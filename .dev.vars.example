@@ -1,0 +1,16 @@
+# Local secrets for the Cloudflare Workers runtime used by
+# `pnpm preview` / `opennextjs-cloudflare`. Copy to `.dev.vars` (gitignored) and fill
+# from .env.local. Plain `next dev` reads .env.local directly; these mirror the values
+# for the Workers preview/runtime. Wire these into the contact route in Phase 2.
+
+# Resend (contact / free-estimate email)
+RESEND_API_KEY=
+CONTACT_TO_EMAIL=
+CONTACT_FROM_EMAIL=
+
+# reCAPTCHA (form spam protection)
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+
+# Production canonical URL (no trailing slash)
+NEXT_PUBLIC_SITE_URL=https://trinity-garage-door.workers.dev

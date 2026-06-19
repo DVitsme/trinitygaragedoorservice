@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "trinity-garage-door",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://trinity-garage-door.workers.dev"
+  },
+  // D1 lead store (Phase 2). Create the real DB with:
+  //   pnpm dlx wrangler d1 create trinity-leads
+  // then paste the returned database_id below (requires `wrangler login`).
+  // Local dev/migrations (`pnpm db:migrate:local`) work against a local SQLite without it.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "trinity-leads",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "db/migrations"
+    }
+  ]
+}
