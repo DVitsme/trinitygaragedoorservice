@@ -18,9 +18,20 @@ export const SITE = {
   foundedYear: 2007,
   yearsLabel: "18+",
   instagram: "https://www.instagram.com/trinitygaragedoorservice/",
-  /** Phase 2: replace with the real Housecall Pro online-booking URL. */
-  bookingHref: "#book",
+  /** Real Housecall Pro booking URL comes from env; falls back to the #book anchor. */
+  bookingHref: process.env.NEXT_PUBLIC_BOOKING_URL || "#book",
 } as const;
+
+/** Service types for the contact / free-estimate form. */
+export const SERVICE_OPTIONS = [
+  "Garage door repair",
+  "Spring repair",
+  "Opener repair",
+  "Off-track repair",
+  "New installation",
+  "Door replacement",
+  "Not sure / something else",
+] as const;
 
 /** Provisional homepage stats (shown with a "figures provisional" disclaimer). */
 export const STATS = [

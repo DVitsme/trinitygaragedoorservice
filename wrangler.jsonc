@@ -14,15 +14,13 @@
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://trinity-garage-door.workers.dev"
   },
-  // D1 lead store (Phase 2). Create the real DB with:
-  //   pnpm dlx wrangler d1 create trinity-leads
-  // then paste the returned database_id below (requires `wrangler login`).
-  // Local dev/migrations (`pnpm db:migrate:local`) work against a local SQLite without it.
+  // D1 lead store (Phase 2). Remote DB created via `wrangler d1 create trinity-leads`.
+  // Local dev/migrations use `pnpm db:migrate:local`; remote uses `pnpm db:migrate`.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "trinity-leads",
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "ef9d8b27-9eb3-4141-9127-da70f5260a14",
       "migrations_dir": "db/migrations"
     }
   ]

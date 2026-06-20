@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
+import { UtilityBar } from "@/components/sections/utility-bar";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/sections/site-footer";
+import { StickyMobileBar } from "@/components/sections/sticky-mobile-bar";
 
 // Body font: self-hosted + optimized via next/font. The display face "Archivo Expanded"
 // is NOT in next/font's Google catalog (only base "Archivo"), so it loads via the <link>
@@ -36,7 +40,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&display=swap"
         />
-        {children}
+        <UtilityBar />
+        <SiteHeader />
+        <main className="overflow-x-hidden bg-white pb-[76px] min-[921px]:pb-0">{children}</main>
+        <SiteFooter />
+        <StickyMobileBar />
       </body>
     </html>
   );
