@@ -62,9 +62,9 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 
 ## ✅ DESIGN-PORT BUILD COMPLETE (2026-06-22)
 Every designed `.dc.html` is now ported 1:1 and prod-screenshot-verified: home, services hub, repair hub, 6 repair detail pages, replacement, installation, service-areas hub + 6 cities, doors (types/brands/brochures), about (our-story/portfolio/reviews), contact, privacy. Final `pnpm build` green — **32 static pages, 0 errors**. **~27 commits ahead of origin/main, UNPUSHED** — the user pushes via `! git push origin main`.
-**Remaining (NOT design-port):** (1) dead-code cleanup — delete the 12 unused `components/sections/*` old-home files (keep utility-bar/site-footer/sticky-mobile-bar); (2) build the `/resources/{blog,safety-tips,troubleshooting,faq}/` pages from existing copy with a generic template (out of design scope); (3) the open client decisions in [[trinity-open-decisions]] before launch; (4) optional Radix a11y upgrade (G8).
+**Remaining (NOT design-port):** ~~(1) dead-code cleanup~~ ✅ DONE; (2) build the `/resources/{blog,safety-tips,troubleshooting,faq}/` pages from existing copy with a generic template (out of design scope); (3) the open client decisions in [[trinity-open-decisions]] before launch; (4) optional Radix a11y upgrade (G8).
 
-**Dead code to remove (cleanup):** now that `app/page.tsx` is the new Bold Trade home, the 12 OLD home-section files in `components/sections/` are unused: `hero, trust-strip, about-split, partner-marquee, why-us, stats-clip, before-after, service-area-map, reviews, booking-band, instagram-grid, cta-band`. **Keep** `utility-bar, site-footer, sticky-mobile-bar` (still imported by `layout.tsx`). Safe to delete the 12 (grep-confirmed only the old page imported them). Defer to a cleanup pass.
+**Dead code (cleanup ✅ DONE 2026-06-22):** the 12 old-home section files in `components/sections/` were deleted (build stayed green, 32 static pages). Only the chrome remains there: `utility-bar, site-footer, sticky-mobile-bar` (imported by `layout.tsx`).
 
 **Out of scope here (not designed):** `/resources/{blog,safety-tips,troubleshooting,faq}/` — copy exists (`copy/resources/`, `content/blog/`); build later with a generic template. Footer links to them must not ship as `#` (F2).
 
