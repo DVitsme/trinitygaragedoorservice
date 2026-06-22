@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#1A1A1A;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A}
+  img{display:block;max-width:100%}
+  ::selection{background:#b8202a;color:#fff}
+  #bt-root{--accent:#b8202a;--ov:.82}
+  .reveal{transition:opacity .45s ease,transform .45s ease}
+  .bt-js .reveal{opacity:0;transform:translateY(16px)}
+  .bt-js .reveal.in{opacity:1;transform:none}
+  .bt-navlink{text-decoration:none;position:relative;padding-bottom:3px}
+  .bt-navlink::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;background:var(--accent);transition:width .25s ease}
+  .bt-navlink:hover::after{width:100%}
+  .bt-sticky{display:none}
+  .bt-menu{display:none}
+  .bt-navitem{position:static;display:flex;align-items:center}
+  .bt-navtrigger{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#1A1A1A;font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;background:none;border:none;padding:20px 0}
+  .bt-navitem:hover .bt-navtrigger,.bt-navitem:focus-within .bt-navtrigger{color:var(--accent)}
+  .bt-navtrigger-active{color:var(--accent);border-bottom:3px solid var(--accent)}
+  .bt-caret{transition:transform .2s ease}
+  .bt-navitem:hover .bt-caret,.bt-navitem:focus-within .bt-caret{transform:rotate(180deg)}
+  .bt-mega{position:absolute;top:100%;left:50%;margin-top:12px;background:#fff;border:2px solid #1A1A1A;border-radius:8px;box-shadow:0 26px 50px rgba(0,0,0,.22);padding:22px;opacity:0;visibility:hidden;transform:translate(-50%,10px);transition:opacity .2s ease,transform .2s ease,visibility .2s;z-index:60}
+  .bt-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+  .bt-navitem:hover .bt-mega,.bt-navitem:focus-within .bt-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .bt-mega-r{left:50%;right:auto}
+  .bt-mcolh{display:inline-block;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#1A1A1A;padding-bottom:6px;border-bottom:3px solid var(--accent);margin-bottom:6px}
+  .bt-mli{display:flex;align-items:center;gap:7px;text-decoration:none;color:#3a3a3a;font-weight:600;font-size:14.5px;padding:8px 10px;border-radius:6px;transition:background .15s ease,color .15s ease;white-space:nowrap}
+  .bt-mli:hover{background:#F2F0EC;color:var(--accent)}
+  .bt-mli-all{color:var(--accent);font-weight:800}
+  .bt-mcta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:11px 14px;border-radius:7px;margin-top:8px}
+  .bt-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+  .bt-gcard{position:relative;border:2px solid #1A1A1A;border-radius:10px;overflow:hidden;background:#1A1A1A}
+  .bt-gcard img{width:100%;height:260px;object-fit:cover;transition:transform .5s ease;display:block}
+  .bt-gcard:hover img{transform:scale(1.05)}
+  .bt-gcap{position:absolute;left:0;right:0;bottom:0;padding:30px 18px 14px;background:linear-gradient(180deg,transparent,rgba(10,10,10,.85));pointer-events:none}
+  .bt-gtag{display:inline-block;background:var(--accent);color:#fff;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px;margin-bottom:7px}
+  .bt-gcap b{display:block;color:#fff;font-weight:700;font-size:15px}
+  @media(max-width:920px){
+    .bt-navlinks{display:none!important}
+    .bt-navcta{display:none!important}
+    .bt-menu{display:inline-flex!important}
+    .bt-g2,.bt-foot{grid-template-columns:1fr!important}
+    .bt-sec{padding-left:20px!important;padding-right:20px!important}
+    .bt-util{display:none!important}
+    .bt-sticky{display:flex!important}
+    .bt-pad-b{padding-bottom:92px!important}
+    .bt-gal{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){ .bt-gal{grid-template-columns:1fr} }
+</style>
+</helmet>
+
+<div id="bt-root" style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A;background:#fff;overflow-x:hidden">
+
+  <!-- utility bar (red) -->
+  <div class="bt-util" style="background:var(--accent);color:#fff;font-size:13.5px;font-weight:600">
+    <div style="max-width:1200px;margin:0 auto;padding:9px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>24/7 Emergency Service</span>
+        <span style="opacity:.45">|</span>
+        <a href="tel:18132796785" style="color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Lutz · Tampa Bay, FL</div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div style="position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #1A1A1A">
+    <div style="position:relative;max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="/" aria-label="Trinity Garage Door Service — Home"><img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service" style="height:60px;width:auto"></a>
+      <div class="bt-navlinks" style="display:flex;align-items:center;gap:28px;color:#1A1A1A">
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Services <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:700px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px">
+            <div style="background:#FBF3F3;border:1px solid #F0DCDC;border-radius:8px;padding:14px">
+              <span class="bt-mcolh">Repair</span>
+              <a class="bt-mli" href="/services/repair/emergency/">24/7 Emergency Repair</a>
+              <a class="bt-mli" href="/services/repair/spring/">Spring Repair</a>
+              <a class="bt-mli" href="/services/repair/opener/">Opener Repair</a>
+              <a class="bt-mli" href="/services/repair/off-track/">Off-Track Repair</a>
+              <a class="bt-mli" href="/services/repair/cables-rollers/">Cables &amp; Rollers</a>
+              <a class="bt-mli" href="/services/repair/tune-up/">Maintenance / Tune-Up</a>
+              <a class="bt-mli bt-mli-all" href="/services/repair/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Repair Services</a>
+              <a class="bt-mcta" href="/get-service/?intent=repair" style="background:var(--accent);color:#fff">Book a Repair</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Install &amp; Replace</span>
+              <a class="bt-mli" href="/services/installation/">New Installation</a>
+              <a class="bt-mli" href="/services/replacement/">Door Replacement</a>
+              <a class="bt-mcta" href="/get-service/?intent=estimate" style="background:#fff;color:#1A1A1A;border:2px solid #1A1A1A">Free Estimate</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Doors &amp; Brands</span>
+              <a class="bt-mli" href="/doors/types/">Door Types &amp; Styles</a>
+              <a class="bt-mli" href="/doors/brands/">Brands (catalog)</a>
+              <a class="bt-mli" href="/doors/brochures/">Brochures</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Service Areas <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:260px">
+            <span class="bt-mcolh">Areas</span>
+            <a class="bt-mli" href="/service-areas/lutz/">Lutz</a>
+            <a class="bt-mli" href="/service-areas/land-o-lakes/">Land O' Lakes</a>
+            <a class="bt-mli" href="/service-areas/wesley-chapel/">Wesley Chapel</a>
+            <a class="bt-mli" href="/service-areas/palm-harbor/">Palm Harbor</a>
+            <a class="bt-mli" href="/service-areas/oldsmar/">Oldsmar</a>
+            <a class="bt-mli" href="/service-areas/tampa/">Tampa</a>
+            <a class="bt-mli bt-mli-all" href="/service-areas/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Service Areas</a>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger bt-navtrigger-active" aria-haspopup="true">About <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega bt-mega-r" style="width:240px">
+            <span class="bt-mcolh">About</span>
+            <a class="bt-mli" href="/about/our-story/">Our Story</a>
+            <a class="bt-mli" href="/about/portfolio/">Portfolio / Our Work</a>
+            <a class="bt-mli" href="/about/reviews/">Reviews</a>
+          </div>
+        </div>
+
+        <a class="bt-navtrigger" href="/contact/" style="text-decoration:none">Contact</a>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <a class="bt-navcta" href="tel:18132796785" style="text-decoration:none;color:#1A1A1A;font-weight:900;font-size:17px;white-space:nowrap">(813) 279-6785</a>
+        <a class="bt-navcta" href="/get-service/?intent=repair" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;padding:13px 22px;border-radius:7px">Book a Repair</a>
+        <button class="bt-menu" aria-label="Menu" style="background:none;border:2px solid #1A1A1A;border-radius:7px;padding:8px;cursor:pointer;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1A1A1A" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero (photo bg) -->
+  <div class="bt-hero-pad bt-pad-b" style="position:relative;overflow:hidden;padding:108px 24px 114px;border-bottom:5px solid var(--accent)">
+    <img src="assets/door-after-white-2car-home.jpg" alt="A finished Trinity garage door installation in Tampa Bay" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0">
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgb(10 10 10 / calc(var(--ov) * .78)) 0%, rgb(10 10 10 / calc(var(--ov) * .92)) 55%, rgb(10 10 10 / var(--ov)) 100%)"></div>
+    <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto">
+      <div style="font-size:12.5px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:22px">
+        <a href="/" style="color:rgba(255,255,255,.72);text-decoration:none">Home</a> <span style="opacity:.5">/</span> <a href="/about/our-story/" style="color:rgba(255,255,255,.72);text-decoration:none">About</a> <span style="opacity:.5">/</span> <span style="color:#fff">Portfolio</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="width:52px;height:4px;background:var(--accent)"></span>
+        <span style="font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#fff">Our Work</span>
+      </div>
+      <h1 class="bt-h1" style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(34px,5.6vw,64px);line-height:.98;letter-spacing:-.015em;text-transform:uppercase;margin:18px 0 0;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5);max-width:920px">Real Doors, <span style="color:#fff;background:var(--accent);padding:0 12px;display:inline-block">Real Driveways</span></h1>
+      <p style="font-size:clamp(17px,2.1vw,21px);line-height:1.55;color:rgba(255,255,255,.9);max-width:660px;margin:24px 0 0;font-weight:500">Every photo on this page is a real job our crew did somewhere around Tampa Bay. No stock photos, no catalog renders. Doors we've installed, replaced, and repaired across Lutz, Wesley Chapel, Tampa, and the rest of the bay.</p>
+      <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
+        <a href="/get-service/?intent=estimate" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 32px;border-radius:7px;box-shadow:0 12px 26px rgba(184,32,42,.4)">Request a Free Estimate</a>
+        <a href="tel:18132796785" style="text-decoration:none;background:#fff;color:#1A1A1A;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 30px;border-radius:7px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call (813) 279-6785</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- trust strip (dark) -->
+  <div style="background:#1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:center;gap:14px 26px;flex-wrap:wrap">
+      <img src="assets/badge-angi-super-service-2024.png" alt="Angi Super Service Award 2024" style="height:58px;width:auto">
+      <img src="assets/badge-elite.png" alt="HomeAdvisor Elite Service" style="height:48px;width:auto">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:#fff"><span style="color:var(--accent);letter-spacing:1px">★★★★★</span> 4.9 on Google</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:#fff"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;background:#fff;color:#0a4ea2;font-size:11px;font-weight:900">A+</span>BBB Accredited</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="font-size:13px;color:#9a9a9a;font-weight:600;letter-spacing:.03em">LICENSED · BONDED · INSURED · FL GD13010 / GDI-09484</span>
+    </div>
+  </div>
+
+  <!-- new installs & replacements -->
+  <div style="background:#fff">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:84px 32px 40px">
+      <div class="reveal" style="max-width:720px">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">New Installs &amp; Replacements</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">When A Door Changes The Whole House</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">Some on new builds, some in place of a door that finally gave out. Steel, wood look, carriage style, single and double, we've worked on most of what Tampa Bay puts on a garage. Weighing a new door? Our <a href="/doors/types/" style="color:var(--accent);font-weight:700;text-decoration:none">door types and styles</a> page breaks down the looks.</p>
+      </div>
+      <div class="bt-gal reveal">
+        <div class="bt-gcard"><img src="assets/door-after-white-2car-home.jpg" alt="A new white two-car steel garage door installed by Trinity"><div class="bt-gcap"><span class="bt-gtag">New Install</span><b>New two-car steel door</b></div></div>
+        <div class="bt-gcard"><img src="assets/door-after-brown-wood-sectional.jpg" alt="A brown wood-look sectional garage door installed by Trinity"><div class="bt-gcap"><span class="bt-gtag">Replacement</span><b>Wood-look sectional door</b></div></div>
+        <div class="bt-gcard"><img src="assets/door-after-white-on-blue-home.jpg" alt="A fresh white garage door on a blue coastal home"><div class="bt-gcap"><span class="bt-gtag">New Install</span><b>Fresh white door, coastal home</b></div></div>
+        <div class="bt-gcard"><img src="assets/door-after-brown-dusk-2car.jpg" alt="A carriage-style two-car garage door photographed at dusk"><div class="bt-gcap"><span class="bt-gtag">Replacement</span><b>Carriage-style door at dusk</b></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- repairs that brought a door back -->
+  <div style="background:#F2F0EC;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:84px 32px">
+      <div class="reveal" style="max-width:720px">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Repairs That Brought A Door Back</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Not Every Job Is A New Door</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">A fresh set of springs, a realigned track, an opener that finally runs quiet again. The door you already have is often worth saving, and these are some of the ones we saved.</p>
+      </div>
+      <div class="bt-gal reveal">
+        <div class="bt-gcard"><img src="assets/jobsite-tech-crouching-repair.jpg" alt="Trinity technician on a hands-on garage door repair"><div class="bt-gcap"><span class="bt-gtag">Repair</span><b>Hands-on spring repair</b></div></div>
+        <div class="bt-gcard"><img src="assets/jobsite-opener-and-spring-hardware.jpg" alt="New garage door spring and hardware installed"><div class="bt-gcap"><span class="bt-gtag">Repair</span><b>New spring &amp; hardware</b></div></div>
+        <div class="bt-gcard"><img src="assets/jobsite-tech-installing-opener.jpg" alt="Trinity technician servicing a garage door opener"><div class="bt-gcap"><span class="bt-gtag">Opener</span><b>Opener service</b></div></div>
+        <div class="bt-gcard"><img src="assets/jobsite-two-techs-on-ladder.jpg" alt="Two Trinity technicians realigning a garage door"><div class="bt-gcap"><span class="bt-gtag">Repair</span><b>Track realignment</b></div></div>
+        <div class="bt-gcard"><img src="assets/jobsite-tech-working-dusk.jpg" alt="Trinity technician on a same-day repair at dusk"><div class="bt-gcap"><span class="bt-gtag">Same-Day</span><b>Same-day repair, after hours</b></div></div>
+        <div class="bt-gcard"><img src="assets/jobsite-tech-at-residential-garage.jpg" alt="Trinity technician diagnosing a garage door on site"><div class="bt-gcap"><span class="bt-gtag">On-Site</span><b>On-site diagnosis</b></div></div>
+      </div>
+      <div class="reveal" style="font-size:12.5px;color:#8a8a8a;margin-top:18px;font-weight:600">Real jobs around Tampa Bay. Captions are kept general where the exact city or door model isn't confirmed.</div>
+    </div>
+  </div>
+
+  <!-- closing CTA -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="bt-sec reveal" style="max-width:1200px;margin:0 auto;padding:74px 32px;text-align:center">
+      <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(28px,4vw,46px);line-height:1.0;text-transform:uppercase;margin:0">See A Door You Like?</h2>
+      <p style="font-size:17.5px;line-height:1.55;margin:16px auto 0;color:rgba(255,255,255,.92);font-weight:500;max-width:640px">If something here looks right for your house, we can help you get there. Call (813) 279-6785 for a free estimate, or send us a few photos of your current door and we'll tell you what your options are.</p>
+      <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:30px">
+        <a href="tel:18132796785" style="text-decoration:none;background:#fff;color:var(--accent);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 32px;border-radius:7px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call (813) 279-6785</a>
+        <a href="/get-service/?intent=estimate" style="text-decoration:none;background:transparent;color:#fff;border:2px solid #fff;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:16px 28px;border-radius:7px">Request a Free Estimate</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="background:#111;color:#9a9a9a">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:60px 32px 0">
+      <div class="bt-foot" style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px">
+        <div>
+          <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service — Opening Doors Since 2007" style="width:230px;max-width:100%;height:auto;background:#fff;border-radius:8px;padding:12px 14px">
+          <p style="font-size:15px;line-height:1.6;color:#8a8a8a;margin:18px 0 0;max-width:300px">Family-owned garage door repair, replacement, and installation serving the Tampa Bay area since 2007.</p>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Services</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/services/installation/" style="color:#9a9a9a;text-decoration:none">Installation</a>
+            <a class="bt-navlink" href="/services/repair/" style="color:#9a9a9a;text-decoration:none">Repair &amp; Service</a>
+            <a class="bt-navlink" href="/services/repair/spring/" style="color:#9a9a9a;text-decoration:none">Spring Repair</a>
+            <a class="bt-navlink" href="/services/repair/opener/" style="color:#9a9a9a;text-decoration:none">Opener Repair</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">About</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/about/our-story/" style="color:#9a9a9a;text-decoration:none">Our Story</a>
+            <a class="bt-navlink" href="/about/portfolio/" style="color:#9a9a9a;text-decoration:none">Portfolio</a>
+            <a class="bt-navlink" href="/about/reviews/" style="color:#9a9a9a;text-decoration:none">Reviews</a>
+            <a class="bt-navlink" href="/service-areas/" style="color:#9a9a9a;text-decoration:none">Service Areas</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px">(813) 279-6785</a>
+            <span>24/7 Emergency Service</span>
+            <span>Lutz, FL · Tampa Bay</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:2px solid #2a2a2a;margin-top:46px;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-size:13px;color:#6a6a6a;font-weight:500">© 2026 Trinity Garage Door Service Inc. · Licensed &amp; Insured · FL GD13010 / GDI-09484</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" aria-label="Facebook" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M14 9h3V5.5h-3c-2 0-3.5 1.6-3.5 3.6V11H8v3.5h2.5V22H14v-7.5h2.6l.4-3.5H14V9.6c0-.4.3-.6.6-.6z"></path></svg></a>
+          <a href="https://www.instagram.com/trinitygaragedoorservice/" aria-label="Instagram" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a href="#" aria-label="Google" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21.6 12.2c0-.6-.1-1.2-.2-1.8H12v3.5h5.4c-.2 1.2-.9 2.3-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2zM12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.6-4.1H3.1v2.6C4.7 19.8 8.1 22 12 22zM6.4 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.5H3.1A10 10 0 0 0 2 12c0 1.6.4 3.2 1.1 4.5zM12 6c1.5 0 2.8.5 3.8 1.5l2.8-2.8C16.9 3.1 14.7 2 12 2 8.1 2 4.7 4.2 3.1 7.5l3.3 2.6C7.2 7.7 9.4 6 12 6z"></path></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sticky mobile call/book bar -->
+  <div class="bt-sticky" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#111;padding:10px 12px;gap:10px;border-top:3px solid var(--accent)">
+    <a href="tel:18132796785" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#1A1A1A;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+    <a href="/get-service/?intent=repair" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px">Book a Repair</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#b8202a&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroOverlay&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:0.82,&quot;min&quot;:0.4,&quot;max&quot;:0.95,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.getElementById('bt-root');
+    if (root) { root.classList.add('bt-js'); this.applyTheme(root); }
+    this._io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+    requestAnimationFrame(() => this.observe());
+    this._fallback = setTimeout(() => {
+      document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => {
+        const r = n.getBoundingClientRect();
+        if (r.top < window.innerHeight) n.classList.add('in');
+      });
+    }, 1200);
+  }
+  componentDidUpdate() {
+    const root = document.getElementById('bt-root');
+    if (root) this.applyTheme(root);
+    this.observe();
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); clearTimeout(this._fallback); }
+  applyTheme(root) {
+    root.style.setProperty('--accent', this.props.accent ?? '#b8202a');
+    root.style.setProperty('--ov', String(this.props.heroOverlay ?? 0.82));
+  }
+  observe() {
+    if (!this._io) return;
+    document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => this._io.observe(n));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

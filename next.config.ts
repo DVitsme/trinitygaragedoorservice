@@ -2,10 +2,23 @@ import type { NextConfig } from "next";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const nextConfig: NextConfig = {
-  // Phase 3 (SEO/go-live): add redirects() from site-audit/ARCHITECTURE-PROPOSAL.md §6
-  // to 301 the legacy WordPress URLs, e.g.
-  //   /services/garage-door-spring-repair-and-replacement/ -> /services/repair/spring/
-  //   /home/ -> /
+  // Designs use trailing-slash URLs everywhere (handoff F1).
+  trailingSlash: true,
+  // next/image optimization doesn't run on Cloudflare Workers by default (handoff G4).
+  images: { unoptimized: true },
+  async redirects() {
+    return [
+      // Canonical off-track slug — repair IA wins (handoff G2).
+      { source: "/services/off-track/", destination: "/services/repair/off-track/", permanent: true },
+      // Section parents with no index page (handoff F2).
+      { source: "/about/", destination: "/about/our-story/", permanent: true },
+      { source: "/doors/", destination: "/doors/types/", permanent: true },
+      // Old-site duplicate home.
+      { source: "/home/", destination: "/", permanent: true },
+      // TODO (handoff G7): add the full legacy WordPress -> new IA 301 map once
+      // the destination pages exist (e.g. /garage-door-types/ -> /doors/types/).
+    ];
+  },
 };
 
 export default nextConfig;

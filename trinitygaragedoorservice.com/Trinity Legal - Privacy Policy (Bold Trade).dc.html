@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#1A1A1A;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A}
+  img{display:block;max-width:100%}
+  ::selection{background:#b8202a;color:#fff}
+  #bt-root{--accent:#b8202a}
+  .bt-navlink{text-decoration:none;position:relative;padding-bottom:3px}
+  .bt-navlink::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;background:var(--accent);transition:width .25s ease}
+  .bt-navlink:hover::after{width:100%}
+  .bt-sticky{display:none}
+  .bt-menu{display:none}
+  .bt-navitem{position:static;display:flex;align-items:center}
+  .bt-navtrigger{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#1A1A1A;font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;background:none;border:none;padding:20px 0}
+  .bt-navitem:hover .bt-navtrigger,.bt-navitem:focus-within .bt-navtrigger{color:var(--accent)}
+  .bt-caret{transition:transform .2s ease}
+  .bt-navitem:hover .bt-caret,.bt-navitem:focus-within .bt-caret{transform:rotate(180deg)}
+  .bt-mega{position:absolute;top:100%;left:50%;margin-top:12px;background:#fff;border:2px solid #1A1A1A;border-radius:8px;box-shadow:0 26px 50px rgba(0,0,0,.22);padding:22px;opacity:0;visibility:hidden;transform:translate(-50%,10px);transition:opacity .2s ease,transform .2s ease,visibility .2s;z-index:60}
+  .bt-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+  .bt-navitem:hover .bt-mega,.bt-navitem:focus-within .bt-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .bt-mega-r{left:50%;right:auto}
+  .bt-mcolh{display:inline-block;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#1A1A1A;padding-bottom:6px;border-bottom:3px solid var(--accent);margin-bottom:6px}
+  .bt-mli{display:flex;align-items:center;gap:7px;text-decoration:none;color:#3a3a3a;font-weight:600;font-size:14.5px;padding:8px 10px;border-radius:6px;transition:background .15s ease,color .15s ease;white-space:nowrap}
+  .bt-mli:hover{background:#F2F0EC;color:var(--accent)}
+  .bt-mli-all{color:var(--accent);font-weight:800}
+  .bt-mcta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:11px 14px;border-radius:7px;margin-top:8px}
+  .bt-legal h2{font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:20px;text-transform:uppercase;letter-spacing:-.005em;color:#1A1A1A;margin:42px 0 0;padding-top:20px;border-top:2px solid #ececec}
+  .bt-legal h2:first-of-type{border-top:none;padding-top:0;margin-top:6px}
+  .bt-legal p{font-size:16.5px;line-height:1.72;color:#3a3a3a;margin:14px 0 0}
+  .bt-legal ul{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+  .bt-legal li{position:relative;padding-left:24px;font-size:16.5px;line-height:1.6;color:#3a3a3a}
+  .bt-legal li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;background:var(--accent);border-radius:2px}
+  .bt-legal strong{color:#1A1A1A;font-weight:700}
+  .bt-ph{background:#FBEDED;color:#8f1820;font-weight:700;padding:1px 7px;border-radius:4px;font-size:.92em}
+  @media(max-width:920px){
+    .bt-navlinks{display:none!important}
+    .bt-navcta{display:none!important}
+    .bt-menu{display:inline-flex!important}
+    .bt-foot{grid-template-columns:1fr!important}
+    .bt-sec{padding-left:20px!important;padding-right:20px!important}
+    .bt-util{display:none!important}
+    .bt-sticky{display:flex!important}
+    .bt-pad-b{padding-bottom:92px!important}
+  }
+</style>
+</helmet>
+
+<div id="bt-root" style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A;background:#fff;overflow-x:hidden">
+
+  <!-- utility bar (red) -->
+  <div class="bt-util" style="background:var(--accent);color:#fff;font-size:13.5px;font-weight:600">
+    <div style="max-width:1200px;margin:0 auto;padding:9px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>24/7 Emergency Service</span>
+        <span style="opacity:.45">|</span>
+        <a href="tel:18132796785" style="color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Lutz · Tampa Bay, FL</div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div style="position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #1A1A1A">
+    <div style="position:relative;max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="/" aria-label="Trinity Garage Door Service — Home"><img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service" style="height:60px;width:auto"></a>
+      <div class="bt-navlinks" style="display:flex;align-items:center;gap:28px;color:#1A1A1A">
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Services <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:700px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px">
+            <div style="background:#FBF3F3;border:1px solid #F0DCDC;border-radius:8px;padding:14px">
+              <span class="bt-mcolh">Repair</span>
+              <a class="bt-mli" href="/services/repair/emergency/">24/7 Emergency Repair</a>
+              <a class="bt-mli" href="/services/repair/spring/">Spring Repair</a>
+              <a class="bt-mli" href="/services/repair/opener/">Opener Repair</a>
+              <a class="bt-mli" href="/services/repair/off-track/">Off-Track Repair</a>
+              <a class="bt-mli" href="/services/repair/cables-rollers/">Cables &amp; Rollers</a>
+              <a class="bt-mli" href="/services/repair/tune-up/">Maintenance / Tune-Up</a>
+              <a class="bt-mli bt-mli-all" href="/services/repair/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Repair Services</a>
+              <a class="bt-mcta" href="/get-service/?intent=repair" style="background:var(--accent);color:#fff">Book a Repair</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Install &amp; Replace</span>
+              <a class="bt-mli" href="/services/installation/">New Installation</a>
+              <a class="bt-mli" href="/services/replacement/">Door Replacement</a>
+              <a class="bt-mcta" href="/get-service/?intent=estimate" style="background:#fff;color:#1A1A1A;border:2px solid #1A1A1A">Free Estimate</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Doors &amp; Brands</span>
+              <a class="bt-mli" href="/doors/types/">Door Types &amp; Styles</a>
+              <a class="bt-mli" href="/doors/brands/">Brands (catalog)</a>
+              <a class="bt-mli" href="/doors/brochures/">Brochures</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Service Areas <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:260px">
+            <span class="bt-mcolh">Areas</span>
+            <a class="bt-mli" href="/service-areas/lutz/">Lutz</a>
+            <a class="bt-mli" href="/service-areas/land-o-lakes/">Land O' Lakes</a>
+            <a class="bt-mli" href="/service-areas/wesley-chapel/">Wesley Chapel</a>
+            <a class="bt-mli" href="/service-areas/palm-harbor/">Palm Harbor</a>
+            <a class="bt-mli" href="/service-areas/oldsmar/">Oldsmar</a>
+            <a class="bt-mli" href="/service-areas/tampa/">Tampa</a>
+            <a class="bt-mli bt-mli-all" href="/service-areas/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Service Areas</a>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">About <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega bt-mega-r" style="width:240px">
+            <span class="bt-mcolh">About</span>
+            <a class="bt-mli" href="/about/our-story/">Our Story</a>
+            <a class="bt-mli" href="/about/portfolio/">Portfolio / Our Work</a>
+            <a class="bt-mli" href="/about/reviews/">Reviews</a>
+          </div>
+        </div>
+
+        <a class="bt-navtrigger" href="/contact/" style="text-decoration:none">Contact</a>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <a class="bt-navcta" href="tel:18132796785" style="text-decoration:none;color:#1A1A1A;font-weight:900;font-size:17px;white-space:nowrap">(813) 279-6785</a>
+        <a class="bt-navcta" href="/get-service/?intent=repair" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;padding:13px 22px;border-radius:7px">Book a Repair</a>
+        <button class="bt-menu" aria-label="Menu" style="background:none;border:2px solid #1A1A1A;border-radius:7px;padding:8px;cursor:pointer;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1A1A1A" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- header band -->
+  <div class="bt-pad-b" style="background:#161616;border-bottom:5px solid var(--accent);padding:64px 24px">
+    <div style="max-width:860px;margin:0 auto">
+      <div style="font-size:12.5px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:18px">
+        <a href="/" style="color:rgba(255,255,255,.72);text-decoration:none">Home</a> <span style="opacity:.5">/</span> <span style="color:#fff">Privacy Policy</span>
+      </div>
+      <h1 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(30px,4.6vw,52px);line-height:1.0;letter-spacing:-.015em;text-transform:uppercase;margin:0;color:#fff">Privacy Policy</h1>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 15px;font-size:13.5px;font-weight:600;color:#fff">Effective date: <span class="bt-ph" style="background:rgba(184,32,42,.25);color:#fff">[date you publish]</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- legal body -->
+  <div style="background:#fff">
+    <div class="bt-sec" style="max-width:860px;margin:0 auto;padding:56px 24px 80px">
+      <div style="display:flex;gap:13px;align-items:flex-start;background:#FBF3F3;border:2px solid #F0DCDC;border-radius:10px;padding:18px 20px;margin-bottom:40px">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+        <p style="font-size:14.5px;line-height:1.6;color:#7a3b3b;margin:0;font-weight:500">Starting template tailored to what this site collects. Have it reviewed by legal counsel before publishing, and fill the highlighted placeholders once your contact email and mailing address are confirmed.</p>
+      </div>
+
+      <div class="bt-legal">
+        <p>Trinity Garage Door Service, Inc. ("Trinity," "we," "us," or "our") respects your privacy. This policy explains what information we collect through our website, how we use it, and the choices you have. By using this site or submitting a form, you agree to this policy.</p>
+
+        <h2>Information We Collect</h2>
+        <p><strong>Information you give us.</strong> When you fill out our contact or free estimate form, or otherwise reach out, we collect the details you provide. That typically includes your name, phone number, email address, city, the service you need, and any message you send. If you call or email us, we keep what you share so we can help you.</p>
+        <p><strong>Information collected automatically.</strong> Like most websites, our hosting platform records basic technical information when you visit, such as your IP address, browser type, and the pages you view. When you submit a form, we also record your IP address and browser details to help us prevent spam and abuse.</p>
+        <p>We do not collect payment card information through this website.</p>
+
+        <h2>How We Use Your Information</h2>
+        <p>We use the information you provide to:</p>
+        <ul>
+          <li>respond to your request and answer your questions</li>
+          <li>schedule and carry out garage door service</li>
+          <li>follow up about your inquiry or completed work</li>
+          <li>keep records of the work we do</li>
+          <li>keep the site secure and prevent spam and fraud</li>
+          <li>improve our website and service</li>
+        </ul>
+
+        <h2>How We Share Your Information</h2>
+        <p>We do not sell your personal information. We share it only with the service providers that help us run this website and respond to you, and only as needed for them to do that work:</p>
+        <ul>
+          <li><strong>Cloudflare</strong> hosts the website and stores form submissions in our database.</li>
+          <li><strong>Cloudflare Turnstile</strong> helps protect the form from spam and abuse.</li>
+          <li><strong>Resend</strong> delivers your form submission to our email inbox.</li>
+        </ul>
+        <p>We may also disclose information if the law requires it, or to protect the safety, rights, or property of Trinity, our customers, or others.</p>
+
+        <h2>Where Your Information Is Stored</h2>
+        <p>Form submissions are sent to us by email and stored in our database. Our service providers may process and store data on servers located in the United States.</p>
+
+        <h2>Cookies And Similar Technologies</h2>
+        <p>The site uses only the cookies needed for it to work and for spam protection. If we add website analytics or advertising tools in the future, we will update this policy to describe them.</p>
+
+        <h2>Your Choices</h2>
+        <p>You can contact us at any time to ask what information we have about you, to correct it, or to ask us to delete it. You can also tell us to stop following up with you. To make a request, use the contact details below.</p>
+
+        <h2>Data Security</h2>
+        <p>We take reasonable steps to protect the information you share with us. No method of transmission or storage is completely secure, however, so we cannot guarantee absolute security.</p>
+
+        <h2>Children's Privacy</h2>
+        <p>This website is meant for adults and is not directed to children under 13. We do not knowingly collect personal information from children.</p>
+
+        <h2>Links To Other Sites</h2>
+        <p>Our site may link to other services, such as our online booking tool or social media pages. We are not responsible for the privacy practices of those other sites, so please review their policies.</p>
+
+        <h2>Changes To This Policy</h2>
+        <p>We may update this policy periodically. When we do, we will change the effective date at the top of this page.</p>
+      </div>
+
+      <!-- contact block -->
+      <div style="margin-top:44px;background:#1A1A1A;border-radius:12px;padding:30px 32px;color:#fff">
+        <div style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px;text-transform:uppercase">Contact Us</div>
+        <p style="font-size:15.5px;line-height:1.6;color:#cfcfcf;margin:12px 0 18px">If you have questions about this policy or your information, contact us:</p>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:15.5px;color:#e8e8e8">
+          <div style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;color:#fff">Trinity Garage Door Service, Inc.</div>
+          <div><span style="color:#9a9a9a">Phone:</span> <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-weight:700">(813) 279-6785</a></div>
+          <div><span style="color:#9a9a9a">Email:</span> <span class="bt-ph">[contact email to confirm]</span></div>
+          <div><span style="color:#9a9a9a">Address:</span> <span class="bt-ph">[business mailing address to confirm]</span></div>
+          <div style="color:#9a9a9a;font-size:14.5px;margin-top:4px">Serving Tampa Bay, Florida — Hillsborough, Pasco, and Pinellas counties</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="background:#111;color:#9a9a9a">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:60px 32px 0">
+      <div class="bt-foot" style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px">
+        <div>
+          <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service — Opening Doors Since 2007" style="width:230px;max-width:100%;height:auto;background:#fff;border-radius:8px;padding:12px 14px">
+          <p style="font-size:15px;line-height:1.6;color:#8a8a8a;margin:18px 0 0;max-width:300px">Family-owned garage door repair, replacement, and installation serving the Tampa Bay area since 2007.</p>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Services</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/services/installation/" style="color:#9a9a9a;text-decoration:none">Installation</a>
+            <a class="bt-navlink" href="/services/repair/" style="color:#9a9a9a;text-decoration:none">Repair &amp; Service</a>
+            <a class="bt-navlink" href="/services/repair/spring/" style="color:#9a9a9a;text-decoration:none">Spring Repair</a>
+            <a class="bt-navlink" href="/services/repair/opener/" style="color:#9a9a9a;text-decoration:none">Opener Repair</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Company</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/about/our-story/" style="color:#9a9a9a;text-decoration:none">Our Story</a>
+            <a class="bt-navlink" href="/service-areas/" style="color:#9a9a9a;text-decoration:none">Service Areas</a>
+            <a class="bt-navlink" href="/contact/" style="color:#9a9a9a;text-decoration:none">Contact</a>
+            <a class="bt-navlink" href="/privacy-policy/" style="color:#9a9a9a;text-decoration:none">Privacy Policy</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px">(813) 279-6785</a>
+            <span>24/7 Emergency Service</span>
+            <span>Lutz, FL · Tampa Bay</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:2px solid #2a2a2a;margin-top:46px;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-size:13px;color:#6a6a6a;font-weight:500">© 2026 Trinity Garage Door Service Inc. · Licensed &amp; Insured · FL GD13010 / GDI-09484</div>
+        <div style="display:flex;align-items:center;gap:18px">
+          <a href="/privacy-policy/" style="color:#9a9a9a;text-decoration:none;font-size:13px;font-weight:600">Privacy</a>
+          <a href="/contact/" style="color:#9a9a9a;text-decoration:none;font-size:13px;font-weight:600">Contact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sticky mobile call/book bar -->
+  <div class="bt-sticky" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#111;padding:10px 12px;gap:10px;border-top:3px solid var(--accent)">
+    <a href="tel:18132796785" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#1A1A1A;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+    <a href="/get-service/?intent=repair" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px">Book a Repair</a>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

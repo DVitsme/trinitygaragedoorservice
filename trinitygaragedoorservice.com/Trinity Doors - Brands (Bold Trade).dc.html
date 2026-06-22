@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#1A1A1A;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A}
+  img{display:block;max-width:100%}
+  ::selection{background:#b8202a;color:#fff}
+  #bt-root{--accent:#b8202a;--ov:.82}
+  .reveal{transition:opacity .45s ease,transform .45s ease}
+  .bt-js .reveal{opacity:0;transform:translateY(16px)}
+  .bt-js .reveal.in{opacity:1;transform:none}
+  .bt-navlink{text-decoration:none;position:relative;padding-bottom:3px}
+  .bt-navlink::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;background:var(--accent);transition:width .25s ease}
+  .bt-navlink:hover::after{width:100%}
+  .bt-sticky{display:none}
+  .bt-menu{display:none}
+  .bt-navitem{position:static;display:flex;align-items:center}
+  .bt-navtrigger{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#1A1A1A;font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;background:none;border:none;padding:20px 0}
+  .bt-navitem:hover .bt-navtrigger,.bt-navitem:focus-within .bt-navtrigger{color:var(--accent)}
+  .bt-navtrigger-active{color:var(--accent);border-bottom:3px solid var(--accent)}
+  .bt-caret{transition:transform .2s ease}
+  .bt-navitem:hover .bt-caret,.bt-navitem:focus-within .bt-caret{transform:rotate(180deg)}
+  .bt-mega{position:absolute;top:100%;left:50%;margin-top:12px;background:#fff;border:2px solid #1A1A1A;border-radius:8px;box-shadow:0 26px 50px rgba(0,0,0,.22);padding:22px;opacity:0;visibility:hidden;transform:translate(-50%,10px);transition:opacity .2s ease,transform .2s ease,visibility .2s;z-index:60}
+  .bt-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+  .bt-navitem:hover .bt-mega,.bt-navitem:focus-within .bt-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .bt-mega-r{left:50%;right:auto}
+  .bt-mcolh{display:inline-block;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#1A1A1A;padding-bottom:6px;border-bottom:3px solid var(--accent);margin-bottom:6px}
+  .bt-mli{display:flex;align-items:center;gap:7px;text-decoration:none;color:#3a3a3a;font-weight:600;font-size:14.5px;padding:8px 10px;border-radius:6px;transition:background .15s ease,color .15s ease;white-space:nowrap}
+  .bt-mli:hover{background:#F2F0EC;color:var(--accent)}
+  .bt-mli-all{color:var(--accent);font-weight:800}
+  .bt-mcta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:11px 14px;border-radius:7px;margin-top:8px}
+  .bt-faq{border:2px solid #1A1A1A;border-radius:8px;background:#fff;margin-top:14px;overflow:hidden}
+  .bt-faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;color:#1A1A1A}
+  .bt-faq summary::-webkit-details-marker{display:none}
+  .bt-faq .bt-faq-plus{flex-shrink:0;width:26px;height:26px;border:2px solid var(--accent);border-radius:6px;position:relative;transition:background .2s ease}
+  .bt-faq .bt-faq-plus::before,.bt-faq .bt-faq-plus::after{content:"";position:absolute;background:var(--accent);transition:transform .2s ease,background .2s ease}
+  .bt-faq .bt-faq-plus::before{left:5px;right:5px;top:11px;height:2px}
+  .bt-faq .bt-faq-plus::after{top:5px;bottom:5px;left:11px;width:2px}
+  .bt-faq[open] .bt-faq-plus{background:var(--accent)}
+  .bt-faq[open] .bt-faq-plus::before{background:#fff}
+  .bt-faq[open] .bt-faq-plus::after{transform:scaleY(0);background:#fff}
+  .bt-faq-body{padding:0 22px 22px;font-size:16px;line-height:1.62;color:#4a4a4a;font-weight:500}
+  .bt-brand{display:flex;flex-direction:column;background:#fff;border:2px solid #1A1A1A;border-radius:10px;overflow:hidden}
+  .bt-brandlogo{height:96px;display:flex;align-items:center;justify-content:center;padding:20px;border-bottom:2px solid #1A1A1A;background:#fff}
+  .bt-brandlogo img{max-height:100%;max-width:80%;object-fit:contain}
+  .bt-badge{display:inline-block;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:5px}
+  @media(max-width:920px){
+    .bt-navlinks{display:none!important}
+    .bt-navcta{display:none!important}
+    .bt-menu{display:inline-flex!important}
+    .bt-g4,.bt-g3,.bt-g2,.bt-foot{grid-template-columns:1fr!important}
+    .bt-g4{grid-template-columns:1fr 1fr!important}
+    .bt-g3{grid-template-columns:1fr 1fr!important}
+    .bt-sec{padding-left:20px!important;padding-right:20px!important}
+    .bt-util{display:none!important}
+    .bt-sticky{display:flex!important}
+    .bt-pad-b{padding-bottom:92px!important}
+  }
+  @media(max-width:560px){ .bt-g4,.bt-g3{grid-template-columns:1fr!important} }
+</style>
+</helmet>
+
+<div id="bt-root" style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A;background:#fff;overflow-x:hidden">
+
+  <!-- utility bar (red) -->
+  <div class="bt-util" style="background:var(--accent);color:#fff;font-size:13.5px;font-weight:600">
+    <div style="max-width:1200px;margin:0 auto;padding:9px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>24/7 Emergency Service</span>
+        <span style="opacity:.45">|</span>
+        <a href="tel:18132796785" style="color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Lutz · Tampa Bay, FL</div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div style="position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #1A1A1A">
+    <div style="position:relative;max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="/" aria-label="Trinity Garage Door Service — Home"><img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service" style="height:60px;width:auto"></a>
+      <div class="bt-navlinks" style="display:flex;align-items:center;gap:28px;color:#1A1A1A">
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger bt-navtrigger-active" aria-haspopup="true">Services <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:700px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px">
+            <div style="background:#FBF3F3;border:1px solid #F0DCDC;border-radius:8px;padding:14px">
+              <span class="bt-mcolh">Repair</span>
+              <a class="bt-mli" href="/services/repair/emergency/">24/7 Emergency Repair</a>
+              <a class="bt-mli" href="/services/repair/spring/">Spring Repair</a>
+              <a class="bt-mli" href="/services/repair/opener/">Opener Repair</a>
+              <a class="bt-mli" href="/services/repair/off-track/">Off-Track Repair</a>
+              <a class="bt-mli" href="/services/repair/cables-rollers/">Cables &amp; Rollers</a>
+              <a class="bt-mli" href="/services/repair/tune-up/">Maintenance / Tune-Up</a>
+              <a class="bt-mli bt-mli-all" href="/services/repair/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Repair Services</a>
+              <a class="bt-mcta" href="/get-service/?intent=repair" style="background:var(--accent);color:#fff">Book a Repair</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Install &amp; Replace</span>
+              <a class="bt-mli" href="/services/installation/">New Installation</a>
+              <a class="bt-mli" href="/services/replacement/">Door Replacement</a>
+              <a class="bt-mcta" href="/get-service/?intent=estimate" style="background:#fff;color:#1A1A1A;border:2px solid #1A1A1A">Free Estimate</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Doors &amp; Brands</span>
+              <a class="bt-mli" href="/doors/types/">Door Types &amp; Styles</a>
+              <a class="bt-mli" href="/doors/brands/">Brands (catalog)</a>
+              <a class="bt-mli" href="/doors/brochures/">Brochures</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Service Areas <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:260px">
+            <span class="bt-mcolh">Areas</span>
+            <a class="bt-mli" href="/service-areas/lutz/">Lutz</a>
+            <a class="bt-mli" href="/service-areas/land-o-lakes/">Land O' Lakes</a>
+            <a class="bt-mli" href="/service-areas/wesley-chapel/">Wesley Chapel</a>
+            <a class="bt-mli" href="/service-areas/palm-harbor/">Palm Harbor</a>
+            <a class="bt-mli" href="/service-areas/oldsmar/">Oldsmar</a>
+            <a class="bt-mli" href="/service-areas/tampa/">Tampa</a>
+            <a class="bt-mli bt-mli-all" href="/service-areas/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Service Areas</a>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">About <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega bt-mega-r" style="width:240px">
+            <span class="bt-mcolh">About</span>
+            <a class="bt-mli" href="/about/our-story/">Our Story</a>
+            <a class="bt-mli" href="/about/portfolio/">Portfolio / Our Work</a>
+            <a class="bt-mli" href="/about/reviews/">Reviews</a>
+          </div>
+        </div>
+
+        <a class="bt-navtrigger" href="/contact/" style="text-decoration:none">Contact</a>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <a class="bt-navcta" href="tel:18132796785" style="text-decoration:none;color:#1A1A1A;font-weight:900;font-size:17px;white-space:nowrap">(813) 279-6785</a>
+        <a class="bt-navcta" href="/get-service/?intent=estimate" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;padding:13px 22px;border-radius:7px">Free Estimate</a>
+        <button class="bt-menu" aria-label="Menu" style="background:none;border:2px solid #1A1A1A;border-radius:7px;padding:8px;cursor:pointer;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1A1A1A" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero (dark) -->
+  <div class="bt-hero-pad bt-pad-b" style="position:relative;overflow:hidden;padding:96px 24px 96px;border-bottom:5px solid var(--accent);background:#161616">
+    <div style="position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 82% 28%, rgba(184,32,42,.3), transparent 48%)"></div>
+    <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto">
+      <div style="font-size:12.5px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:22px">
+        <a href="/" style="color:rgba(255,255,255,.72);text-decoration:none">Home</a> <span style="opacity:.5">/</span> <a href="/doors/types/" style="color:rgba(255,255,255,.72);text-decoration:none">Doors</a> <span style="opacity:.5">/</span> <span style="color:#fff">Brands</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="width:52px;height:4px;background:var(--accent)"></span>
+        <span style="font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#fff">Brands We Carry</span>
+      </div>
+      <h1 class="bt-h1" style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(34px,5.6vw,64px);line-height:.98;letter-spacing:-.015em;text-transform:uppercase;margin:18px 0 0;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5);max-width:920px">We're Not A <span style="color:#fff;background:var(--accent);padding:0 12px;display:inline-block">Single-Brand Dealer</span></h1>
+      <p style="font-size:clamp(17px,2.1vw,21px);line-height:1.55;color:rgba(255,255,255,.9);max-width:680px;margin:24px 0 0;font-weight:500">We install the door and opener lines we trust and stand behind, and we service and repair just about every brand out there. So when you ask us what to buy, you get an honest answer for your house and your budget, not a pitch for the one product we're stuck selling.</p>
+    </div>
+  </div>
+
+  <!-- trust strip (dark) -->
+  <div style="background:#1A1A1A;border-top:1px solid #2a2a2a">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:center;gap:14px 26px;flex-wrap:wrap">
+      <img src="assets/badge-angi-super-service-2024.png" alt="Angi Super Service Award 2024" style="height:58px;width:auto">
+      <img src="assets/badge-elite.png" alt="HomeAdvisor Elite Service" style="height:48px;width:auto">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:#fff"><span style="color:var(--accent);letter-spacing:1px">★★★★★</span> 4.9 on Google</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:#fff"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;background:#fff;color:#0a4ea2;font-size:11px;font-weight:900">A+</span>BBB Accredited</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="font-size:13px;color:#9a9a9a;font-weight:600;letter-spacing:.03em">LICENSED · BONDED · INSURED · FL GD13010 / GDI-09484</span>
+    </div>
+  </div>
+
+  <!-- doors we install -->
+  <div style="background:#fff">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:84px 32px 40px">
+      <div class="reveal" style="max-width:720px">
+        <div style="display:inline-flex;align-items:center;gap:8px"><span class="bt-badge" style="background:var(--accent);color:#fff">Install &amp; Service</span></div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Doors We Install &amp; Service</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">The four door brands we install most. All four offer insulated and wind rated models, which matters in our part of Florida.</p>
+      </div>
+      <div class="bt-g4 reveal" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px">
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-clopay.png" alt="Clopay"></div>
+          <div style="padding:22px 22px 24px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:0;color:#1A1A1A">Clopay</h3><span class="bt-badge" style="background:#FBEDED;color:var(--accent)">Doors</span></div><p style="font-size:15px;line-height:1.58;color:#4a4a4a;margin:10px 0 0">The largest residential garage door maker in North America, and our go-to for good reason. Value steel doors and custom faux wood carriage doors alike. Ask about Intellicore insulation and WindCode rated models. The Canyon Ridge and Coachman lines nail the carriage look.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-chi.png" alt="C.H.I. Overhead Doors"></div>
+          <div style="padding:22px 22px 24px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:0;color:#1A1A1A">C.H.I.</h3><span class="bt-badge" style="background:#FBEDED;color:var(--accent)">Doors</span></div><p style="font-size:15px;line-height:1.58;color:#4a4a4a;margin:10px 0 0">A dealer favorite known for solid build quality, made in Illinois. Great if you want the wood look without the wood. Their Accents Woodtones steel doors use a printed grain that holds up to a close look, and the Planks line gives a clean modern wood look.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-hormann.png" alt="Hörmann"></div>
+          <div style="padding:22px 22px 24px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:0;color:#1A1A1A">Hörmann</h3><span class="bt-badge" style="background:#FBEDED;color:var(--accent)">Doors</span></div><p style="font-size:15px;line-height:1.58;color:#4a4a4a;margin:10px 0 0">The premium, design forward choice. A German maker that's built doors since 1935, and the engineering shows in the insulation, security, and smooth quiet operation. It costs more with fewer dealers around, but if you want a high end door it's worth a look.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-amarr.png" alt="Amarr"></div>
+          <div style="padding:22px 22px 24px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:0;color:#1A1A1A">Amarr</h3><span class="bt-badge" style="background:#FBEDED;color:var(--accent)">Doors</span></div><p style="font-size:15px;line-height:1.58;color:#4a4a4a;margin:10px 0 0">A well regarded mainstream brand with a big range of styles and several insulation tiers. Amarr's hurricane and wind rated models get specified all over Florida, so it's a dependable, easy choice. The Classica carriage line and Lincoln traditional line are popular sellers.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- openers we install -->
+  <div style="background:#fff">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:20px 32px 70px">
+      <div class="reveal" style="background:#1A1A1A;border:2px solid #1A1A1A;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:240px 1fr">
+        <div style="background:#fff;display:flex;align-items:center;justify-content:center;padding:28px;border-right:2px solid #1A1A1A"><img src="assets/brandlogo-liftmaster.png" alt="LiftMaster" style="max-width:80%;max-height:80px;object-fit:contain"></div>
+        <div style="padding:28px 30px;color:#fff">
+          <div style="display:flex;align-items:center;gap:10px"><span class="bt-badge" style="background:var(--accent);color:#fff">Openers · Install &amp; Service</span></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;margin:12px 0 0;color:#fff">LiftMaster</h3>
+          <p style="font-size:15.5px;line-height:1.6;color:#cfcfcf;margin:10px 0 0;max-width:720px">The opener we install most, and the one most pros trust. LiftMaster is the professional, dealer installed line, built heavier than the versions on a store shelf. You get the myQ app to open, close, and check your door from your phone, and battery backup models so the door still works in an outage. When we put in a new opener, this is usually the one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- brands we service -->
+  <div style="background:#F2F0EC;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:84px 32px">
+      <div class="reveal" style="max-width:720px">
+        <div style="display:inline-flex;align-items:center;gap:8px"><span class="bt-badge" style="background:#1A1A1A;color:#fff">Service &amp; Repair</span></div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Brands We Service &amp; Repair</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">We fix doors and openers from every major brand, even the ones we don't sell new. If you've got one of these, we can almost always get the parts and get it running again.</p>
+      </div>
+      <div class="bt-g3 reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px">
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-chamberlain.png" alt="Chamberlain"></div>
+          <div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;margin:0;color:#1A1A1A">Chamberlain</h3><span class="bt-badge" style="background:#E7E2D8;color:#555">Opener</span></div><p style="font-size:14.5px;line-height:1.55;color:#4a4a4a;margin:9px 0 0">LiftMaster's retail sibling, made by the same company and running the same myQ app. A little lighter duty, and we service and repair it all the time.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-genie.png" alt="Genie"></div>
+          <div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;margin:0;color:#1A1A1A">Genie</h3><span class="bt-badge" style="background:#E7E2D8;color:#555">Opener</span></div><p style="font-size:14.5px;line-height:1.55;color:#4a4a4a;margin:9px 0 0">A long running opener brand you'll find at the home stores. Genie uses its own Aladdin Connect smart app rather than myQ. We repair and replace them either way.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-craftsman.png" alt="Craftsman"></div>
+          <div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;margin:0;color:#1A1A1A">Craftsman</h3><span class="bt-badge" style="background:#E7E2D8;color:#555">Opener</span></div><p style="font-size:14.5px;line-height:1.55;color:#4a4a4a;margin:9px 0 0">The familiar Craftsman openers are built by the same company that makes Chamberlain and LiftMaster, so they're a known quantity for us to service and find parts for.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-linear.png" alt="Linear"></div>
+          <div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;margin:0;color:#1A1A1A">Linear</h3><span class="bt-badge" style="background:#E7E2D8;color:#555">Opener / Gate</span></div><p style="font-size:14.5px;line-height:1.55;color:#4a4a4a;margin:9px 0 0">Better known for gate openers and access control, Linear shows up on a lot of gated properties. We service their garage operators and can help with gate setups too.</p></div>
+        </div>
+        <div class="bt-brand">
+          <div class="bt-brandlogo"><img src="assets/brandlogo-wayne-dalton.jpg" alt="Wayne Dalton"></div>
+          <div style="padding:20px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;margin:0;color:#1A1A1A">Wayne Dalton</h3><span class="bt-badge" style="background:#E7E2D8;color:#555">Door</span></div><p style="font-size:14.5px;line-height:1.55;color:#4a4a4a;margin:9px 0 0">Worth clearing up: Wayne Dalton is really a door maker, not an opener brand, and they stopped making openers. If you have an older iDrive, parts are scarce, so we'll fix it if we can and talk replacement if we can't. We also service their TorqueMaster doors.</p></div>
+        </div>
+        <div style="background:#1A1A1A;border:2px solid #1A1A1A;border-radius:10px;padding:24px;display:flex;flex-direction:column;justify-content:center">
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:17px;text-transform:uppercase;margin:0;color:#fff">Got Another Brand?</h3>
+          <p style="font-size:14.5px;line-height:1.55;color:#a8a8a8;margin:9px 0 0">We carry common parts on the truck and can almost always get yours running again. Tell us what you've got.</p>
+          <a href="tel:18132796785" style="margin-top:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:800;font-size:13.5px;text-transform:uppercase;letter-spacing:.04em">Call us <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why no single brand + wind -->
+  <div style="background:#fff;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:84px 32px">
+      <div class="bt-g2 reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:44px">
+        <div>
+          <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Why We Don't Push One Brand</div>
+          <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(24px,2.8vw,34px);line-height:1.05;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">No Badge On The Truck Telling Us What To Recommend</h2>
+          <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">Plenty of companies are locked into one manufacturer and sell you that no matter what. We'd rather earn the call by being straight with you. We install the lines we believe in, we repair whatever you already own, and if your door or opener is past saving, we'll help you choose a replacement that actually fits your home and budget.</p>
+        </div>
+        <div style="background:#1A1A1A;border:2px solid #1A1A1A;border-radius:10px;padding:30px 28px;color:#fff">
+          <div style="display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--accent);padding:6px 12px;border-radius:999px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"></path></svg>A Word On Florida Wind Ratings</div>
+          <p style="font-size:15.5px;line-height:1.6;color:#cfcfcf;margin:14px 0 0">If you're replacing a door, ask us about wind rated models. Much of Tampa Bay sits in a wind borne debris zone, so your opening needs a door rated for the pressure at your address. Clopay calls their system WindCode, and Amarr, C.H.I., and Hörmann all offer rated lines.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:18px">
+            <a href="/doors/types/" style="text-decoration:none;background:#fff;color:#1A1A1A;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:11px 18px;border-radius:7px">How Ratings Work</a>
+            <a href="/doors/brochures/" style="text-decoration:none;background:transparent;color:#fff;border:2px solid #3a3a3a;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:9px 16px;border-radius:7px">Brochures</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- faq -->
+  <div style="background:#F2F0EC;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:880px;margin:0 auto;padding:84px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Brand Questions</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Frequently Asked</h2>
+      </div>
+      <div class="reveal" style="margin-top:36px">
+        <details class="bt-faq"><summary>Do I have to pick a brand you install? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Not at all. If you want a new door or opener, we'll point you to the lines we install and trust. If you already own another brand, we'll service and repair it just the same.</div></details>
+        <details class="bt-faq"><summary>Which garage door brand is best? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">There's no single best. The right door depends on your house, your budget, and how close you are to the coast. Clopay and Amarr cover most needs really well, C.H.I. is great for a wood look, and Hörmann is the premium pick. We'll help you sort it out.</div></details>
+        <details class="bt-faq"><summary>Do you only install LiftMaster openers? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">LiftMaster is what we install most, because it's the professional grade line and it holds up. If you have another brand, we service and repair it, and we can talk options if you want something specific.</div></details>
+        <details class="bt-faq"><summary>Can you fix my opener even if you didn't install it? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Yes. We repair every major opener brand, including Chamberlain, Genie, Craftsman, Linear, and older Wayne Dalton units, and we carry common parts on the truck.</div></details>
+        <details class="bt-faq"><summary>Is Wayne Dalton a door or an opener brand? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">A door brand. They used to make openers but stopped, so if your Wayne Dalton opener dies, replacement parts can be hard to find. We'll fix what we can and help you replace it if we can't.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- closing CTA -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="bt-sec reveal" style="max-width:1200px;margin:0 auto;padding:74px 32px;text-align:center">
+      <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(28px,4vw,46px);line-height:1.0;text-transform:uppercase;margin:0">Let's Find The Right Brand For You</h2>
+      <p style="font-size:17.5px;line-height:1.55;margin:16px auto 0;color:rgba(255,255,255,.92);font-weight:500;max-width:640px">Need a new door, a new opener, or a repair on the one you've got? Call Trinity at (813) 279-6785 or request a free estimate. We'll give you honest options and get the job done right.</p>
+      <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:30px">
+        <a href="tel:18132796785" style="text-decoration:none;background:#fff;color:var(--accent);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 32px;border-radius:7px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call (813) 279-6785</a>
+        <a href="/get-service/?intent=estimate" style="text-decoration:none;background:transparent;color:#fff;border:2px solid #fff;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:16px 28px;border-radius:7px">Request a Free Estimate</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="background:#111;color:#9a9a9a">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:60px 32px 0">
+      <div class="bt-foot" style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px">
+        <div>
+          <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service — Opening Doors Since 2007" style="width:230px;max-width:100%;height:auto;background:#fff;border-radius:8px;padding:12px 14px">
+          <p style="font-size:15px;line-height:1.6;color:#8a8a8a;margin:18px 0 0;max-width:300px">Family-owned garage door repair, replacement, and installation serving the Tampa Bay area since 2007.</p>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Doors</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/doors/types/" style="color:#9a9a9a;text-decoration:none">Types &amp; Styles</a>
+            <a class="bt-navlink" href="/doors/brands/" style="color:#9a9a9a;text-decoration:none">Brands We Carry</a>
+            <a class="bt-navlink" href="/doors/brochures/" style="color:#9a9a9a;text-decoration:none">Brochures</a>
+            <a class="bt-navlink" href="/services/installation/" style="color:#9a9a9a;text-decoration:none">Installation</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">About</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/about/our-story/" style="color:#9a9a9a;text-decoration:none">Our Story</a>
+            <a class="bt-navlink" href="/about/portfolio/" style="color:#9a9a9a;text-decoration:none">Portfolio</a>
+            <a class="bt-navlink" href="/about/reviews/" style="color:#9a9a9a;text-decoration:none">Reviews</a>
+            <a class="bt-navlink" href="/service-areas/" style="color:#9a9a9a;text-decoration:none">Service Areas</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px">(813) 279-6785</a>
+            <span>24/7 Emergency Service</span>
+            <span>Lutz, FL · Tampa Bay</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:2px solid #2a2a2a;margin-top:46px;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-size:13px;color:#6a6a6a;font-weight:500">© 2026 Trinity Garage Door Service Inc. · Licensed &amp; Insured · FL GD13010 / GDI-09484</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" aria-label="Facebook" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M14 9h3V5.5h-3c-2 0-3.5 1.6-3.5 3.6V11H8v3.5h2.5V22H14v-7.5h2.6l.4-3.5H14V9.6c0-.4.3-.6.6-.6z"></path></svg></a>
+          <a href="https://www.instagram.com/trinitygaragedoorservice/" aria-label="Instagram" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a href="#" aria-label="Google" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21.6 12.2c0-.6-.1-1.2-.2-1.8H12v3.5h5.4c-.2 1.2-.9 2.3-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2zM12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.6-4.1H3.1v2.6C4.7 19.8 8.1 22 12 22zM6.4 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.5H3.1A10 10 0 0 0 2 12c0 1.6.4 3.2 1.1 4.5zM12 6c1.5 0 2.8.5 3.8 1.5l2.8-2.8C16.9 3.1 14.7 2 12 2 8.1 2 4.7 4.2 3.1 7.5l3.3 2.6C7.2 7.7 9.4 6 12 6z"></path></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sticky mobile call/book bar -->
+  <div class="bt-sticky" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#111;padding:10px 12px;gap:10px;border-top:3px solid var(--accent)">
+    <a href="tel:18132796785" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#1A1A1A;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+    <a href="/get-service/?intent=estimate" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px">Free Estimate</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#b8202a&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroOverlay&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:0.82,&quot;min&quot;:0.4,&quot;max&quot;:0.95,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.getElementById('bt-root');
+    if (root) { root.classList.add('bt-js'); this.applyTheme(root); }
+    this._io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+    requestAnimationFrame(() => this.observe());
+    this._fallback = setTimeout(() => {
+      document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => {
+        const r = n.getBoundingClientRect();
+        if (r.top < window.innerHeight) n.classList.add('in');
+      });
+    }, 1200);
+  }
+  componentDidUpdate() {
+    const root = document.getElementById('bt-root');
+    if (root) this.applyTheme(root);
+    this.observe();
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); clearTimeout(this._fallback); }
+  applyTheme(root) {
+    root.style.setProperty('--accent', this.props.accent ?? '#b8202a');
+    root.style.setProperty('--ov', String(this.props.heroOverlay ?? 0.82));
+  }
+  observe() {
+    if (!this._io) return;
+    document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => this._io.observe(n));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

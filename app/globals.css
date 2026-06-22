@@ -1,40 +1,62 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
-/* Bold Trade design tokens (from mockup/v3/dist). Tailwind v4 exposes these as
-   utilities: bg-accent, text-ink, bg-sand, font-heading, font-sans, etc. */
+/* Bold Trade design system (handoff 01). Tailwind v4 exposes these as utilities:
+   bg-accent, text-ink, bg-cream, bg-panel, font-display, font-body, etc.
+   Custom breakpoints nav=920 / xs=560 (handoff G1): use max-nav: / max-xs: / nav: */
 @theme {
-  --color-ink: #1a1a1a;
   --color-accent: #b8202a;
-  --color-sand: #f2f0ec;
+  --color-accent-dark: #8f1820;
+  --color-ink: #1a1a1a;
+  --color-ink-2: #161616;
+  --color-ink-3: #111111;
+  --color-panel: #222222;
+  --color-panel-border: #333333;
+  --color-cream: #f2f0ec;
+  --color-cream-2: #fbf3f3;
+  --color-paper: #ffffff;
+  --color-body: #4a4a4a;
 
-  --font-sans: var(--font-hanken), system-ui, sans-serif;
+  --breakpoint-xs: 560px;
+  --breakpoint-nav: 920px;
+
+  /* Body = Hanken Grotesk via next/font (--font-hanken, set on <html> in layout).
+     Display = Archivo Expanded via Google <link> in layout (NOT in next/font/google). */
+  --font-display: "Archivo Expanded", "Archivo", system-ui, sans-serif;
+  --font-body: var(--font-hanken), "Hanken Grotesk", system-ui, sans-serif;
+
+  /* Back-compat aliases for the not-yet-replaced original homepage/sections.
+     Remove once components/sections/* are migrated to the new blocks. */
+  --color-sand: #f2f0ec;
   --font-heading: "Archivo Expanded", "Archivo", system-ui, sans-serif;
+  --font-sans: var(--font-hanken), system-ui, sans-serif;
+}
+
+/* Runtime-tweakable accent + hero overlay opacity (handoff 01). */
+:root {
+  --accent: #b8202a;
+  --ov: 0.82;
 }
 
 html {
   scroll-behavior: smooth;
 }
-
 body {
   margin: 0;
   background: #fff;
   color: var(--color-ink);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
 }
-
 img {
   display: block;
   max-width: 100%;
 }
-
 ::selection {
-  background: var(--color-accent);
+  background: #b8202a;
   color: #fff;
 }
 
-/* Partner-logo marquee (ported from the dc-runtime CSS animation). */
-@keyframes marquee {
+/* Partner-logo marquee (home "Who We Work With"). */
+@keyframes bt-marquee {
   from {
     transform: translateX(0);
   }
@@ -42,22 +64,23 @@ img {
     transform: translateX(-50%);
   }
 }
-
-.marquee {
+.bt-marquee {
   display: flex;
   width: max-content;
   align-items: center;
   gap: 40px;
-  animation: marquee 32s linear infinite;
+  animation: bt-marquee 32s linear infinite;
 }
-
-.marquee-mask {
+.bt-marquee-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee {
+  .bt-marquee {
     animation: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

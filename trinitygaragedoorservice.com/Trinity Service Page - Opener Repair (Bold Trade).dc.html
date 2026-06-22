@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#1A1A1A;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A}
+  img{display:block;max-width:100%}
+  ::selection{background:#b8202a;color:#fff}
+  #bt-root{--accent:#b8202a;--ov:.82}
+  .reveal{transition:opacity .45s ease,transform .45s ease}
+  .bt-js .reveal{opacity:0;transform:translateY(16px)}
+  .bt-js .reveal.in{opacity:1;transform:none}
+  .bt-navlink{text-decoration:none;position:relative;padding-bottom:3px}
+  .bt-navlink::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;background:var(--accent);transition:width .25s ease}
+  .bt-navlink:hover::after{width:100%}
+  .bt-sticky{display:none}
+  .bt-menu{display:none}
+  .bt-navitem{position:static;display:flex;align-items:center}
+  .bt-navtrigger{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#1A1A1A;font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;background:none;border:none;padding:20px 0}
+  .bt-navitem:hover .bt-navtrigger,.bt-navitem:focus-within .bt-navtrigger{color:var(--accent)}
+  .bt-navtrigger-active{color:var(--accent);border-bottom:3px solid var(--accent)}
+  .bt-caret{transition:transform .2s ease}
+  .bt-navitem:hover .bt-caret,.bt-navitem:focus-within .bt-caret{transform:rotate(180deg)}
+  .bt-mega{position:absolute;top:100%;left:50%;margin-top:12px;background:#fff;border:2px solid #1A1A1A;border-radius:8px;box-shadow:0 26px 50px rgba(0,0,0,.22);padding:22px;opacity:0;visibility:hidden;transform:translate(-50%,10px);transition:opacity .2s ease,transform .2s ease,visibility .2s;z-index:60}
+  .bt-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+  .bt-navitem:hover .bt-mega,.bt-navitem:focus-within .bt-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .bt-mega-r{left:50%;right:auto}
+  .bt-mcolh{display:inline-block;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#1A1A1A;padding-bottom:6px;border-bottom:3px solid var(--accent);margin-bottom:6px}
+  .bt-mli{display:flex;align-items:center;gap:7px;text-decoration:none;color:#3a3a3a;font-weight:600;font-size:14.5px;padding:8px 10px;border-radius:6px;transition:background .15s ease,color .15s ease;white-space:nowrap}
+  .bt-mli:hover{background:#F2F0EC;color:var(--accent)}
+  .bt-mli-all{color:var(--accent);font-weight:800}
+  .bt-mcta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:11px 14px;border-radius:7px;margin-top:8px}
+  .bt-faq{border:2px solid #1A1A1A;border-radius:8px;background:#fff;margin-top:14px;overflow:hidden}
+  .bt-faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;color:#1A1A1A}
+  .bt-faq summary::-webkit-details-marker{display:none}
+  .bt-faq .bt-faq-plus{flex-shrink:0;width:26px;height:26px;border:2px solid var(--accent);border-radius:6px;position:relative;transition:background .2s ease}
+  .bt-faq .bt-faq-plus::before,.bt-faq .bt-faq-plus::after{content:"";position:absolute;background:var(--accent);transition:transform .2s ease,background .2s ease}
+  .bt-faq .bt-faq-plus::before{left:5px;right:5px;top:11px;height:2px}
+  .bt-faq .bt-faq-plus::after{top:5px;bottom:5px;left:11px;width:2px}
+  .bt-faq[open] .bt-faq-plus{background:var(--accent)}
+  .bt-faq[open] .bt-faq-plus::before{background:#fff}
+  .bt-faq[open] .bt-faq-plus::after{transform:scaleY(0);background:#fff}
+  .bt-faq-body{padding:0 22px 22px;font-size:16px;line-height:1.62;color:#4a4a4a;font-weight:500}
+  @media(max-width:920px){
+    .bt-navlinks{display:none!important}
+    .bt-navcta{display:none!important}
+    .bt-menu{display:inline-flex!important}
+    .bt-g2,.bt-g4,.bt-g3,.bt-foot{grid-template-columns:1fr!important}
+    .bt-g4{grid-template-columns:1fr 1fr!important}
+    .bt-g3{grid-template-columns:1fr 1fr!important}
+    .bt-sec{padding-left:20px!important;padding-right:20px!important}
+    .bt-util{display:none!important}
+    .bt-sticky{display:flex!important}
+    .bt-pad-b{padding-bottom:92px!important}
+    .bt-idxrow{grid-template-columns:64px 1fr!important;gap:16px!important}
+    .bt-idxico{display:none!important}
+  }
+  @media(max-width:560px){
+    .bt-g4,.bt-g3{grid-template-columns:1fr!important}
+  }
+</style>
+</helmet>
+
+<div id="bt-root" style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A;background:#fff;overflow-x:hidden">
+
+  <!-- utility bar (red) -->
+  <div class="bt-util" style="background:var(--accent);color:#fff;font-size:13.5px;font-weight:600">
+    <div style="max-width:1200px;margin:0 auto;padding:9px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>24/7 Emergency Service</span>
+        <span style="opacity:.45">|</span>
+        <a href="tel:18132796785" style="color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Lutz · Tampa Bay, FL</div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div style="position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #1A1A1A">
+    <div style="position:relative;max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="/" aria-label="Trinity Garage Door Service — Home"><img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service" style="height:60px;width:auto"></a>
+      <div class="bt-navlinks" style="display:flex;align-items:center;gap:28px;color:#1A1A1A">
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger bt-navtrigger-active" aria-haspopup="true">Services <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:700px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px">
+            <div style="background:#FBF3F3;border:1px solid #F0DCDC;border-radius:8px;padding:14px">
+              <span class="bt-mcolh">Repair</span>
+              <a class="bt-mli" href="/services/repair/emergency/">24/7 Emergency Repair</a>
+              <a class="bt-mli" href="/services/repair/spring/">Spring Repair</a>
+              <a class="bt-mli" href="/services/repair/opener/">Opener Repair</a>
+              <a class="bt-mli" href="/services/repair/off-track/">Off-Track Repair</a>
+              <a class="bt-mli" href="/services/repair/cables-rollers/">Cables &amp; Rollers</a>
+              <a class="bt-mli" href="/services/repair/tune-up/">Maintenance / Tune-Up</a>
+              <a class="bt-mli bt-mli-all" href="/services/repair/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Repair Services</a>
+              <a class="bt-mcta" href="/get-service/?intent=repair" style="background:var(--accent);color:#fff">Book a Repair</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Install &amp; Replace</span>
+              <a class="bt-mli" href="/services/installation/">New Installation</a>
+              <a class="bt-mli" href="/services/replacement/">Door Replacement</a>
+              <a class="bt-mcta" href="/get-service/?intent=estimate" style="background:#fff;color:#1A1A1A;border:2px solid #1A1A1A">Free Estimate</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Doors &amp; Brands</span>
+              <a class="bt-mli" href="/doors/types/">Door Types &amp; Styles</a>
+              <a class="bt-mli" href="/doors/brands/">Brands (catalog)</a>
+              <a class="bt-mli" href="/doors/brochures/">Brochures</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Service Areas <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:260px">
+            <span class="bt-mcolh">Areas</span>
+            <a class="bt-mli" href="/service-areas/lutz/">Lutz</a>
+            <a class="bt-mli" href="/service-areas/land-o-lakes/">Land O' Lakes</a>
+            <a class="bt-mli" href="/service-areas/wesley-chapel/">Wesley Chapel</a>
+            <a class="bt-mli" href="/service-areas/palm-harbor/">Palm Harbor</a>
+            <a class="bt-mli" href="/service-areas/oldsmar/">Oldsmar</a>
+            <a class="bt-mli" href="/service-areas/tampa/">Tampa</a>
+            <a class="bt-mli bt-mli-all" href="/service-areas/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Service Areas</a>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">About <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega bt-mega-r" style="width:240px">
+            <span class="bt-mcolh">About</span>
+            <a class="bt-mli" href="/about/our-story/">Our Story</a>
+            <a class="bt-mli" href="/about/portfolio/">Portfolio / Our Work</a>
+            <a class="bt-mli" href="/about/reviews/">Reviews</a>
+          </div>
+        </div>
+
+        <a class="bt-navtrigger" href="/contact/" style="text-decoration:none">Contact</a>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <a class="bt-navcta" href="tel:18132796785" style="text-decoration:none;color:#1A1A1A;font-weight:900;font-size:17px;white-space:nowrap">(813) 279-6785</a>
+        <a class="bt-navcta" href="/get-service/?intent=repair" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;padding:13px 22px;border-radius:7px">Book a Repair</a>
+        <button class="bt-menu" aria-label="Menu" style="background:none;border:2px solid #1A1A1A;border-radius:7px;padding:8px;cursor:pointer;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1A1A1A" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero (photo bg) -->
+  <div class="bt-hero-pad bt-pad-b" style="position:relative;overflow:hidden;padding:112px 24px 118px;border-bottom:5px solid var(--accent)">
+    <img src="assets/jobsite-tech-installing-opener.jpg" alt="Trinity technician servicing a garage door opener" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0">
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgb(10 10 10 / calc(var(--ov) * .78)) 0%, rgb(10 10 10 / calc(var(--ov) * .92)) 55%, rgb(10 10 10 / var(--ov)) 100%)"></div>
+    <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto">
+      <div style="font-size:12.5px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:22px">
+        <a href="/" style="color:rgba(255,255,255,.72);text-decoration:none">Home</a> <span style="opacity:.5">/</span> <a href="/services/" style="color:rgba(255,255,255,.72);text-decoration:none">Services</a> <span style="opacity:.5">/</span> <a href="/services/repair/" style="color:rgba(255,255,255,.72);text-decoration:none">Repair</a> <span style="opacity:.5">/</span> <span style="color:#fff">Opener Repair</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <span style="width:52px;height:4px;background:var(--accent)"></span>
+        <span style="font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#fff">Opener Repair &amp; Replacement</span>
+      </div>
+      <h1 class="bt-h1" style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(34px,5.6vw,64px);line-height:.98;letter-spacing:-.015em;text-transform:uppercase;margin:18px 0 0;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5);max-width:920px">Garage Door Opener <span style="color:#fff;background:var(--accent);padding:0 12px;display:inline-block">Repair</span></h1>
+      <p style="font-size:clamp(17px,2.1vw,21px);line-height:1.55;color:rgba(255,255,255,.9);max-width:660px;margin:24px 0 0;font-weight:500">When the opener quits, the whole morning stops. The good news is most opener trouble is fixable, and a fair amount turns out to be a quick fix once you know what's wrong. We repair and replace openers all over Tampa Bay, every major brand.</p>
+      <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
+        <a href="/get-service/?intent=repair" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 32px;border-radius:7px;box-shadow:0 12px 26px rgba(184,32,42,.4)">Book a Repair</a>
+        <a href="tel:18132796785" style="text-decoration:none;background:#fff;color:#1A1A1A;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 30px;border-radius:7px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call (813) 279-6785</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- trust strip (dark) -->
+  <div style="background:#1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:center;gap:14px 26px;flex-wrap:wrap">
+      <img src="assets/badge-angi-super-service-2024.png" alt="Angi Super Service Award 2024" style="height:58px;width:auto">
+      <img src="assets/badge-elite.png" alt="HomeAdvisor Elite Service" style="height:48px;width:auto">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:#fff"><span style="color:var(--accent);letter-spacing:1px">★★★★★</span> 4.9 on Google</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:#fff"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;background:#fff;color:#0a4ea2;font-size:11px;font-weight:900">A+</span>BBB Accredited</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="font-size:13px;color:#9a9a9a;font-weight:600;letter-spacing:.03em">LICENSED · BONDED · INSURED · FL GD13010 / GDI-09484</span>
+    </div>
+  </div>
+
+  <!-- intro split -->
+  <div style="background:#fff">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:90px 32px">
+      <div class="bt-g2 reveal" style="display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)"><span style="width:30px;height:3px;background:var(--accent)"></span>The Short Version</div>
+          <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;letter-spacing:-.01em;text-transform:uppercase;margin:16px 0 0;color:#1A1A1A">Most Opener Trouble Is Fixable</h2>
+          <p style="font-size:17.5px;line-height:1.64;color:#4a4a4a;margin:20px 0 0">You're sitting in the driveway pressing the button, the door won't budge, and you're already running late. Sometimes it's the opener itself. Sometimes it's a dead remote battery or a sensor knocked out of line.</p>
+          <p style="font-size:17.5px;line-height:1.64;color:#4a4a4a;margin:16px 0 0">We work on every major brand, chain, belt, screw, and smart WiFi units alike. We'll figure out what's actually wrong, then tell you straight whether it's a quick repair or time for a new unit.</p>
+        </div>
+        <div style="position:relative">
+          <img src="assets/jobsite-tech-at-residential-garage.jpg" alt="Trinity technician at a residential garage opener" style="width:100%;height:380px;object-fit:cover;border:2px solid #1A1A1A;border-radius:8px">
+          <div style="position:absolute;right:-16px;bottom:-16px;background:var(--accent);border:2px solid #1A1A1A;border-radius:8px;padding:12px 18px;color:#fff;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.03em">Same-Day Service</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- signs -->
+  <div style="background:#F2F0EC;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:90px 32px">
+      <div class="reveal" style="max-width:680px">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Common Opener Problems</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">How Openers Usually Fail</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">Openers tend to fail in pretty recognizable ways. These are the ones we hear about most.</p>
+      </div>
+      <div class="bt-g3 reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px">
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:24px"><div style="width:46px;height:46px;border-radius:8px;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"></rect><path d="M4 9h16"></path></svg></div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Won't Respond</h3><p style="font-size:15px;line-height:1.5;color:#4a4a4a;margin:7px 0 0">You press the remote or wall button and nothing happens. Could be power, a dead remote battery, the wall switch, or the logic board inside.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:24px"><div style="width:46px;height:46px;border-radius:8px;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h3l2-6 4 12 2-6h3"></path><path d="M18 5l3 3-3 3"></path></svg></div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Reverses On Its Own</h3><p style="font-size:15px;line-height:1.5;color:#4a4a4a;margin:7px 0 0">It starts down, then backs up before it reaches the floor. Nine times out of ten that's the safety sensors, knocked out of line or with a dirty lens.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:24px"><div style="width:46px;height:46px;border-radius:8px;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8c4-2 6 2 9 0M3 14c4-2 6 2 9 0"></path><path d="M15 11h6"></path></svg></div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Grinding Or Rattling</h3><p style="font-size:15px;line-height:1.5;color:#4a4a4a;margin:7px 0 0">A worn gear or sprocket, a loose chain, or a tired motor makes an opener loud. That noise usually warns you something's about to give.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:24px"><div style="width:46px;height:46px;border-radius:8px;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg></div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Remote Won't Connect</h3><p style="font-size:15px;line-height:1.5;color:#4a4a4a;margin:7px 0 0">Dead batteries are the easy one. Past that, remotes can need reprogramming, or the antenna or receiver on the opener may be the trouble.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:24px"><div style="width:46px;height:46px;border-radius:8px;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l16 4M4 7v10l16 4V11"></path></svg></div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;margin:14px 0 0;color:#1A1A1A">Runs But Won't Move</h3><p style="font-size:15px;line-height:1.5;color:#4a4a4a;margin:7px 0 0">The motor hums and the carriage travels, but the door stays put. That can be a stripped gear, a broken trolley, or a disconnected arm.</p></div>
+        <div style="background:#1A1A1A;border:2px solid #1A1A1A;border-radius:8px;padding:24px;display:flex;flex-direction:column;justify-content:center"><div style="display:flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4M12 17h.01"></path></svg><span style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;color:#fff">Try The Easy Stuff</span></div><p style="font-size:15px;line-height:1.5;color:#cfcfcf;margin:10px 0 0;font-weight:500">A few you can rule out yourself, like swapping a remote battery or wiping the sensor eyes. If it's more than that, we'll sort it out.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- topical index: spring types -->
+  <div style="background:#fff;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:90px 32px">
+      <div class="reveal" style="max-width:680px">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">The Main Types Of Opener</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Chain, Belt, Screw &amp; More</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">If you're replacing an opener, the drive type is the big decision. Each one moves the door a little differently.</p>
+      </div>
+      <div class="reveal" style="margin-top:40px;border:2px solid #1A1A1A;border-radius:10px;background:#fff;overflow:hidden">
+        <div class="bt-idxrow" style="display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:24px;padding:26px 28px;border-bottom:2px solid #1A1A1A">
+          <span style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:44px;line-height:1;color:var(--accent)">01</span>
+          <div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;margin:0;color:#1A1A1A">Chain Drive</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:6px 0 0">A metal chain, sort of like a bike chain, pulls the door up. It's the workhorse, tough and affordable. The tradeoff is noise, so if your garage sits under a bedroom, you'll hear it.</p></div>
+          <div class="bt-idxico" style="width:52px;height:52px;border-radius:8px;background:#F2F0EC;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"></circle><circle cx="17" cy="17" r="3"></circle><path d="M10 7h7M7 10v7"></path></svg></div>
+        </div>
+        <div class="bt-idxrow" style="display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:24px;padding:26px 28px;border-bottom:2px solid #1A1A1A">
+          <span style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:44px;line-height:1;color:var(--accent)">02</span>
+          <div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;margin:0;color:#1A1A1A">Belt Drive</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:6px 0 0">Swaps the chain for a reinforced rubber belt. Much quieter and smoother, which is why people pick it for attached garages and rooms over the garage. It costs a bit more than a chain.</p></div>
+          <div class="bt-idxico" style="width:52px;height:52px;border-radius:8px;background:#F2F0EC;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="6" rx="3"></rect><path d="M7 9v6M11 9v6M15 9v6"></path></svg></div>
+        </div>
+        <div class="bt-idxrow" style="display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:24px;padding:26px 28px;border-bottom:2px solid #1A1A1A">
+          <span style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:44px;line-height:1;color:var(--accent)">03</span>
+          <div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;margin:0;color:#1A1A1A">Screw Drive</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:6px 0 0">Turns a threaded steel rod to move the door. Fewer moving parts and not much upkeep. These sit in the middle on noise and handle our heat fine.</p></div>
+          <div class="bt-idxico" style="width:52px;height:52px;border-radius:8px;background:#F2F0EC;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M5 8h14M5 16h14M3 12h.01"></path></svg></div>
+        </div>
+        <div class="bt-idxrow" style="display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:24px;padding:26px 28px;border-bottom:2px solid #1A1A1A">
+          <span style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:44px;line-height:1;color:var(--accent)">04</span>
+          <div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;margin:0;color:#1A1A1A">Wall Mount</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:6px 0 0">Also called a jackshaft opener, it mounts on the wall beside the door instead of up on the ceiling. It frees the ceiling for storage and runs nice and quiet, a great fit for high or cathedral style ceilings.</p></div>
+          <div class="bt-idxico" style="width:52px;height:52px;border-radius:8px;background:#F2F0EC;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="8" height="8" rx="1"></rect><path d="M13 12h6M19 9v6"></path></svg></div>
+        </div>
+        <div class="bt-idxrow" style="display:grid;grid-template-columns:104px 1fr auto;align-items:center;gap:24px;padding:26px 28px">
+          <span style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:44px;line-height:1;color:var(--accent)">05</span>
+          <div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:20px;text-transform:uppercase;margin:0;color:#1A1A1A">Smart &amp; WiFi</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:6px 0 0">Open, close, and check the door from your phone, wherever you are. A lot run through the myQ app and alert you when the door's left up. Many newer LiftMaster and Chamberlain units build this in, and we can add it to plenty of existing setups too.</p></div>
+          <div class="bt-idxico" style="width:52px;height:52px;border-radius:8px;background:#F2F0EC;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13a10 10 0 0 1 14 0M8.5 16.5a5 5 0 0 1 7 0"></path><circle cx="12" cy="20" r="1"></circle></svg></div>
+        </div>
+      </div>
+      <div class="reveal" style="display:flex;gap:14px;align-items:flex-start;margin-top:24px;background:#1A1A1A;border-radius:8px;padding:22px 24px">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <p style="font-size:15.5px;line-height:1.6;color:#cfcfcf;margin:0;font-weight:500"><strong style="color:#fff">Repair it or replace it?</strong> Plenty of opener problems are a straightforward repair, a new gear, a sensor realignment, a logic board, a fresh remote. Replacement makes more sense when the unit is around ten to fifteen years old, it keeps breaking, it has no safety sensors, or you want features it can't do like quiet operation, phone control, or battery backup for storm season. You'll get an honest call either way.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- same day & 24/7 (red band) -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="bt-sec reveal" style="max-width:1200px;margin:0 auto;padding:64px 32px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+      <div style="max-width:680px">
+        <span style="display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.18);padding:7px 14px;border-radius:999px"><span style="width:8px;height:8px;border-radius:50%;background:#fff"></span>Same-Day &amp; 24/7</span>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(26px,3.6vw,42px);line-height:1.0;text-transform:uppercase;margin:16px 0 0">When The Opener Quits, The Morning Stops</h2>
+        <p style="font-size:17px;line-height:1.58;color:rgba(255,255,255,.92);margin:14px 0 0;font-weight:500">Most repairs are done the same visit, and a new opener install usually wraps up the same day. We keep common parts on the truck, so you're not left waiting with a door that won't open.</p>
+      </div>
+      <a href="tel:18132796785" style="text-decoration:none;background:#fff;color:var(--accent);border-radius:8px;padding:20px 26px;display:inline-flex;align-items:center;gap:14px;flex-shrink:0">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <span><span style="display:block;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8f1820">Call the 24/7 line</span><span style="display:block;font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:24px;color:var(--accent)">(813) 279-6785</span></span>
+      </a>
+    </div>
+  </div>
+
+  <!-- what we do -->
+  <div style="background:#1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:90px 32px">
+      <div class="bt-g2 reveal" style="display:grid;grid-template-columns:1fr 1.05fr;gap:50px;align-items:center">
+        <div style="position:relative">
+          <img src="assets/jobsite-two-techs-on-ladder.jpg" alt="Trinity technicians servicing a garage door opener" style="width:100%;height:420px;object-fit:cover;border:2px solid #000;border-radius:8px">
+          <div style="position:absolute;left:-16px;bottom:-16px;background:var(--accent);border:2px solid #000;border-radius:8px;padding:12px 18px;color:#fff;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.03em">Every Brand</div>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">What We Do On A Service Call</div>
+          <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.2vw,38px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#fff">We Check The Whole System</h2>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:22px">
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:15.5px;font-weight:500;color:#d8d8d8"><strong style="color:#fff">We go over everything.</strong> The opener, the sensors, the wiring, the springs, and the door balance, instead of only eyeballing the part that's acting up.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:15.5px;font-weight:500;color:#d8d8d8"><strong style="color:#fff">We tell you straight what it needs.</strong> An honest read and a clear price before we start. No pressure, no selling you parts that are still fine.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:15.5px;font-weight:500;color:#d8d8d8"><strong style="color:#fff">A struggling opener is often worn springs.</strong> When the door is too heavy, the opener works overtime. We check that the door isn't the real problem.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:15.5px;font-weight:500;color:#d8d8d8"><strong style="color:#fff">We work on every major brand.</strong> LiftMaster, Chamberlain, Genie, Craftsman, Linear, and Wayne Dalton, so you don't have to track down a specialist.</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:15.5px;font-weight:500;color:#d8d8d8"><strong style="color:#fff">Smart setup if you want it.</strong> We can install a WiFi opener you run from your phone, or add the feature to many units you already have.</span></div>
+          </div>
+          <p style="font-size:15.5px;line-height:1.6;color:#a8a8a8;margin:22px 0 0">Most repairs are done the same visit, and a new install usually wraps up the same day. You get a clear explanation and a price before we touch anything, and a free estimate every time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why trinity (dark) -->
+  <div style="background:#1A1A1A;border-top:5px solid var(--accent)">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:90px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Why Folks In Tampa Bay Call Trinity</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.04;text-transform:uppercase;margin:12px 0 0;color:#fff">A Family Shop, Not A Call Center</h2>
+        <p style="font-size:16px;line-height:1.6;color:#a8a8a8;margin:14px 0 0">We've been opening doors around here since 2007, across Hillsborough, Pasco, and Pinellas.</p>
+      </div>
+      <div class="bt-g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px">
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">No Guesswork</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">We fix what's broken and leave the rest alone. No pressure and no upsell.</p>
+        </div>
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Fast &amp; Same-Day</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">Same day help, plus a 24/7 line for when a spring breaks at a bad hour.</p>
+        </div>
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Licensed &amp; Insured</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">Bonded and insured under FL GD13010 and GDI-09484.</p>
+        </div>
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="9"></circle></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Fair, Upfront Pricing</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">A price you hear up front, with free estimates every time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- faq -->
+  <div style="background:#F2F0EC">
+    <div class="bt-sec" style="max-width:880px;margin:0 auto;padding:90px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Opener Repair Questions</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Frequently Asked</h2>
+      </div>
+      <div class="reveal" style="margin-top:36px">
+        <details class="bt-faq"><summary>My garage door won't close and the opener light keeps blinking. What's wrong? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">That blinking light is usually the safety sensors. The two little eyes near the floor need a clear line of sight to each other. Check for a bin or box in the way, wipe the lenses, and nudge them back into line until the lights hold steady. If it still won't close, give us a call.</div></details>
+        <details class="bt-faq"><summary>Is it worth repairing an old opener, or should I just replace it? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Depends on the unit. If it's under ten years old and the fix is small, repair it. If it's pushing fifteen years, breaking often, or has no safety sensors, a new opener is usually the better money. We'll walk you through the honest math.</div></details>
+        <details class="bt-faq"><summary>How long should a garage door opener last? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">About ten to fifteen years for most units. How often you use it and a little routine maintenance both make a difference. Keeping the door itself balanced helps too, since the opener isn't fighting a heavy door every cycle.</div></details>
+        <details class="bt-faq"><summary>Can I control a new opener from my phone? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Yep. Smart openers connect to WiFi and run through an app like myQ, so you can open or close the door and get alerts from anywhere. We can install a smart opener, or in a lot of cases add the feature to the one you already have.</div></details>
+        <details class="bt-faq"><summary>Do you work on my brand? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Most likely. We service LiftMaster, Chamberlain, Genie, Craftsman, Linear, and Wayne Dalton, among others. Tell us what you've got when you call and we'll come prepared.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- closing CTA -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="bt-sec reveal" style="max-width:1200px;margin:0 auto;padding:74px 32px;text-align:center">
+      <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(28px,4vw,46px);line-height:1.0;text-transform:uppercase;margin:0">Let's Get That Door Opening Again</h2>
+      <p style="font-size:17.5px;line-height:1.55;margin:16px auto 0;color:rgba(255,255,255,.92);font-weight:500;max-width:640px">A cranky opener doesn't get better on its own. Call Trinity at (813) 279-6785 or request a free estimate, and we'll get a tech out, usually the same day, to fix what you've got or set you up with a new one.</p>
+      <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:30px">
+        <a href="tel:18132796785" style="text-decoration:none;background:#fff;color:var(--accent);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 32px;border-radius:7px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call (813) 279-6785</a>
+        <a href="/get-service/?intent=estimate" style="text-decoration:none;background:transparent;color:#fff;border:2px solid #fff;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:16px 28px;border-radius:7px">Request a Free Estimate</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="background:#111;color:#9a9a9a">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:60px 32px 0">
+      <div class="bt-foot" style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px">
+        <div>
+          <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service — Opening Doors Since 2007" style="width:230px;max-width:100%;height:auto;background:#fff;border-radius:8px;padding:12px 14px">
+          <p style="font-size:15px;line-height:1.6;color:#8a8a8a;margin:18px 0 0;max-width:300px">Family-owned garage door repair, replacement, and installation serving the Tampa Bay area since 2007.</p>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Services</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/services/installation/" style="color:#9a9a9a;text-decoration:none">Installation</a>
+            <a class="bt-navlink" href="/services/repair/" style="color:#9a9a9a;text-decoration:none">Repair &amp; Service</a>
+            <a class="bt-navlink" href="/services/repair/spring/" style="color:#9a9a9a;text-decoration:none">Spring Repair</a>
+            <a class="bt-navlink" href="/services/repair/opener/" style="color:#9a9a9a;text-decoration:none">Opener Repair</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Resources</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="#" style="color:#9a9a9a;text-decoration:none">Blog</a>
+            <a class="bt-navlink" href="#" style="color:#9a9a9a;text-decoration:none">Safety Tips</a>
+            <a class="bt-navlink" href="#" style="color:#9a9a9a;text-decoration:none">DIY Troubleshooting</a>
+            <a class="bt-navlink" href="#" style="color:#9a9a9a;text-decoration:none">FAQ</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px">(813) 279-6785</a>
+            <span>24/7 Emergency Service</span>
+            <span>Lutz, FL · Tampa Bay</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:2px solid #2a2a2a;margin-top:46px;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-size:13px;color:#6a6a6a;font-weight:500">© 2026 Trinity Garage Door Service Inc. · Licensed &amp; Insured · FL GD13010 / GDI-09484</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" aria-label="Facebook" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M14 9h3V5.5h-3c-2 0-3.5 1.6-3.5 3.6V11H8v3.5h2.5V22H14v-7.5h2.6l.4-3.5H14V9.6c0-.4.3-.6.6-.6z"></path></svg></a>
+          <a href="https://www.instagram.com/trinitygaragedoorservice/" aria-label="Instagram" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a href="#" aria-label="LinkedIn" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0zM3.4 8.5h3.1V21H3.4zM9.3 8.5h2.97v1.7h.04c.41-.78 1.42-1.6 2.93-1.6 3.13 0 3.71 2.06 3.71 4.74V21h-3.1v-5.36c0-1.28-.02-2.92-1.78-2.92-1.78 0-2.05 1.39-2.05 2.83V21H9.3z"></path></svg></a>
+          <a href="#" aria-label="Yelp" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M11.3 3.2c.1-.7-.5-1.3-1.2-1.1L6.3 3.4c-.6.2-.9.9-.5 1.4l3 4.6c.5.8 1.8.4 1.8-.5zM10.9 12.4c-.2-.6-.9-.8-1.4-.5L5.6 14c-.6.4-.6 1.3.1 1.5l3.6 1.1c.8.2 1.5-.5 1.3-1.3zM13.2 13.6c-.7-.4-1.6.1-1.6.9v4.9c0 .8.9 1.2 1.5.7l3-2.4c.5-.4.4-1.2-.2-1.5zM14 11.3c.1.8 1 1.2 1.6.7l3-2.4c.5-.4.4-1.2-.2-1.5l-4.4-2.4c-.7-.4-1.6.2-1.5 1z"></path></svg></a>
+          <a href="#" aria-label="Google" style="width:36px;height:36px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21.6 12.2c0-.6-.1-1.2-.2-1.8H12v3.5h5.4c-.2 1.2-.9 2.3-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2zM12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.6-4.1H3.1v2.6C4.7 19.8 8.1 22 12 22zM6.4 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.5H3.1A10 10 0 0 0 2 12c0 1.6.4 3.2 1.1 4.5zM12 6c1.5 0 2.8.5 3.8 1.5l2.8-2.8C16.9 3.1 14.7 2 12 2 8.1 2 4.7 4.2 3.1 7.5l3.3 2.6C7.2 7.7 9.4 6 12 6z"></path></svg></a>
+          <a href="#" aria-label="Better Business Bureau" style="height:36px;padding:0 12px;border-radius:7px;border:2px solid #2a2a2a;display:flex;align-items:center;justify-content:center;color:#cfcfcf;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:1px">BBB</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sticky mobile call/book bar -->
+  <div class="bt-sticky" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#111;padding:10px 12px;gap:10px;border-top:3px solid var(--accent)">
+    <a href="tel:18132796785" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#1A1A1A;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+    <a href="/get-service/?intent=repair" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px">Book a Repair</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#b8202a&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroOverlay&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:0.82,&quot;min&quot;:0.4,&quot;max&quot;:0.95,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.getElementById('bt-root');
+    if (root) { root.classList.add('bt-js'); this.applyTheme(root); }
+    this._io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+    requestAnimationFrame(() => this.observe());
+    this._fallback = setTimeout(() => {
+      document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => {
+        const r = n.getBoundingClientRect();
+        if (r.top < window.innerHeight) n.classList.add('in');
+      });
+    }, 1200);
+  }
+  componentDidUpdate() {
+    const root = document.getElementById('bt-root');
+    if (root) this.applyTheme(root);
+    this.observe();
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); clearTimeout(this._fallback); }
+  applyTheme(root) {
+    root.style.setProperty('--accent', this.props.accent ?? '#b8202a');
+    root.style.setProperty('--ov', String(this.props.heroOverlay ?? 0.82));
+  }
+  observe() {
+    if (!this._io) return;
+    document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => this._io.observe(n));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

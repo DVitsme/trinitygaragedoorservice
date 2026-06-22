@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#F5F1EA;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#2B2622}
+  img{display:block;max-width:100%}
+  ::selection{background:#b8202a;color:#fff}
+  #wp-root{--accent:#b8202a;--ov:.72}
+  @keyframes wp-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .wp-mq{display:flex;width:max-content;gap:56px;align-items:center;animation:wp-marquee 50s linear infinite}
+  .wp-mqwrap{-webkit-mask-image:linear-gradient(90deg,transparent,#000 11%,#000 89%,transparent);mask-image:linear-gradient(90deg,transparent,#000 11%,#000 89%,transparent)}
+  .reveal{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .wp-js .reveal{opacity:0;transform:translateY(24px)}
+  .wp-js .reveal.in{opacity:1;transform:none}
+  .wp-igtile img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .wp-igtile:hover img{transform:scale(1.06)}
+  .wp-link{position:relative;text-decoration:none}
+  .wp-link::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:2px;background:var(--accent);transition:width .3s ease}
+  .wp-link:hover::after{width:100%}
+  .wp-sticky{display:none}
+  .wp-menu{display:none}
+  @media(max-width:920px){
+    .wp-navlinks{display:none!important}
+    .wp-navcta{display:none!important}
+    .wp-menu{display:inline-flex!important}
+    .wp-g2,.wp-g4,.wp-ba,.wp-foot,.wp-book{grid-template-columns:1fr!important}
+    .wp-g4{grid-template-columns:1fr 1fr!important}
+    .wp-sec{padding-left:22px!important;padding-right:22px!important}
+    .wp-util{display:none!important}
+    .wp-sticky{display:flex!important}
+    .wp-ownerwrap{position:static!important;margin-top:18px!important}
+    .wp-pad-b{padding-bottom:96px!important}
+  }
+  @media(max-width:560px){
+    .wp-g4,.wp-ig{grid-template-columns:1fr 1fr!important}
+  }
+</style>
+</helmet>
+
+<div id="wp-root" style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#2B2622;background:#F5F1EA;overflow-x:hidden">
+
+  <!-- utility bar -->
+  <div class="wp-util" style="background:#211E1A;color:#cdc6bc;font-size:13.5px">
+    <div style="max-width:1180px;margin:0 auto;padding:9px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600"><span style="width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(184,32,42,.25)"></span>24/7 Emergency Service</span>
+        <span style="opacity:.3">|</span>
+        <a href="tel:18132796785" style="color:#cdc6bc;text-decoration:none;display:inline-flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#8c857b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Lutz · Serving Tampa Bay, FL</span></div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div style="position:sticky;top:0;z-index:50;background:rgba(245,241,234,.92);backdrop-filter:blur(10px);border-bottom:1px solid #E7E0D6">
+    <div style="max-width:1180px;margin:0 auto;padding:13px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service" style="height:58px;width:auto">
+      <div class="wp-navlinks" style="display:flex;align-items:center;gap:30px;font-weight:600;font-size:15.5px;color:#4a443c">
+        <a class="wp-link" href="#services" style="color:#4a443c">Services</a>
+        <a class="wp-link" href="#areas" style="color:#4a443c">Service Areas</a>
+        <a class="wp-link" href="#about" style="color:#4a443c">About</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <a class="wp-navcta" href="tel:18132796785" style="text-decoration:none;color:#211E1A;font-weight:700;font-size:16.5px;white-space:nowrap">(813) 279-6785</a>
+        <a class="wp-navcta" href="#book" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:999px;box-shadow:0 8px 20px rgba(184,32,42,.26)">Book a Repair</a>
+        <button class="wp-menu" aria-label="Menu" style="background:none;border:1px solid #d8d1c6;border-radius:10px;padding:9px;cursor:pointer;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#211E1A" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero (video bg) -->
+  <div class="wp-hero-pad wp-pad-b" style="position:relative;overflow:hidden;text-align:center;padding:130px 24px 140px">
+    <video autoplay muted loop playsinline poster="assets/door-after-brown-dusk-2car.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"><source src="assets/hero-video.mp4" type="video/mp4"></video>
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgb(28 20 16 / calc(var(--ov) * .45)) 0%, rgb(28 20 16 / calc(var(--ov) * .82)) 58%, rgb(28 20 16 / var(--ov)) 100%)"></div>
+    <div style="position:relative;z-index:2;max-width:860px;margin:0 auto">
+      <div style="display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#fff"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></span>Opening Doors Since 2007 · Tampa Bay</div>
+      <h1 class="wp-h1" style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-.015em;margin:18px 0 0;color:#fff;text-shadow:0 2px 24px rgba(0,0,0,.45)">Garage Door Won't Open?<br>We'll Be There Fast.</h1>
+      <p style="font-size:clamp(17px,2.2vw,20px);line-height:1.6;color:rgba(255,255,255,.92);max-width:620px;margin:20px auto 0">Fast, honest garage-door repair across Tampa Bay — broken springs, off-track doors, and dead openers fixed same day, often within hours.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px">
+        <a href="#book" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:700;font-size:17px;padding:16px 30px;border-radius:999px;box-shadow:0 14px 30px rgba(184,32,42,.34)">Book a Repair</a>
+        <a href="tel:18132796785" style="text-decoration:none;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(6px);font-weight:700;font-size:17px;padding:16px 28px;border-radius:999px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call (813) 279-6785</a>
+      </div>
+      <div style="font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.82);margin-top:26px">Licensed &amp; Insured · Same-Day Service · 6 Cities Covered</div>
+    </div>
+  </div>
+
+  <!-- trust strip -->
+  <div style="background:#fff;border-bottom:1px solid #EEE7DC">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:center;gap:16px 30px;flex-wrap:wrap">
+      <img src="assets/badge-angi-super-service-2024.png" alt="Angi Super Service Award 2024" style="height:58px;width:auto">
+      <img src="assets/badge-elite.png" alt="HomeAdvisor Elite Service" style="height:48px;width:auto">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;color:#3a352e"><span style="color:var(--accent);letter-spacing:1px">★★★★★</span> 4.9 on Google</span>
+      <span style="width:1px;height:26px;background:#E7E0D6"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:#3a352e"><span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;background:#0a4ea2;color:#fff;font-size:11px;font-weight:800">A+</span>BBB Accredited</span>
+      <span style="width:1px;height:26px;background:#E7E0D6"></span>
+      <span style="font-size:13.5px;color:#8a8276;font-weight:500">Licensed · Bonded · Insured · FL GD13010 / GDI-09484</span>
+    </div>
+  </div>
+
+  <!-- about / intro split -->
+  <div id="about" style="background:#F5F1EA">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="wp-g2 reveal" style="display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center">
+        <div>
+          <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">About Trinity</div>
+          <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,3.8vw,44px);line-height:1.08;letter-spacing:-.01em;margin:14px 0 0;color:#221E1A">Doors That Just Work — From People Who Show Up</h2>
+          <p style="font-size:18px;line-height:1.68;color:#6F675E;margin:20px 0 0;max-width:480px">Trinity Garage Door Service is a family-owned team that's kept Tampa Bay's garage doors running since 2007. No call centers, no pressure — just licensed local technicians, upfront pricing, and work we stand behind.</p>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:26px">
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:16.5px;font-weight:500;color:#3a352e">Family-owned, local techs — no call-center runaround</span></div>
+            <div style="display:flex;align-items:flex-start;gap:12px"><span style="flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(184,32,42,.1);display:flex;align-items:center;justify-content:center;margin-top:1px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span style="font-size:16.5px;font-weight:500;color:#3a352e">Upfront pricing before any work begins</span></div>
+          </div>
+          <div style="margin-top:30px"><a href="#about" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid #E0D8CC;border-radius:999px;padding:14px 26px;font-weight:700;font-size:15.5px;color:#211E1A;box-shadow:0 8px 22px rgba(43,38,34,.07)">Learn our story <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a></div>
+        </div>
+        <div style="position:relative">
+          <img src="assets/team-group-in-showroom.jpg" alt="The Trinity Garage Door team in their Tampa Bay showroom" style="width:100%;height:420px;object-fit:cover;border-radius:24px;box-shadow:0 30px 60px rgba(43,38,34,.16)">
+          <div style="position:absolute;right:-18px;top:-18px;background:#fff;border-radius:20px;padding:16px 20px;box-shadow:0 16px 34px rgba(43,38,34,.16);text-align:center"><div style="font-family:'Fraunces',serif;font-weight:600;font-size:34px;line-height:1;color:var(--accent)">18+</div><div style="font-size:11.5px;font-weight:600;letter-spacing:.04em;color:#8a8276;margin-top:3px;text-transform:uppercase">Years Serving<br>Tampa Bay</div></div>
+          <div class="wp-ownerwrap" style="position:absolute;left:-22px;bottom:-28px;display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 16px 12px 12px;box-shadow:0 16px 34px rgba(43,38,34,.16)">
+            <img src="assets/owner-jason-placeholder.png" alt="Jason — owner" style="width:56px;height:56px;object-fit:cover;object-position:top;border-radius:50%;background:#e6ebee;flex-shrink:0">
+            <div>
+              <div style="font-weight:700;font-size:15px;color:#211E1A">Jason · Owner</div>
+              <div style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#b1a89c"><span style="width:6px;height:6px;border-radius:50%;background:#d6a93a"></span>AI placeholder — real photo soon</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- partner logos carousel -->
+  <div id="services" style="background:#fff;border-top:1px solid #EEE7DC;border-bottom:1px solid #EEE7DC">
+    <div style="max-width:1180px;margin:0 auto;padding:64px 0">
+      <div class="reveal" style="text-align:center;padding:0 32px">
+        <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Who We Work With</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,3vw,36px);line-height:1.1;margin:10px 0 0;color:#221E1A">Trusted Brands &amp; Partners</h2>
+      </div>
+      <div class="wp-mqwrap" style="margin-top:36px;overflow:hidden">
+        <div class="wp-mq">
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-clopay.png" alt="Clopay" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-chi.png" alt="C.H.I. Overhead Doors" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-hormann.png" alt="Hörmann" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-amarr.png" alt="Amarr" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-liftmaster.png" alt="LiftMaster" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-chamberlain.png" alt="Chamberlain" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-genie.png" alt="Genie" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-craftsman.png" alt="Craftsman" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-linear.png" alt="Linear" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-wayne-dalton.jpg" alt="Wayne Dalton" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-clopay.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-chi.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-hormann.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-amarr.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-liftmaster.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-chamberlain.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-genie.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-craftsman.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-linear.png" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+          <span aria-hidden="true" style="flex-shrink:0;display:flex;align-items:center;justify-content:center;width:176px;height:92px;border:1px solid #ECE5DA;border-radius:16px;background:#fff;padding:18px;box-shadow:0 8px 22px rgba(43,38,34,.05)"><img src="assets/brandlogo-wayne-dalton.jpg" alt="" style="max-width:100%;max-height:100%;object-fit:contain"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- why us -->
+  <div style="background:#F5F1EA">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="reveal" style="text-align:center;max-width:640px;margin:0 auto">
+        <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Why Homeowners Call Us First</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,3.6vw,42px);line-height:1.08;margin:12px 0 0;color:#221E1A">Built around your emergency, not ours</h2>
+      </div>
+      <div class="wp-g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px">
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;padding:30px 26px;box-shadow:0 10px 30px rgba(43,38,34,.05)">
+          <div style="width:54px;height:54px;border-radius:16px;background:rgba(184,32,42,.09);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
+          <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin:18px 0 0;color:#221E1A">24/7 Response</h3>
+          <p style="font-size:15.5px;line-height:1.6;color:#6F675E;margin:8px 0 0">A real person day or night for emergencies.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;padding:30px 26px;box-shadow:0 10px 30px rgba(43,38,34,.05)">
+          <div style="width:54px;height:54px;border-radius:16px;background:rgba(184,32,42,.09);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7-7V3h6.6l7.4 7.4a2 2 0 0 1 0 2.8z"></path><circle cx="7.5" cy="7.5" r="1.2" fill="var(--accent)" stroke="none"></circle></svg></div>
+          <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin:18px 0 0;color:#221E1A">Upfront Pricing</h3>
+          <p style="font-size:15.5px;line-height:1.6;color:#6F675E;margin:8px 0 0">A clear price before we start; no surprises.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;padding:30px 26px;box-shadow:0 10px 30px rgba(43,38,34,.05)">
+          <div style="width:54px;height:54px;border-radius:16px;background:rgba(184,32,42,.09);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
+          <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin:18px 0 0;color:#221E1A">Licensed &amp; Insured</h3>
+          <p style="font-size:15.5px;line-height:1.6;color:#6F675E;margin:8px 0 0">FL GD13010 / GDI-09484, bonded &amp; insured.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;padding:30px 26px;box-shadow:0 10px 30px rgba(43,38,34,.05)">
+          <div style="width:54px;height:54px;border-radius:16px;background:rgba(184,32,42,.09);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"></path></svg></div>
+          <h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:21px;margin:18px 0 0;color:#221E1A">Same-Day Service</h3>
+          <p style="font-size:15.5px;line-height:1.6;color:#6F675E;margin:8px 0 0">Most repairs done the same day, often within hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- stats band + clip -->
+  <div style="background:#fff;border-top:1px solid #EEE7DC">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:84px 32px">
+      <div class="reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center">
+        <div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4vw,48px);line-height:1;color:#221E1A">18<span style="color:var(--accent)">+</span></div><div style="font-size:13px;font-weight:600;letter-spacing:.06em;color:#8a8276;text-transform:uppercase;margin-top:8px">Years of Service</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4vw,48px);line-height:1;color:#221E1A">12k<span style="color:var(--accent)">+</span></div><div style="font-size:13px;font-weight:600;letter-spacing:.06em;color:#8a8276;text-transform:uppercase;margin-top:8px">Doors Serviced</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4vw,48px);line-height:1;color:#221E1A">4.9<span style="color:var(--accent)">★</span></div><div style="font-size:13px;font-weight:600;letter-spacing:.06em;color:#8a8276;text-transform:uppercase;margin-top:8px">Average Rating</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,4vw,48px);line-height:1;color:#221E1A">6</div><div style="font-size:13px;font-weight:600;letter-spacing:.06em;color:#8a8276;text-transform:uppercase;margin-top:8px">Cities Covered</div></div>
+      </div>
+      <div class="reveal" style="margin-top:44px;position:relative;border-radius:24px;overflow:hidden;box-shadow:0 24px 50px rgba(43,38,34,.16)">
+        <video autoplay muted loop playsinline poster="assets/door-after-white-2car-home.jpg" style="width:100%;height:clamp(280px,46vw,440px);object-fit:cover;display:block"><source src="assets/clip-door-opening.mp4" type="video/mp4"></video>
+        <span style="position:absolute;left:18px;bottom:18px;background:rgba(33,30,26,.82);backdrop-filter:blur(4px);color:#fff;font-weight:600;font-size:13px;letter-spacing:.04em;padding:8px 14px;border-radius:999px">Watch a finished door open smoothly</span>
+      </div>
+      <div style="text-align:center;font-size:12.5px;color:#a99f92;margin-top:14px">Figures provisional — final stats confirmed before launch.</div>
+    </div>
+  </div>
+
+  <!-- before / after -->
+  <div style="background:#F5F1EA">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="reveal" style="text-align:center;max-width:640px;margin:0 auto">
+        <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Real Jobs, Real Results</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,3.6vw,42px);line-height:1.08;margin:12px 0 0;color:#221E1A">Before &amp; After, around Tampa Bay</h2>
+      </div>
+      <div class="wp-ba reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:48px">
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;overflow:hidden;box-shadow:0 12px 32px rgba(43,38,34,.07)">
+          <div style="padding:18px 20px 0"><div style="font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:#221E1A">White Door · New Build</div></div>
+          <div style="padding:14px 20px 0">
+            <div style="position:relative;height:150px;border-radius:14px;background:#F1ECE3;border:1px dashed #D8CFC1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#a99f92"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#bdb3a4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span style="font-size:12.5px;font-weight:600">Before photo coming soon</span><span style="position:absolute;top:9px;left:9px;background:#211E1A;color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px">BEFORE</span></div>
+          </div>
+          <div style="text-align:center;color:var(--accent);font-size:20px;margin:6px 0">↓</div>
+          <div style="padding:0 20px 20px"><div style="position:relative;height:150px;border-radius:14px;overflow:hidden"><img src="assets/door-after-white-on-blue-home.jpg" alt="Finished white garage door on a blue home" style="width:100%;height:100%;object-fit:cover"><span style="position:absolute;top:9px;left:9px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px">AFTER</span></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;overflow:hidden;box-shadow:0 12px 32px rgba(43,38,34,.07)">
+          <div style="padding:18px 20px 0"><div style="font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:#221E1A">Sectional Replacement</div></div>
+          <div style="padding:14px 20px 0">
+            <div style="position:relative;height:150px;border-radius:14px;background:#F1ECE3;border:1px dashed #D8CFC1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#a99f92"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#bdb3a4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span style="font-size:12.5px;font-weight:600">Before photo coming soon</span><span style="position:absolute;top:9px;left:9px;background:#211E1A;color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px">BEFORE</span></div>
+          </div>
+          <div style="text-align:center;color:var(--accent);font-size:20px;margin:6px 0">↓</div>
+          <div style="padding:0 20px 20px"><div style="position:relative;height:150px;border-radius:14px;overflow:hidden"><img src="assets/door-after-brown-wood-sectional.jpg" alt="Finished brown wood-look sectional garage door" style="width:100%;height:100%;object-fit:cover"><span style="position:absolute;top:9px;left:9px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px">AFTER</span></div></div>
+        </div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:22px;overflow:hidden;box-shadow:0 12px 32px rgba(43,38,34,.07)">
+          <div style="padding:18px 20px 0"><div style="font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:#221E1A">Two-Car Upgrade</div></div>
+          <div style="padding:14px 20px 0">
+            <div style="position:relative;height:150px;border-radius:14px;background:#F1ECE3;border:1px dashed #D8CFC1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#a99f92"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#bdb3a4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span style="font-size:12.5px;font-weight:600">Before photo coming soon</span><span style="position:absolute;top:9px;left:9px;background:#211E1A;color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px">BEFORE</span></div>
+          </div>
+          <div style="text-align:center;color:var(--accent);font-size:20px;margin:6px 0">↓</div>
+          <div style="padding:0 20px 20px"><div style="position:relative;height:150px;border-radius:14px;overflow:hidden"><img src="assets/door-after-white-2car-home.jpg" alt="Finished white two-car garage door" style="width:100%;height:100%;object-fit:cover"><span style="position:absolute;top:9px;left:9px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:6px">AFTER</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- service area map -->
+  <div id="areas" style="background:#fff;border-top:1px solid #EEE7DC">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="wp-g2 reveal" style="display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center">
+        <div style="position:relative;height:440px;border-radius:24px;overflow:hidden;border:1px solid #E7E0D6;box-shadow:0 20px 44px rgba(43,38,34,.12);background:linear-gradient(135deg,#eef1ec,#e7ece6)">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,rgba(150,160,150,.16) 0 1px,transparent 1px 68px),repeating-linear-gradient(0deg,rgba(150,160,150,.16) 0 1px,transparent 1px 68px)"></div>
+          <div style="position:absolute;left:-10%;top:18%;width:120%;height:14px;background:#e4ddcf;transform:rotate(-9deg)"></div>
+          <div style="position:absolute;left:-10%;top:62%;width:120%;height:10px;background:#e4ddcf;transform:rotate(6deg)"></div>
+          <div style="position:absolute;right:-12%;top:-10%;width:46%;height:120%;background:rgba(120,160,180,.16);transform:rotate(12deg)"></div>
+          <div style="position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:62%;height:64%;border-radius:50%;background:rgba(184,32,42,.07);border:1.5px dashed rgba(184,32,42,.4)"></div>
+          <span style="position:absolute;left:29%;top:34%;transform:translate(-50%,-100%)"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.28)"><span style="width:8px;height:8px;border-radius:50%;background:#fff;transform:rotate(45deg)"></span></span></span>
+          <span style="position:absolute;left:51%;top:27%;transform:translate(-50%,-100%)"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.28)"><span style="width:8px;height:8px;border-radius:50%;background:#fff;transform:rotate(45deg)"></span></span></span>
+          <span style="position:absolute;left:44%;top:53%;transform:translate(-50%,-100%)"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.28)"><span style="width:8px;height:8px;border-radius:50%;background:#fff;transform:rotate(45deg)"></span></span></span>
+          <span style="position:absolute;left:64%;top:60%;transform:translate(-50%,-100%)"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.28)"><span style="width:8px;height:8px;border-radius:50%;background:#fff;transform:rotate(45deg)"></span></span></span>
+          <span style="position:absolute;left:38%;top:72%;transform:translate(-50%,-100%)"><span style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 5px 12px rgba(0,0,0,.28)"><span style="width:8px;height:8px;border-radius:50%;background:#fff;transform:rotate(45deg)"></span></span></span>
+          <div style="position:absolute;left:18px;bottom:16px;background:rgba(255,255,255,.94);border-radius:12px;padding:10px 15px;font-weight:700;font-size:14px;color:#221E1A;display:flex;align-items:center;gap:9px;box-shadow:0 8px 20px rgba(43,38,34,.14)"><span style="width:9px;height:9px;border-radius:50%;background:var(--accent)"></span>Tampa Bay Service Area</div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Service Areas</div>
+          <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,3.4vw,40px);line-height:1.08;margin:12px 0 0;color:#221E1A">We cover the whole Tampa Bay area</h2>
+          <p style="font-size:17px;line-height:1.62;color:#6F675E;margin:14px 0 0">Local techs based in Lutz means shorter drive times and same-day arrival across six cities.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px">
+            <span style="background:#F7F3EC;border:1px solid #E7E0D6;border-radius:999px;padding:9px 17px;font-weight:600;font-size:14.5px;color:#3a352e">Lutz</span>
+            <span style="background:#F7F3EC;border:1px solid #E7E0D6;border-radius:999px;padding:9px 17px;font-weight:600;font-size:14.5px;color:#3a352e">Land O' Lakes</span>
+            <span style="background:#F7F3EC;border:1px solid #E7E0D6;border-radius:999px;padding:9px 17px;font-weight:600;font-size:14.5px;color:#3a352e">Wesley Chapel</span>
+            <span style="background:#F7F3EC;border:1px solid #E7E0D6;border-radius:999px;padding:9px 17px;font-weight:600;font-size:14.5px;color:#3a352e">Palm Harbor</span>
+            <span style="background:#F7F3EC;border:1px solid #E7E0D6;border-radius:999px;padding:9px 17px;font-weight:600;font-size:14.5px;color:#3a352e">Oldsmar</span>
+            <span style="background:#F7F3EC;border:1px solid #E7E0D6;border-radius:999px;padding:9px 17px;font-weight:600;font-size:14.5px;color:#3a352e">Tampa</span>
+          </div>
+          <form onsubmit="return false" style="display:flex;gap:10px;margin-top:24px;max-width:400px">
+            <input placeholder="Enter your ZIP code" style="flex:1;border:1px solid #D8CFC1;border-radius:999px;padding:13px 18px;font-size:15px;font-family:'Hanken Grotesk',sans-serif;outline:none;background:#fff">
+            <button style="background:#211E1A;color:#fff;border:none;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;cursor:pointer">Check</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- reviews -->
+  <div style="background:#F5F1EA">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="reveal" style="text-align:center;max-width:640px;margin:0 auto">
+        <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Reviews</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,3.6vw,42px);line-height:1.08;margin:12px 0 0;color:#221E1A">Neighbors who trust Trinity</h2>
+        <p style="font-size:14px;color:#a99f92;margin:10px 0 0">Live Google reviews syncing soon — samples shown.</p>
+      </div>
+      <div class="wp-g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:44px">
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:20px;padding:26px 24px;box-shadow:0 10px 28px rgba(43,38,34,.05)"><div style="color:var(--accent);letter-spacing:2px;font-size:15px">★★★★★</div><p style="font-family:'Fraunces',serif;font-size:16.5px;line-height:1.55;color:#2f2a24;margin:14px 0 0;font-weight:500">"Called at 7am with a snapped spring — fixed by lunch. Fair price, no pressure."</p><div style="display:flex;align-items:center;gap:11px;margin-top:18px"><span style="width:38px;height:38px;border-radius:50%;background:#211E1A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">S</span><div><div style="font-weight:700;font-size:14.5px;color:#221E1A">Sarah M.</div><div style="font-size:12.5px;color:#9a9183">Lutz · Google</div></div></div></div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:20px;padding:26px 24px;box-shadow:0 10px 28px rgba(43,38,34,.05)"><div style="color:var(--accent);letter-spacing:2px;font-size:15px">★★★★★</div><p style="font-family:'Fraunces',serif;font-size:16.5px;line-height:1.55;color:#2f2a24;margin:14px 0 0;font-weight:500">"Door came off the track and wouldn't budge. Same-day fix, smoother than ever."</p><div style="display:flex;align-items:center;gap:11px;margin-top:18px"><span style="width:38px;height:38px;border-radius:50%;background:#211E1A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">M</span><div><div style="font-weight:700;font-size:14.5px;color:#221E1A">Mike R.</div><div style="font-size:12.5px;color:#9a9183">Tampa · Google</div></div></div></div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:20px;padding:26px 24px;box-shadow:0 10px 28px rgba(43,38,34,.05)"><div style="color:var(--accent);letter-spacing:2px;font-size:15px">★★★★★</div><p style="font-family:'Fraunces',serif;font-size:16.5px;line-height:1.55;color:#2f2a24;margin:14px 0 0;font-weight:500">"New door looks fantastic and the crew cleaned up everything. Easy to schedule."</p><div style="display:flex;align-items:center;gap:11px;margin-top:18px"><span style="width:38px;height:38px;border-radius:50%;background:#211E1A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">D</span><div><div style="font-weight:700;font-size:14.5px;color:#221E1A">Dana K.</div><div style="font-size:12.5px;color:#9a9183">Oldsmar · Google</div></div></div></div>
+        <div style="background:#fff;border:1px solid #EEE7DC;border-radius:20px;padding:26px 24px;box-shadow:0 10px 28px rgba(43,38,34,.05)"><div style="color:var(--accent);letter-spacing:2px;font-size:15px">★★★★★</div><p style="font-family:'Fraunces',serif;font-size:16.5px;line-height:1.55;color:#2f2a24;margin:14px 0 0;font-weight:500">"Honest, on time, and the price they quoted was the price I paid. Highly recommend."</p><div style="display:flex;align-items:center;gap:11px;margin-top:18px"><span style="width:38px;height:38px;border-radius:50%;background:#211E1A;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">C</span><div><div style="font-weight:700;font-size:14.5px;color:#221E1A">Carlos V.</div><div style="font-size:12.5px;color:#9a9183">Wesley Chapel · Google</div></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- booking band -->
+  <div id="book" style="background:#fff;border-top:1px solid #EEE7DC">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="wp-book reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center">
+        <div>
+          <div style="font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">Book Now</div>
+          <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,3.8vw,46px);line-height:1.05;margin:12px 0 0;color:#221E1A">Book Your Repair in Under a Minute</h2>
+          <p style="font-size:18px;line-height:1.62;color:#6F675E;margin:16px 0 0;max-width:430px">Pick a time that works for you and a local tech will be there — usually the same day.</p>
+          <a href="tel:18132796785" style="text-decoration:none;display:inline-flex;align-items:center;gap:14px;margin-top:26px;background:#F7F3EC;border:1px solid #E7E0D6;border-radius:18px;padding:16px 20px">
+            <span style="width:48px;height:48px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
+            <span><span style="display:block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#9a9183">Prefer to call? 24/7</span><span style="display:block;font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:#221E1A">(813) 279-6785</span></span>
+          </a>
+        </div>
+        <div style="background:#fff;border:1px solid #E7E0D6;border-radius:24px;padding:26px;box-shadow:0 24px 50px rgba(43,38,34,.12)">
+          <div style="display:flex;align-items:center;justify-content:space-between"><h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0;color:#221E1A">Book online</h3><span style="font-size:12px;color:#9a9183;font-weight:600">Powered by Housecall Pro</span></div>
+          <div style="margin-top:18px;font-size:13px;font-weight:600;color:#6F675E">What do you need?</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;border:1px solid #D8CFC1;border-radius:12px;padding:13px 15px;margin-top:7px;font-size:15px;color:#3a352e">Garage door repair <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#a99f92" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"></path></svg></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px"><span style="font-size:13px;font-weight:600;color:#6F675E">Pick a day</span><span style="font-size:13px;font-weight:600;color:#221E1A">June 2026</span></div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:8px">
+            <div style="border:1px solid #ECE5DA;border-radius:12px;padding:9px 0;text-align:center"><div style="font-size:10.5px;color:#a99f92;font-weight:600">MON</div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#221E1A">16</div></div>
+            <div style="border:1px solid var(--accent);background:var(--accent);border-radius:12px;padding:9px 0;text-align:center"><div style="font-size:10.5px;color:rgba(255,255,255,.85);font-weight:600">TUE</div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#fff">17</div></div>
+            <div style="border:1px solid #ECE5DA;border-radius:12px;padding:9px 0;text-align:center"><div style="font-size:10.5px;color:#a99f92;font-weight:600">WED</div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#221E1A">18</div></div>
+            <div style="border:1px solid #ECE5DA;border-radius:12px;padding:9px 0;text-align:center"><div style="font-size:10.5px;color:#a99f92;font-weight:600">THU</div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#221E1A">19</div></div>
+            <div style="border:1px solid #ECE5DA;border-radius:12px;padding:9px 0;text-align:center"><div style="font-size:10.5px;color:#a99f92;font-weight:600">FRI</div><div style="font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:#221E1A">20</div></div>
+          </div>
+          <div style="margin-top:16px;font-size:13px;font-weight:600;color:#6F675E">Available times</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <span style="border:1px solid #ECE5DA;border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;color:#3a352e">8:00 AM</span>
+            <span style="border:1px solid var(--accent);background:rgba(184,32,42,.07);border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px;color:var(--accent)">10:30 AM</span>
+            <span style="border:1px solid #ECE5DA;border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;color:#3a352e">1:00 PM</span>
+            <span style="border:1px solid #ECE5DA;border-radius:999px;padding:9px 16px;font-weight:600;font-size:14px;color:#3a352e">3:30 PM</span>
+          </div>
+          <button style="width:100%;margin-top:22px;background:var(--accent);color:#fff;border:none;font-weight:700;font-size:17px;padding:15px;border-radius:999px;cursor:pointer;box-shadow:0 12px 26px rgba(184,32,42,.26)">Confirm Booking</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- instagram grid -->
+  <div style="background:#F5F1EA">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:100px 32px">
+      <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"></circle></svg>Follow Us</div>
+          <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(26px,3.2vw,38px);line-height:1.08;margin:8px 0 0;color:#221E1A">@trinitygaragedoorservice</h2>
+        </div>
+        <a href="https://www.instagram.com/trinitygaragedoorservice/" style="text-decoration:none;display:inline-flex;align-items:center;gap:9px;background:#211E1A;color:#fff;font-weight:700;font-size:15px;padding:13px 24px;border-radius:999px">Follow on Instagram <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+      </div>
+      <div class="wp-ig reveal" style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:30px">
+        <a class="wp-igtile" href="https://www.instagram.com/trinitygaragedoorservice/" style="position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block;box-shadow:0 8px 22px rgba(43,38,34,.08)"><img src="assets/jobsite-tech-at-residential-garage.jpg" alt="Trinity tech at a residential garage" style="width:100%;height:100%;object-fit:cover"></a>
+        <a class="wp-igtile" href="https://www.instagram.com/trinitygaragedoorservice/" style="position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block;box-shadow:0 8px 22px rgba(43,38,34,.08)"><img src="assets/jobsite-tech-installing-opener.jpg" alt="Trinity tech installing an opener" style="width:100%;height:100%;object-fit:cover"></a>
+        <a class="wp-igtile" href="https://www.instagram.com/trinitygaragedoorservice/" style="position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block;box-shadow:0 8px 22px rgba(43,38,34,.08)"><img src="assets/jobsite-two-techs-on-ladder.jpg" alt="Two Trinity techs on a ladder" style="width:100%;height:100%;object-fit:cover"></a>
+        <a class="wp-igtile" href="https://www.instagram.com/trinitygaragedoorservice/" style="position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block;box-shadow:0 8px 22px rgba(43,38,34,.08)"><img src="assets/jobsite-tech-crouching-repair.jpg" alt="Trinity tech on a hands-on repair" style="width:100%;height:100%;object-fit:cover"></a>
+        <a class="wp-igtile" href="https://www.instagram.com/trinitygaragedoorservice/" style="position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block;box-shadow:0 8px 22px rgba(43,38,34,.08)"><img src="assets/jobsite-tech-working-dusk.jpg" alt="Trinity tech working at dusk" style="width:100%;height:100%;object-fit:cover"></a>
+        <a class="wp-igtile" href="https://www.instagram.com/trinitygaragedoorservice/" style="position:relative;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block;box-shadow:0 8px 22px rgba(43,38,34,.08)"><img src="assets/team-with-branded-banner.jpg" alt="Trinity team with branded banner" style="width:100%;height:100%;object-fit:cover"></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- big CTA -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="wp-sec reveal" style="max-width:1180px;margin:0 auto;padding:74px 32px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,3.8vw,44px);line-height:1.04;margin:0;max-width:600px">Don't Wait — Get Your Door Fixed Today</h2>
+        <p style="font-size:17px;margin:12px 0 0;color:rgba(255,255,255,.9)">Same-day slots fill fast — book online or call our 24/7 line.</p>
+      </div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#book" style="text-decoration:none;background:#fff;color:var(--accent);font-weight:700;font-size:17px;padding:16px 30px;border-radius:999px">Book a Repair</a>
+        <a href="tel:18132796785" style="text-decoration:none;background:rgba(0,0,0,.18);color:#fff;border:1px solid rgba(255,255,255,.5);font-weight:700;font-size:17px;padding:16px 28px;border-radius:999px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="background:#211E1A;color:#9a9183">
+    <div class="wp-sec" style="max-width:1180px;margin:0 auto;padding:64px 32px 0">
+      <div class="wp-foot" style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px">
+        <div>
+          <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service — Opening Doors Since 2007" style="width:230px;max-width:100%;height:auto;background:#fff;border-radius:12px;padding:12px 14px">
+          <p style="font-size:15px;line-height:1.6;color:#8c857b;margin:18px 0 0;max-width:300px">Family-owned garage door repair, replacement, and installation serving the Tampa Bay area since 2007.</p>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:700;font-size:16px;margin-bottom:14px">Services</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="wp-link" href="#services" style="color:#9a9183;text-decoration:none">Emergency Repair</a>
+            <a class="wp-link" href="#services" style="color:#9a9183;text-decoration:none">Spring Repair</a>
+            <a class="wp-link" href="#services" style="color:#9a9183;text-decoration:none">Opener Repair</a>
+            <a class="wp-link" href="#services" style="color:#9a9183;text-decoration:none">Installation</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:700;font-size:16px;margin-bottom:14px">Resources</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="wp-link" href="#" style="color:#9a9183;text-decoration:none">Blog</a>
+            <a class="wp-link" href="#" style="color:#9a9183;text-decoration:none">Safety Tips</a>
+            <a class="wp-link" href="#" style="color:#9a9183;text-decoration:none">DIY Troubleshooting</a>
+            <a class="wp-link" href="#" style="color:#9a9183;text-decoration:none">FAQ</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:700;font-size:16px;margin-bottom:14px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-family:'Fraunces',serif;font-weight:600;font-size:19px">(813) 279-6785</a>
+            <span>24/7 Emergency Service</span>
+            <span>Lutz, FL · Tampa Bay</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid #38332d;margin-top:48px;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-size:13px;color:#7b746a">© 2026 Trinity Garage Door Service Inc. · Licensed &amp; Insured · FL GD13010 / GDI-09484</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a href="#" aria-label="Facebook" style="width:36px;height:36px;border-radius:10px;border:1px solid #38332d;display:flex;align-items:center;justify-content:center;color:#cdc6bc;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M14 9h3V5.5h-3c-2 0-3.5 1.6-3.5 3.6V11H8v3.5h2.5V22H14v-7.5h2.6l.4-3.5H14V9.6c0-.4.3-.6.6-.6z"></path></svg></a>
+          <a href="https://www.instagram.com/trinitygaragedoorservice/" aria-label="Instagram" style="width:36px;height:36px;border-radius:10px;border:1px solid #38332d;display:flex;align-items:center;justify-content:center;color:#cdc6bc;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a href="#" aria-label="LinkedIn" style="width:36px;height:36px;border-radius:10px;border:1px solid #38332d;display:flex;align-items:center;justify-content:center;color:#cdc6bc;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0zM3.4 8.5h3.1V21H3.4zM9.3 8.5h2.97v1.7h.04c.41-.78 1.42-1.6 2.93-1.6 3.13 0 3.71 2.06 3.71 4.74V21h-3.1v-5.36c0-1.28-.02-2.92-1.78-2.92-1.78 0-2.05 1.39-2.05 2.83V21H9.3z"></path></svg></a>
+          <a href="#" aria-label="Yelp" style="width:36px;height:36px;border-radius:10px;border:1px solid #38332d;display:flex;align-items:center;justify-content:center;color:#cdc6bc;text-decoration:none"><svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M11.3 3.2c.1-.7-.5-1.3-1.2-1.1L6.3 3.4c-.6.2-.9.9-.5 1.4l3 4.6c.5.8 1.8.4 1.8-.5zM10.9 12.4c-.2-.6-.9-.8-1.4-.5L5.6 14c-.6.4-.6 1.3.1 1.5l3.6 1.1c.8.2 1.5-.5 1.3-1.3zM13.2 13.6c-.7-.4-1.6.1-1.6.9v4.9c0 .8.9 1.2 1.5.7l3-2.4c.5-.4.4-1.2-.2-1.5zM14 11.3c.1.8 1 1.2 1.6.7l3-2.4c.5-.4.4-1.2-.2-1.5l-4.4-2.4c-.7-.4-1.6.2-1.5 1z"></path></svg></a>
+          <a href="#" aria-label="Google" style="width:36px;height:36px;border-radius:10px;border:1px solid #38332d;display:flex;align-items:center;justify-content:center;color:#cdc6bc;text-decoration:none"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M21.6 12.2c0-.6-.1-1.2-.2-1.8H12v3.5h5.4c-.2 1.2-.9 2.3-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.2zM12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.7-5.6-4.1H3.1v2.6C4.7 19.8 8.1 22 12 22zM6.4 13.9c-.2-.6-.3-1.2-.3-1.9s.1-1.3.3-1.9V7.5H3.1A10 10 0 0 0 2 12c0 1.6.4 3.2 1.1 4.5zM12 6c1.5 0 2.8.5 3.8 1.5l2.8-2.8C16.9 3.1 14.7 2 12 2 8.1 2 4.7 4.2 3.1 7.5l3.3 2.6C7.2 7.7 9.4 6 12 6z"></path></svg></a>
+          <a href="#" aria-label="Better Business Bureau" style="height:36px;padding:0 12px;border-radius:10px;border:1px solid #38332d;display:flex;align-items:center;justify-content:center;color:#cdc6bc;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:1px">BBB</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sticky mobile call/book bar -->
+  <div class="wp-sticky" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(33,30,26,.97);backdrop-filter:blur(8px);padding:10px 14px;gap:10px;border-top:1px solid #38332d">
+    <a href="tel:18132796785" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#211E1A;font-weight:700;font-size:15px;padding:13px;border-radius:999px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+    <a href="#book" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-weight:700;font-size:15px;padding:13px;border-radius:999px">Book a Repair</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#b8202a&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroOverlay&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:0.72,&quot;min&quot;:0.3,&quot;max&quot;:0.95,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.getElementById('wp-root');
+    if (root) { root.classList.add('wp-js'); this.applyTheme(root); }
+    this.primeVideos();
+    this._io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
+    requestAnimationFrame(() => this.observe());
+    // safety: if observer never fires (edge cases), reveal everything after a beat
+    this._fallback = setTimeout(() => {
+      document.querySelectorAll('#wp-root .reveal:not(.in)').forEach(n => {
+        const r = n.getBoundingClientRect();
+        if (r.top < window.innerHeight) n.classList.add('in');
+      });
+    }, 1200);
+  }
+  componentDidUpdate() {
+    const root = document.getElementById('wp-root');
+    if (root) this.applyTheme(root);
+    this.observe();
+  }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); clearTimeout(this._fallback); }
+  primeVideos() {
+    document.querySelectorAll('#wp-root video').forEach(v => {
+      v.muted = true; v.loop = true; v.defaultMuted = true;
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      const go = () => v.play().catch(() => {});
+      go();
+      v.addEventListener('canplay', go, { once: true });
+    });
+  }
+  applyTheme(root) {
+    root.style.setProperty('--accent', this.props.accent ?? '#b8202a');
+    root.style.setProperty('--ov', String(this.props.heroOverlay ?? 0.72));
+  }
+  observe() {
+    if (!this._io) return;
+    document.querySelectorAll('#wp-root .reveal:not(.in)').forEach(n => this._io.observe(n));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

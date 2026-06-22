@@ -55,3 +55,10 @@ next-env.d.ts
 
 # react-email preview build cache
 /.react-email/
+
+# design handoff: keep the handoff/*.md docs + *.dc.html specs in git;
+# ignore the redundant asset/upload dupes + design-tool runtime
+/trinitygaragedoorservice.com/assets/
+/trinitygaragedoorservice.com/uploads/
+/trinitygaragedoorservice.com/support.js
+/trinitygaragedoorservice.com/.thumbnail
