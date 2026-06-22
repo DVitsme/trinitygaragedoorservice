@@ -34,7 +34,20 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 - [ ] (polish) Radix NavigationMenu + Accordion a11y upgrade (G8) — CSS/hand-rolled used for now
 
 **Phase B — Prove the system**
-- [ ] `/` home (bespoke) · [ ] `/services/repair/spring/` · [ ] `/privacy-policy/` · [ ] `/contact/`
+- [x] `/services/repair/spring/` + `RepairDetailLayout` (data-driven, reused by 8 detail pages) — screenshot-verified 1:1, committed
+- [ ] `/privacy-policy/` · `/contact/` · `/` home (bespoke) — different archetypes, build next
+
+**Phase C — Services** (parallel agents write page-data objects; orchestrator builds + screenshots centrally to avoid .next clashes — PROVEN workflow)
+- [x] opener, off-track, cables-rollers, tune-up, emergency, replacement — parallel-built, build green, all 6 screenshot-verified 1:1, committed
+- [ ] `/services/repair/` hub (6-service index) · `/services/` hub (card grid archetype) · `/services/installation/` (from installation.md, not designed)
+
+RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-free** house style — strip the design's prose compound hyphens ("Same Day", "Off Track", "wood look") — done on the 7 detail pages; (2) **tailor any copy that bled from the Spring template** in claude.ai/design (e.g. spring-flavored lines on opener/emergency) so each page reads for its own topic. Bake both into every remaining page.
+
+**Remaining pages** (~13 designed + 4 template cities). Workflow: detail-recipe pages (reuse RepairDetailLayout) → parallel write-only agents + central build/screenshot (proven). New-archetype pages (need their own blocks) → one fork at a time (builds + screenshots in the main tree as sole builder; no .next clash):
+- Services: `/services/repair/` hub (index rows LINK to the 6 services — needs `href` added to NumberedIndex/IdxRow first) · `/services/` hub (card grid) · `/services/installation/` (from installation.md, mirrors detail recipe)
+- Phase B archetypes: `/privacy-policy/` (LegalBody) · `/contact/` (split + ContactForm wired to Resend/D1/Turnstile) · `/` home (bespoke: VideoHero, LogoMarquee, stats, before/after, booking mock, reviews)
+- Phase D Service Areas: hub (MapHero) + lutz + land-o-lakes (designed) + wesley-chapel/palm-harbor/oldsmar/tampa (city template) — needs MapHero, LinkCard, ServiceAreaMapMock blocks
+- Phase E Doors: types (buyer's guide) · brands (BrandCard/BrandHighlight catalog) · brochures (PdfList). About: our-story · portfolio (GalleryGrid) · reviews (ReviewCard masonry)
 
 **Phase C — Services** (detail recipe / RepairDetailLayout)
 - [ ] `/services/` · [ ] `/services/repair/` · [ ] `/services/repair/opener/` · [ ] `/services/repair/off-track/` · [ ] `/services/repair/cables-rollers/` · [ ] `/services/repair/tune-up/` · [ ] `/services/replacement/` · [ ] `/services/installation/` (build from copy)

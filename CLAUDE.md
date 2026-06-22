@@ -2,6 +2,32 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚠️ ACTIVE WORK — RESUME HERE (2026-06-22)
+
+You are **mid-way through a 1:1 design → Next.js build**: converting the approved `*.dc.html` "Bold Trade" designs (in `trinitygaragedoorservice.com/`) into real Next.js pages. Context was compacted; pick the build back up on your own.
+
+**Read first (the live state):**
+1. **`trinitygaragedoorservice.com/handoff/BUILD-PROGRESS.md`** — the LIVE tracker: page-by-page status, the build workflow, settled decisions, the full remaining-pages list. **This is the source of truth for what to do next.**
+2. `trinitygaragedoorservice.com/handoff/00-README.md` … `05-final-pass.md` — the design→Next spec (route→`.dc.html` map, design system, components, per-page section inventory, gaps/fixes G1–G16, F1–F8).
+3. Project memory: `trinity-garage-door-redesign`, `trinity-open-decisions`.
+
+**Done + committed (17 commits ahead of origin/main, UNPUSHED — the user pushes via `! git push origin main`; the auto-mode classifier blocks me from pushing to main):**
+- Foundation: `app/globals.css` (Bold Trade `@theme` tokens `accent/ink/ink-2/ink-3/panel/cream/cream-2` + fonts `--font-display`/`--font-body`; **custom breakpoints `nav`=920px, `xs`=560px** — use `max-nav:`/`nav:`/`max-xs:`, NOT `md:`/`lg:`; OLD tokens kept as back-compat aliases). `next.config.ts` (`trailingSlash:true`, CF `images:{unoptimized:true}`, redirects). `lib/site.ts` adds `ROUTES`, `SERVICES`, `AREAS`, `GOOGLE_REVIEWS` (8 real), `BRAND_CATALOG` (10 corrected), `HOURS`, `getNavConfig(pathname)`.
+- Chrome adapted to pathname-driven active-nav + Book/Estimate CTA + Contact link (`components/site-header.tsx`, `components/sections/sticky-mobile-bar.tsx`, `components/mobile-menu.tsx`, layout skip-link).
+- **Block library `components/blocks/`**: Section, SectionHeading, Cta, Button, Breadcrumb, Reveal, PhotoHero/VideoHero, TrustStrip, RedBand, CardGrid/IconCard/NumberStepCard, SplitFeature/CheckList, NumberedIndex/DarkCallout, FaqAccordion — plus the data-driven **`RepairDetailLayout`** (`components/blocks/repair-detail-layout.tsx`, exports `RepairDetailData`; auto-emits Breadcrumb+FAQ JSON-LD).
+- **7 detail pages built 1:1, screenshot-verified, committed:** `/services/repair/{spring,opener,off-track,cables-rollers,tune-up,emergency}/` + `/services/replacement/`. Each is a `RepairDetailData` object mirroring `app/services/repair/spring/page.tsx` (the exemplar to copy for new detail pages).
+
+**Settled decisions (apply to EVERY remaining page):** (1) **dash-free** house style — strip the design's prose compound hyphens ("Same Day", "Off Track", not "Same-Day"). (2) **Tailor any copy that bled** from the Spring template in claude.ai/design so each page reads for its own topic.
+
+**Proven workflow:**
+- **Detail-recipe pages** (reuse `RepairDetailLayout`): dispatch **parallel agents** that only WRITE the page data object (instruct: do NOT run `pnpm build`/`next dev` — parallel builds corrupt the shared `.next`), then build + screenshot-verify all centrally.
+- **New-archetype pages** (build their own blocks): **one fork at a time** (sole builder; it builds + screenshots in the main tree).
+- Verify each route: `pnpm build` green → dev server + headless-Chrome screenshot vs the `.dc.html` (recipe in BUILD-PROGRESS.md) → fix diffs → commit at green.
+
+**Next up (full list + per-archetype workflow in BUILD-PROGRESS.md):** `/services/repair/` hub (add an `href` to `NumberedIndex`/`IdxRow` first so its index rows link to the 6 services) + `/services/installation/` (build from `copy/services/installation.md`); then `/services/` hub, `/privacy-policy/`, `/contact/` (wire to the existing Resend/D1/Turnstile flow), `/` home (bespoke), Service Areas (hub + 6 cities), Doors (types/brands/brochures), About (our-story/portfolio/reviews).
+
+> The sections below describe the PRE-design-port state. **Two architectures currently coexist:** the new one above (`components/blocks/`, `RepairDetailLayout`, tokens `accent/ink/cream` + `font-display/font-body`) used by the built detail pages, AND the original homepage (`app/page.tsx` + `components/sections/`, old tokens via back-compat aliases) still awaiting its Phase-B rebuild. The Gotchas section still fully applies (esp. Archivo Expanded via `<link>`, `@/*`→root, keep the Turnstile/Resend/D1 infra).
+
 ## What this is
 
 Marketing site for **Trinity Garage Door Service** (Tampa Bay garage-door company). It is a
