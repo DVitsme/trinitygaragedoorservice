@@ -101,8 +101,8 @@ export default function ReviewsPage() {
               </div>
               <div className="flex flex-wrap items-center justify-end gap-[18px] max-nav:justify-start">
                 <div className="flex items-center gap-4 rounded-[10px] border border-[#333] bg-[#222] p-[22px]">
-                  <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={160} height={64} className="h-16 w-auto" />
-                  <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={130} height={52} className="h-[52px] w-auto" />
+                  <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={296} height={310} className="h-16 w-auto" />
+                  <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={162} height={160} className="h-[52px] w-auto" />
                 </div>
               </div>
             </div>

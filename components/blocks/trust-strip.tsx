@@ -10,8 +10,8 @@ export function TrustStrip() {
   return (
     <div className="bg-ink">
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-center gap-x-[26px] gap-y-[14px] px-5 py-[22px] nav:px-8">
-        <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={150} height={58} className="h-[58px] w-auto" />
-        <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={120} height={48} className="h-12 w-auto" />
+        <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={296} height={310} className="h-[58px] w-auto" />
+        <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={162} height={160} className="h-12 w-auto" />
         <span className="inline-flex items-center gap-2 text-[15px] font-bold text-white">
           <span className="tracking-[1px] text-accent">★★★★★</span> 4.9 on Google
         </span>

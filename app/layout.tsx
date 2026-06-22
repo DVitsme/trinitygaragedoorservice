@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <LocalBusinessJsonLd />
         <UtilityBar />
         <SiteHeader />
-        <main id="content" tabIndex={-1} className="overflow-x-hidden bg-white pb-[76px] nav:pb-0">{children}</main>
+        <main id="content" tabIndex={-1} className="overflow-x-clip bg-white pb-[76px] nav:pb-0">{children}</main>
         <SiteFooter />
         <StickyMobileBar />
       </body>

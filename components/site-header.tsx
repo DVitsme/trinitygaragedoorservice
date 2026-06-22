@@ -61,8 +61,8 @@ export function SiteHeader() {
           <Image
             src={asset("logo-trinity-primary.png")}
             alt="Trinity Garage Door Service"
-            width={220}
-            height={60}
+            width={670}
+            height={372}
             priority
             className="h-[60px] w-auto"
           />

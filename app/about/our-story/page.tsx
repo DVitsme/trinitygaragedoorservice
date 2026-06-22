@@ -202,8 +202,8 @@ export default function OurStoryPage() {
                   </div>
                 </div>
                 <div className="mt-[22px] flex items-center gap-4 border-t border-[#333] pt-[22px]">
-                  <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={135} height={54} className="h-[54px] w-auto" />
-                  <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={115} height={46} className="h-[46px] w-auto" />
+                  <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={296} height={310} className="h-[54px] w-auto" />
+                  <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={162} height={160} className="h-[46px] w-auto" />
                 </div>
               </div>
             </div>

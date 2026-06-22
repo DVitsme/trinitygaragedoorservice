@@ -34,8 +34,8 @@ export function SiteFooter() {
               <Image
                 src={asset("logo-trinity-primary.png")}
                 alt="Trinity Garage Door Service, Opening Doors Since 2007"
-                width={230}
-                height={80}
+                width={670}
+                height={372}
                 className="h-auto w-[200px]"
               />
             </div>
