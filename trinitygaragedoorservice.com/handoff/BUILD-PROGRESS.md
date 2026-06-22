@@ -39,18 +39,20 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 
 **Phase C — Services** (parallel agents write page-data objects; orchestrator builds + screenshots centrally to avoid .next clashes — PROVEN workflow)
 - [x] opener, off-track, cables-rollers, tune-up, emergency, replacement — parallel-built, build green, all 6 screenshot-verified 1:1, committed
-- [ ] `/services/repair/` hub (6-service index) · `/services/` hub (card grid archetype) · `/services/installation/` (from installation.md, not designed)
+- [x] `/services/repair/` hub — **bespoke** (diverges from RepairDetailLayout: 6-icon signs grid + dark note, 6-part index w/ rows LINKING to service pages + brand-logo strip, centered red band, tune-up dark split, 4-step "No Mystery", why-us) — built, prod-screenshot-verified 1:1, committed
+- [x] `/services/installation/` (from `installation.md`, not designed) — `RepairDetailData` object via RepairDetailLayout, primaryCta=estimate; materials/install-steps/Florida-weather; built, prod-verified, committed
+- [ ] `/services/` hub (card grid archetype) — needs ServiceCard + ServiceAreaMapMock blocks
 
 RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-free** house style — strip the design's prose compound hyphens ("Same Day", "Off Track", "wood look") — done on the 7 detail pages; (2) **tailor any copy that bled from the Spring template** in claude.ai/design (e.g. spring-flavored lines on opener/emergency) so each page reads for its own topic. Bake both into every remaining page.
 
 **Remaining pages** (~13 designed + 4 template cities). Workflow: detail-recipe pages (reuse RepairDetailLayout) → parallel write-only agents + central build/screenshot (proven). New-archetype pages (need their own blocks) → one fork at a time (builds + screenshots in the main tree as sole builder; no .next clash):
-- Services: `/services/repair/` hub (index rows LINK to the 6 services — needs `href` added to NumberedIndex/IdxRow first) · `/services/` hub (card grid) · `/services/installation/` (from installation.md, mirrors detail recipe)
+- Services: ✅ repair hub + installation DONE. Remaining: `/services/` hub (card grid archetype — build its ServiceCard + ServiceAreaMapMock; one fork). NOTE: I did **not** add `href` to the shared `NumberedIndex` (kept it untouched so the 7 verified detail pages stay byte-stable); the repair hub builds its linked index **inline** (cream icon chip + whole-row `<Link>` + subtle hover, mapping each part to its service page).
 - Phase B archetypes: `/privacy-policy/` (LegalBody) · `/contact/` (split + ContactForm wired to Resend/D1/Turnstile) · `/` home (bespoke: VideoHero, LogoMarquee, stats, before/after, booking mock, reviews)
 - Phase D Service Areas: hub (MapHero) + lutz + land-o-lakes (designed) + wesley-chapel/palm-harbor/oldsmar/tampa (city template) — needs MapHero, LinkCard, ServiceAreaMapMock blocks
 - Phase E Doors: types (buyer's guide) · brands (BrandCard/BrandHighlight catalog) · brochures (PdfList). About: our-story · portfolio (GalleryGrid) · reviews (ReviewCard masonry)
 
 **Phase C — Services** (detail recipe / RepairDetailLayout)
-- [ ] `/services/` · [ ] `/services/repair/` · [ ] `/services/repair/opener/` · [ ] `/services/repair/off-track/` · [ ] `/services/repair/cables-rollers/` · [ ] `/services/repair/tune-up/` · [ ] `/services/replacement/` · [ ] `/services/installation/` (build from copy)
+- [ ] `/services/` · [x] `/services/repair/` · [x] `/services/repair/opener/` · [x] `/services/repair/off-track/` · [x] `/services/repair/cables-rollers/` · [x] `/services/repair/tune-up/` · [x] `/services/replacement/` · [x] `/services/installation/` (built from copy)
 
 **Phase D — Service Areas**
 - [ ] `/service-areas/` · [ ] `/lutz/` · [ ] `/land-o-lakes/` · [ ] `/wesley-chapel/` · [ ] `/palm-harbor/` · [ ] `/oldsmar/` · [ ] `/tampa/` (last 4 = template + copy)
@@ -64,6 +66,7 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 Hero media+overlay · breakpoints 920/560 · metadata title/desc/canonical · FAQ JSON-LD where present · header active+CTA (G10) · footer variant · `next/link` internal · 2px-ink borders / 7px radius / `#b8202a` · reduced-motion · mobile nav + sticky bar · no invented stats/prices/ratings · screenshot matches `.dc.html`.
 
 ## Verification recipe (per page)
-1. `pnpm exec next dev -p 3000 > /tmp/devserver.log 2>&1 &` ; wait for 200 via `curl --retry`.
-2. Screenshot the route with `/usr/bin/google-chrome-stable --headless=new --no-sandbox --disable-gpu --hide-scrollbars --virtual-time-budget=25000 --window-size=1440,9000 --screenshot=/tmp/shots/<route>.png http://localhost:3000<route>` (mobile: `--window-size=414,12000`).
-3. Open the matching `.dc.html` in the browser the same way for side-by-side (strip the `<x-dc>`/`support.js` wrapper if it doesn't render standalone; else compare to the design intent in `03`). Read both PNGs; fix diffs. `pnpm build` must stay green.
+1. **Screenshot the PRODUCTION server, not `next dev`.** `pnpm build` (must be green) → `pnpm exec next start -p 3000` (use Bash `run_in_background:true` so it survives the turn) → wait for 200 via `curl --retry`. **Why:** in `next dev` (Turbopack) headless Chrome intermittently fails to load HMR/CSS chunks (`ChunkLoadError` in the log), so `nav:`/`max-nav:` media-query utilities silently don't apply and every responsive grid renders **stacked** — a phantom "bug" that is NOT in your code. `next start` serves one optimized CSS file and renders true. (Wasted ~30 min here chasing this; the index 3-col grid was correct all along.)
+2. Screenshot: `/usr/bin/google-chrome-stable --headless=new --no-sandbox --disable-gpu --hide-scrollbars --virtual-time-budget=20000 --window-size=1440,9000 --screenshot=/tmp/shots/<route>.png http://localhost:3000<route>` (mobile: `--window-size=414,11000`). Crop with **PIL** (`from PIL import Image; im.crop((0,y0,w,y1))`) for close reads — ImageMagick `convert` is NOT installed here.
+3. Open the matching `.dc.html` for side-by-side (strip the `<x-dc>`/`support.js` wrapper if it doesn't render standalone; else compare to the design intent in `03`). Read both PNGs; fix diffs. `pnpm build` must stay green.
+4. Restart note: after `pnpm build`, the `.next` dir holds the production build; a subsequent `next dev` reuses/overlays it and can leave dev chunks stale — another reason to verify via `next start`.
