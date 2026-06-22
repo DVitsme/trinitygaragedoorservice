@@ -58,7 +58,7 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 - [x] `/service-areas/` hub · [x] `/lutz/` · [x] `/land-o-lakes/` · [x] `/wesley-chapel/` · [x] `/palm-harbor/` · [x] `/oldsmar/` · [x] `/tampa/` — **Phase D COMPLETE.** All 6 cities via data-driven **`components/blocks/city-area-layout.tsx`** (`CityAreaData`): dark labeled-pin hero + intro split + uniform 6 service link-cards + review pull-quote + nearby chips + CTA. Lutz/LOL match their designs exactly; the other 4 use the template + `copy/service-areas/*.md`. Pull-quotes use real Google reviews (verbatim excerpts). Built green, prod-verified (Lutz + Palm Harbor screenshot-checked).
 
 **Phase E — About + Doors**
-- [ ] `/about/our-story/` · [ ] `/about/portfolio/` · [ ] `/about/reviews/` · [ ] `/doors/types/` · [ ] `/doors/brands/` · [ ] `/doors/brochures/`
+- [x] `/about/our-story/` · [x] `/about/portfolio/` · [x] `/about/reviews/` — **About COMPLETE**, all built 1:1 + prod-verified + committed (reviews masonry uses the 8 verbatim `GOOGLE_REVIEWS`; only Breadcrumb JSON-LD, no aggregateRating per G6) · [ ] `/doors/types/` · [ ] `/doors/brands/` · [ ] `/doors/brochures/`
 
 **Dead code to remove (cleanup):** now that `app/page.tsx` is the new Bold Trade home, the 12 OLD home-section files in `components/sections/` are unused: `hero, trust-strip, about-split, partner-marquee, why-us, stats-clip, before-after, service-area-map, reviews, booking-band, instagram-grid, cta-band`. **Keep** `utility-bar, site-footer, sticky-mobile-bar` (still imported by `layout.tsx`). Safe to delete the 12 (grep-confirmed only the old page imported them). Defer to a cleanup pass.
 
