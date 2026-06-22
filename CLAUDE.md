@@ -2,31 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## ⚠️ ACTIVE WORK — RESUME HERE (2026-06-22)
+## ✅ DESIGN-PORT BUILD COMPLETE (2026-06-22)
 
-You are **mid-way through a 1:1 design → Next.js build**: converting the approved `*.dc.html` "Bold Trade" designs (in `trinitygaragedoorservice.com/`) into real Next.js pages. Context was compacted; pick the build back up on your own.
+The 1:1 design → Next.js build is **done**. Every approved `*.dc.html` "Bold Trade" design (in `trinitygaragedoorservice.com/`) is now a live Next.js page, each `pnpm build`-green and **production-screenshot-verified 1:1**. Final build: **32 static pages, 0 errors**. **~27 commits ahead of origin/main, UNPUSHED** — the user pushes via `! git push origin main` (the auto-mode classifier blocks me from pushing to main).
 
-**Read first (the live state):**
-1. **`trinitygaragedoorservice.com/handoff/BUILD-PROGRESS.md`** — the LIVE tracker: page-by-page status, the build workflow, settled decisions, the full remaining-pages list. **This is the source of truth for what to do next.**
-2. `trinitygaragedoorservice.com/handoff/00-README.md` … `05-final-pass.md` — the design→Next spec (route→`.dc.html` map, design system, components, per-page section inventory, gaps/fixes G1–G16, F1–F8).
-3. Project memory: `trinity-garage-door-redesign`, `trinity-open-decisions`.
+**Built (all under `app/`):** `/` home (bespoke), `/services/` hub, `/services/repair/` hub (bespoke), the 6 repair detail pages + `/services/replacement/` + `/services/installation/` (via `components/blocks/repair-detail-layout.tsx` `RepairDetailData`), `/service-areas/` hub + 6 city pages (via `components/blocks/city-area-layout.tsx` `CityAreaData`), `/doors/{types,brands,brochures}/`, `/about/{our-story,portfolio,reviews}/`, `/contact/` (wraps the existing Resend/D1/Turnstile `ContactForm`), `/privacy-policy/`. Foundation: `app/globals.css` Bold Trade `@theme` tokens (`accent/ink/cream` + `--font-display`/`--font-body`; **custom breakpoints `nav`=920px, `xs`=560px** — use `max-nav:`/`nav:`/`max-xs:`, NOT `md:`/`lg:`); `lib/site.ts` (`ROUTES`, `SERVICES`, `AREAS`, `GOOGLE_REVIEWS`, `BRAND_CATALOG`, `getNavConfig`); reusable blocks in `components/blocks/` incl. `service-area-map-mock.tsx`.
 
-**Done + committed (17 commits ahead of origin/main, UNPUSHED — the user pushes via `! git push origin main`; the auto-mode classifier blocks me from pushing to main):**
-- Foundation: `app/globals.css` (Bold Trade `@theme` tokens `accent/ink/ink-2/ink-3/panel/cream/cream-2` + fonts `--font-display`/`--font-body`; **custom breakpoints `nav`=920px, `xs`=560px** — use `max-nav:`/`nav:`/`max-xs:`, NOT `md:`/`lg:`; OLD tokens kept as back-compat aliases). `next.config.ts` (`trailingSlash:true`, CF `images:{unoptimized:true}`, redirects). `lib/site.ts` adds `ROUTES`, `SERVICES`, `AREAS`, `GOOGLE_REVIEWS` (8 real), `BRAND_CATALOG` (10 corrected), `HOURS`, `getNavConfig(pathname)`.
-- Chrome adapted to pathname-driven active-nav + Book/Estimate CTA + Contact link (`components/site-header.tsx`, `components/sections/sticky-mobile-bar.tsx`, `components/mobile-menu.tsx`, layout skip-link).
-- **Block library `components/blocks/`**: Section, SectionHeading, Cta, Button, Breadcrumb, Reveal, PhotoHero/VideoHero, TrustStrip, RedBand, CardGrid/IconCard/NumberStepCard, SplitFeature/CheckList, NumberedIndex/DarkCallout, FaqAccordion — plus the data-driven **`RepairDetailLayout`** (`components/blocks/repair-detail-layout.tsx`, exports `RepairDetailData`; auto-emits Breadcrumb+FAQ JSON-LD).
-- **7 detail pages built 1:1, screenshot-verified, committed:** `/services/repair/{spring,opener,off-track,cables-rollers,tune-up,emergency}/` + `/services/replacement/`. Each is a `RepairDetailData` object mirroring `app/services/repair/spring/page.tsx` (the exemplar to copy for new detail pages).
+**Conventions baked into every page (keep if extending):** dash-free copy (no em/en/hyphen); reviews use the 8 verbatim `GOOGLE_REVIEWS` (never invent testimonials); client unknowns kept as **visible** placeholders (G16); per-route `metadata` + Breadcrumb/FAQ JSON-LD (no `aggregateRating` per G6).
 
-**Settled decisions (apply to EVERY remaining page):** (1) **dash-free** house style — strip the design's prose compound hyphens ("Same Day", "Off Track", not "Same-Day"). (2) **Tailor any copy that bled** from the Spring template in claude.ai/design so each page reads for its own topic.
+**⚠️ VERIFY VIA PRODUCTION, NOT `next dev`** (cost ~30 min to learn): in `next dev` (Turbopack) headless Chrome intermittently fails to load CSS chunks (`ChunkLoadError`), so `nav:`/`max-nav:` media-query grids silently render **stacked** — a phantom regression that is NOT in the code. Always `pnpm build` → `pnpm exec next start -p 3000` (Bash `run_in_background:true`) → screenshot that. Crop with PIL (no ImageMagick here). Full recipe + page status in **`trinitygaragedoorservice.com/handoff/BUILD-PROGRESS.md`**.
 
-**Proven workflow:**
-- **Detail-recipe pages** (reuse `RepairDetailLayout`): dispatch **parallel agents** that only WRITE the page data object (instruct: do NOT run `pnpm build`/`next dev` — parallel builds corrupt the shared `.next`), then build + screenshot-verify all centrally.
-- **New-archetype pages** (build their own blocks): **one fork at a time** (sole builder; it builds + screenshots in the main tree).
-- Verify each route: `pnpm build` green → dev server + headless-Chrome screenshot vs the `.dc.html` (recipe in BUILD-PROGRESS.md) → fix diffs → commit at green.
+**Remaining work is NOT design-port:** (1) **dead-code cleanup** — delete the 12 unused old-home files in `components/sections/` (`hero, trust-strip, about-split, partner-marquee, why-us, stats-clip, before-after, service-area-map, reviews, booking-band, instagram-grid, cta-band`); **keep** `utility-bar, site-footer, sticky-mobile-bar` (still imported by `layout.tsx`). (2) Build `/resources/{blog,safety-tips,troubleshooting,faq}/` from existing copy (`copy/resources/`, `content/blog/`) with a generic template (never designed). (3) Settle the launch-blocking client decisions in the `trinity-open-decisions` memory. (4) Optional Radix `NavigationMenu`/`Accordion` a11y upgrade (G8).
 
-**Next up (full list + per-archetype workflow in BUILD-PROGRESS.md):** `/services/repair/` hub (add an `href` to `NumberedIndex`/`IdxRow` first so its index rows link to the 6 services) + `/services/installation/` (build from `copy/services/installation.md`); then `/services/` hub, `/privacy-policy/`, `/contact/` (wire to the existing Resend/D1/Turnstile flow), `/` home (bespoke), Service Areas (hub + 6 cities), Doors (types/brands/brochures), About (our-story/portfolio/reviews).
-
-> The sections below describe the PRE-design-port state. **Two architectures currently coexist:** the new one above (`components/blocks/`, `RepairDetailLayout`, tokens `accent/ink/cream` + `font-display/font-body`) used by the built detail pages, AND the original homepage (`app/page.tsx` + `components/sections/`, old tokens via back-compat aliases) still awaiting its Phase-B rebuild. The Gotchas section still fully applies (esp. Archivo Expanded via `<link>`, `@/*`→root, keep the Turnstile/Resend/D1 infra).
+> The sections below describe the PRE-design-port state and are mostly historical now (the old `app/page.tsx`+`components/sections/` homepage was replaced). The **Gotchas** section still fully applies (esp. Archivo Expanded via `<link>` not `next/font/google`, `@/*`→repo root, keep the Turnstile/Resend/D1 infra). The `components/blocks/` + `accent/ink/cream` + `font-display/font-body` system is now the only architecture.
 
 ## What this is
 
