@@ -21,14 +21,14 @@ const offTrack: RepairDetailData = {
     { label: "Home", href: "/" },
     { label: "Services", href: "/services/" },
     { label: "Repair", href: "/services/repair/" },
-    { label: "Off-Track Repair" },
+    { label: "Off Track Repair" },
   ],
-  heroEyebrow: "Off-Track Repair & Replacement",
+  heroEyebrow: "Off Track Repair & Replacement",
   heroImage: "jobsite-tech-crouching-repair.jpg",
   heroImageAlt: "Trinity technician repairing an off-track garage door",
   h1: (
     <>
-      Garage Door Off-Track <span className="inline-block bg-accent px-3 text-white">Repair</span>
+      Garage Door Off Track <span className="inline-block bg-accent px-3 text-white">Repair</span>
     </>
   ),
   heroLead:
@@ -42,7 +42,7 @@ const offTrack: RepairDetailData = {
     ],
     image: "jobsite-two-techs-on-ladder.jpg",
     imageAlt: "Trinity technicians realigning a garage door",
-    badge: "Same-Day Service",
+    badge: "Same Day Service",
   },
   signs: {
     eyebrow: "Why It Happens",
@@ -80,7 +80,7 @@ const offTrack: RepairDetailData = {
     ),
   },
   redBand: {
-    badge: "Same-Day & 24/7",
+    badge: "Same Day & 24/7",
     title: "Stuck Open Or Jammed Shut?",
     lead: "An off track door can't wait, especially one stuck wide open overnight. We keep a 24/7 line for exactly that, and we'll come ready to get your car out safely if it's trapped inside.",
   },
@@ -105,12 +105,12 @@ const offTrack: RepairDetailData = {
     lead: "We've been opening doors around here since 2007, across Hillsborough, Pasco, and Pinellas.",
     cards: [
       { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "Honest Diagnosis", body: "If a simple repair will hold, that's what we'll do. We don't pad the bill." },
-      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same-Day", body: "Same day help, plus a 24/7 line for when a spring breaks at a bad hour." },
+      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, plus a 24/7 line for when your door quits at a bad hour." },
       { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "Bonded and insured under FL GD13010 and GDI-09484." },
       { icon: ico(26, (<><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></>)), title: "Fair, Upfront Pricing", body: "A price you hear up front, with free estimates every time." },
     ],
   },
-  faqHeading: { eyebrow: "Off-Track Questions", title: "Frequently Asked" },
+  faqHeading: { eyebrow: "Off Track Questions", title: "Frequently Asked" },
   faqs: [
     { q: "My door is off track. Is it safe to use until you get here?", a: "No. Don't run the opener, and don't try to open it by hand. Every time it moves, an off track door can do more damage to itself or to whatever is underneath it. Leave it be and we'll handle it." },
     { q: "Can I just put the roller back in myself?", a: "We really don't recommend it. The door is heavy and the springs are under high tension, and a door that drops while you're working on it can hurt you. Even if you got the roller back in, whatever knocked it out is still there." },

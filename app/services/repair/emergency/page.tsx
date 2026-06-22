@@ -42,7 +42,7 @@ const emergency: RepairDetailData = {
     ],
     image: "jobsite-tech-crouching-repair.jpg",
     imageAlt: "Trinity technician on an emergency garage door repair",
-    badge: "Same-Day Service",
+    badge: "Same Day Service",
   },
   signs: {
     eyebrow: "When It Can't Wait",
@@ -78,8 +78,8 @@ const emergency: RepairDetailData = {
     ),
   },
   redBand: {
-    badge: "Same-Day & 24/7",
-    title: "A Broken Spring Won't Wait",
+    badge: "Same Day & 24/7",
+    title: "A Garage Door Emergency Won't Wait",
     lead: "It's the morning you have to be somewhere, or the night you can't leave the house wide open. A real person answers our 24/7 line, the trucks carry common parts, and most emergencies are fixed on the first visit.",
   },
   whatWeDo: {
@@ -103,7 +103,7 @@ const emergency: RepairDetailData = {
     lead: "We've been opening doors around here since 2007, across Hillsborough, Pasco, and Pinellas.",
     cards: [
       { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "We Answer When It Matters", body: "A real person picks up our 24/7 line, holidays included. We won't use a late call to pad the bill." },
-      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same-Day", body: "Same day help, plus a 24/7 line for when a spring breaks at a bad hour." },
+      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, plus a 24/7 line for when your door quits at a bad hour." },
       { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "Bonded and insured under FL GD13010 and GDI-09484." },
       { icon: ico(26, (<><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></>)), title: "Fair, Upfront Pricing", body: "A price you hear up front, with free estimates every time." },
     ],

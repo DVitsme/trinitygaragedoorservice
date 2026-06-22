@@ -41,8 +41,8 @@ const replacement: RepairDetailData = {
       "This page is about that decision. We'll help you make the honest call, and if a new door is the right move, we handle the whole swap, old door out and new door in.",
     ],
     image: "door-after-brown-wood-sectional.jpg",
-    imageAlt: "A new wood-look garage door by Trinity",
-    badge: "Same-Day Service",
+    imageAlt: "A new wood look garage door by Trinity",
+    badge: "Same Day Service",
   },
   signs: {
     eyebrow: "Repair Or Replace?",
@@ -57,7 +57,7 @@ const replacement: RepairDetailData = {
     ],
     note: {
       icon: ico(22, (<><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z" /><path d="M12 9v4M12 17h.01" /></>), 2.2),
-      title: "Dated & Not Storm-Ready",
+      title: "Dated & Not Storm Ready",
       body: "If the door drags down the front of the house, a new one is the quickest way to freshen the exterior. And older doors often aren't wind rated, a weak point when the wind picks up in Tampa Bay.",
     },
   },
@@ -105,7 +105,7 @@ const replacement: RepairDetailData = {
     lead: "We've been opening doors around here since 2007, across Hillsborough, Pasco, and Pinellas.",
     cards: [
       { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "Honest Diagnosis", body: "A lot of doors don't need replacing. If a repair gets you a few more solid years, we'll say so." },
-      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same-Day", body: "Same day help, plus a 24/7 line for when a spring breaks at a bad hour." },
+      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, plus a 24/7 line for when your door quits at a bad hour." },
       { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "Bonded and insured under FL GD13010 and GDI-09484." },
       { icon: ico(26, (<><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></>)), title: "Fair, Upfront Pricing", body: "A price you hear up front, with free estimates every time." },
     ],
