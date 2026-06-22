@@ -41,7 +41,7 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 - [x] opener, off-track, cables-rollers, tune-up, emergency, replacement — parallel-built, build green, all 6 screenshot-verified 1:1, committed
 - [x] `/services/repair/` hub — **bespoke** (diverges from RepairDetailLayout: 6-icon signs grid + dark note, 6-part index w/ rows LINKING to service pages + brand-logo strip, centered red band, tune-up dark split, 4-step "No Mystery", why-us) — built, prod-screenshot-verified 1:1, committed
 - [x] `/services/installation/` (from `installation.md`, not designed) — `RepairDetailData` object via RepairDetailLayout, primaryCta=estimate; materials/install-steps/Florida-weather; built, prod-verified, committed
-- [ ] `/services/` hub (card grid archetype) — needs ServiceCard + ServiceAreaMapMock blocks
+- [x] `/services/` hub (card grid archetype) — built 1:1, prod-verified desktop+mobile, committed. Added reusable **`components/blocks/service-area-map-mock.tsx`** (`<ServiceAreaMapMock />` — the decorative Tampa Bay map panel; reuse on Contact/About/home). Service cards built page-local (icon chip + title + desc + hover "Learn More" bar that turns accent).
 
 RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-free** house style — strip the design's prose compound hyphens ("Same Day", "Off Track", "wood look") — done on the 7 detail pages; (2) **tailor any copy that bled from the Spring template** in claude.ai/design (e.g. spring-flavored lines on opener/emergency) so each page reads for its own topic. Bake both into every remaining page.
 
@@ -52,7 +52,7 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 - Phase E Doors: types (buyer's guide) · brands (BrandCard/BrandHighlight catalog) · brochures (PdfList). About: our-story · portfolio (GalleryGrid) · reviews (ReviewCard masonry)
 
 **Phase C — Services** (detail recipe / RepairDetailLayout)
-- [ ] `/services/` · [x] `/services/repair/` · [x] `/services/repair/opener/` · [x] `/services/repair/off-track/` · [x] `/services/repair/cables-rollers/` · [x] `/services/repair/tune-up/` · [x] `/services/replacement/` · [x] `/services/installation/` (built from copy)
+- [x] `/services/` · [x] `/services/repair/` · [x] `/services/repair/opener/` · [x] `/services/repair/off-track/` · [x] `/services/repair/cables-rollers/` · [x] `/services/repair/tune-up/` · [x] `/services/replacement/` · [x] `/services/installation/` (built from copy)
 
 **Phase D — Service Areas**
 - [ ] `/service-areas/` · [ ] `/lutz/` · [ ] `/land-o-lakes/` · [ ] `/wesley-chapel/` · [ ] `/palm-harbor/` · [ ] `/oldsmar/` · [ ] `/tampa/` (last 4 = template + copy)
