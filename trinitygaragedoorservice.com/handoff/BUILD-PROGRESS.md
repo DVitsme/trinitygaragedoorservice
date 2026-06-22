@@ -35,7 +35,7 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 
 **Phase B — Prove the system**
 - [x] `/services/repair/spring/` + `RepairDetailLayout` (data-driven, reused by 8 detail pages) — screenshot-verified 1:1, committed
-- [x] `/privacy-policy/` (LegalBody) · [x] `/contact/` (form wired to `/api/contact`) — both built 1:1, prod-verified, committed · [ ] `/` home (bespoke)
+- [x] `/privacy-policy/` (LegalBody) · [x] `/contact/` (form wired) · [x] `/` **home** (bespoke, 13 sections: VideoHero, about split w/ owner+18yr badges, logo marquee `.bt-marquee`, why-us, stats+clip, before/after, big service-area map [5 pins/2 roads, inline], **real Google reviews** [4 verbatim, not the design's fake samples], booking mock [Confirm → `SITE.bookingHref`], Instagram grid, CTA) — built 1:1, prod-verified, committed. **Phase B COMPLETE.**
 
 **Phase C — Services** (parallel agents write page-data objects; orchestrator builds + screenshots centrally to avoid .next clashes — PROVEN workflow)
 - [x] opener, off-track, cables-rollers, tune-up, emergency, replacement — parallel-built, build green, all 6 screenshot-verified 1:1, committed
@@ -59,6 +59,8 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 
 **Phase E — About + Doors**
 - [ ] `/about/our-story/` · [ ] `/about/portfolio/` · [ ] `/about/reviews/` · [ ] `/doors/types/` · [ ] `/doors/brands/` · [ ] `/doors/brochures/`
+
+**Dead code to remove (cleanup):** now that `app/page.tsx` is the new Bold Trade home, the 12 OLD home-section files in `components/sections/` are unused: `hero, trust-strip, about-split, partner-marquee, why-us, stats-clip, before-after, service-area-map, reviews, booking-band, instagram-grid, cta-band`. **Keep** `utility-bar, site-footer, sticky-mobile-bar` (still imported by `layout.tsx`). Safe to delete the 12 (grep-confirmed only the old page imported them). Defer to a cleanup pass.
 
 **Out of scope here (not designed):** `/resources/{blog,safety-tips,troubleshooting,faq}/` — copy exists (`copy/resources/`, `content/blog/`); build later with a generic template. Footer links to them must not ship as `#` (F2).
 
