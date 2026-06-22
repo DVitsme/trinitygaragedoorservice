@@ -16,6 +16,18 @@ The 1:1 design → Next.js build is **done**. Every approved `*.dc.html` "Bold T
 
 > The sections below describe the PRE-design-port state and are mostly historical now (the old `app/page.tsx`+`components/sections/` homepage was replaced). The **Gotchas** section still fully applies (esp. Archivo Expanded via `<link>` not `next/font/google`, `@/*`→repo root, keep the Turnstile/Resend/D1 infra). The `components/blocks/` + `accent/ink/cream` + `font-display/font-body` system is now the only architecture.
 
+## 🔖 Booking / Housecall Pro integration — SHELVED, revisit with the HCP login + real data (2026-06-22)
+
+The **Book a Repair** page (`app/book-a-repair/`, ported from `handoff/06-book-a-repair.md` + `handoff/Trinity Book a Repair (Bold Trade).dc.html`) is built. Its whole job is to **frame + launch HCP's booking** — no calendar/form on our side. Designer knowledge brief: `handoff/BOOK-A-REPAIR-HCP-BRIEF.md`.
+
+**Mechanism = the HCP embed: a "Book Online" button → modal popup over the page. No MAX plan needed.** `components/book-online-button.tsx` is the single mount point for all four "Book Online" buttons; today it opens the hosted booking URL (`NEXT_PUBLIC_BOOKING_URL` → `SITE.bookingHref`), with a documented `TODO(HCP)` to call HCP's modal open-API once their embed script is added. `ROUTES.bookRepair` now → `/book-a-repair/` (every site-wide "Book a Repair" CTA lands there). **To go live:** set `NEXT_PUBLIC_BOOKING_URL` to Trinity's HCP booking URL (HCP → Online Booking → Share), then drop in HCP's embed script + wire `openBooking()`.
+
+**Researched HCP options (2026-06-22), so we don't re-derive:**
+- **Website embeds (no MAX needed):** (1) "Book Online" button → **modal overlay** (documented, recommended); (2) **hosted link**; (3) Reserve with Google. There is **no official inline-iframe widget**, BUT `book.housecallpro.com` returns **no `X-Frame-Options` / no CSP `frame-ancestors`** (checked via `curl -I`), so a DIY inline `<iframe>` of the hosted URL *does* render — unsupported, height/scroll-fragile; test the real URL before relying on it.
+- **Public API = MAX plan only** (API key / OAuth, **server-side only — never put it in the browser**). **KEY FINDING:** the API is **back-office** (create customers / jobs / appointments, update job schedule + arrival windows, invoices, payments) and **does NOT expose a customer-facing bookable-availability endpoint**. So a MAX key **cannot** cleanly power a true live-availability calendar — you'd have to recompute availability yourself (rebuild HCP's scheduler; fragile). Realistic API-native option = a branded **"request a window, we confirm"** form (POST a job), NOT a live calendar. The better use of the MAX API = **back-office lead/data sync** (push `/contact` + estimate-form leads into HCP).
+
+**REVISIT after we have the Housecall Pro login + account data:** grab the real booking URL + embed snippet, decide modal vs inline-iframe, and evaluate whether MAX is worth it for lead sync. Until then the Book a Repair buttons open `bookingHref` (set the env var to make them live).
+
 ## What this is
 
 Marketing site for **Trinity Garage Door Service** (Tampa Bay garage-door company). It is a
