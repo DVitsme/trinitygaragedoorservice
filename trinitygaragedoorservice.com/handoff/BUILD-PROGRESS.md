@@ -28,9 +28,10 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 **Phase A — Foundation**
 - [x] assets · `next.config` (trailingSlash/images/redirects) · `globals.css` tokens + 920/560 breakpoints · `lib/site.ts` data + `getNavConfig`
 - [x] chrome: utility bar · header (CSS mega-menu, activeNav/headerCta, Contact link, next/link) · sticky bar · mobile drawer · layout skip-link — build green, screenshot-verified
-- [ ] footer variants (parameterize columns + bottom slot) · shadcn accordion/select reskinned
-- [ ] block library + `RepairDetailLayout` · JSON-LD (FAQ/Breadcrumb) · sitemap/robots · 404/error
-- [ ] (polish) Radix NavigationMenu a11y upgrade (G8) — CSS focus-within menu used for now
+- [x] block library CORE (`components/blocks/`): Section/SectionHeading/Cta/Button/Breadcrumb/Reveal · PhotoHero/VideoHero · TrustStrip · RedBand (split+center) · CardGrid/IconCard/NumberStepCard · SplitFeature/CheckList · NumberedIndex/DarkCallout · FaqAccordion (hand-rolled plus->minus) — build green
+- [ ] remaining blocks build WITH their pages (Phase B+): `RepairDetailLayout`, LogoMarquee, MapHero, GalleryGrid, BrandCard/BrandHighlight, ReviewCard masonry, PdfList, LinkCard (bt-do), ServiceAreaMapMock, home-bespoke (stats/before-after/booking)
+- [ ] footer variants · Contact-form Select · JSON-LD (FAQ/Breadcrumb) · sitemap/robots · 404/error
+- [ ] (polish) Radix NavigationMenu + Accordion a11y upgrade (G8) — CSS/hand-rolled used for now
 
 **Phase B — Prove the system**
 - [ ] `/` home (bespoke) · [ ] `/services/repair/spring/` · [ ] `/privacy-policy/` · [ ] `/contact/`
