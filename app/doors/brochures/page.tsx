@@ -16,18 +16,54 @@ export const metadata: Metadata = {
 const SITE_URL = "https://trinitygaragedoorservice.com";
 const breadcrumb = [{ label: "Home", href: "/" }, { label: "Doors", href: ROUTES.doorTypes }, { label: "Brochures" }];
 
-// Placeholder spec-sheet titles (PDFs not yet wired — see note; rendered as non-link cards so no dead # links ship).
-const clopayResidential = ["Classic Steel Premium", "Classic Steel, value series", "Canyon Ridge, faux wood carriage", "Ultra Grain, wood look finish", "The Gallery Steel", "Modern Steel", "Extreme Series", "Make a Statement, style guide"];
-const clopayCommercial = ["Commercial 520 & 520S", "Commercial 524, 524V, 524S", "Commercial CESD10", "Commercial VS904 & VS904U"];
-const chiDocs = ["2250 Raised Panel", "Carriage House", "Contemporary", "Full View, aluminum & glass", "Recessed Panel", "Timeless"];
-const liftmasterDocs = ["Model 8160", "Model 8165", "Model 84505", "Model 85870", "Model 87504", "Model 87802", "Model 98022"];
+// Real manufacturer brochures in public/brochures/ (filename mapping per public/brochures/README.md).
+type Doc = { label: string; file: string };
+const clopayResidential: Doc[] = [
+  { label: "Classic Steel Premium", file: "classicsteelpremmium.pdf" },
+  { label: "Classic Steel, value series", file: "RSDR-VALUESS-12-9.pdf" },
+  { label: "Canyon Ridge, faux wood carriage", file: "canyonridge.pdf" },
+  { label: "Ultra Grain, wood look finish", file: "clopayultragrain.pdf" },
+  { label: "The Gallery Steel", file: "clopaymodern.pdf" },
+  { label: "Modern Steel", file: "clopaymodernsteel.pdf" },
+  { label: "Extreme Series", file: "clopayextreme.pdf" },
+  { label: "Make a Statement, style guide", file: "makeastatement.pdf" },
+];
+const clopayCommercial: Doc[] = [
+  { label: "Commercial 520 & 520S", file: "clopay520.pdf" },
+  { label: "Commercial 524, 524V, 524S", file: "clopay524.pdf" },
+  { label: "Commercial CESD10", file: "clopaycommercial.pdf" },
+  { label: "Commercial VS904 & VS904U", file: "clopay.pdf" },
+];
+const chiDocs: Doc[] = [
+  { label: "2250 Raised Panel", file: "CHI-2250-RP-0317V1-LOCK.pdf" },
+  { label: "Carriage House", file: "chicarriage.pdf" },
+  { label: "Contemporary", file: "chicontemp.pdf" },
+  { label: "Full View, aluminum & glass", file: "chifullview.pdf" },
+  { label: "Recessed Panel", file: "chirecessed.pdf" },
+  { label: "Timeless", file: "chitimeless.pdf" },
+];
+const liftmasterDocs: Doc[] = [
+  { label: "Model 8160", file: "8160LM.pdf" },
+  { label: "Model 8165", file: "8165LM.pdf" },
+  { label: "Model 84505", file: "84505LM.pdf" },
+  { label: "Model 85870", file: "85870LM.pdf" },
+  { label: "Model 87504", file: "87504LM.pdf" },
+  { label: "Model 87802", file: "87802LM.pdf" },
+  { label: "Model 98022", file: "98022LM.pdf" },
+];
 
-function PdfRow({ label }: { label: string }) {
+function PdfRow({ label, file }: Doc) {
   return (
-    <div className="flex items-center gap-3 rounded-[8px] border-2 border-ink bg-white p-[14px_16px]">
-      <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[7px] bg-cream font-display text-[10px] font-extrabold text-accent">PDF</span>
+    <a
+      href={`/brochures/${file}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open the ${label} brochure (PDF, opens in a new tab)`}
+      className="group flex items-center gap-3 rounded-[8px] border-2 border-ink bg-white p-[14px_16px] no-underline transition-[transform,box-shadow] duration-150 hover:-translate-y-[3px] hover:shadow-[0_14px_28px_rgba(0,0,0,0.14)]"
+    >
+      <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[7px] bg-cream font-display text-[10px] font-extrabold text-accent transition-colors group-hover:bg-accent group-hover:text-white">PDF</span>
       <span className="text-[14.5px] font-bold text-ink">{label}</span>
-    </div>
+    </a>
   );
 }
 
@@ -90,9 +126,9 @@ export default function BrochuresPage() {
         <div className="mx-auto max-w-[1200px] px-5 pb-5 pt-[72px] nav:px-8">
           <Reveal><BrandHeader logo="brandlogo-clopay.png" alt="Clopay" title="Clopay Doors" blurb="The largest residential garage door maker in North America. Main residential lines, plus a few commercial models." logoBg="bg-cream" /></Reveal>
           <Reveal><div className={`mt-[30px] ${groupLabel}`}>Residential</div></Reveal>
-          <Reveal><div className={pdfGrid}>{clopayResidential.map((d) => <PdfRow key={d} label={d} />)}</div></Reveal>
+          <Reveal><div className={pdfGrid}>{clopayResidential.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
           <Reveal><div className={`mt-[26px] ${groupLabel}`}>Commercial</div></Reveal>
-          <Reveal><div className={pdfGrid}>{clopayCommercial.map((d) => <PdfRow key={d} label={d} />)}</div></Reveal>
+          <Reveal><div className={pdfGrid}>{clopayCommercial.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
         </div>
       </section>
 
@@ -100,7 +136,7 @@ export default function BrochuresPage() {
       <section className="bg-cream border-t-2 border-ink">
         <div className="mx-auto max-w-[1200px] px-5 py-16 nav:px-8">
           <Reveal><BrandHeader logo="brandlogo-chi.png" alt="C.H.I. Overhead Doors" title="C.H.I. Doors" blurb="A clean, well built lineup that covers most of the looks people ask for." logoBg="bg-white" /></Reveal>
-          <Reveal><div className={pdfGrid.replace("mt-[22px]", "mt-[26px]")}>{chiDocs.map((d) => <PdfRow key={d} label={d} />)}</div></Reveal>
+          <Reveal><div className={pdfGrid.replace("mt-[22px]", "mt-[26px]")}>{chiDocs.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
         </div>
       </section>
 
@@ -108,8 +144,8 @@ export default function BrochuresPage() {
       <section className="bg-white border-t-2 border-ink">
         <div className="mx-auto max-w-[1200px] px-5 py-16 nav:px-8">
           <Reveal><BrandHeader logo="brandlogo-liftmaster.png" alt="LiftMaster" title="LiftMaster Openers" blurb="Spec sheets for popular models of the professional grade opener we install most. Want help matching one to your door? Just ask." logoBg="bg-cream" /></Reveal>
-          <Reveal><div className={pdfGrid.replace("mt-[22px]", "mt-[26px]")}>{liftmasterDocs.map((d) => <PdfRow key={d} label={d} />)}</div></Reveal>
-          <Reveal><div className="mt-5 text-[12.5px] font-semibold text-[#8a8a8a]">Brochure links are placeholders. At build, swap in the real PDFs with descriptive filenames, cover thumbnails, and alt text.</div></Reveal>
+          <Reveal><div className={pdfGrid.replace("mt-[22px]", "mt-[26px]")}>{liftmasterDocs.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
+          <Reveal><div className="mt-5 text-[12.5px] font-semibold text-[#8a8a8a]">Each brochure opens as a PDF in a new tab. These are the manufacturer spec sheets for the lines we install and service.</div></Reveal>
         </div>
       </section>
 
