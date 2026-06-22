@@ -1,21 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Phone } from "lucide-react";
 import {
   SITE,
+  ROUTES,
+  getNavConfig,
   NAV_REPAIR,
   NAV_INSTALL,
   NAV_DOORS,
   NAV_ABOUT,
-  CITIES,
+  AREAS,
 } from "@/lib/site";
 
-const AREA_LINKS = CITIES.map((c) => ({ label: c.name, href: `/service-areas/${c.slug}/` }));
+const AREA_LINKS = AREAS.map((c) => ({ label: c.name, href: `/service-areas/${c.slug}/` }));
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState<string | null>("services");
+  const cfg = getNavConfig(usePathname() || "/");
+  const estimate = cfg.headerCta === "estimate";
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -25,6 +31,7 @@ export function MobileMenu() {
   }, [open]);
 
   const toggle = (key: string) => setSection((s) => (s === key ? null : key));
+  const close = () => setOpen(false);
 
   return (
     <>
@@ -33,44 +40,49 @@ export function MobileMenu() {
         aria-label="Menu"
         aria-expanded={open}
         onClick={() => setOpen(true)}
-        className="flex items-center justify-center rounded-[7px] border-2 border-ink p-2 min-[921px]:hidden"
+        className="flex items-center justify-center rounded-[7px] border-2 border-ink p-2 nav:hidden"
       >
         <Menu className="h-[22px] w-[22px] text-ink" strokeWidth={2.4} />
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[70] flex flex-col bg-white min-[921px]:hidden">
+        <div className="fixed inset-0 z-[70] flex flex-col bg-white nav:hidden">
           <div className="flex items-center justify-between border-b-2 border-ink px-5 py-3.5">
-            <span className="font-heading text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink">
+            <span className="font-display text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink">
               Menu
             </span>
             <button
               type="button"
               aria-label="Close menu"
-              onClick={() => setOpen(false)}
+              onClick={close}
               className="flex items-center justify-center rounded-[7px] border-2 border-ink p-2"
             >
               <X className="h-[22px] w-[22px] text-ink" strokeWidth={2.4} />
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-5 py-4">
-            {/* Services */}
+          <nav className="flex-1 overflow-y-auto px-5 py-4" aria-label="Mobile">
             <Accordion label="Services" open={section === "services"} onToggle={() => toggle("services")}>
-              <Group title="Repair" links={[...NAV_REPAIR, { label: "All Repair Services", href: "/services/repair/" }]} onNav={() => setOpen(false)} />
-              <Group title="Install & Replace" links={NAV_INSTALL} onNav={() => setOpen(false)} />
-              <Group title="Doors & Brands" links={NAV_DOORS} onNav={() => setOpen(false)} />
+              <Group title="Repair" links={[...NAV_REPAIR, { label: "All Repair Services", href: ROUTES.repair }]} onNav={close} />
+              <Group title="Install & Replace" links={NAV_INSTALL} onNav={close} />
+              <Group title="Doors & Brands" links={NAV_DOORS} onNav={close} />
             </Accordion>
 
-            {/* Service Areas */}
             <Accordion label="Service Areas" open={section === "areas"} onToggle={() => toggle("areas")}>
-              <Group links={[...AREA_LINKS, { label: "All Service Areas", href: "/service-areas/" }]} onNav={() => setOpen(false)} />
+              <Group links={[...AREA_LINKS, { label: "All Service Areas", href: ROUTES.serviceAreas }]} onNav={close} />
             </Accordion>
 
-            {/* About */}
             <Accordion label="About" open={section === "about"} onToggle={() => toggle("about")}>
-              <Group links={NAV_ABOUT} onNav={() => setOpen(false)} />
+              <Group links={NAV_ABOUT} onNav={close} />
             </Accordion>
+
+            <Link
+              href={ROUTES.contact}
+              onClick={close}
+              className="flex w-full items-center justify-between border-b border-[#e3e0da] py-4 font-display text-[16px] font-extrabold uppercase tracking-[0.03em] text-ink no-underline"
+            >
+              Contact
+            </Link>
           </nav>
 
           <div className="flex flex-col gap-2.5 border-t-2 border-ink p-5">
@@ -81,13 +93,13 @@ export function MobileMenu() {
               <Phone className="h-[17px] w-[17px] text-accent" strokeWidth={2.2} />
               Call {SITE.phoneDisplay}
             </a>
-            <a
-              href={SITE.bookingHref}
-              onClick={() => setOpen(false)}
+            <Link
+              href={estimate ? ROUTES.estimate : ROUTES.bookRepair}
+              onClick={close}
               className="rounded-[7px] bg-accent py-3.5 text-center text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline"
             >
-              Book a Repair
-            </a>
+              {estimate ? "Free Estimate" : "Book a Repair"}
+            </Link>
           </div>
         </div>
       )}
@@ -112,7 +124,7 @@ function Accordion({
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex w-full items-center justify-between py-4 font-heading text-[16px] font-extrabold uppercase tracking-[0.03em] text-ink"
+        className="flex w-full items-center justify-between py-4 font-display text-[16px] font-extrabold uppercase tracking-[0.03em] text-ink"
       >
         {label}
         <ChevronDown className={`h-5 w-5 transition-transform ${open ? "rotate-180" : ""}`} strokeWidth={2.4} />
@@ -140,14 +152,14 @@ function Group({
       )}
       <div className="flex flex-col">
         {links.map((l) => (
-          <a
+          <Link
             key={l.label}
             href={l.href}
             onClick={onNav}
             className="py-2 text-[15px] font-semibold text-[#3a3a3a] no-underline"
           >
             {l.label}
-          </a>
+          </Link>
         ))}
       </div>
     </div>

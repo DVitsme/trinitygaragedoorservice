@@ -26,9 +26,11 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 
 ## Phases & page status  ( [ ] todo · [~] in progress · [x] done+verified )
 **Phase A — Foundation**
-- [~] assets copied · `next.config` · `globals.css` tokens+breakpoints · `lib/site.ts` data
-- [ ] fonts wired in layout · chrome (utility/header+megamenu/footer/sticky) · shadcn primitives reskinned
-- [ ] block library + `RepairDetailLayout` · JSON-LD/sitemap/robots/404/error
+- [x] assets · `next.config` (trailingSlash/images/redirects) · `globals.css` tokens + 920/560 breakpoints · `lib/site.ts` data + `getNavConfig`
+- [x] chrome: utility bar · header (CSS mega-menu, activeNav/headerCta, Contact link, next/link) · sticky bar · mobile drawer · layout skip-link — build green, screenshot-verified
+- [ ] footer variants (parameterize columns + bottom slot) · shadcn accordion/select reskinned
+- [ ] block library + `RepairDetailLayout` · JSON-LD (FAQ/Breadcrumb) · sitemap/robots · 404/error
+- [ ] (polish) Radix NavigationMenu a11y upgrade (G8) — CSS focus-within menu used for now
 
 **Phase B — Prove the system**
 - [ ] `/` home (bespoke) · [ ] `/services/repair/spring/` · [ ] `/privacy-policy/` · [ ] `/contact/`

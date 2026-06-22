@@ -35,6 +35,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={hanken.variable}>
       <body>
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[100] focus:rounded-[7px] focus:bg-ink focus:px-4 focus:py-2 focus:font-semibold focus:text-white"
+        >
+          Skip to content
+        </a>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -44,7 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <LocalBusinessJsonLd />
         <UtilityBar />
         <SiteHeader />
-        <main className="overflow-x-hidden bg-white pb-[76px] min-[921px]:pb-0">{children}</main>
+        <main id="content" tabIndex={-1} className="overflow-x-hidden bg-white pb-[76px] nav:pb-0">{children}</main>
         <SiteFooter />
         <StickyMobileBar />
       </body>

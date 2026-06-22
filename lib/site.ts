@@ -210,3 +210,26 @@ export const BRAND_CATALOG = [
   { name: "Linear", logo: "brandlogo-linear.png", category: "opener", relationship: "service", blurb: "Better known for gate openers and access control. We service their garage operators and gates." },
   { name: "Wayne Dalton", logo: "brandlogo-wayne-dalton.jpg", category: "door", relationship: "service", blurb: "Really a door maker, not an opener brand. They stopped making openers, so parts are scarce. We service their doors and older openers." },
 ] as const;
+
+/** Per-route chrome config (handoff G10/G11): active nav, header/sticky CTA, footer variant. */
+export type NavConfig = {
+  activeNav: "services" | "areas" | "about" | "contact" | null;
+  headerCta: "repair" | "estimate";
+  footerLinks: "services" | "doors";
+  footerBottom: "social" | "legal";
+};
+
+export function getNavConfig(pathname: string): NavConfig {
+  const p = pathname || "/";
+  const isDoors = p.startsWith("/doors");
+  const isServices = p.startsWith("/services") || isDoors;
+  const isAreas = p.startsWith("/service-areas");
+  const isAbout = p.startsWith("/about");
+  const isContact = p.startsWith("/contact");
+  return {
+    activeNav: isAreas ? "areas" : isAbout ? "about" : isContact ? "contact" : isServices ? "services" : null,
+    headerCta: isDoors ? "estimate" : "repair",
+    footerLinks: isDoors ? "doors" : "services",
+    footerBottom: p === "/" || isAbout ? "social" : "legal",
+  };
+}
