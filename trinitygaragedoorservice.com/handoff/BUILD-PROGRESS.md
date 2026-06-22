@@ -55,7 +55,7 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 - [x] `/services/` · [x] `/services/repair/` · [x] `/services/repair/opener/` · [x] `/services/repair/off-track/` · [x] `/services/repair/cables-rollers/` · [x] `/services/repair/tune-up/` · [x] `/services/replacement/` · [x] `/services/installation/` (built from copy)
 
 **Phase D — Service Areas**
-- [ ] `/service-areas/` · [ ] `/lutz/` · [ ] `/land-o-lakes/` · [ ] `/wesley-chapel/` · [ ] `/palm-harbor/` · [ ] `/oldsmar/` · [ ] `/tampa/` (last 4 = template + copy)
+- [x] `/service-areas/` hub (built 1:1, prod-verified, committed — dark map-decorated MapHero + 6 town cards + "not sure" callout + why-us + map split + CTA; mirrors the Services hub) · [ ] `/lutz/` · [ ] `/land-o-lakes/` · [ ] `/wesley-chapel/` · [ ] `/palm-harbor/` · [ ] `/oldsmar/` · [ ] `/tampa/` (last 4 = template + copy). NOTE: hub links to the 6 city routes — they 404 until built next (expected).
 
 **Phase E — About + Doors**
 - [ ] `/about/our-story/` · [ ] `/about/portfolio/` · [ ] `/about/reviews/` · [ ] `/doors/types/` · [ ] `/doors/brands/` · [ ] `/doors/brochures/`
