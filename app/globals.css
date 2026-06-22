@@ -76,8 +76,17 @@ img {
   mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
 }
 
+/* "Book Online" CTA pulse (Book a Repair page) — a subtle red attention ring, paused on hover. */
+@keyframes bt-pulse {
+  0%, 100% { box-shadow: 0 12px 30px rgba(184, 32, 42, 0.45), 0 0 0 0 rgba(184, 32, 42, 0.5); }
+  50% { box-shadow: 0 12px 30px rgba(184, 32, 42, 0.45), 0 0 0 14px rgba(184, 32, 42, 0); }
+}
+.bt-book-btn { animation: bt-pulse 2.6s ease-out infinite; }
+.bt-book-btn:hover { animation: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .bt-marquee {
+  .bt-marquee,
+  .bt-book-btn {
     animation: none;
   }
   html {

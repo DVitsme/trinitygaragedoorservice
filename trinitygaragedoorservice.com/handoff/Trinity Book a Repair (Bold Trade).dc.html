@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:#1A1A1A;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A}
+  img{display:block;max-width:100%}
+  ::selection{background:#b8202a;color:#fff}
+  #bt-root{--accent:#b8202a;--ov:.82}
+  @keyframes bt-pulse{0%,100%{box-shadow:0 12px 30px rgba(184,32,42,.45),0 0 0 0 rgba(184,32,42,.5)}50%{box-shadow:0 12px 30px rgba(184,32,42,.45),0 0 0 14px rgba(184,32,42,0)}}
+  .bt-book-btn{animation:bt-pulse 2.6s ease-out infinite}
+  .bt-book-btn:hover{animation:none}
+  .reveal{transition:opacity .45s ease,transform .45s ease}
+  .bt-js .reveal{opacity:0;transform:translateY(16px)}
+  .bt-js .reveal.in{opacity:1;transform:none}
+  .bt-navlink{text-decoration:none;position:relative;padding-bottom:3px}
+  .bt-navlink::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;background:var(--accent);transition:width .25s ease}
+  .bt-navlink:hover::after{width:100%}
+  .bt-sticky{display:none}
+  .bt-menu{display:none}
+  .bt-navitem{position:static;display:flex;align-items:center}
+  .bt-navtrigger{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:#1A1A1A;font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;background:none;border:none;padding:20px 0}
+  .bt-navitem:hover .bt-navtrigger,.bt-navitem:focus-within .bt-navtrigger{color:var(--accent)}
+  .bt-caret{transition:transform .2s ease}
+  .bt-navitem:hover .bt-caret,.bt-navitem:focus-within .bt-caret{transform:rotate(180deg)}
+  .bt-mega{position:absolute;top:100%;left:50%;margin-top:12px;background:#fff;border:2px solid #1A1A1A;border-radius:8px;box-shadow:0 26px 50px rgba(0,0,0,.22);padding:22px;opacity:0;visibility:hidden;transform:translate(-50%,10px);transition:opacity .2s ease,transform .2s ease,visibility .2s;z-index:60}
+  .bt-mega::before{content:"";position:absolute;top:-14px;left:0;right:0;height:14px}
+  .bt-navitem:hover .bt-mega,.bt-navitem:focus-within .bt-mega{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .bt-mega-r{left:50%;right:auto}
+  .bt-mcolh{display:inline-block;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#1A1A1A;padding-bottom:6px;border-bottom:3px solid var(--accent);margin-bottom:6px}
+  .bt-mli{display:flex;align-items:center;gap:7px;text-decoration:none;color:#3a3a3a;font-weight:600;font-size:14.5px;padding:8px 10px;border-radius:6px;transition:background .15s ease,color .15s ease;white-space:nowrap}
+  .bt-mli:hover{background:#F2F0EC;color:var(--accent)}
+  .bt-mli-all{color:var(--accent);font-weight:800}
+  .bt-mcta{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:11px 14px;border-radius:7px;margin-top:8px}
+  .bt-faq{border:2px solid #1A1A1A;border-radius:8px;background:#fff;margin-top:14px;overflow:hidden}
+  .bt-faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:16px;text-transform:uppercase;color:#1A1A1A}
+  .bt-faq summary::-webkit-details-marker{display:none}
+  .bt-faq .bt-faq-plus{flex-shrink:0;width:26px;height:26px;border:2px solid var(--accent);border-radius:6px;position:relative;transition:background .2s ease}
+  .bt-faq .bt-faq-plus::before,.bt-faq .bt-faq-plus::after{content:"";position:absolute;background:var(--accent);transition:transform .2s ease,background .2s ease}
+  .bt-faq .bt-faq-plus::before{left:5px;right:5px;top:11px;height:2px}
+  .bt-faq .bt-faq-plus::after{top:5px;bottom:5px;left:11px;width:2px}
+  .bt-faq[open] .bt-faq-plus{background:var(--accent)}
+  .bt-faq[open] .bt-faq-plus::before{background:#fff}
+  .bt-faq[open] .bt-faq-plus::after{transform:scaleY(0);background:#fff}
+  .bt-faq-body{padding:0 22px 22px;font-size:16px;line-height:1.62;color:#4a4a4a;font-weight:500}
+  @media(max-width:920px){
+    .bt-navlinks{display:none!important}
+    .bt-navcta{display:none!important}
+    .bt-menu{display:inline-flex!important}
+    .bt-g2,.bt-g4,.bt-g3,.bt-foot,.bt-hero2{grid-template-columns:1fr!important}
+    .bt-g4{grid-template-columns:1fr 1fr!important}
+    .bt-g3{grid-template-columns:1fr 1fr!important}
+    .bt-sec{padding-left:20px!important;padding-right:20px!important}
+    .bt-util{display:none!important}
+    .bt-sticky{display:flex!important}
+    .bt-pad-b{padding-bottom:92px!important}
+    .bt-herocard{order:-1}
+  }
+  @media(max-width:560px){ .bt-g4,.bt-g3{grid-template-columns:1fr!important} }
+</style>
+</helmet>
+
+<div id="bt-root" style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#1A1A1A;background:#fff;overflow-x:hidden">
+
+  <!-- utility bar (red) -->
+  <div class="bt-util" style="background:var(--accent);color:#fff;font-size:13.5px;font-weight:600">
+    <div style="max-width:1200px;margin:0 auto;padding:9px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><span style="width:7px;height:7px;border-radius:50%;background:#fff"></span>24/7 Emergency Service</span>
+        <span style="opacity:.45">|</span>
+        <a href="tel:18132796785" style="color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>Lutz · Tampa Bay, FL</div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div style="position:sticky;top:0;z-index:50;background:#fff;border-bottom:2px solid #1A1A1A">
+    <div style="position:relative;max-width:1200px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="/" aria-label="Trinity Garage Door Service — Home"><img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service" style="height:60px;width:auto"></a>
+      <div class="bt-navlinks" style="display:flex;align-items:center;gap:28px;color:#1A1A1A">
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Services <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:700px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px">
+            <div style="background:#FBF3F3;border:1px solid #F0DCDC;border-radius:8px;padding:14px">
+              <span class="bt-mcolh">Repair</span>
+              <a class="bt-mli" href="/services/repair/emergency/">24/7 Emergency Repair</a>
+              <a class="bt-mli" href="/services/repair/spring/">Spring Repair</a>
+              <a class="bt-mli" href="/services/repair/opener/">Opener Repair</a>
+              <a class="bt-mli" href="/services/repair/off-track/">Off-Track Repair</a>
+              <a class="bt-mli" href="/services/repair/cables-rollers/">Cables &amp; Rollers</a>
+              <a class="bt-mli" href="/services/repair/tune-up/">Maintenance / Tune-Up</a>
+              <a class="bt-mli bt-mli-all" href="/services/repair/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Repair Services</a>
+              <a class="bt-mcta" href="/book-a-repair/" style="background:var(--accent);color:#fff">Book a Repair</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Install &amp; Replace</span>
+              <a class="bt-mli" href="/services/installation/">New Installation</a>
+              <a class="bt-mli" href="/services/replacement/">Door Replacement</a>
+              <a class="bt-mcta" href="/get-service/?intent=estimate" style="background:#fff;color:#1A1A1A;border:2px solid #1A1A1A">Free Estimate</a>
+            </div>
+            <div style="padding:14px 4px">
+              <span class="bt-mcolh">Doors &amp; Brands</span>
+              <a class="bt-mli" href="/doors/types/">Door Types &amp; Styles</a>
+              <a class="bt-mli" href="/doors/brands/">Brands (catalog)</a>
+              <a class="bt-mli" href="/doors/brochures/">Brochures</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">Service Areas <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega" style="width:260px">
+            <span class="bt-mcolh">Areas</span>
+            <a class="bt-mli" href="/service-areas/lutz/">Lutz</a>
+            <a class="bt-mli" href="/service-areas/land-o-lakes/">Land O' Lakes</a>
+            <a class="bt-mli" href="/service-areas/wesley-chapel/">Wesley Chapel</a>
+            <a class="bt-mli" href="/service-areas/palm-harbor/">Palm Harbor</a>
+            <a class="bt-mli" href="/service-areas/oldsmar/">Oldsmar</a>
+            <a class="bt-mli" href="/service-areas/tampa/">Tampa</a>
+            <a class="bt-mli bt-mli-all" href="/service-areas/"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>All Service Areas</a>
+          </div>
+        </div>
+
+        <div class="bt-navitem">
+          <button class="bt-navtrigger" aria-haspopup="true">About <svg class="bt-caret" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+          <div class="bt-mega bt-mega-r" style="width:240px">
+            <span class="bt-mcolh">About</span>
+            <a class="bt-mli" href="/about/our-story/">Our Story</a>
+            <a class="bt-mli" href="/about/portfolio/">Portfolio / Our Work</a>
+            <a class="bt-mli" href="/about/reviews/">Reviews</a>
+          </div>
+        </div>
+
+        <a class="bt-navtrigger" href="/contact/" style="text-decoration:none">Contact</a>
+
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <a class="bt-navcta" href="tel:18132796785" style="text-decoration:none;color:#1A1A1A;font-weight:900;font-size:17px;white-space:nowrap">(813) 279-6785</a>
+        <a class="bt-navcta" href="/book-a-repair/" style="text-decoration:none;background:var(--accent);color:#fff;font-weight:800;font-size:13.5px;letter-spacing:.04em;text-transform:uppercase;padding:13px 22px;border-radius:7px">Book a Repair</a>
+        <button class="bt-menu" aria-label="Menu" style="background:none;border:2px solid #1A1A1A;border-radius:7px;padding:8px;cursor:pointer;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1A1A1A" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- hero: frame + launch -->
+  <div class="bt-hero-pad bt-pad-b" style="position:relative;overflow:hidden;padding:84px 24px 88px;border-bottom:5px solid var(--accent)">
+    <img src="assets/jobsite-tech-at-residential-garage.jpg" alt="Trinity technician arriving at a Tampa Bay home" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0">
+    <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(110deg, rgba(10,10,10,.93) 0%, rgba(10,10,10,.72) 52%, rgba(10,10,10,.42) 100%)"></div>
+    <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto">
+      <div class="bt-hero2" style="display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center">
+        <div>
+          <div style="font-size:12.5px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.72);text-transform:uppercase;margin-bottom:18px">
+            <a href="/" style="color:rgba(255,255,255,.72);text-decoration:none">Home</a> <span style="opacity:.5">/</span> <span style="color:#fff">Book a Repair</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px">
+            <span style="width:52px;height:4px;background:var(--accent)"></span>
+            <span style="font-family:'Hanken Grotesk',sans-serif;font-weight:800;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#fff">Book Online · 24/7</span>
+          </div>
+          <h1 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(34px,5.4vw,60px);line-height:.98;letter-spacing:-.015em;text-transform:uppercase;margin:18px 0 0;color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.5);max-width:640px">Book Your Repair In <span style="color:#fff;background:var(--accent);padding:0 12px;display:inline-block">A Few Taps</span></h1>
+          <p style="font-size:clamp(17px,2.1vw,20px);line-height:1.55;color:rgba(255,255,255,.9);max-width:540px;margin:22px 0 0;font-weight:500">Pick a service, choose an arrival window, and tell us where to come. It takes about a minute, and a local Trinity tech is on the way, often the same day. Real-time availability, no phone tag.</p>
+          <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:26px">
+            <span style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600;font-size:14.5px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Same-day windows</span>
+            <span style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600;font-size:14.5px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Licensed &amp; insured</span>
+            <span style="display:inline-flex;align-items:center;gap:8px;color:#fff;font-weight:600;font-size:14.5px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Family owned since 2007</span>
+          </div>
+        </div>
+
+        <!-- launch card -->
+        <div class="bt-herocard" style="background:#fff;border:2px solid #1A1A1A;border-radius:16px;padding:30px;box-shadow:0 26px 60px rgba(0,0,0,.45)">
+          <div style="display:flex;align-items:center;gap:10px;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#1A1A1A">
+            <span style="width:34px;height:34px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18M8 2v4M16 2v4"></path></svg></span>
+            Schedule Online
+          </div>
+          <p style="font-size:15.5px;line-height:1.55;color:#4a4a4a;margin:16px 0 0">Tap below to open our booking window. You'll see live openings and lock in an arrival time right here, no calls, no waiting.</p>
+
+          <!-- HCP embed button lives here -->
+          <button class="bt-book-btn" style="width:100%;margin-top:20px;background:var(--accent);color:#fff;border:none;border-radius:11px;padding:20px;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18M8 2v4M16 2v4M9 16l2 2 4-4"></path></svg>
+            Book Online
+          </button>
+          <div style="text-align:center;margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#9a9a9a">Secure scheduling powered by Housecall Pro</div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin:20px 0;color:#c4baac"><span style="flex:1;height:1px;background:#e7e0d6"></span><span style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a9a9a">or</span><span style="flex:1;height:1px;background:#e7e0d6"></span></div>
+
+          <a href="tel:18132796785" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:12px;background:#1A1A1A;border-radius:11px;padding:16px">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:17px;color:#fff">(813) 279-6785</span>
+          </a>
+          <div style="text-align:center;margin-top:10px;font-size:13px;color:#6a6a6a;font-weight:600">Prefer to talk it through? We answer 24/7.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- trust strip (dark) -->
+  <div style="background:#1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:center;gap:14px 26px;flex-wrap:wrap">
+      <img src="assets/badge-angi-super-service-2024.png" alt="Angi Super Service Award 2024" style="height:58px;width:auto">
+      <img src="assets/badge-elite.png" alt="HomeAdvisor Elite Service" style="height:48px;width:auto">
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:#fff"><span style="color:var(--accent);letter-spacing:1px">★★★★★</span> 4.9 on Google</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:#fff"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;background:#fff;color:#0a4ea2;font-size:11px;font-weight:900">A+</span>BBB Accredited</span>
+      <span style="width:2px;height:26px;background:var(--accent)"></span>
+      <span style="font-size:13px;color:#9a9a9a;font-weight:600;letter-spacing:.03em">LICENSED · BONDED · INSURED · FL GD13010 / GDI-09484</span>
+    </div>
+  </div>
+
+  <!-- how it works -->
+  <div style="background:#fff">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:88px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">After You Tap Book Online</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.04;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Here's How It Goes</h2>
+        <p style="font-size:16.5px;line-height:1.6;color:#4a4a4a;margin:14px 0 0">The booking window opens right on this page. Four quick steps and you're on the schedule.</p>
+      </div>
+      <div class="bt-g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px">
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:28px 24px"><div style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:30px;color:#fff;background:var(--accent);width:54px;height:54px;border-radius:8px;display:flex;align-items:center;justify-content:center">1</div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#1A1A1A">Pick The Service</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 0">Choose what's going on, a broken spring, a dead opener, an off-track door, or a tune-up. Not sure? Pick the closest and we'll sort it out.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:28px 24px"><div style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:30px;color:#fff;background:var(--accent);width:54px;height:54px;border-radius:8px;display:flex;align-items:center;justify-content:center">2</div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#1A1A1A">Choose An Arrival Window</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 0">You'll see live openings and pick a window that works, like 10am to 12pm. Same-day slots show up when they're available.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:28px 24px"><div style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:30px;color:#fff;background:var(--accent);width:54px;height:54px;border-radius:8px;display:flex;align-items:center;justify-content:center">3</div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#1A1A1A">Add Your Details</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 0">Your address and contact info, so we know where to come and how to reach you. Some jobs take a small deposit to hold the slot.</p></div>
+        <div style="background:#fff;border:2px solid #1A1A1A;border-radius:8px;padding:28px 24px"><div style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:30px;color:#fff;background:var(--accent);width:54px;height:54px;border-radius:8px;display:flex;align-items:center;justify-content:center">4</div><h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#1A1A1A">We Confirm</h3><p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 0">You get a confirmation by text and email, and the job lands on our schedule. We'll let you know when your tech is on the way.</p></div>
+      </div>
+      <div class="reveal" style="display:flex;gap:14px;align-items:flex-start;margin-top:24px;background:#F2F0EC;border:2px solid #1A1A1A;border-radius:8px;padding:20px 22px">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+        <p style="font-size:15.5px;line-height:1.6;color:#2a2a2a;margin:0;font-weight:500">Need to change or cancel? Just give us a call at <a href="tel:18132796785" style="color:var(--accent);font-weight:700;text-decoration:none">(813) 279-6785</a>. Online booking is the fastest way to get on the schedule, and we handle any changes by phone so nothing falls through the cracks.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- mid red band: book online again -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="bt-sec reveal" style="max-width:1200px;margin:0 auto;padding:60px 32px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+      <div style="max-width:660px">
+        <span style="display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.18);padding:7px 14px;border-radius:999px"><span style="width:8px;height:8px;border-radius:50%;background:#fff"></span>Real-Time Availability</span>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(26px,3.6vw,40px);line-height:1.0;text-transform:uppercase;margin:16px 0 0">Ready When You Are</h2>
+        <p style="font-size:17px;line-height:1.58;color:rgba(255,255,255,.92);margin:14px 0 0;font-weight:500">The booking window shows you exactly what's open and lets you grab it. Most repairs can be scheduled for the same day.</p>
+      </div>
+      <button class="bt-book-btn" style="flex-shrink:0;background:#fff;color:var(--accent);border:none;border-radius:11px;padding:20px 30px;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:17px;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:10px">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18M8 2v4M16 2v4M9 16l2 2 4-4"></path></svg>
+        Book Online
+      </button>
+    </div>
+  </div>
+
+  <!-- why book with trinity -->
+  <div style="background:#1A1A1A;border-top:5px solid var(--accent)">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:88px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Booking With A Local Crew</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.04;text-transform:uppercase;margin:12px 0 0;color:#fff">It's Still Us On The Other End</h2>
+        <p style="font-size:16px;line-height:1.6;color:#a8a8a8;margin:14px 0 0">Booking online is quick and easy, but a real Trinity person, not a call center, takes it from there.</p>
+      </div>
+      <div class="bt-g4 reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:46px">
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Same-Day Help</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">Most repairs can go on the schedule for the same day, with 24/7 for true emergencies.</p>
+        </div>
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Honest &amp; Local</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">Family owned in Tampa Bay since 2007. We tell you what it needs, not what's easiest to sell.</p>
+        </div>
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Licensed &amp; Insured</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">Bonded and insured under FL GD13010 and GDI-09484. Your home and your door are protected.</p>
+        </div>
+        <div style="background:#222;border:1px solid #333;border-top:4px solid var(--accent);border-radius:8px;padding:28px 24px">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H5.2L4 17.2z"></path><path d="M8 9h8M8 12h5"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:18px;text-transform:uppercase;margin:18px 0 0;color:#fff">Clear Confirmation</h3>
+          <p style="font-size:15px;line-height:1.55;color:#a8a8a8;margin:8px 0 0">A text and email the moment you book, and a heads-up when your tech is on the way.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- other ways -->
+  <div style="background:#F2F0EC;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:84px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Rather Not Self-Book?</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.04;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Two Other Easy Ways</h2>
+      </div>
+      <div class="bt-g3 reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px">
+        <a href="tel:18132796785" style="text-decoration:none;background:#fff;border:2px solid #1A1A1A;border-radius:10px;padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease;display:block" style-hover="transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,0,0,.12)">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:16px 0 0;color:#1A1A1A">Call Us 24/7</h3>
+          <p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 14px">Talk to a real person any time, day or night. Best for emergencies or when you'd rather explain it out loud.</p>
+          <span style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px;color:var(--accent)">(813) 279-6785</span>
+        </a>
+        <a href="/get-service/?intent=estimate" style="text-decoration:none;background:#fff;border:2px solid #1A1A1A;border-radius:10px;padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease;display:block" style-hover="transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,0,0,.12)">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"></path><circle cx="12" cy="12" r="9"></circle></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:16px 0 0;color:#1A1A1A">Request A Free Estimate</h3>
+          <p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 14px">Weighing a new door or a bigger job? We'll come take a look and give you an honest number, no pressure.</p>
+          <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#1A1A1A">Get Started <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+        <a href="/contact/" style="text-decoration:none;background:#fff;border:2px solid #1A1A1A;border-radius:10px;padding:30px 26px;transition:transform .2s ease,box-shadow .2s ease;display:block" style-hover="transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,0,0,.12)">
+          <div style="width:52px;height:52px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+          <h3 style="font-family:'Archivo Expanded',sans-serif;font-weight:700;font-size:19px;text-transform:uppercase;margin:16px 0 0;color:#1A1A1A">Send A Message</h3>
+          <p style="font-size:15px;line-height:1.55;color:#4a4a4a;margin:8px 0 14px">Put it in writing and we'll get back to you fast. Tell us about your door and what's going on.</p>
+          <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#1A1A1A">Contact Us <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- faq -->
+  <div style="background:#fff;border-top:2px solid #1A1A1A">
+    <div class="bt-sec" style="max-width:880px;margin:0 auto;padding:84px 32px">
+      <div class="reveal" style="text-align:center;max-width:680px;margin:0 auto">
+        <div style="font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Booking Questions</div>
+        <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,40px);line-height:1.03;text-transform:uppercase;margin:12px 0 0;color:#1A1A1A">Frequently Asked</h2>
+      </div>
+      <div class="reveal" style="margin-top:36px">
+        <details class="bt-faq"><summary>Do I have to create an account to book? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">No. You just pick a service and an arrival window, then enter your address and contact details. The whole thing takes about a minute, right here on this page.</div></details>
+        <details class="bt-faq"><summary>Will I get an exact arrival time? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">You'll choose an arrival window, like 10am to 12pm, rather than an exact minute. That gives our techs room for traffic and the job before yours, and we'll let you know when your tech is on the way.</div></details>
+        <details class="bt-faq"><summary>Is there a deposit? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Some jobs take a small card deposit to hold your slot, and you'll see that clearly before you confirm. Plenty of bookings don't require one at all.</div></details>
+        <details class="bt-faq"><summary>How do I change or cancel? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">Just call us at (813) 279-6785. Changes and cancellations are handled by phone so nothing slips through, and we're happy to find you a better time.</div></details>
+        <details class="bt-faq"><summary>It's an emergency. Should I book online or call? <span class="bt-faq-plus"></span></summary><div class="bt-faq-body">For a true emergency, like a broken spring with your car trapped or a door stuck open, call us at (813) 279-6785. Our line is open 24/7 and we'll get someone headed your way fast.</div></details>
+      </div>
+    </div>
+  </div>
+
+  <!-- closing CTA -->
+  <div style="background:var(--accent);color:#fff">
+    <div class="bt-sec reveal" style="max-width:1200px;margin:0 auto;padding:74px 32px;text-align:center">
+      <h2 style="font-family:'Archivo Expanded',sans-serif;font-weight:900;font-size:clamp(28px,4vw,46px);line-height:1.0;text-transform:uppercase;margin:0">Let's Get Your Door Fixed</h2>
+      <p style="font-size:17.5px;line-height:1.55;margin:16px auto 0;color:rgba(255,255,255,.92);font-weight:500;max-width:640px">Book online in about a minute and pick the arrival window that works for you, or call us 24/7. Family owned, licensed and insured, serving Tampa Bay since 2007.</p>
+      <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap;margin-top:30px">
+        <button class="bt-book-btn" style="background:#fff;color:var(--accent);border:none;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:16px;letter-spacing:.03em;text-transform:uppercase;padding:18px 34px;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:10px">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18M8 2v4M16 2v4M9 16l2 2 4-4"></path></svg>
+          Book Online
+        </button>
+        <a href="tel:18132796785" style="text-decoration:none;background:transparent;color:#fff;border:2px solid #fff;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:16px 28px;border-radius:9px;display:inline-flex;align-items:center;gap:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(813) 279-6785</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="background:#111;color:#9a9a9a">
+    <div class="bt-sec" style="max-width:1200px;margin:0 auto;padding:60px 32px 0">
+      <div class="bt-foot" style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px">
+        <div>
+          <img src="assets/logo-trinity-primary.png" alt="Trinity Garage Door Service — Opening Doors Since 2007" style="width:230px;max-width:100%;height:auto;background:#fff;border-radius:8px;padding:12px 14px">
+          <p style="font-size:15px;line-height:1.6;color:#8a8a8a;margin:18px 0 0;max-width:300px">Family-owned garage door repair, replacement, and installation serving the Tampa Bay area since 2007.</p>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Services</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/services/installation/" style="color:#9a9a9a;text-decoration:none">Installation</a>
+            <a class="bt-navlink" href="/services/repair/" style="color:#9a9a9a;text-decoration:none">Repair &amp; Service</a>
+            <a class="bt-navlink" href="/services/repair/spring/" style="color:#9a9a9a;text-decoration:none">Spring Repair</a>
+            <a class="bt-navlink" href="/services/repair/opener/" style="color:#9a9a9a;text-decoration:none">Opener Repair</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Company</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a class="bt-navlink" href="/about/our-story/" style="color:#9a9a9a;text-decoration:none">Our Story</a>
+            <a class="bt-navlink" href="/service-areas/" style="color:#9a9a9a;text-decoration:none">Service Areas</a>
+            <a class="bt-navlink" href="/contact/" style="color:#9a9a9a;text-decoration:none">Contact</a>
+            <a class="bt-navlink" href="/privacy-policy/" style="color:#9a9a9a;text-decoration:none">Privacy Policy</a>
+          </div>
+        </div>
+        <div>
+          <div style="color:#fff;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+            <a href="tel:18132796785" style="color:#fff;text-decoration:none;font-family:'Archivo Expanded',sans-serif;font-weight:800;font-size:18px">(813) 279-6785</a>
+            <span>24/7 Emergency Service</span>
+            <span>Lutz, FL · Tampa Bay</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:2px solid #2a2a2a;margin-top:46px;padding:22px 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-size:13px;color:#6a6a6a;font-weight:500">© 2026 Trinity Garage Door Service Inc. · Licensed &amp; Insured · FL GD13010 / GDI-09484</div>
+        <div style="display:flex;align-items:center;gap:18px">
+          <a href="/privacy-policy/" style="color:#9a9a9a;text-decoration:none;font-size:13px;font-weight:600">Privacy</a>
+          <a href="/contact/" style="color:#9a9a9a;text-decoration:none;font-size:13px;font-weight:600">Contact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- sticky mobile call/book bar -->
+  <div class="bt-sticky" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#111;padding:10px 12px;gap:10px;border-top:3px solid var(--accent)">
+    <a href="tel:18132796785" style="flex:1;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:#1A1A1A;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Call</a>
+    <button class="bt-book-btn" style="flex:1;border:none;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#fff;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:7px;cursor:pointer">Book Online</button>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.getElementById('bt-root');
+    if (root) root.classList.add('bt-js');
+    this._io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+    requestAnimationFrame(() => this.observe());
+    this._fallback = setTimeout(() => {
+      document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => {
+        const r = n.getBoundingClientRect();
+        if (r.top < window.innerHeight) n.classList.add('in');
+      });
+    }, 1200);
+  }
+  componentDidUpdate() { this.observe(); }
+  componentWillUnmount() { if (this._io) this._io.disconnect(); clearTimeout(this._fallback); }
+  observe() {
+    if (!this._io) return;
+    document.querySelectorAll('#bt-root .reveal:not(.in)').forEach(n => this._io.observe(n));
+  }
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

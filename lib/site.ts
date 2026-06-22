@@ -151,7 +151,7 @@ export const ROUTES = {
   contact: "/contact/",
   privacy: "/privacy-policy/",
   faq: "/resources/faq/",
-  bookRepair: "/get-service/?intent=repair",
+  bookRepair: "/book-a-repair/",
   estimate: "/get-service/?intent=estimate",
 } as const;
 
