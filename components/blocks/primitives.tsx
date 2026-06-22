@@ -110,18 +110,21 @@ export function Button({ variant, size, full, className, ...props }: CtaVP & But
   return <button className={cn(ctaVariants({ variant, size, full }), className)} {...props} />;
 }
 
-/** Breadcrumb row (handoff G6 BreadcrumbList feeds this). */
+/** Breadcrumb row with "/" separators (handoff design + G6 BreadcrumbList). */
 export function Breadcrumb({ items, onDark = true }: { items: { label: string; href?: string }[]; onDark?: boolean }) {
   return (
-    <nav aria-label="Breadcrumb" className={cn("flex flex-wrap items-center gap-1.5 text-[13px] font-semibold", onDark ? "text-white/70" : "text-body")}>
+    <nav
+      aria-label="Breadcrumb"
+      className={cn("flex flex-wrap items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.04em]", onDark ? "text-white/70" : "text-body")}
+    >
       {items.map((it, i) => (
-        <span key={i} className="inline-flex items-center gap-1.5">
+        <span key={i} className="inline-flex items-center gap-2">
           {it.href ? (
-            <Link href={it.href} className="no-underline hover:text-accent">{it.label}</Link>
+            <Link href={it.href} className={cn("no-underline hover:text-accent", onDark ? "text-white/70" : "text-body")}>{it.label}</Link>
           ) : (
             <span className={onDark ? "text-white" : "text-ink"}>{it.label}</span>
           )}
-          {i < items.length - 1 && <ChevronRight className="h-3.5 w-3.5 opacity-60" />}
+          {i < items.length - 1 && <span className="opacity-50">/</span>}
         </span>
       ))}
     </nav>

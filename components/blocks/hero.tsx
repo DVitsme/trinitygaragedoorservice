@@ -26,7 +26,7 @@ export function PhotoHero({
         className="absolute inset-0 z-[1]"
         style={{
           background:
-            "linear-gradient(180deg, rgb(10 10 10 / calc(var(--ov) * .78)) 0%, rgb(10 10 10 / calc(var(--ov) * .9)) 55%, rgb(10 10 10 / var(--ov)) 100%)",
+            "linear-gradient(180deg, rgb(10 10 10 / calc(var(--ov) * .78)) 0%, rgb(10 10 10 / calc(var(--ov) * .92)) 55%, rgb(10 10 10 / var(--ov)) 100%)",
         }}
       />
       <div className="relative z-[2] mx-auto max-w-[1200px]">
