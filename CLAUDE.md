@@ -55,7 +55,8 @@ pnpm lint                # eslint (next/core-web-vitals + next/typescript)
 
 pnpm preview             # opennextjs-cloudflare build && preview — exercises the WORKERS runtime
                          # locally; catches nodejs_compat / binding issues that `pnpm dev` hides
-pnpm deploy              # build + deploy the Worker to Cloudflare
+pnpm run deploy          # build + deploy the Worker to Cloudflare
+                         # (MUST be `pnpm run deploy` — `pnpm deploy` is a reserved pnpm builtin)
 pnpm cf-typegen          # regenerate cloudflare-env.d.ts from wrangler.jsonc (gitignored, ~540KB)
 
 pnpm db:migrate:local    # apply db/migrations/* to the LOCAL D1 (SQLite) — works offline
