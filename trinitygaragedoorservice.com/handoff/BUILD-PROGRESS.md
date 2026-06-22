@@ -35,7 +35,7 @@ Founding year **2007** (copy) · single phone **(813) 279-6785** · NAP/address 
 
 **Phase B — Prove the system**
 - [x] `/services/repair/spring/` + `RepairDetailLayout` (data-driven, reused by 8 detail pages) — screenshot-verified 1:1, committed
-- [ ] `/privacy-policy/` · `/contact/` · `/` home (bespoke) — different archetypes, build next
+- [x] `/privacy-policy/` (LegalBody) — built 1:1, prod-verified, committed · [ ] `/contact/` · [ ] `/` home (bespoke)
 
 **Phase C — Services** (parallel agents write page-data objects; orchestrator builds + screenshots centrally to avoid .next clashes — PROVEN workflow)
 - [x] opener, off-track, cables-rollers, tune-up, emergency, replacement — parallel-built, build green, all 6 screenshot-verified 1:1, committed
@@ -47,7 +47,7 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 
 **Remaining pages** (~13 designed + 4 template cities). Workflow: detail-recipe pages (reuse RepairDetailLayout) → parallel write-only agents + central build/screenshot (proven). New-archetype pages (need their own blocks) → one fork at a time (builds + screenshots in the main tree as sole builder; no .next clash):
 - Services: ✅ repair hub + installation DONE. Remaining: `/services/` hub (card grid archetype — build its ServiceCard + ServiceAreaMapMock; one fork). NOTE: I did **not** add `href` to the shared `NumberedIndex` (kept it untouched so the 7 verified detail pages stay byte-stable); the repair hub builds its linked index **inline** (cream icon chip + whole-row `<Link>` + subtle hover, mapping each part to its service page).
-- Phase B archetypes: `/privacy-policy/` (LegalBody) · `/contact/` (split + ContactForm wired to Resend/D1/Turnstile) · `/` home (bespoke: VideoHero, LogoMarquee, stats, before/after, booking mock, reviews)
+- Phase B archetypes: ✅ `/privacy-policy/` (LegalBody) DONE. Remaining: `/contact/` (split + ContactForm wired to Resend/D1/Turnstile — reuse `<ServiceAreaMapMock/>` for the "where we work" map) · `/` home (bespoke: VideoHero, LogoMarquee, stats, before/after, booking mock, reviews)
 - Phase D Service Areas: hub (MapHero) + lutz + land-o-lakes (designed) + wesley-chapel/palm-harbor/oldsmar/tampa (city template) — needs MapHero, LinkCard, ServiceAreaMapMock blocks
 - Phase E Doors: types (buyer's guide) · brands (BrandCard/BrandHighlight catalog) · brochures (PdfList). About: our-story · portfolio (GalleryGrid) · reviews (ReviewCard masonry)
 
