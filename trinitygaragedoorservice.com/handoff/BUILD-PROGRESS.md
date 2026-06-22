@@ -55,7 +55,7 @@ RESOLVED style decisions (apply to ALL pages, built + remaining): (1) **dash-fre
 - [x] `/services/` · [x] `/services/repair/` · [x] `/services/repair/opener/` · [x] `/services/repair/off-track/` · [x] `/services/repair/cables-rollers/` · [x] `/services/repair/tune-up/` · [x] `/services/replacement/` · [x] `/services/installation/` (built from copy)
 
 **Phase D — Service Areas**
-- [x] `/service-areas/` hub (built 1:1, prod-verified, committed — dark map-decorated MapHero + 6 town cards + "not sure" callout + why-us + map split + CTA; mirrors the Services hub) · [ ] `/lutz/` · [ ] `/land-o-lakes/` · [ ] `/wesley-chapel/` · [ ] `/palm-harbor/` · [ ] `/oldsmar/` · [ ] `/tampa/` (last 4 = template + copy). NOTE: hub links to the 6 city routes — they 404 until built next (expected).
+- [x] `/service-areas/` hub · [x] `/lutz/` · [x] `/land-o-lakes/` · [x] `/wesley-chapel/` · [x] `/palm-harbor/` · [x] `/oldsmar/` · [x] `/tampa/` — **Phase D COMPLETE.** All 6 cities via data-driven **`components/blocks/city-area-layout.tsx`** (`CityAreaData`): dark labeled-pin hero + intro split + uniform 6 service link-cards + review pull-quote + nearby chips + CTA. Lutz/LOL match their designs exactly; the other 4 use the template + `copy/service-areas/*.md`. Pull-quotes use real Google reviews (verbatim excerpts). Built green, prod-verified (Lutz + Palm Harbor screenshot-checked).
 
 **Phase E — About + Doors**
 - [ ] `/about/our-story/` · [ ] `/about/portfolio/` · [ ] `/about/reviews/` · [ ] `/doors/types/` · [ ] `/doors/brands/` · [ ] `/doors/brochures/`
