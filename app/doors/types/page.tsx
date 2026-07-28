@@ -38,9 +38,9 @@ const materials = [
 ];
 
 const looks = [
-  { icon: ico(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M4 10h16M4 15h16M12 4v16" /></>), name: "Raised Panel", body: "The classic look, rows of rectangular panels, clean and easy to live with. Fits Colonial, ranch, and most traditional homes, which is to say most of the street." },
-  { icon: ico(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 9h16" /><circle cx="8" cy="6.5" r=".6" fill="currentColor" /><circle cx="16" cy="6.5" r=".6" fill="currentColor" /></>), name: "Carriage House", body: "Mimics old swing open barn doors, usually with decorative hardware and a row of windows up top. Almost always sectional doors styled to look the part, so you get the charm without the swing. Great on Craftsman, farmhouse, and Spanish homes." },
-  { icon: ico(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M4 12h16" /></>), name: "Modern", body: "Clean and simple, either a smooth flush face or a full view door of glass and aluminum that floods the garage with light. A natural fit for contemporary and midcentury homes, and popular for shops and indoor outdoor spaces." },
+  { icon: ico(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M4 10h16M4 15h16M12 4v16" /></>), name: "Raised Panel", img: "doorstyle-raised-panel-traditional.jpg", imgAlt: "A traditional raised panel garage door", body: "The classic look, rows of rectangular panels, clean and easy to live with. Fits Colonial, ranch, and most traditional homes, which is to say most of the street." },
+  { icon: ico(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M12 4v16M4 9h16" /><circle cx="8" cy="6.5" r=".6" fill="currentColor" /><circle cx="16" cy="6.5" r=".6" fill="currentColor" /></>), name: "Carriage House", img: "doorstyle-carriage-house.jpg", imgAlt: "A carriage house style garage door with decorative hardware", body: "Mimics old swing open barn doors, usually with decorative hardware and a row of windows up top. Almost always sectional doors styled to look the part, so you get the charm without the swing. Great on Craftsman, farmhouse, and Spanish homes." },
+  { icon: ico(<><rect x="4" y="4" width="16" height="16" rx="1" /><path d="M4 12h16" /></>), name: "Modern", img: "doorstyle-contemporary-wood-glass.jpg", imgAlt: "A contemporary garage door in wood and glass", body: "Clean and simple, either a smooth flush face or a full view door of glass and aluminum that floods the garage with light. A natural fit for contemporary and midcentury homes, and popular for shops and indoor outdoor spaces." },
 ];
 
 const insulation = [
@@ -160,10 +160,16 @@ export default function DoorTypesPage() {
           <Reveal>
             <div className="mt-[38px] grid gap-[18px] grid-cols-3 max-nav:grid-cols-1">
               {looks.map((l) => (
-                <div key={l.name} className="rounded-[8px] border-2 border-ink bg-cream p-[26px]">
-                  <div className="flex h-[46px] w-[46px] items-center justify-center rounded-[8px] bg-accent text-white">{l.icon}</div>
-                  <h3 className="mt-4 font-display text-[18px] font-bold uppercase text-ink">{l.name}</h3>
-                  <p className="mt-2 text-[15px] leading-[1.55] text-body">{l.body}</p>
+                <div key={l.name} className="overflow-hidden rounded-[8px] border-2 border-ink bg-cream">
+                  {/* Real photo of the style, so the reader can see what the words describe. */}
+                  <div className="relative h-[168px] border-b-2 border-ink bg-ink">
+                    <Image src={asset(l.img)} alt={l.imgAlt} fill sizes="(max-width:920px) 100vw, 380px" className="object-cover" />
+                  </div>
+                  <div className="p-[26px]">
+                    <div className="flex h-[46px] w-[46px] items-center justify-center rounded-[8px] bg-accent text-white">{l.icon}</div>
+                    <h3 className="mt-4 font-display text-[18px] font-bold uppercase text-ink">{l.name}</h3>
+                    <p className="mt-2 text-[15px] leading-[1.55] text-body">{l.body}</p>
+                  </div>
                 </div>
               ))}
             </div>

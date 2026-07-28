@@ -34,10 +34,15 @@ const stats = [
   { v: <>6</>, label: "Cities Covered" },
 ];
 
+/**
+ * Real before/after pairs from the client's own job archive (public/work/). This band previously
+ * shipped a visible "Before photo coming soon" placeholder because no before shots were on hand;
+ * the pairs were recovered by splitting the original side-by-side and stacked composites.
+ */
 const beforeAfter = [
-  { title: "White Door · New Build", img: "door-after-white-on-blue-home.jpg", alt: "Finished white garage door on a blue home" },
-  { title: "Sectional Replacement", img: "door-after-brown-wood-sectional.jpg", alt: "Finished brown wood look sectional garage door" },
-  { title: "Two Car Upgrade", img: "door-after-white-2car-home.jpg", alt: "Finished white two car garage door" },
+  { title: "Dated Door Replaced", base: "ba-dark-to-white", alt: "a dated dark garage door replaced with a white sectional" },
+  { title: "Boarded Up To Finished", base: "ba-boarded-to-new", alt: "a boarded up garage opening finished with a new white door" },
+  { title: "Dented Panels Replaced", base: "ba-dented-to-new", alt: "a dented garage door replaced with a straight new door" },
 ];
 
 const cities: { name: string; slug: string }[] = [
@@ -57,13 +62,14 @@ const reviews = [
   { quote: "The original quote was honored. The work was scheduled and completed in the timeframe I needed. My installer Joey was on time, knowledgeable, professional but friendly.", name: "Lynn Rosenthal" },
 ];
 
+/** Actual posts from the Trinity Instagram feed (public/social/), so the grid matches the profile. */
 const igTiles = [
-  { img: "jobsite-tech-at-residential-garage.jpg", alt: "Trinity tech at a residential garage" },
-  { img: "jobsite-tech-installing-opener.jpg", alt: "Trinity tech installing an opener" },
-  { img: "jobsite-two-techs-on-ladder.jpg", alt: "Two Trinity techs on a ladder" },
-  { img: "jobsite-tech-crouching-repair.jpg", alt: "Trinity tech on a hands on repair" },
-  { img: "jobsite-tech-working-dusk.jpg", alt: "Trinity tech working at dusk" },
-  { img: "team-with-branded-banner.jpg", alt: "Trinity team with branded banner" },
+  { img: "/social/ig-crew-on-site.jpg", alt: "Trinity crew on a job in branded shirts" },
+  { img: "/social/ig-tech-hardware-repair.jpg", alt: "Trinity technician repairing garage door hardware" },
+  { img: "/social/ig-tech-on-ladder.jpg", alt: "Trinity technician on a ladder servicing a door" },
+  { img: "/social/ig-tech-carrying-spring.jpg", alt: "Trinity technician carrying a replacement torsion spring" },
+  { img: "/social/ig-dark-door-home.jpg", alt: "A dark garage door on a Tampa Bay home" },
+  { img: "/social/ig-black-doors-home.jpg", alt: "Black garage doors on a Florida home" },
 ];
 
 const mapPins = [
@@ -143,7 +149,7 @@ export default function HomePage() {
                   <div className="mt-[3px] text-[10.5px] font-extrabold uppercase leading-tight tracking-[0.06em] text-white">Years in<br />Tampa Bay</div>
                 </div>
                 <div className="absolute -bottom-[34px] -left-[26px] w-[168px] rounded-[8px] border-2 border-accent bg-ink p-2.5 max-nav:hidden">
-                  <Image src={asset("owner-jason-placeholder.png")} alt="Jason, Owner" width={148} height={190} className="block h-[190px] w-full rounded-[6px] bg-[#2a2a2a] object-cover object-top" />
+                  <Image src={"/team/owner-jason-grunder.jpg"} alt="Jason, Owner" width={148} height={190} className="block h-[190px] w-full rounded-[6px] bg-[#2a2a2a] object-cover object-top" />
                   <div className="mt-2 text-center text-[15px] font-extrabold uppercase tracking-[0.03em] text-white">Jason · Owner</div>
                 </div>
               </div>
@@ -234,16 +240,15 @@ export default function HomePage() {
                 <div key={i} className="overflow-hidden rounded-[8px] border border-[#333] bg-[#222]">
                   <div className="px-[18px] pt-4"><div className="font-display text-[17px] font-bold uppercase text-white">{b.title}</div></div>
                   <div className="px-[18px] pt-3">
-                    <div className="relative flex h-[150px] flex-col items-center justify-center gap-[7px] rounded-[6px] border border-dashed border-[#4a4a4a] bg-[#2a2a2a] text-[#6f6f6f]">
-                      {ico(24, (<><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /><circle cx="12" cy="13" r="4" /></>), 1.8)}
-                      <span className="text-[12px] font-bold uppercase tracking-[0.04em]">Before photo coming soon</span>
+                    <div className="relative h-[150px] overflow-hidden rounded-[6px]">
+                      <Image src={`/work/${b.base}-before.jpg`} alt={`Before: ${b.alt}`} fill sizes="(max-width:920px) 100vw, 380px" className="object-cover" />
                       <span className="absolute left-2 top-2 bg-black px-2 py-[3px] text-[10px] font-extrabold tracking-[0.06em] text-white">BEFORE</span>
                     </div>
                   </div>
                   <div className="my-1.5 text-center text-[20px] text-accent">↓</div>
                   <div className="px-[18px] pb-[18px]">
                     <div className="relative h-[150px] overflow-hidden rounded-[6px]">
-                      <Image src={asset(b.img)} alt={b.alt} fill sizes="(max-width:920px) 100vw, 380px" className="object-cover" />
+                      <Image src={`/work/${b.base}-after.jpg`} alt={`After: ${b.alt}`} fill sizes="(max-width:920px) 100vw, 380px" className="object-cover" />
                       <span className="absolute left-2 top-2 bg-accent px-2 py-[3px] text-[10px] font-extrabold tracking-[0.06em] text-white">AFTER</span>
                     </div>
                   </div>
@@ -405,7 +410,7 @@ export default function HomePage() {
             <div className="mt-[30px] grid grid-cols-6 gap-3 max-nav:grid-cols-3 max-xs:grid-cols-2">
               {igTiles.map((t, i) => (
                 <a key={i} href={IG} target="_blank" rel="noopener noreferrer" className="relative block aspect-square overflow-hidden rounded-[8px] border-2 border-ink">
-                  <Image src={asset(t.img)} alt={t.alt} fill sizes="(max-width:560px) 50vw, (max-width:920px) 33vw, 180px" className="object-cover" />
+                  <Image src={t.img} alt={t.alt} fill sizes="(max-width:560px) 50vw, (max-width:920px) 33vw, 180px" className="object-cover" />
                 </a>
               ))}
             </div>

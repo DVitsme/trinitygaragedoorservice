@@ -61,7 +61,7 @@ export default function OurStoryPage() {
       <FaqJsonLd faqs={faqs} />
 
       <PhotoHero
-        media={<Image src={asset("team-group-in-showroom.jpg")} alt="The Trinity Garage Door team in their Tampa Bay showroom" fill sizes="100vw" priority className="object-cover" />}
+        media={<Image src={"/team/team-in-office.jpg"} alt="The Trinity Garage Door team in their Tampa Bay showroom" fill sizes="100vw" priority className="object-cover" />}
         breadcrumb={<Breadcrumb items={breadcrumb} />}
         eyebrow="Family Owned Since 2007"
       >
@@ -85,7 +85,7 @@ export default function OurStoryPage() {
           <Reveal>
             <div className="grid items-center gap-14 nav:grid-cols-[1fr_1.05fr]">
               <div className="relative max-nav:order-last">
-                <Image src={asset("owner-jason-placeholder.png")} alt="Jason, owner of Trinity Garage Door Service" width={580} height={440} className="h-[440px] w-full rounded-[8px] border-2 border-ink bg-[#e7eaec] object-cover object-top" />
+                <Image src={"/team/owner-jason-grunder.jpg"} alt="Jason, owner of Trinity Garage Door Service" width={580} height={440} className="h-[440px] w-full rounded-[8px] border-2 border-ink bg-[#e7eaec] object-cover object-top" />
                 <div className="absolute -bottom-4 -left-4 rounded-[8px] border-2 border-accent bg-ink px-[18px] py-3">
                   <div className="font-display text-[16px] font-extrabold uppercase tracking-[0.02em] text-white">Jason</div>
                   <div className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#9a9a9a]">Owner</div>
@@ -139,7 +139,7 @@ export default function OurStoryPage() {
                 </Link>
               </div>
               <div className="relative">
-                <Image src={asset("team-with-branded-banner.jpg")} alt="The Trinity crew with their branded banner" width={580} height={400} className="h-[400px] w-full rounded-[8px] border-2 border-ink object-cover" />
+                <Image src={"/team/team-lineup-named.jpg"} alt="The Trinity team, David, Joey, Jason, Andre and Jonah" width={580} height={400} className="h-[400px] w-full rounded-[8px] border-2 border-ink object-cover" />
                 <div className="absolute -right-4 -top-4 rounded-[8px] border-2 border-ink bg-accent px-[18px] py-3 font-display text-[14px] font-extrabold uppercase tracking-[0.03em] text-white">Honest &amp; Pro</div>
               </div>
             </div>

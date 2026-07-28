@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
-import { SITE, ROUTES, asset } from "@/lib/site";
+import { SITE, ROUTES } from "@/lib/site";
 import { PhotoHero } from "@/components/blocks/hero";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { TrustStrip } from "@/components/blocks/trust-strip";
@@ -17,20 +17,43 @@ export const metadata: Metadata = {
 
 const breadcrumb = [{ label: "Home", href: "/" }, { label: "About", href: ROUTES.aboutStory }, { label: "Portfolio" }];
 
+/**
+ * Real job photography from public/work/, curated from the client's own archive. The hero on this
+ * page promises "no stock photos", so everything below is an actual Trinity job. The before/after
+ * pairs were recovered by splitting the original side-by-side and stacked composites.
+ */
+const work = (f: string) => `/work/${f}`;
+
 const installs = [
-  { img: "door-after-white-2car-home.jpg", alt: "A new white two car steel garage door installed by Trinity", tag: "New Install", cap: "New two car steel door" },
-  { img: "door-after-brown-wood-sectional.jpg", alt: "A brown wood look sectional garage door installed by Trinity", tag: "Replacement", cap: "Wood look sectional door" },
-  { img: "door-after-white-on-blue-home.jpg", alt: "A fresh white garage door on a blue coastal home", tag: "New Install", cap: "Fresh white door, coastal home" },
-  { img: "door-after-brown-dusk-2car.jpg", alt: "A carriage style two car garage door photographed at dusk", tag: "Replacement", cap: "Carriage style door at dusk" },
+  { img: "work-black-long-panel-2car.jpg", alt: "A new black long panel two car garage door on a Tampa Bay home", tag: "New Install", cap: "Black long panel, two car" },
+  { img: "work-white-window-row.jpg", alt: "A white garage door with a row of windows across the top panel", tag: "New Install", cap: "White door with window row" },
+  { img: "work-brown-raised-panel.jpg", alt: "A brown raised panel garage door on a Tampa Bay home", tag: "Replacement", cap: "Brown raised panel" },
+  { img: "work-white-on-blue-home.jpg", alt: "A fresh white garage door on a blue Florida home", tag: "New Install", cap: "White door, blue home" },
+  { img: "work-black-long-panel-shrubs.jpg", alt: "A black long panel garage door framed by shrubs", tag: "Replacement", cap: "Black long panel" },
+  { img: "work-white-on-green-home.jpg", alt: "A new white garage door on a green sided home", tag: "New Install", cap: "White door, green siding" },
+  { img: "work-brown-raised-panel-wide.jpg", alt: "A wide brown raised panel garage door on a brick home", tag: "Replacement", cap: "Brown raised panel, wide" },
+  { img: "work-white-2car-clean.jpg", alt: "A clean white two car garage door on a Florida home", tag: "New Install", cap: "White two car door" },
+  { img: "work-white-dark-trim.jpg", alt: "A white garage door set against dark exterior trim", tag: "Replacement", cap: "White door, dark trim" },
+  { img: "work-white-2car-brick-drive.jpg", alt: "A white two car garage door above a brick paver driveway", tag: "New Install", cap: "White door, brick driveway" },
+  { img: "work-two-doors-brick-drive.jpg", alt: "Two white garage doors on a home with a brick paver driveway", tag: "New Install", cap: "Matching pair of doors" },
+  { img: "work-white-on-blue-block.jpg", alt: "A white garage door on a blue block Florida home", tag: "Replacement", cap: "White door, block home" },
 ];
 
 const repairs = [
-  { img: "jobsite-tech-crouching-repair.jpg", alt: "Trinity technician on a hands on garage door repair", tag: "Repair", cap: "Hands on spring repair" },
-  { img: "jobsite-opener-and-spring-hardware.jpg", alt: "New garage door spring and hardware installed", tag: "Repair", cap: "New spring & hardware" },
-  { img: "jobsite-tech-installing-opener.jpg", alt: "Trinity technician servicing a garage door opener", tag: "Opener", cap: "Opener service" },
-  { img: "jobsite-two-techs-on-ladder.jpg", alt: "Two Trinity technicians realigning a garage door", tag: "Repair", cap: "Track realignment" },
-  { img: "jobsite-tech-working-dusk.jpg", alt: "Trinity technician on a same day repair at dusk", tag: "Same Day", cap: "Same day repair, after hours" },
-  { img: "jobsite-tech-at-residential-garage.jpg", alt: "Trinity technician diagnosing a garage door on site", tag: "On Site", cap: "On site diagnosis" },
+  { img: "work-interior-opener.jpg", alt: "A garage door opener unit mounted above a finished white door", tag: "Opener", cap: "Opener install, inside view" },
+  { img: "work-interior-track-rails.jpg", alt: "Garage door track and rail hardware inside a finished garage", tag: "Hardware", cap: "New track and rails" },
+  { img: "work-interior-window-panels.jpg", alt: "The inside of a garage door with a row of window panels", tag: "Install", cap: "Window panel door, inside" },
+  { img: "work-interior-open-door.jpg", alt: "An open garage door showing the rail and rollers from inside", tag: "Repair", cap: "Rollers and rail, open" },
+  { img: "work-newbuild-framing.jpg", alt: "A new construction garage opening framed and ready for a door", tag: "New Build", cap: "New construction opening" },
+  { img: "work-white-wood-frame.jpg", alt: "A white garage door fitted into a timber framed opening", tag: "Install", cap: "Fitted to timber frame" },
+];
+
+/** Genuine before/after pairs from the same job, recovered from the client's composites. */
+const beforeAfter = [
+  { base: "ba-dark-to-white", cap: "Dated dark door to a clean white sectional", alt: "garage door replaced with a white sectional door" },
+  { base: "ba-boarded-to-new", cap: "Boarded up opening to a finished door", alt: "boarded up garage opening replaced with a finished white door" },
+  { base: "ba-dented-to-new", cap: "Dented panels to a straight new door", alt: "dented garage door replaced with a straight new door" },
+  { base: "ba-carport-to-new", cap: "Open carport to an enclosed garage", alt: "open carport converted to an enclosed garage with a new door" },
 ];
 
 const eyebrowCls = "text-[13px] font-extrabold uppercase tracking-[0.16em] text-accent";
@@ -38,7 +61,7 @@ const eyebrowCls = "text-[13px] font-extrabold uppercase tracking-[0.16em] text-
 function GalleryCard({ img, alt, tag, cap }: { img: string; alt: string; tag: string; cap: string }) {
   return (
     <div className="group relative h-[260px] overflow-hidden rounded-[10px] border-2 border-ink bg-ink">
-      <Image src={asset(img)} alt={alt} fill sizes="(max-width:560px) 100vw, (max-width:920px) 50vw, 380px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+      <Image src={work(img)} alt={alt} fill sizes="(max-width:560px) 100vw, (max-width:920px) 50vw, 380px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(10,10,10,0.85))] px-[18px] pb-3.5 pt-[30px]">
         <span className="mb-[7px] inline-block rounded-[4px] bg-accent px-2 py-[3px] font-display text-[10px] font-extrabold uppercase tracking-[0.06em] text-white">{tag}</span>
         <b className="block text-[15px] font-bold text-white">{cap}</b>
@@ -51,7 +74,7 @@ export default function PortfolioPage() {
   return (
     <>
       <PhotoHero
-        media={<Image src={asset("door-after-white-2car-home.jpg")} alt="A finished Trinity garage door installation in Tampa Bay" fill sizes="100vw" priority className="object-cover" />}
+        media={<Image src={work("work-black-long-panel-2car.jpg")} alt="A finished Trinity garage door installation in Tampa Bay" fill sizes="100vw" priority className="object-cover" />}
         breadcrumb={<Breadcrumb items={breadcrumb} />}
         eyebrow="Our Work"
       >
@@ -105,6 +128,44 @@ export default function PortfolioPage() {
           <Reveal>
             <div className="mt-[18px] text-[12.5px] font-semibold text-[#8a8a8a]">Real jobs around Tampa Bay. Captions are kept general where the exact city or door model isn&apos;t confirmed.</div>
           </Reveal>
+        </div>
+      </section>
+
+      {/* BEFORE & AFTER (real pairs, same job) */}
+      <section className="border-t-2 border-ink bg-white">
+        <div className="mx-auto max-w-[1200px] px-5 py-[84px] nav:px-8">
+          <Reveal>
+            <div className="max-w-[720px]">
+              <div className={eyebrowCls}>Before &amp; After</div>
+              <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.03] text-ink">Same Driveway, Different Day</h2>
+              <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">These are the same house photographed twice, once before we started and once after we finished. Nothing staged and nothing swapped out.</p>
+            </div>
+          </Reveal>
+          <div className="mt-9 grid gap-7 grid-cols-2 max-nav:grid-cols-1">
+            {beforeAfter.map((b, i) => (
+              <Reveal key={b.base} delay={(i % 2) * 0.05}>
+                <figure className="m-0 overflow-hidden rounded-[10px] border-2 border-ink bg-white">
+                  <div className="grid grid-cols-2">
+                    {(["before", "after"] as const).map((side) => (
+                      <div key={side} className={`relative h-[210px] max-xs:h-[170px] ${side === "before" ? "border-r-2 border-ink" : ""}`}>
+                        <Image
+                          src={work(`${b.base}-${side}.jpg`)}
+                          alt={`${side === "before" ? "Before" : "After"}: ${b.alt}`}
+                          fill
+                          sizes="(max-width:920px) 50vw, 290px"
+                          className="object-cover"
+                        />
+                        <span className={`absolute left-2.5 top-2.5 rounded-[4px] px-2 py-[3px] font-display text-[10px] font-extrabold uppercase tracking-[0.06em] text-white ${side === "before" ? "bg-ink/85" : "bg-accent"}`}>
+                          {side}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <figcaption className="border-t-2 border-ink px-[18px] py-3.5 text-[14.5px] font-bold text-ink">{b.cap}</figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
