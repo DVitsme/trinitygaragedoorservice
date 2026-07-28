@@ -76,6 +76,19 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
   (target LCP ≤2.5s, INP ≤200ms, CLS ≤0.1). **DEV.**
 - **P2-12 · Privacy policy review.** Needs the real mailing address, effective date and a contact
   email; should name what the form and analytics collect. **BOTH** (client/legal).
+- **P2-15 · 🔴 There is no analytics on the site. None.** Verified 2026-07-28: zero `gtag`,
+  `cloudflareinsights`, Plausible, Fathom, PostHog or anything else, in source or on the deployed
+  Worker. The only two scripts we load at all are Turnstile and the Housecall Pro booking widget.
+  **Consequence: nothing about this site is measurable** — not bookings, not the ZIP checker, not
+  which pages produce leads. It is the reason `/book-a-repair/thank-you/` can only be counted
+  roughly from server traffic rather than as a real conversion.
+  **Recommendation: Cloudflare Web Analytics.** Free, the site already runs on Cloudflare, no
+  cookies, no consent banner, no measurable speed cost, and it reports per path, which is exactly
+  what the thank-you page needs. Blocked only on Cloudflare account access (**P1-x / `CLIENT-ASKS`
+  #7**), decision at `CLIENT-ASKS` #36.
+  ⚠️ **Ships together with a P2-12 edit**: the privacy policy currently promises *"if we add website
+  analytics or advertising tools in the future, we will update this policy to describe them."*
+  Turning analytics on without that edit makes the policy untrue. **DEV + CLIENT.**
 - **P2-14 · Blog follow-ups.** Featured-image alt text is written ✅. Still open: real publish dates
   (ours are approximate month-precision, so `BlogPosting` schema deliberately omits
   `datePublished`); canonicalise the two near-duplicate "noises" posts; the Lutz post decision;
@@ -85,11 +98,15 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
 
 ## 🟢 P3 — Post-launch / deferred
 
-- **P3-1 · Google "are you in our area?" address checker.** Replaces the homepage service-area
-  CTA. Needs a Maps key (**Places API New** + Maps JS). Real spend ≈ $0. Plan:
-  `handoff/SERVICE-AREA-CHECKER-RESEARCH.md`.
-- **P3-2 · Housecall Pro modal embed.** `components/book-online-button.tsx` opens the booking URL
-  in a new tab today; upgrade to HCP's on-page modal once their embed script is added.
+- ~~**P3-1 · Google "are you in our area?" address checker.**~~ ✅ **SHIPPED 2026-07-28, and
+  deliberately NOT the way this said.** It needed no Google Maps key, no billing account and no
+  runtime request: the check runs client side against `lib/service-area-zips.json` (verified
+  130/130 against their live HCP zone) in 1,818 bytes gzipped. The old plan in
+  `handoff/SERVICE-AREA-CHECKER-RESEARCH.md` is superseded by `SERVICE-AREA-REDESIGN.md`.
+- ~~**P3-2 · Housecall Pro modal embed.**~~ ✅ **SHIPPED 2026-07-28.** All 13 Book Online buttons
+  open `window.HCPWidget.openModal()` over the page, keeping the `window.open` fallback for when
+  their script is blocked or fails to init. Costs 5,197 bytes on load; their iframe is
+  `loading="lazy"` so the booking app itself is not fetched until the modal opens.
 - **P3-3 · HCP back-office lead sync (optional).** Zapier on the Essentials plan can push contact
   form leads into HCP. **The MAX API cannot power a live booking calendar** — validated.
 - **P3-4 · Domain cutover.** Add `trinitygaragedoorservice.com` (+ `www`) as a Worker Custom

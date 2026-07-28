@@ -230,9 +230,27 @@ door companies leads average around **$49** versus about **$145** on regular Goo
 It runs off their Google profile and needs no website work.
 
 ### 6. They cannot tell which advertising works
-There is no tracking on anything today.
-**Action:** free website analytics now, and call tracking (about $30/month) if they start spending
-on ads. Phone calls are how this business converts, so untracked calls means untracked money.
+**There is still no analytics of any kind on the website. Not one line of it, confirmed 2026-07-28.**
+So right now nobody can answer the most basic question about the rebuild: did it bring in any work?
+That is uncomfortable given **1 of their 300 most recent jobs** came from the website.
+
+This has become concrete rather than theoretical. We have just built the **booking thank you page**,
+which is the only supported way to know somebody finished booking. Without analytics it can only be
+counted roughly, from server traffic. With analytics it becomes a real number.
+
+**Action, in order:**
+1. **Turn on Cloudflare Web Analytics. It is free, and the site already runs on Cloudflare.** No
+   cookies, no consent banner, no speed cost, and it counts visits per page, which is exactly what
+   the thank you page needs. This is a one line change for us.
+2. **Jason points Housecall Pro's booking redirect at that page** (`CLIENT-ASKS` #35). Two minutes
+   in his settings, and it is what turns bookings into a countable number.
+3. **Call tracking** (about $30/month) if they start spending on ads. Phone calls are how this
+   business converts, so untracked calls means untracked money. Housecall Pro sells numbers too.
+
+⚠️ **One honest caveat to mention:** the privacy policy currently promises *"if we add website
+analytics or advertising tools in the future, we will update this policy to describe them."* So
+switching analytics on means we update that page the same day. Not a blocker, just do not let it be
+forgotten.
 
 ### 7. Accessibility is a real legal risk
 Small businesses get sued over inaccessible websites. About 3,100 federal cases in 2025, usually
