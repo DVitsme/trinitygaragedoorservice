@@ -389,11 +389,54 @@ written (422, 429). **Never on 5xx or timeout** — those are ambiguous.
 
 Run the whole push after the response via `ctx.waitUntil`, so a slow CRM can never slow the form.
 
-### Before the first production write
-Three schema facts are documented but unexercised: whether `lead_source` takes a name or an id,
-whether an address with no street is accepted, and whether tags must pre exist. Confirm with one
-`GET`, then do **one supervised test write from `pnpm preview`** using `@example.com` and a
-**555-0142** number, and have Jason delete it in the HCP web app. Creating a lead notifies nobody.
+### ✅ Schema pre-flight is DONE — settled 2026-07-28 without a write
+The three unknowns are resolved by inspecting existing leads read only. Detail in
+`HOUSECALL-PRO-API.md` §11.
+
+- **`lead_source` is a bare string.** Send `"Trinity Website"` directly. No id, no lookup call.
+- **`tags` are neither required nor pre-existing.** Empty on every lead sampled. Omit the field.
+- **A street-less address is accepted.** This was the riskiest one, because our form has no street
+  field and a 422 would have failed the whole write. **41 of 100** leads with an address have no
+  street. Normal in their data.
+- Correction: `job_fields` uses **`job_type_uuid`**, not `job_type_id`.
+
+So the schema work that would otherwise have meant trial and error against a live 6,001 customer
+account is finished, and the account was never touched.
+
+### ⛔ THE REMAINING GAP — one supervised test write, and it needs Jason
+
+This is the **only** thing between here and lead sync going live, and **it cannot be closed by us
+alone.**
+
+**Why it is still a gap.** There is **no sandbox**, and **no DELETE endpoint** for customers,
+jobs, leads or estimates. So the first real `POST /leads` is **permanent from our side** — the
+only way to remove it is a human clicking Delete in the Housecall Pro web app. We can create the
+test record; **we cannot clean it up.** That is the dependency.
+
+**The procedure, in order:**
+
+1. **Jason issues a separate website-only API key** (My Apps → API Key Management, Admin only).
+   Do **not** reuse the key shared with the marketing agency, or revoking one breaks the other.
+2. **Real Turnstile keys first.** The current ones are always-pass dummies. The push is gated on
+   `humanVerified`, so it stays safely inert until then, but do not ungate it before this lands.
+3. **One test lead, from `pnpm preview`, never from production:**
+   - name `ZZ Test Website Lead`
+   - phone **`(813) 555-0142`** — the reserved fictional range is **555-0100 to 555-0199**.
+     **Not** 555-1212, which is real directory assistance.
+   - email `test@example.com` (IANA reserved, cannot reach a real inbox)
+   - **`notifications_enabled: false`**
+4. **Verify** it lands in **Job Inbox → Pipeline → New Lead** under the "API Leads" channel with
+   source "Trinity Website". Creating a lead notifies nobody, so this is safe to leave briefly.
+5. **Jason deletes it** in the web app. Deletion there is soft, restorable, and does not notify
+   the customer.
+6. Only then enable the push in production.
+
+**Before step 3, check My Apps for active Zapier or webhook automations.** A `lead.created`
+automation could forward the test record into a second system that HCP cannot clean up either.
+
+> **Do not skip step 5 and leave the record.** It would sit in the 6,001 customer database they
+> mail postcards to, and it would show up in the "Trinity Website" lead source report — the exact
+> number the client will use to judge whether this rebuild worked.
 
 ---
 
@@ -410,7 +453,7 @@ whether an address with no street is accepted, and whether tags must pre exist. 
 | **4. Add the verified NAP** | Street, ZIP, geo into `SITE`, schema and footer | Pure win, zero client input, already verified |
 | **5. Wire the booking modal** | Mount script once · `window.HCPWidget.openModal()` with synchronous fallback · build `/book-a-repair/thank-you/` · set HCP's booking redirect | Small, contained, and finally makes booking measurable |
 | **6. Ship the ZIP checker** | Client side against `lib/service-area-zips.json` | No key, no cost, no runtime call. Fills the dead slot at `app/page.tsx:293-301` |
-| **7. Real Turnstile, then HCP lead sync** | Real keys first, then the gated push | The interlock means 7 can be merged before the keys exist |
+| **7. Real Turnstile, then HCP lead sync** | Real keys first, then the gated push. **Ends with a supervised test lead that only Jason can delete** — see the gap in §9 and `CLIENT-ASKS` #34b | The interlock means 7 can be merged before the keys exist. But it cannot go LIVE without Jason on hand |
 | **8. Collapse the duplicated data** | Merge `CITIES` into `AREAS`, delete the four dead exports, close the `ROUTES` leak | Housekeeping that stops the next editor wasting an hour |
 | **9. Build the 3 county hubs** | `/service-areas/{hernando,polk,pinellas}/` | **Not blocked.** A county page can be honestly generic. Covers the two invisible counties without needing local reviews or photos |
 | **10. Then the city pages** | Only once reviews and photos arrive | Highest revenue upside, genuinely blocked until then. Benchmark: Banko has **150+ city pages**, Trinity has 6 |

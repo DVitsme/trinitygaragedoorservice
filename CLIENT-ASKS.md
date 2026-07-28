@@ -94,7 +94,8 @@ one thing worth a careful conversation.
 | 31 | **Generate a separate API key for the website** | Named something like "website". Then either key can be switched off without breaking the other. Jason must do this himself, only Admins can. | ☐ |
 | 32 | **One booking link per service page?** | Housecall Pro can make several booking links, each tagged. If he makes one per service, he sees exactly which page produced each booking. Takes a few minutes in their settings. | ☐ |
 | 33 | **Which service area is current, 130 zip codes or 268?** | They have two saved. The 130 one has the technicians assigned to it, so we assume that is the live one. | ☐ |
-| 34 | **Do they want website leads pushed into Housecall Pro?** | We can make contact form submissions appear in their Job Inbox next to their Angi and Yelp leads. Nothing extra to buy. | ☐ |
+| 34 | **Do they want website leads pushed into Housecall Pro?** | We can make contact form submissions appear in their Job Inbox next to their Angi and Yelp leads. Nothing extra to buy, it is included in the plan they already pay for. | ☐ |
+| 34b | 🔴 **If yes: Jason has to be on hand for one 5 minute test** | **This is the only thing standing between us and switching it on, and we cannot do it without him.** Housecall Pro has **no test mode** and **no way to delete a lead through the software we use**. So we create one obviously fake test lead (fake name, a 555 phone number that cannot ring anyone, notifications turned off), check it lands in his Job Inbox, and then **he deletes it himself in Housecall Pro**. Deleting is reversible and does not message anyone. **We can create it. We cannot remove it.** Also needed from him first: **a separate API key just for the website**, so it can be switched off without breaking anything the marketing company uses. | ☐ |
 
 ---
 
