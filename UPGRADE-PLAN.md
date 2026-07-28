@@ -7,6 +7,14 @@ Created **2026-07-28** · Live: https://trinity-garage-door.derrick-2fd.workers.
 Companions: `HOUSECALL-PRO-API.md` (API reference) · `CLIENT-ASKS.md` · `CLIENT-NOTES.md` ·
 `PRE-LAUNCH-PUNCHLIST.md`
 
+> ### 👉 If you read one section, read **§4 — What the Housecall Pro deep dive unlocks**
+> Nine upgrades, each with **what it actually buys the business**, plus five facts the API handed
+> us that cost nothing to use, plus what we deliberately decided **not** to build and why.
+> Everything there exists *because* we got API access — none of it was buildable before.
+>
+> The rest of this document is the audit that produced it: §2 and §5 are what was shipping false,
+> §9 is the lead path, §12 is new pages, §13 is the five questions only the client can answer.
+
 > **Priority key:** 🔴 **P0** shipping something false or losing leads · 🟠 **P1** wrong or
 > materially incomplete · 🟡 **P2** real improvement · 🟢 **P3** opportunity, needs a decision
 > **Effort:** S = under an hour · M = half a day · L = multi day
@@ -141,24 +149,50 @@ already do the work.
 
 ---
 
-## 4. Live Housecall Pro integrations worth building
+## 4. What the Housecall Pro deep dive unlocks
 
-Ranked by value over effort. Detail and code sketches in the sections that follow.
+**This is the section to read if you only read one.** Every item below exists *because* we got API
+access; none of it was buildable before. The middle column is the point — what it actually buys
+the business, not how clever it is.
 
-| # | Integration | Value | Effort | Verdict |
-|---|---|---|---|---|
-| 1 | **Booking modal** (`window.HCPWidget.openModal()`) | High | **S** | ✅ Do first |
-| 2 | **ZIP service-area checker** from `lib/service-area-zips.json` | High | **S/M** | ✅ Do. **Measured: 1.2 KB gzipped**, so ship it client side and be done. No API key, no runtime call, $0 |
-| 3 | **Lead sync** — `POST /leads` from the contact form | High | **M** | ✅ Do, after real spam protection |
-| 4 | **Thank-you page** + conversion tracking | High | **S** | ✅ Do with #1 |
-| 5 | **Build-time data bake** (hours, service area) like the blog | Medium | **M** | ✅ Do, same pattern as `generate-blog.mjs` |
-| 6 | **Live availability calendar** | Medium | **L** | ⏸ Defer. Means owning a booking UI we get free today |
-| 7 | Live job/review counters on the homepage | Low | M | ❌ Skip. Adds a runtime dependency for a vanity number |
+### A. Build these
 
-**A principle for all of these:** this site is fully static and cheap because of it. Anything
-that adds a **runtime** call to a third-party API on a page load trades that away. Prefer
-**build-time** baking (the blog already proves the pattern) or **client-side on interaction**
-(the ZIP checker needs no network at all).
+| # | Upgrade | **What it actually buys us** | Effort |
+|---|---|---|---|
+| 1 | **Booking modal** — `window.HCPWidget.openModal()` | Booking opens **on the page** instead of throwing the visitor into a new tab, which is where funnels leak. Paired with #4 it is also the first time a booking becomes **countable**. **Free bonus once the script is mounted:** any URL containing **`?booking`** auto-opens the modal, so email and ad campaigns can deep link straight into the booking flow at no extra cost. | **S** |
+| 2 | **ZIP service-area checker** | Answers the question every caller asks first, **"do you even come out here?"** — instantly, without a phone call. It also surfaces the **35 towns the site currently hides**, so a Spring Hill visitor stops bouncing. Fills the dead feature slot at `app/page.tsx:293-301`. **Measured 1.2 KB gzipped**, no API key, no runtime call, **$0**. | **S/M** |
+| 3 | **Lead sync** — `POST /leads` | Puts website leads **where Jason actually works**. Today a lead lands in an inbox that can spam-folder and a D1 table he will never open. In Job Inbox it **texts him** and sits beside his Angi and Yelp leads in the same workflow. The metric that matters is whether a truck gets dispatched, and this is the only thing that moves it. **Also makes the rebuild measurable**, via the "Trinity Website" lead source that already exists in his reporting. | **M** |
+| 4 | **`/book-a-repair/thank-you/`** | **Right now bookings are completely unmeasured.** HCP fires **no completion event**, so the dashboard "booking redirect" to a page we own is the *only* supported way to know a booking happened. Without it, every future claim about whether the site works is a guess. | **S** |
+| 5 | **Build-time data bake** (hours, service area, job types) | Kills the whole *class* of bug this audit is full of: facts hardcoded once and silently rotting. Wrong hours, "6 cities", stale counts. Same proven pattern as `generate-blog.mjs`, but **refresh-only, never chained to `build`**, so an HCP outage can never break a deploy. | **M** |
+| 6 | **Service pages from their own job tags** — Hurricane Reinforcement, 25 Point Inspection, Torsion Conversion | **Proven revenue, not a guess.** These are services they already bill for, invisible on the site. **Hurricane Reinforcement in Florida** is the strongest single page available: seasonal demand, insurance relevance, and they already do the work. | **M** |
+| 7 | **Per-page booking links** (HCP tracking attributes) | Per-page booking attribution, so "which page produces bookings" stops being unanswerable. **There is no API route to this** — only Jason generating the links. Costs him minutes. | **S** |
+| 8 | **Financing page** (Wisetack, free on MAX) | **36% of their jobs are $1,000+**, median ~$855, so a third of the work is genuinely in financing territory — and they are already paying for the tool. Only 1 of 8 competitors does this well. | **M** |
+| 9 | **County hubs**, then the city tranche | The site claims 6 cities against **41 served**. Their biggest competitor runs **150+ city pages**. County hubs are the unblocked version, and the tranche is now chosen from **real job counts** rather than guesswork. | **M / L** |
+| 10 | **"Office open now / after hours" indicator** in the utility bar | Turns the site's most exposed liability into a selling point. The static `24/7 Emergency Service` dot becomes **true and specific**: "Office open now" during business hours, "After hours, emergency line open" otherwise. **Zero API calls** — bake the schedule from `/company/schedule_availability` and compute client side from the visitor's clock. ⚠️ **Blocked on `CLIENT-ASKS` #4/#4b**, and it must never render the word "Closed" beside a phone number we advertise as 24/7. | **M** |
+
+### B. Facts the API handed us that cost nothing to use
+
+Pure copy wins — no build, no integration, just true things we were not saying.
+
+| Fact | Benefit |
+|---|---|
+| **120 minute arrival window** | Concrete instead of vague. A real Google review already describes it in the customer's own words, so it is double sourced. Currently `book-a-repair` **invents an example** instead of stating the real policy. |
+| **$0 trip charge** | "We come to you, no trip charge" is a genuine differentiator, used nowhere. |
+| **Verified address + geo** | Unblocks the LocalBusiness schema that has been waiting on a confirmed NAP, flagged HIGH-RISK for local SEO. |
+| **5 counties, 41 cities, 130 zips** | Replaces an understated "6 cities" everywhere it appears. |
+| **5.0 from 597 reviews** | The truth was better than the claim. ✅ shipped. |
+
+### C. Deliberately NOT building
+
+| Item | Why |
+|---|---|
+| **Live availability calendar** | Possible now, but it means **owning a booking UI we currently get free**, and our own test returned 96 windows all flagged `available: true` — the flag may not reflect booked work. Shipping a wrong "next available" is worse than none. Revisit only after validating against Jason's dispatch board. |
+| Live job/review counters | A runtime dependency on a static page for a vanity number nobody reloads to watch. Bake it. |
+| `Service` schema / `aggregateRating` / review widgets | See §8. Each has a specific, sourced reason. |
+
+**The governing principle:** this site is static and cheap **because** it is static. Anything that
+adds a **runtime** third-party call on page load trades that away. Prefer **build-time baking**
+(proven by the blog) or **client-side on interaction** (the ZIP checker needs no network at all).
 
 ---
 
