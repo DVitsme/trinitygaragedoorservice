@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Phone } from "lucide-react";
-import { SITE, ROUTES } from "@/lib/site";
+import { SITE, ROUTES, COUNTY_PHONES } from "@/lib/site";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { ServiceAreaMapMock } from "@/components/blocks/service-area-map-mock";
 import { Reveal } from "@/components/blocks/reveal";
@@ -60,15 +60,32 @@ export default function ContactPage() {
             <div className="grid items-start gap-11 nav:grid-cols-[1fr_1.05fr]">
               {/* LEFT: ways to reach us */}
               <div>
-                <a href={SITE.phoneHref} className="flex items-center gap-4 rounded-[12px] border-2 border-ink bg-ink px-6 py-[22px] no-underline">
-                  <span className="flex h-[52px] w-[52px] flex-none items-center justify-center rounded-[10px] bg-accent text-white">
-                    <Phone className="h-6 w-6" strokeWidth={2} />
-                  </span>
-                  <span>
-                    <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#9a9a9a]">Call us 24/7 for emergencies</span>
-                    <span className="block font-display text-[26px] font-black text-white">{SITE.phoneDisplay}</span>
-                  </span>
-                </a>
+                {/* The three county lines. Each row is tap-to-call on mobile. */}
+                <div className="overflow-hidden rounded-[12px] border-2 border-ink bg-ink">
+                  <div className="flex items-center gap-4 border-b border-[#333] px-6 py-[18px]">
+                    <span className="flex h-[46px] w-[46px] flex-none items-center justify-center rounded-[10px] bg-accent text-white">
+                      <Phone className="h-[22px] w-[22px]" strokeWidth={2} />
+                    </span>
+                    <span>
+                      <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#9a9a9a]">Call us 24/7 for emergencies</span>
+                      <span className="block font-display text-[16px] font-extrabold uppercase text-white">Dial the line for your county</span>
+                    </span>
+                  </div>
+                  {COUNTY_PHONES.map((p, i) => (
+                    <a
+                      key={p.county}
+                      href={p.href}
+                      aria-label={`Call our ${p.county} County line, ${p.display}`}
+                      className={`flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-6 py-[17px] no-underline transition-colors hover:bg-[#222] ${i > 0 ? "border-t border-[#2a2a2a]" : ""}`}
+                    >
+                      <span>
+                        <span className="block font-display text-[14px] font-extrabold uppercase tracking-[0.04em] text-white">{p.county} County</span>
+                        <span className="block text-[13px] text-[#9a9a9a]">{p.cities}</span>
+                      </span>
+                      <span className="whitespace-nowrap font-display text-[21px] font-black text-accent-on-dark">{p.display}</span>
+                    </a>
+                  ))}
+                </div>
 
                 <div className="mt-3.5 grid grid-cols-2 gap-3 max-xs:grid-cols-1">
                   <Link href={ROUTES.bookRepair} className="flex items-center justify-center rounded-[9px] bg-accent px-4 py-4 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline">Book a Repair</Link>
@@ -179,7 +196,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,46px)] font-black uppercase leading-none">Let&apos;s Get Your Door Handled</h2>
             <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">
-              However you reach us, we&apos;ll take care of it. Call (813) 279-6785, book online, or send a message and we&apos;ll take it from there. Family owned and local since 2007, licensed and insured.
+              However you reach us, we&apos;ll take care of it. Call the line for your county, book online, or send a message and we&apos;ll take it from there. Family owned and local since 2007, licensed and insured.
             </p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">

@@ -11,7 +11,7 @@ Things only Jason or Simone can answer or provide. Tick them off as they come in
 
 | # | Ask | Why it matters | Status |
 |---|---|---|---|
-| 1 | **Which phone number is the main one?** | Site currently shows the Pasco number. Their own trucks and BBB show the Hillsborough one. Pick one, or tell me to show all three by county. | ☐ |
+| 1 | **Which phone number is the main one?** | **Contact page now lists all three county lines.** Everywhere else still shows the Pasco number, while their trucks and BBB show the Hillsborough one. Tell me which should be the main number sitewide. | ◐ |
 | 2 | **What year did the business start?** | Their logo and trucks say 2007. State records say 2011. Yelp says 2010. It is on the logo, so we need the real answer. | ☐ |
 | 3 | **Confirm the address** | We have 18125 N US Hwy 41, Ste 208, Lutz FL 33549. Needed for Google and the site. | ☐ |
 | 4 | **What are the real office hours?** | Google says Mon to Sat, 7am to 9pm. Their front door says Mon to Fri, 8am to 5:30pm. | ☐ |
@@ -72,4 +72,8 @@ The site is fully stocked with real photos now. These would make it noticeably b
 ---
 
 ## Changelog
+- **2026-07-28** Contact page now lists all three county lines, so ask #1 is half answered: we
+  still need to know which number leads everywhere else on the site.
 - **2026-07-28** Created. Added photo/video asks and quick decisions surfaced by the media hunt.
+
+*Key: ☐ open · ◐ partly handled · ☑ done*

@@ -50,6 +50,22 @@ export const SOCIAL = {
   googleWriteReview: "https://search.google.com/local/writereview?placeid=ChIJC6icp3C5wogRgiYvqfyx0I4",
 } as const;
 
+/**
+ * The three county lines, printed on Trinity's own Nextdoor flyer and listed on BBB.
+ *
+ * `SITE.phoneDisplay` (the Pasco line) is still the single number used sitewide. Whether the site
+ * should route by county everywhere is an open client decision, so for now these are surfaced on
+ * the Contact page only. See CLIENT-ASKS.md item 1.
+ *
+ * Cities are mapped from AREAS below: Tampa + Lutz = Hillsborough, Land O Lakes + Wesley Chapel =
+ * Pasco, Palm Harbor + Oldsmar = Pinellas. (Lutz straddles Hillsborough and Pasco.)
+ */
+export const COUNTY_PHONES = [
+  { county: "Hillsborough", cities: "Tampa, Lutz", display: "(813) 447-3874", href: "tel:18134473874" },
+  { county: "Pasco", cities: "Land O Lakes, Wesley Chapel", display: "(813) 279-6785", href: "tel:18132796785" },
+  { county: "Pinellas", cities: "Palm Harbor, Oldsmar", display: "(727) 314-5062", href: "tel:17273145062" },
+] as const;
+
 /** Service types for the contact / free-estimate form. */
 export const SERVICE_OPTIONS = [
   "Garage door repair",
