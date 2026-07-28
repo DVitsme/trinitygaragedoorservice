@@ -78,7 +78,7 @@ export default function ServicesHubPage() {
 
       {/* HERO */}
       <PhotoHero
-        media={<Image src={asset("jobsite-tech-at-residential-garage.jpg")} alt="Trinity technician at a Tampa Bay home" fill sizes="100vw" priority className="object-cover" />}
+        media={<Image src={asset("svc-opener-rail-work.jpg")} alt="Trinity technician at a Tampa Bay home" fill sizes="100vw" priority className="object-cover" />}
         breadcrumb={<Breadcrumb items={breadcrumb} />}
         eyebrow="Garage Door Services"
       >

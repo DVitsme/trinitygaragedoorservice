@@ -74,7 +74,7 @@ export default function BookARepairPage() {
 
       {/* HERO — frame + launch */}
       <section className="relative overflow-hidden border-b-[5px] border-accent px-6 pb-[88px] pt-[84px]">
-        <Image src={asset("jobsite-tech-at-residential-garage.jpg")} alt="Trinity technician arriving at a Tampa Bay home" fill sizes="100vw" priority className="object-cover" />
+        <Image src={asset("svc-tuneup-rail-check.jpg")} alt="Trinity technician arriving at a Tampa Bay home" fill sizes="100vw" priority className="object-cover" />
         <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(110deg, rgba(10,10,10,.93) 0%, rgba(10,10,10,.72) 52%, rgba(10,10,10,.42) 100%)" }} />
         <div className="relative z-[2] mx-auto max-w-[1200px]">
           <div className="grid items-center gap-12 nav:grid-cols-[1.05fr_.95fr]">

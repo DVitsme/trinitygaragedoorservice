@@ -74,7 +74,7 @@ export default function DoorTypesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: breadcrumb.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.label, ...(c.href ? { item: `https://trinitygaragedoorservice.com${c.href}` } : {}) })) }) }} />
 
       <PhotoHero
-        media={<Image src={asset("door-after-brown-wood-sectional.jpg")} alt="A wood look sectional garage door installed by Trinity" fill sizes="100vw" priority className="object-cover" />}
+        media={<Image src={asset("door-black-long-panel.jpg")} alt="A wood look sectional garage door installed by Trinity" fill sizes="100vw" priority className="object-cover" />}
         breadcrumb={<Breadcrumb items={breadcrumb} />}
         eyebrow="A Buyer's Guide"
       >

@@ -24,7 +24,7 @@ const installation: RepairDetailData = {
     { label: "Installation" },
   ],
   heroEyebrow: "Garage Door Installation",
-  heroImage: "door-after-brown-dusk-2car.jpg",
+  heroImage: "svc-install-moving-panel.jpg",
   heroImageAlt: "A new Trinity garage door at dusk",
   h1: (
     <>
@@ -40,7 +40,7 @@ const installation: RepairDetailData = {
       "Maybe your old door finally gave out. Maybe you're building and the garage is a blank opening waiting for a door. Either way, this is the page about getting a new garage door put in, and put in right.",
       "We install new doors for homeowners all over Tampa Bay, on existing houses and new construction both. You pick the door. We measure, set it, connect the opener, and make sure it runs smooth and quiet before we pack up.",
     ],
-    image: "door-after-white-2car-home.jpg",
+    image: "svc-install-panel-lift.jpg",
     imageAlt: "A newly installed white garage door on a Tampa Bay home",
     badge: "New Builds & Replacements",
   },
@@ -86,7 +86,7 @@ const installation: RepairDetailData = {
   whatWeDo: {
     eyebrow: "Built for Florida Weather",
     title: "Heat and Wind, Handled",
-    image: "door-after-white-on-blue-home.jpg",
+    image: "door-white-window-row.jpg",
     imageAlt: "A freshly installed Trinity garage door",
     badge: "Permit Handled",
     items: [

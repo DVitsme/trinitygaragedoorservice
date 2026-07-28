@@ -24,7 +24,7 @@ const emergency: RepairDetailData = {
     { label: "Emergency Repair" },
   ],
   heroEyebrow: "24/7 Emergency Repair",
-  heroImage: "jobsite-tech-working-dusk.jpg",
+  heroImage: "svc-offtrack-ladder-top-section.jpg",
   heroImageAlt: "Trinity technician on an after hours emergency garage door call",
   h1: (
     <>
@@ -40,7 +40,7 @@ const emergency: RepairDetailData = {
       "That's what our emergency line is for. We keep room in the schedule for the calls that can't wait, and a real person answers, not a machine, even at two in the morning.",
       "We're family owned and based right here in Tampa Bay, so help is usually close by. Our trucks carry the common parts, so most emergencies are fixed in a single visit, often within a couple of hours.",
     ],
-    image: "jobsite-tech-crouching-repair.jpg",
+    image: "svc-emergency-night-call.jpg",
     imageAlt: "Trinity technician on an emergency garage door repair",
     badge: "Same Day Service",
   },
@@ -85,7 +85,7 @@ const emergency: RepairDetailData = {
   whatWeDo: {
     eyebrow: "What To Expect From An Emergency Call",
     title: "A Real Person, Then A Fast Fix",
-    image: "jobsite-two-techs-on-ladder.jpg",
+    image: "svc-offtrack-frame-kneeling.jpg",
     imageAlt: "Trinity technicians on an emergency garage door call",
     badge: "Fixed Fast",
     items: [

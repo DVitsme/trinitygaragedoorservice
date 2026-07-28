@@ -102,7 +102,7 @@ export default function RepairHubPage() {
 
       {/* HERO */}
       <PhotoHero
-        media={<Image src={asset("jobsite-tech-crouching-repair.jpg")} alt="Trinity technician on a hands on garage door repair" fill sizes="100vw" priority className="object-cover" />}
+        media={<Image src={asset("svc-offtrack-frame-kneeling.jpg")} alt="Trinity technician on a hands on garage door repair" fill sizes="100vw" priority className="object-cover" />}
         breadcrumb={<Breadcrumb items={breadcrumb} />}
         eyebrow="Garage Door Repair"
       >
@@ -142,7 +142,7 @@ export default function RepairHubPage() {
                 </p>
               </div>
               <div className="relative">
-                <Image src={asset("jobsite-opener-and-spring-hardware.jpg")} alt="Garage door opener motor and spring hardware" width={620} height={380} className="h-[380px] w-full rounded-[8px] border-2 border-ink object-cover" />
+                <Image src={asset("svc-spring-torsion-shaft.jpg")} alt="Garage door opener motor and spring hardware" width={620} height={380} className="h-[380px] w-full rounded-[8px] border-2 border-ink object-cover" />
                 <div className="absolute -bottom-4 -right-4 rounded-[8px] border-2 border-ink bg-accent px-[18px] py-3 font-display text-[14px] font-extrabold uppercase tracking-[0.03em] text-white">Same Day Service</div>
               </div>
             </div>
@@ -256,7 +256,7 @@ export default function RepairHubPage() {
           <Reveal>
             <div className="grid items-center gap-[50px] nav:grid-cols-[1fr_1.05fr]">
               <div className="relative">
-                <Image src={asset("jobsite-tech-installing-opener.jpg")} alt="Trinity technician servicing a garage door opener" width={620} height={420} className="h-[420px] w-full rounded-[8px] border-2 border-black object-cover" />
+                <Image src={asset("svc-opener-unit-in-hand.jpg")} alt="Trinity technician servicing a garage door opener" width={620} height={420} className="h-[420px] w-full rounded-[8px] border-2 border-black object-cover" />
                 <div className="absolute -bottom-4 -left-4 rounded-[8px] border-2 border-black bg-accent px-[18px] py-3 font-display text-[14px] font-extrabold uppercase tracking-[0.03em] text-white">Twice a Year</div>
               </div>
               <div>

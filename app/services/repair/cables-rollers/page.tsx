@@ -24,7 +24,7 @@ const cablesRollers: RepairDetailData = {
     { label: "Cables & Rollers" },
   ],
   heroEyebrow: "Cable & Roller Repair",
-  heroImage: "jobsite-opener-and-spring-hardware.jpg",
+  heroImage: "svc-cables-rail-tool.jpg",
   heroImageAlt: "Garage door cables, drum, and spring hardware",
   h1: (
     <>
@@ -40,7 +40,7 @@ const cablesRollers: RepairDetailData = {
       "A steel cable runs down each side of your door. They work with the springs to carry the weight, a few hundred pounds, and keep both sides moving together. The bottom of each cable hooks to a bracket at the lower corner, then winds around a drum at the end of the spring shaft.",
       "Because the cables carry that load all the time, they sit under real tension, even when the door is just closed and quiet. That's why the bottom bracket and the cables are not something to poke at, it's a job for the right tools and training.",
     ],
-    image: "jobsite-tech-crouching-repair.jpg",
+    image: "svc-cables-track-interior.jpg",
     imageAlt: "Trinity technician replacing a garage door cable",
     badge: "Same Day Service",
   },
@@ -85,7 +85,7 @@ const cablesRollers: RepairDetailData = {
   whatWeDo: {
     eyebrow: "What We Do On The Visit",
     title: "Worked Safely, All The Way Through",
-    image: "jobsite-two-techs-on-ladder.jpg",
+    image: "svc-offtrack-frame-kneeling.jpg",
     imageAlt: "Trinity technicians replacing garage door rollers",
     badge: "Quiet & Smooth",
     items: [

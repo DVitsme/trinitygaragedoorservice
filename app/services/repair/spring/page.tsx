@@ -24,7 +24,7 @@ const spring: RepairDetailData = {
     { label: "Spring Repair" },
   ],
   heroEyebrow: "Spring Repair & Replacement",
-  heroImage: "jobsite-opener-and-spring-hardware.jpg",
+  heroImage: "svc-spring-torsion-shaft.jpg",
   heroImageAlt: "Garage door torsion spring and hardware",
   h1: (
     <>
@@ -40,7 +40,7 @@ const spring: RepairDetailData = {
       "The spring carries the weight of a door that can run a few hundred pounds, so when a spring goes, the whole door usually quits with it. You might hear a loud bang from the garage, find the door stuck shut, or watch it drop faster than it should.",
       "That's a job for a tech, not a Saturday project. Running the opener against a broken spring can burn out the motor and bend the door panels, so if you spot the signs, stop using the door and give us a call.",
     ],
-    image: "jobsite-tech-crouching-repair.jpg",
+    image: "svc-spring-winding-bar.jpg",
     imageAlt: "Trinity technician replacing a garage door spring",
     badge: "Same Day Service",
   },
@@ -84,7 +84,7 @@ const spring: RepairDetailData = {
   whatWeDo: {
     eyebrow: "What We Do On A Spring Call",
     title: "More Than Swapping A Part",
-    image: "jobsite-tech-installing-opener.jpg",
+    image: "svc-spring-shaft-detail.jpg",
     imageAlt: "Trinity technician balancing a garage door",
     badge: "Balanced & Tested",
     items: [

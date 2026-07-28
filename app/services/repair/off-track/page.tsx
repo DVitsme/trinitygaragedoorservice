@@ -24,7 +24,7 @@ const offTrack: RepairDetailData = {
     { label: "Off Track Repair" },
   ],
   heroEyebrow: "Off Track Repair & Replacement",
-  heroImage: "jobsite-tech-crouching-repair.jpg",
+  heroImage: "svc-offtrack-frame-kneeling.jpg",
   heroImageAlt: "Trinity technician repairing an off-track garage door",
   h1: (
     <>
@@ -40,7 +40,7 @@ const offTrack: RepairDetailData = {
       "You'll know it when you see it. One side hangs lower than the other, a roller or two has popped out of the metal track, and the whole door looks like it's leaning in. Sometimes it's stuck wide open, sometimes jammed halfway and won't go either way.",
       "It's not a problem to put off. We're family owned and based right here in Tampa Bay, and we keep a 24/7 line for the ones that can't wait, like a door stuck open overnight.",
     ],
-    image: "jobsite-two-techs-on-ladder.jpg",
+    image: "svc-offtrack-top-seal.jpg",
     imageAlt: "Trinity technicians realigning a garage door",
     badge: "Same Day Service",
   },
@@ -87,7 +87,7 @@ const offTrack: RepairDetailData = {
   whatWeDo: {
     eyebrow: "When You Need A New Track",
     title: "Realign It, Or Replace The Track",
-    image: "jobsite-tech-working-dusk.jpg",
+    image: "svc-offtrack-ladder-top-section.jpg",
     imageAlt: "Trinity technician working on a garage door track",
     badge: "Realign Or Replace",
     items: [

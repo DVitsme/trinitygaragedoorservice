@@ -24,7 +24,7 @@ const replacement: RepairDetailData = {
     { label: "Replacement" },
   ],
   heroEyebrow: "Garage Door Replacement",
-  heroImage: "door-after-white-2car-home.jpg",
+  heroImage: "door-white-2car-clean.jpg",
   heroImageAlt: "A new Trinity garage door installation",
   h1: (
     <>
@@ -40,7 +40,7 @@ const replacement: RepairDetailData = {
       "Every garage door reaches a point where fixing it again stops making sense. Maybe you've had somebody out three times this year. Maybe it sounds like it's coming apart, it's dented from a storm, or it just looks tired next to the rest of the house.",
       "This page is about that decision. We'll help you make the honest call, and if a new door is the right move, we handle the whole swap, old door out and new door in.",
     ],
-    image: "door-after-brown-wood-sectional.jpg",
+    image: "door-brown-raised-panel.jpg",
     imageAlt: "A new wood look garage door by Trinity",
     badge: "Same Day Service",
   },
@@ -87,7 +87,7 @@ const replacement: RepairDetailData = {
   whatWeDo: {
     eyebrow: "How We Handle The Swap",
     title: "Old Door Out, New Door In",
-    image: "door-after-white-on-blue-home.jpg",
+    image: "svc-install-barn-door.jpg",
     imageAlt: "A freshly installed Trinity garage door",
     badge: "Hauled Away",
     items: [

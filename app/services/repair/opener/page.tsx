@@ -24,7 +24,7 @@ const opener: RepairDetailData = {
     { label: "Opener Repair" },
   ],
   heroEyebrow: "Opener Repair & Replacement",
-  heroImage: "jobsite-tech-installing-opener.jpg",
+  heroImage: "svc-opener-rail-work.jpg",
   heroImageAlt: "Trinity technician servicing a garage door opener",
   h1: (
     <>
@@ -40,7 +40,7 @@ const opener: RepairDetailData = {
       "You're sitting in the driveway pressing the button, the door won't budge, and you're already running late. Sometimes it's the opener itself. Sometimes it's a dead remote battery or a sensor knocked out of line.",
       "We work on every major brand, chain, belt, screw, and smart WiFi units alike. We'll figure out what's actually wrong, then tell you straight whether it's a quick repair or time for a new unit.",
     ],
-    image: "jobsite-tech-at-residential-garage.jpg",
+    image: "svc-opener-unit-in-hand.jpg",
     imageAlt: "Trinity technician at a residential garage opener",
     badge: "Same Day Service",
   },
@@ -87,7 +87,7 @@ const opener: RepairDetailData = {
   whatWeDo: {
     eyebrow: "What We Do On A Service Call",
     title: "We Check The Whole System",
-    image: "jobsite-two-techs-on-ladder.jpg",
+    image: "svc-opener-overhead-install.jpg",
     imageAlt: "Trinity technicians servicing a garage door opener",
     badge: "Every Brand",
     items: [

@@ -24,7 +24,7 @@ const tuneUp: RepairDetailData = {
     { label: "Tune Up" },
   ],
   heroEyebrow: "Tune Up & Maintenance",
-  heroImage: "jobsite-tech-installing-opener.jpg",
+  heroImage: "svc-opener-rail-work.jpg",
   heroImageAlt: "Trinity technician servicing and tuning up a garage door",
   h1: (
     <>
@@ -40,7 +40,7 @@ const tuneUp: RepairDetailData = {
       "A yearly tune up keeps the door running smooth and catches the small stuff before it strands you with your car inside. When we service a door, we go through the whole system, not only the squeaky part.",
       "The good news is a little attention goes a long way, and a well kept door lasts many years longer than a neglected one. We'll tell you honestly what your door needs and what it doesn't.",
     ],
-    image: "jobsite-tech-crouching-repair.jpg",
+    image: "svc-tuneup-rail-check.jpg",
     imageAlt: "Trinity technician lubricating garage door hardware",
     badge: "Same Day Service",
   },
@@ -84,7 +84,7 @@ const tuneUp: RepairDetailData = {
   whatWeDo: {
     eyebrow: "A Few Things You Can Do Yourself",
     title: "Honest Homeowner Maintenance",
-    image: "jobsite-two-techs-on-ladder.jpg",
+    image: "svc-cables-track-interior.jpg",
     imageAlt: "Trinity technicians tuning up a garage door",
     badge: "Twice A Year",
     items: [
