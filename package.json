@@ -13,7 +13,8 @@
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate": "wrangler d1 migrations apply DB --remote",
-    "blog:gen": "node scripts/generate-blog.mjs"
+    "blog:gen": "node scripts/generate-blog.mjs",
+    "geo:gen": "node scripts/generate-service-area-geo.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.11",

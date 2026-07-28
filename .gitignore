@@ -65,3 +65,4 @@ next-env.d.ts
 .shots/
 .audit/
 .media-hunt/
+.geo-cache/

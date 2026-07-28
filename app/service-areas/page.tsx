@@ -5,7 +5,7 @@ import { Phone } from "lucide-react";
 import { SITE, ROUTES } from "@/lib/site";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { TrustStrip } from "@/components/blocks/trust-strip";
-import { ServiceAreaMapMock } from "@/components/blocks/service-area-map-mock";
+import { ServiceAreaMap } from "@/components/blocks/service-area-map";
 import { Reveal } from "@/components/blocks/reveal";
 
 export const metadata: Metadata = {
@@ -75,7 +75,7 @@ export default function ServiceAreasHubPage() {
             Garage Door Service <span className="inline-block bg-accent px-3 text-white">Across Tampa Bay</span>
           </h1>
           <p className="mt-6 max-w-[660px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">
-            Trinity is based right here in Tampa Bay, and we cover a good stretch of it. If your garage door quits in Hillsborough, Pasco, or Pinellas county, there&apos;s a strong chance we can be at your house the same day. Here&apos;s where we work and how to tell if you&apos;re in range.
+            Trinity is based right here in Tampa Bay, and we cover a good stretch of it. If your garage door quits in Hillsborough, Pinellas, Pasco, Hernando or Polk county, there&apos;s a strong chance we can be at your house the same day. Here&apos;s where we work and how to tell if you&apos;re in range.
           </p>
           <div className="mt-[30px] flex flex-wrap gap-[13px]">
             <a href="#towns" className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">See The Towns</a>
@@ -167,14 +167,14 @@ export default function ServiceAreasHubPage() {
               <div>
                 <div className={eyebrowCls}>Where We Work</div>
                 <h2 className={`${h2Cls} text-ink`}>All Over Tampa Bay</h2>
-                <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pasco, and Pinellas counties, and the towns around them. Not sure you&apos;re in range? Give us a call and ask.</p>
+                <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, and the towns around them. Not sure you&apos;re in range? Give us a call and ask.</p>
                 <div className="mt-[22px] flex flex-wrap gap-2.5">
                   {[towns[5], towns[0], towns[1], towns[2], towns[3], towns[4]].map((a) => (
                     <Link key={a.slug} href={`/service-areas/${a.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{a.name}</Link>
                   ))}
                 </div>
               </div>
-              <ServiceAreaMapMock />
+              <ServiceAreaMap className="mx-auto max-w-[380px]" />
             </div>
           </Reveal>
         </div>

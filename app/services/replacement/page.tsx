@@ -102,7 +102,7 @@ const replacement: RepairDetailData = {
   whyTrinity: {
     eyebrow: "Why Folks In Tampa Bay Call Trinity",
     title: "A Family Shop, Not A Call Center",
-    lead: "We've been opening doors around here since 2007, across Hillsborough, Pasco, and Pinellas.",
+    lead: "We've been opening doors around here since 2007, across Hillsborough, Pinellas, Pasco, Hernando and Polk.",
     cards: [
       { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "Honest Diagnosis", body: "A lot of doors don't need replacing. If a repair gets you a few more solid years, we'll say so." },
       { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, plus a 24/7 line for when your door quits at a bad hour." },

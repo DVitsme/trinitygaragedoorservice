@@ -79,6 +79,7 @@ The site is fully stocked with real photos now. These would make it noticeably b
 | 24 | **Two** blog images are paid stock photos | We found a second one. The real question is **who bought them**. Shutterstock licences belong to the buyer and **cannot be transferred**, so if the old web company bought them, the licence stays with them and does not come with the pictures. | ☐ |
 | 24b | **Three blog images were made by AI. Can we swap them?** | Their old blog used AI generated pictures, and the files still carry a hidden tag saying so, which Google and Facebook can read and label. One of them is the **first picture people see** on the blog. We have hundreds of their real job photos, so this is an easy swap. **Not something we did, it came over from the old site.** | ☐ |
 | 25 | Manufacturer product photos | Are they allowed to use Clopay / C.H.I. / LiftMaster images as a dealer? | ☐ |
+| 25b | **Can we advertise "no trip charge" on the homepage?** | Their own Housecall Pro account says the trip charge is **$0 on both service zones**, so we believe it. But it is a pricing promise going on the front page, and it is the kind of thing that changes with fuel prices. One yes from Jason and it goes in. It is a genuine differentiator we currently say nowhere. | ☐ |
 
 ---
 
@@ -110,6 +111,7 @@ one thing worth a careful conversation.
 ---
 
 ## Changelog
+- **2026-07-28** Service areas section redesign planned (`SERVICE-AREA-REDESIGN.md`). Added #25b, whether we can advertise the $0 trip charge their own system reports.
 - **2026-07-28** Housecall Pro keys tested and working. Added asks 29 to 34. **Address (#3) answered** from their own HCP record, **plan level (#26) answered (MAX)**, phone (#1) and public email (#6) moved to part answered.
 - **2026-07-28** Added a "for them to go fix" section (their listings) and a question to confirm the 2007 trading vs 2011 incorporation story.
 - **2026-07-28** Founding year answered: **2007**. Site now says 19+ years (was showing a stale 18+).

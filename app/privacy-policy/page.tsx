@@ -133,7 +133,7 @@ export default function PrivacyPolicyPage() {
               <div><span className="text-[#9a9a9a]">Phone:</span> <a href={SITE.phoneHref} className="font-bold text-white no-underline">{SITE.phoneDisplay}</a></div>
               <div><span className="text-[#9a9a9a]">Email:</span> <Ph>[contact email to confirm]</Ph></div>
               <div><span className="text-[#9a9a9a]">Address:</span> <Ph>[business mailing address to confirm]</Ph></div>
-              <div className="mt-1 text-[14.5px] text-[#9a9a9a]">Serving Tampa Bay, Florida, across Hillsborough, Pasco, and Pinellas counties.</div>
+              <div className="mt-1 text-[14.5px] text-[#9a9a9a]">Serving Tampa Bay, Florida, across five counties.</div>
             </div>
           </div>
         </div>

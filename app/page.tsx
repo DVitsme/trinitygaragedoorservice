@@ -7,6 +7,7 @@ import { SITE, ROUTES, BRAND_CATALOG, asset } from "@/lib/site";
 import { AutoplayVideo } from "@/components/autoplay-video";
 import { BookOnlineButton } from "@/components/book-online-button";
 import { TrustStrip } from "@/components/blocks/trust-strip";
+import { ServiceAreaMap } from "@/components/blocks/service-area-map";
 import { Reveal } from "@/components/blocks/reveal";
 
 export const metadata: Metadata = {
@@ -80,11 +81,6 @@ const igTiles = [
   { img: "/social/ig-tech-carrying-spring.jpg", alt: "Trinity technician carrying a replacement torsion spring" },
   { img: "/social/ig-dark-door-home.jpg", alt: "A dark garage door on a Tampa Bay home" },
   { img: "/social/ig-black-doors-home.jpg", alt: "Black garage doors on a Florida home" },
-];
-
-const mapPins = [
-  { left: "29%", top: "34%" }, { left: "51%", top: "27%" }, { left: "44%", top: "53%" },
-  { left: "64%", top: "60%" }, { left: "38%", top: "72%" },
 ];
 
 const eyebrowCls = "text-[13px] font-extrabold uppercase tracking-[0.16em] text-accent";
@@ -272,24 +268,9 @@ export default function HomePage() {
       <section id="areas" className="bg-white scroll-mt-24">
         <div className="mx-auto max-w-[1200px] px-5 py-[92px] nav:px-8">
           <Reveal>
-            <div className="grid items-center gap-11 nav:grid-cols-[1.25fr_1fr]">
-              <div className="relative h-[440px] overflow-hidden rounded-[8px] border-2 border-ink bg-[#15161a] max-nav:h-[340px]">
-                <div className="absolute inset-0" style={{ backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 68px),repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 1px,transparent 1px 68px)" }} />
-                <div className="absolute left-[-10%] top-[20%] h-3.5 w-[120%] bg-[#26282f]" style={{ transform: "rotate(-9deg)" }} />
-                <div className="absolute left-[-10%] top-[60%] h-2.5 w-[120%] bg-[#26282f]" style={{ transform: "rotate(6deg)" }} />
-                <div className="absolute right-[-12%] top-[-10%] h-[120%] w-[46%] bg-[rgba(40,80,110,0.4)]" style={{ transform: "rotate(12deg)" }} />
-                <div className="absolute left-1/2 top-[52%] h-[64%] w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-dashed border-[rgba(184,32,42,0.6)] bg-[rgba(184,32,42,0.12)]" />
-                {mapPins.map((p, i) => (
-                  <span key={i} className="absolute" style={{ left: p.left, top: p.top, transform: "translate(-50%,-100%)" }}>
-                    <span className="flex h-[26px] w-[26px] items-center justify-center border-2 border-white bg-accent shadow-[0_5px_12px_rgba(0,0,0,0.5)]" style={{ borderRadius: "50% 50% 50% 0", transform: "rotate(-45deg)" }}>
-                      <span className="h-2 w-2 rounded-full bg-white" style={{ transform: "rotate(45deg)" }} />
-                    </span>
-                  </span>
-                ))}
-                <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-[6px] border-2 border-accent bg-ink px-[15px] py-2.5 text-[13px] font-extrabold uppercase tracking-[0.04em] text-white">
-                  <span className="h-[9px] w-[9px] rounded-full bg-accent" /> Tampa Bay Service Area
-                </div>
-              </div>
+            {/* Copy leads, map supports. The real footprint is portrait (taller than wide), which
+                is the actual shape of their zone, so the map column is the narrower one. */}
+            <div className="grid items-center gap-11 nav:grid-cols-[1.15fr_0.85fr]">
               <div>
                 <div className={eyebrowCls}>Service Areas</div>
                 <h2 className="mt-3 font-display text-[clamp(26px,3.2vw,38px)] font-extrabold uppercase leading-[1.04] text-ink">We Cover the Whole Tampa Bay Area</h2>
@@ -300,8 +281,8 @@ export default function HomePage() {
                   ))}
                 </div>
                 {/* Was a ZIP input that did nothing (typing a ZIP and pressing Check just linked
-                    to the hub), which reads as a broken feature. Honest CTAs until the real
-                    address checker ships. See handoff/SERVICE-AREA-CHECKER-RESEARCH.md. */}
+                    to the hub), which reads as a broken feature. The real checker lands in
+                    Phase 2. See SERVICE-AREA-REDESIGN.md. */}
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <Link href={ROUTES.serviceAreas} className="rounded-[6px] bg-accent px-[22px] py-3 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark">See All Service Areas</Link>
                   <span className="text-[14.5px] font-medium text-body">
@@ -309,6 +290,7 @@ export default function HomePage() {
                   </span>
                 </div>
               </div>
+              <ServiceAreaMap className="max-w-[430px] max-nav:mx-auto" />
             </div>
           </Reveal>
         </div>

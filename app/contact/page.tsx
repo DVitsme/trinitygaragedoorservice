@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Phone } from "lucide-react";
 import { SITE, ROUTES, COUNTY_PHONES } from "@/lib/site";
 import { Breadcrumb } from "@/components/blocks/primitives";
-import { ServiceAreaMapMock } from "@/components/blocks/service-area-map-mock";
+import { ServiceAreaMap } from "@/components/blocks/service-area-map";
 import { Reveal } from "@/components/blocks/reveal";
 import { ContactForm } from "@/components/contact-form";
 
@@ -156,7 +156,7 @@ export default function ContactPage() {
                 <div className={eyebrowCls}>Where We Work</div>
                 <h2 className="m-0 mt-3 font-display text-[clamp(24px,3vw,36px)] font-extrabold uppercase leading-[1.04] text-ink">We&apos;re Mobile, So We Come To You</h2>
                 <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">
-                  We cover Tampa Bay across Hillsborough, Pasco, and Pinellas counties, plus the towns nearby. Find yours on our{" "}
+                  We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the towns nearby. Find yours on our{" "}
                   <Link href={ROUTES.serviceAreas} className="font-bold text-accent no-underline">service areas</Link> page.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2.5">
@@ -166,9 +166,21 @@ export default function ContactPage() {
                     </Link>
                   ))}
                 </div>
+                {/*
+                  ⚠️ STALE PLACEHOLDER — DELETE THIS LINE when the NAP ships.
+                  The address is no longer unconfirmed: 18125 US-41 Ste 208, Lutz FL 33549, geo
+                  28.1372004 / -82.4625826, read from Trinity's own Housecall Pro company record
+                  on 2026-07-28 (CLIENT-ASKS #3, answered). So this sentence now tells the customer
+                  something untrue about us.
+                  It was left in place deliberately rather than patched here: the address has to
+                  land in the footer, the LocalBusiness JSON-LD and this page together, or the site
+                  ends up with a worse inconsistency than the placeholder. That is UPGRADE-PLAN.md
+                  §10 item 4 and PRE-LAUNCH-PUNCHLIST P1-3. Replace this div with the real address
+                  as part of that work, not on its own.
+                */}
                 <div className="mt-[18px] text-[13px] font-semibold text-[#8a8a8a]">Street address &amp; map to be added once the business address is confirmed.</div>
               </div>
-              <ServiceAreaMapMock className="h-[320px]" />
+              <ServiceAreaMap className="mx-auto max-w-[380px]" />
             </div>
           </Reveal>
         </div>
