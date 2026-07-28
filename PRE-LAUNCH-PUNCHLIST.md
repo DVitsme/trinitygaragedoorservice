@@ -1,210 +1,145 @@
 # PRE-LAUNCH PUNCH LIST — Trinity Garage Door
 
-**Everything outstanding before public go-live, ranked by importance.** Compiled 2026-07-07,
-grounded in the current code (not memory) and validated against live Google / Housecall Pro
-docs and current SEO/ADA guidance.
+**What is still outstanding before public go-live.** Living document.
+Last updated: **2026-07-28** · Live preview: https://trinity-garage-door.derrick-2fd.workers.dev
 
----
+> **This file lists only what is LEFT.** Finished work moves to the [Cleared log](#cleared-log) at
+> the bottom so this stays a true to-do list.
+>
+> Companion docs: **`CLIENT-ASKS.md`** (what we need from Jason/Simone, meeting friendly) ·
+> **`CLIENT-NOTES.md`** (what to tell them) · **`LAUNCH-CHECKLIST.md`** (exact keys and commands) ·
+> **`MEDIA-INVENTORY.md`** (photo/video status and gaps).
 
-## ✅ CLEARED 2026-07-27 (built, verified, and deployed)
+## Status
+Site is **built, deployed and healthy**: 50 pages, build green, **134 links / 0 broken**.
+Nothing is broken on the site itself. **Everything remaining is either a client decision, an
+external account/key, or optional polish.**
 
-Everything that did not need the client or an external key is **done and live** on
-`https://trinity-garage-door.derrick-2fd.workers.dev`. Verified: build green (50 pages),
-linkinator **134 links / 0 broken** against the live site, all 17 new routes 200.
-
-| Item | Result |
-|---|---|
-| **P0-1** Resources pages | **DONE.** `/resources/{faq,safety-tips,troubleshooting,blog}/` + all 13 blog posts. The sitewide footer 404s are gone. |
-| **P1-7** Housecall Pro booking | **DONE.** Real booking URL wired; every Book Online / Book a Repair CTA works. |
-| **P1-9** Legacy 301 map | **DONE.** Full WordPress map in `next.config.ts` (services, 10 brand pages, brochures, resources, booking, `/blogs/<slug>/`). |
-| **P1-10** Sitemap | **DONE.** 2 URLs → **45**, derived from `ROUTES`/`AREAS`/posts. |
-| **P1-11** Canonical / site URL | **DONE.** `NEXT_PUBLIC_SITE_URL` set; staging `pages.dev` fallback replaced with the production origin. |
-| **P2-1 / P2-2** Homepage mocks | **DONE.** Fake calendar (stuck on a past month) replaced with a real booking hand-off; dead ZIP input replaced with honest CTAs. |
-| **P2-5 / P2-6 / P2-7** Brand assets | **DONE.** Favicon set, 1200×630 OG + Twitter image, branded 404 with nav and phone CTA. |
-| **P2-8** Security headers | **DONE.** HSTS, nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, conservative CSP. Via `next.config` (not `_headers`, a Pages convention the Worker ignores). |
-| **P2-9** Accessibility | **PARTIAL.** All real axe contrast failures fixed (footer greys, brand red on dark via a new `accent-on-dark` token, breadcrumb separator). Remaining reports are false positives (axe cannot resolve the gradient hero background). Broader WCAG pass still open. |
-| **P2-11** Dead code | **DONE.** `REVIEWS`, `BRANDS`, and `pageMetadata()` removed. |
-| **P2-15** Alt text | **DONE (already clean).** 33 images, all with good alts; the one empty alt is a correct decorative case. |
-| *(new)* Dead footer links | **DONE.** 4 dead `href="#"` socials + dead BBB link removed; Privacy Policy link added. |
-| *(new)* Blog on Workers | **DONE.** Posts are baked at build time (`scripts/generate-blog.mjs`) because `fs` reads fail in the Worker. |
-
-**Decisions still needed from tonight's work**
-- `/promo-discounts/` currently 301s to `/contact/` (no `/specials/` page exists). Confirm.
-- The Lutz blog post is live at `/resources/blog/professional-garage-door-repair-services-in-lutz/`.
-  The locked IA suggested 301ing it to `/service-areas/lutz/` instead. Confirm which.
-- `understanding-garage-doors-and-garage-door-repair` states a **"$65 to $600"** repair range
-  (the client's own 2024 copy, kept verbatim). Confirm it is still accurate or we should cut it.
-- Blog dates are month precision and approximate; `BlogPosting` schema deliberately omits
-  `datePublished` rather than assert an inferred date. Supply real dates to enable it.
-- The 6 project skills in `.claude/skills/` are **not committed** (`.gitignore` ignores
-  `/.claude/skills/`). Un-ignore them if they should travel with the repo.
-
-- **This is the master "what's left" tracker.** For the exact key/command runbook see
-  **`LAUNCH-CHECKLIST.md`**; for the client-decision detail see the `trinity-open-decisions`
-  memory; for the two shelved features see `handoff/SERVICE-AREA-CHECKER-RESEARCH.md` and
-  `handoff/BOOK-A-REPAIR-HCP-BRIEF.md`.
-
-## What "launch" means here
-The site is **already built and live for preview** on the Cloudflare Worker
-(`https://trinity-garage-door.derrick-2fd.workers.dev`, all pages 200). "Launch" =
-**public go-live on `trinitygaragedoorservice.com`, retiring the WordPress site.** Every page
-is static and renders with zero keys — the items below switch on the interactive features,
-correct the placeholder facts, and cover the cutover.
-
-## How to read the priorities
 | Tier | Meaning |
 |---|---|
-| 🔴 **P0 — Blocker** | Broken or non-functional today, or the site can't do its core job (capture leads) at launch. |
-| 🟠 **P1 — Critical** | Wrong/placeholder facts that mislead customers or hurt SEO, and the keys that switch on core features. Settle before public launch. |
-| 🟡 **P2 — Recommended** | Polish, SEO/ops, trust, accessibility. Do before or right at launch; not strictly blocking. |
-| 🟢 **P3 — Post-launch** | Explicitly deferred; each needs an external account/key or is a future feature. |
+| 🔴 **P0** | Site cannot do its core job (capture leads) at launch |
+| 🟠 **P1** | Wrong or placeholder facts that mislead customers or hurt SEO |
+| 🟡 **P2** | Polish, ops, trust, accessibility |
+| 🟢 **P3** | Deferred; needs an external key or is a future feature |
 
-**Owner:** `CLIENT` = needs Jason/Simone (a decision, an account, or real content) · `DEV` = we
-can do it · `BOTH` = client provides input, we implement.
+**Owner:** `CLIENT` = needs Jason/Simone · `DEV` = we can do it · `BOTH` = client input, we implement
 
 ---
 
 ## 🔴 P0 — Launch blockers
 
-### P0-1 · Build the `/resources/*` pages (live footer 404s)
-The footer on **every page** links to four pages that **404 in production right now**:
-`/resources/blog/`, `/resources/safety-tips/`, `/resources/troubleshooting/`, `/resources/faq/`
-(`components/sections/site-footer.tsx:13-16`; `ROUTES.faq` also points there). Dead links on
-every page hurt trust and SEO.
-- **Fix:** build the four pages from existing copy (`copy/resources/` + 13 posts in
-  `content/blog/`) with a generic template, OR temporarily remove the footer links.
-- **Owner:** DEV (copy already written) · **Effort:** M · **Blocked by:** nothing — can start now.
-
-### P0-2 · Make the lead form actually deliver in production
-`components/contact-form.tsx` → `app/api/contact/route.ts` writes email + D1 **best-effort**
-(never throws), so a misconfigured production Worker shows the visitor "success" while
-**silently dropping the lead** — the one thing a lead-gen site cannot do.
-- **Needs:** Resend account + **verified sending domain**; set `RESEND_API_KEY`,
-  `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` as Worker secrets (`wrangler secret put`); confirm
-  the **remote D1 `leads` table** exists (`pnpm db:migrate`; DB `trinity-leads` is already
-  bound). Verify with `wrangler secret list` + a real test submission after deploy.
-- **Email deliverability [HIGH-RISK]:** add **SPF + DKIM + DMARC** (`p=none` to start) on the
-  sending domain, or Resend mail lands in spam and the lead notifications vanish.
-- **Owner:** BOTH (client: Resend signup + DNS · dev: secrets, migration, test) · **Effort:** M.
+### P0-2 · Make the lead form actually deliver
+`components/contact-form.tsx` → `app/api/contact/route.ts` writes email and D1 **best-effort**
+(never throws), so a misconfigured Worker shows the visitor "success" while **silently dropping
+the lead** — the one thing a lead-gen site cannot do.
+- **Needs:** Resend account + **verified sending domain**; `RESEND_API_KEY`, `CONTACT_TO_EMAIL`,
+  `CONTACT_FROM_EMAIL` as Worker secrets; remote D1 table via `pnpm db:migrate`.
+- **[HIGH-RISK] deliverability:** add **SPF + DKIM + DMARC** (`p=none` to start) or Resend mail
+  lands in spam and the notifications vanish.
+- **Owner:** BOTH · **Blocked by:** client Resend signup + DNS access (`CLIENT-ASKS` #5)
 
 ---
 
 ## 🟠 P1 — Critical
 
-### A. Client facts to settle (placeholder values shipping today)
-These are encoded tentatively in `lib/site.ts` and the copy. Confirm before cutover so nothing
-is redone. Full context in the `trinity-open-decisions` memory.
+### A. Client facts still to settle
+Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-ASKS.md`**.
 
-| # | Decision | Shipping now | Why it matters | Owner |
-|---|---|---|---|---|
-| P1-1 | **Phone** — single vs 3 county lines | single `(813) 279-6785` (`SITE.phoneDisplay`) | wrong/!split number = lost calls; the old site had Hillsborough / Pasco / Pinellas lines | CLIENT |
-| P1-2 | **Founding year** — 2007 vs 2011 | `foundedYear: 2007`, `yearsLabel "18+"`, "since 2007" sitewide | factual accuracy; state records say 2011; drives the stat + tagline | CLIENT |
-| P1-3 | **Canonical NAP / address** | none (JSON-LD omits address/geo on purpose; Contact leads with "we come to you") | needed for `LocalBusiness` schema, Contact, Privacy; **NAP consistency [HIGH-RISK] for local SEO** | CLIENT |
-| P1-4 | **Provisional stats** | `12k+` doors, `4.9★`, `18+` yrs, `6` cities (`STATS`, homepage) | never invent numbers — confirm real figures or soften the copy | CLIENT |
-| P1-5 | **Office hours + public email** | hours in code as tentative (Mon–Sat 7–9, closed Sun, 24/7 emerg.); no contact email | Contact/schema correctness | CLIENT |
-| P1-6 | **Brands install-vs-service split** | **data already corrected** in `BRAND_CATALOG` and rendered correctly on `/doors/brands/` | just needs Jason's sign-off; then delete the stale `BRANDS` export (P2-11) | CLIENT confirm |
+| # | Decision | Shipping now | Owner |
+|---|---|---|---|
+| P1-1 | **Phone — which number leads sitewide** | Contact page lists **all three county lines** ✅. Everywhere else still uses the Pasco number, while their trucks and BBB lead with Hillsborough. | CLIENT |
+| P1-2 | **Founding year** | "since 2007" sitewide. Four conflicting sources: 2007 (logo/trucks), 2010 (Yelp), 2011 (BBB + Sunbiz). | CLIENT |
+| P1-3 | **Canonical NAP / address** | JSON-LD omits address/geo on purpose. We have 18125 N US Hwy 41 Ste 208, Lutz FL 33549 pending confirmation. **[HIGH-RISK] for local SEO.** | CLIENT |
+| P1-4 | **Provisional stats** | `12k+` doors, `4.9★`, `18+` yrs, `6` cities. Note Google now shows **5.0 from 597 reviews**. | CLIENT |
+| P1-5 | **Office hours + public email** | Hours conflict: Google says Mon–Sat 7am–9pm, their door says Mon–Fri 8am–5:30pm. No public email exists. | CLIENT |
+| P1-6 | **Brand install-vs-service split** | Data already corrected in `BRAND_CATALOG` and rendering correctly. Needs sign-off only. | CLIENT |
 
-> ✅ **Reviews are NOT an issue** — the 15-day-old note about "fake testimonials" is resolved:
-> the homepage renders 4 real Google reviews (`app/page.tsx:52`) and `/about/reviews/` renders
-> the 8 real `GOOGLE_REVIEWS`. No fabricated names render anywhere.
+### B. Keys still needed
 
-### B. Core-feature keys & SEO for the cutover
-
-| # | Item | State | What's needed | Owner |
-|---|---|---|---|---|
-| P1-7 | **Housecall Pro booking URL** | `NEXT_PUBLIC_BOOKING_URL` unset → every "Book a Repair" / "Book Online" / "Confirm Booking" CTA falls back to `#book` (does nothing). **Core conversion path is dead.** | Get the URL from HCP **Settings → Booking → Online Booking → Booking page Link**, set the env var, rebuild. (Modal embed = P3-2.) *No MAX plan needed — validated.* | BOTH |
-| P1-8 | **Real Turnstile keys** | always-pass **test** keys → no real spam protection on the lead form | Create the widget in Cloudflare → Turnstile; set `NEXT_PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` | BOTH |
-| P1-9 | **Legacy WordPress 301 map [HIGH-RISK]** | `next.config.ts` has only 4 redirects; the full old-URL → new-IA map is a `TODO` (line 18) | Export the old WP URL list, map 1:1 (no chains) in `redirects()`. Skipping this drops rankings + backlinks overnight | BOTH |
-| P1-10 | **Sitemap is incomplete** | `app/sitemap.ts` declares only **2 of ~33** URLs (`/`, `/get-service/`) | Extend to all real routes before submitting to Search Console | DEV — can do now |
-| P1-11 | **Canonical / site URL at cutover** | every page's `canonical` is hardcoded to `trinitygaragedoorservice.com` (good), but `metadataBase` / `NEXT_PUBLIC_SITE_URL` default to a stale `*.pages.dev` / `workers.dev` host → OG URLs point at the wrong host | Set `NEXT_PUBLIC_SITE_URL=https://trinitygaragedoorservice.com` in `.env.local` **before** `pnpm run deploy` (it's baked at build time) | DEV — at cutover |
+| # | Item | State | Owner |
+|---|---|---|---|
+| P1-8 | **Real Turnstile keys** | Always-pass **test** keys, so no real spam protection on the form. Needs a widget in Cloudflare → Turnstile. | BOTH |
 
 ---
 
 ## 🟡 P2 — Recommended before launch
 
-- **P2-1 · Rework the homepage "booking" mock.** `app/page.tsx:328-376` renders a **fake
-  calendar hardcoded to "June 2026"** (now a *past* month) with fake time slots; "Confirm
-  Booking" → `#book` (dead until P1-7). It reads as a broken widget. Replace with the real HCP
-  button/embed or a clean CTA, and point the hero's `#book` link (`app/page.tsx:98`) at
-  `/book-a-repair/` for consistency. **DEV.**
-- **P2-2 · Homepage ZIP "check your area" mock is non-functional.** The service-area block has a
-  decorative ZIP input that does nothing. Either simplify it so it doesn't look broken, or build
-  the real checker (P3-1). **DEV.**
-- **P2-3 · Analytics + Search Console.** Nothing is wired. Add **Cloudflare Web Analytics**
-  (cookieless, no banner) and/or **GA4**; track `tel:` taps + form-submit as conversions
-  (a lead-gen site with no attribution can't tell what pays); verify **Google Search Console +
-  Bing**. **DEV.**
-- **P2-4 · Google Business Profile [HIGH-RISK].** Maps is usually the #1 lead source for local
-  trades. Claim + optimize; keep NAP identical to the site. **CLIENT.**
-- **P2-5 · Favicon + apple-touch-icon (180×180) + `theme-color`.** None exist anywhere — the
-  browser tab shows a blank default. **DEV** (needs a source mark).
-- **P2-6 · Open Graph + Twitter share image (1200×630).** `lib/seo.ts` sets no OG image, so
-  texted/shared links show no preview (big for local word-of-mouth). **DEV** (+ one image).
-- **P2-7 · Custom branded 404 page.** No `app/not-found.tsx` — uses the bare Next default. **DEV.**
-- **P2-8 · Security headers.** None configured. Add CSP, `X-Content-Type-Options`,
-  `Referrer-Policy`, `X-Frame-Options`, HSTS (Cloudflare rule / `_headers` / `next.config`). **DEV.**
-- **P2-9 · Accessibility WCAG 2.1 AA pass [HIGH-RISK].** No small-business ADA exemption
-  (~3,100 federal web suits in 2025, most opening with $10–25k demand letters). Cover alt text,
-  labeled fields, keyboard focus + visible focus ring, 4.5:1 contrast, logical headings; publish
-  an **accessibility statement**; the optional Radix NavigationMenu/Accordion a11y upgrade (G8)
-  fits here. **Do NOT install an accessibility overlay widget** (plaintiffs specifically target
-  overlay sites). **DEV.**
-- **P2-10 · Core Web Vitals pass.** Lighthouse the key templates; watch the hero video weight
-  and image sizing (target LCP ≤2.5s, INP ≤200ms, CLS ≤0.1). **DEV.**
-- **P2-11 · Dead-code cleanup in `lib/site.ts`.** The stale `REVIEWS` (fabricated samples) and
-  `BRANDS` (wrong install/service relationships) exports are now unused — remove them so they
-  can't be reused by accident. **DEV.**
-- **P2-12 · Privacy policy review.** Template needs the real mailing address, effective date,
-  and a contact email; name what the form/analytics actually collect; US needs no GDPR banner,
-  but disclose GA4 cookies if used. **BOTH** (client/legal review).
-- **P2-13 · Imagery.** Owner headshot is an **AI placeholder** (`public/assets/owner-jason-*`);
-  no real team photos; before/after section has only "after" shots. Swap in real photos. **CLIENT.**
-- **P2-14 · Blog build TODOs** (`content/blog/README.md`): dates are approximate; canonicalize
-  the two duplicate "noises" posts; decide the Lutz post (301 → `/service-areas/lutz/` vs keep);
-  write featured-image alt text; confirm the Shutterstock image license for the new domain. **BOTH.**
-- **P2-15 · Image alt-text audit.** New build mostly has alts; sweep to confirm none are empty
-  (the old site had 229 empty-alt images). **DEV.**
+- **P2-3 · Analytics + Search Console.** Nothing is wired, so they cannot tell which marketing
+  works. Add **Cloudflare Web Analytics** (cookieless, no banner) and/or GA4; track `tel:` taps and
+  form submits as conversions; verify Search Console + Bing. **BOTH** (needs account access).
+- **P2-4 · Google Business Profile [HIGH-RISK].** Usually the #1 lead source for local trades, and
+  they already have **5.0 from 597 reviews**. Claim, optimise, keep NAP identical to the site. **CLIENT.**
+- **P2-9 · Accessibility, broader WCAG 2.1 AA pass [HIGH-RISK].** Contrast failures are fixed;
+  still to do: keyboard focus audit, an **accessibility statement** page, and the optional Radix
+  NavigationMenu/Accordion upgrade (G8). **Do NOT install an accessibility overlay widget** —
+  plaintiffs specifically target overlay sites. **DEV.**
+- **P2-10 · Core Web Vitals pass.** Not yet measured. Watch the hero video weight and image sizing
+  (target LCP ≤2.5s, INP ≤200ms, CLS ≤0.1). **DEV.**
+- **P2-12 · Privacy policy review.** Needs the real mailing address, effective date and a contact
+  email; should name what the form and analytics collect. **BOTH** (client/legal).
+- **P2-14 · Blog follow-ups.** Featured-image alt text is written ✅. Still open: real publish dates
+  (ours are approximate month-precision, so `BlogPosting` schema deliberately omits
+  `datePublished`); canonicalise the two near-duplicate "noises" posts; the Lutz post decision;
+  confirm the Shutterstock licence covers the new domain. **BOTH.**
 
 ---
 
-## 🟢 P3 — Post-launch / deferred (each needs an external key or is a future feature)
+## 🟢 P3 — Post-launch / deferred
 
-- **P3-1 · Google "are you in our area?" address checker.** Replaces the homepage ZIP mock.
-  Needs a Google Maps key (**Places API (New)** + Maps JS; **legacy Autocomplete is closed to
-  new customers — validated**). Card-on-file required but real spend ≈ $0 (10,000 free
-  Essentials calls/mo; the old $200 credit was retired Mar 2025). Build plan:
+- **P3-1 · Google "are you in our area?" address checker.** Replaces the homepage service-area
+  CTA. Needs a Maps key (**Places API New** + Maps JS). Real spend ≈ $0. Plan:
   `handoff/SERVICE-AREA-CHECKER-RESEARCH.md`.
-- **P3-2 · Housecall Pro modal embed upgrade.** `components/book-online-button.tsx` currently
-  opens the booking URL in a new tab; upgrade to HCP's on-page **modal** once their embed
-  snippet is added (`TODO(HCP)` in that file). Needs the HCP login.
-- **P3-3 · HCP back-office lead sync (optional).** A MAX-plan API key could push `/contact`
-  leads into Housecall Pro as customers/jobs. **Validated: the API is back-office only — it has
-  no customer availability endpoint, so it cannot power a live in-page booking calendar.** Not
-  worth MAX for booking; only for data sync.
-- **P3-4 · Domain cutover mechanics.** Add `trinitygaragedoorservice.com` (+ `www`) as a Worker
-  Custom Domain, point DNS, set the real `NEXT_PUBLIC_SITE_URL`, redeploy, then submit the
-  sitemap to Search Console and spot-check the 301s. (Pairs with P1-9/10/11.)
+- **P3-2 · Housecall Pro modal embed.** `components/book-online-button.tsx` opens the booking URL
+  in a new tab today; upgrade to HCP's on-page modal once their embed script is added.
+- **P3-3 · HCP back-office lead sync (optional).** Zapier on the Essentials plan can push contact
+  form leads into HCP. **The MAX API cannot power a live booking calendar** — validated.
+- **P3-4 · Domain cutover.** Add `trinitygaragedoorservice.com` (+ `www`) as a Worker Custom
+  Domain, point DNS, set the real `NEXT_PUBLIC_SITE_URL`, redeploy, submit the sitemap, spot-check
+  the 301s.
 
 ---
 
-## ✅ Unblocked — Claude can start these now (no client input, no keys)
-1. **P0-1** Build the four `/resources/*` pages (copy exists) — kills the live footer 404s.
-2. **P1-10** Complete `app/sitemap.ts` (all ~33 routes).
-3. **P2-1 / P2-2** Rework the fake booking calendar + ZIP mock so nothing reads as broken.
-4. **P2-5 / P2-6 / P2-7** Favicon set, OG share image, branded 404.
-5. **P2-8** Security headers.
-6. **P2-11** Delete the dead `REVIEWS` / `BRANDS` exports.
-7. **P2-15** Alt-text sweep.
-8. **Housekeeping:** 2 local doc commits are still unpushed to GitHub (`git push origin main`).
+## 🔧 Dev housekeeping (not launch blocking)
 
-## Owner split at a glance
-- **CLIENT must provide/decide:** phone, founding year, NAP/address, stats, hours + contact
-  email, brand-split sign-off (P1-1…6); the HCP booking URL and Turnstile widget and Resend
-  account (P0-2, P1-7/8); real photos (P2-13); Google Business Profile (P2-4); privacy/legal
-  review (P2-12); the old-URL list for redirects (P1-9).
-- **DEV owns everything else** and can begin the "Unblocked" list immediately.
+- **Unpushed commits.** Several local commits are not on GitHub yet (`git push origin main`).
+- **Project skills are gitignored.** `.gitignore` ignores `/.claude/skills/`, so the 6 skills we
+  built do not travel with the repo. Un-ignore if they should.
+- **`/promo-discounts/`** currently 301s to `/contact/`; no `/specials/` page exists. Confirm.
+- **`.env.local` carries ~11 dead keys** (Stripe, reCAPTCHA, shadcn, Stitch) left over from an
+  older stack. Harmless but worth pruning.
 
 ---
-*Validation date 2026-07-07. Google Maps + Housecall Pro facts re-confirmed against current
-official docs; SEO/ADA guidance per Google Search Central, web.dev, W3C-WAI, ADA.gov. The two
-integration research briefs in `handoff/` remain accurate as of this date.*
+
+## Cleared log
+
+### 2026-07-28 — Real photography and profile links
+| Item | Result |
+|---|---|
+| **P2-13** Imagery | **DONE.** The **AI-generated owner photo is gone**, replaced with Jason's real studio portrait. Real team, fleet, job and technician photos placed sitewide. 53 curated images. Detail + remaining gaps: `MEDIA-INVENTORY.md`. |
+| Before/after photos | **DONE.** Recovered 25 genuine pairs by splitting the client's fused composites. Homepage "Before photo coming soon" placeholder is gone. |
+| Photo repetition | **DONE.** Six photos previously covered 13 pages; every page now has its own. |
+| Footer profile links | **DONE.** Instagram, Facebook, Google, Yelp, BBB, Angi wired. `sameAs` schema went 1 → 8 profiles. |
+| Contact phone lines | **DONE.** All three county numbers listed with their cities, tap-to-call. |
+
+### 2026-07-27 — Resources build + launch-blocking fixes
+Verified: build green (50 pages), linkinator **134 links / 0 broken**, all 17 new routes 200.
+
+| Item | Result |
+|---|---|
+| **P0-1** Resources pages | **DONE + re-verified 2026-07-28.** `/resources/{faq,safety-tips,troubleshooting,blog}/` all return 200 live, the footer links to all four, and **13/13 blog posts return 200**. The sitewide footer 404s are gone. |
+| **P1-7** Housecall Pro booking | **DONE.** Real booking URL wired; every Book Online / Book a Repair CTA works. |
+| **P1-9** Legacy 301 map | **DONE.** Full WordPress map in `next.config.ts`. |
+| **P1-10** Sitemap | **DONE.** 2 URLs → 45, derived from `ROUTES`/`AREAS`/posts. |
+| **P1-11** Canonical / site URL | **DONE.** Was publishing a staging domain in robots/sitemap/JSON-LD while canonicals said the live domain. |
+| **P2-1 / P2-2** Homepage mocks | **DONE.** Fake calendar (stuck on a past month) and dead ZIP input both replaced. |
+| **P2-5 / P2-6 / P2-7** Brand assets | **DONE.** Favicon set, 1200×630 OG + Twitter image, branded 404. |
+| **P2-8** Security headers | **DONE.** HSTS, nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, conservative CSP. |
+| **P2-9** Contrast | **PARTIAL → see P2-9 above.** All real axe failures fixed; remaining reports are false positives (axe cannot resolve the gradient hero). |
+| **P2-11** Dead code | **DONE.** `REVIEWS`, `BRANDS`, `pageMetadata()` removed. |
+| **P2-15** Alt text | **DONE (already clean).** 33 images, all with good alts. |
+| Dead footer links | **DONE.** 4 dead `href="#"` socials + dead BBB link fixed; Privacy Policy link added. |
+| Blog on Workers | **DONE.** Posts baked at build time; `fs` reads fail in the Worker. |
+
+---
+*Facts validated 2026-07-07 against Google Search Central, web.dev, W3C-WAI, ADA.gov, and current
+Google Maps + Housecall Pro docs. Media and business-listing facts validated 2026-07-28.*
