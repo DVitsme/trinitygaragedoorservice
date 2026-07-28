@@ -4,9 +4,20 @@
  *
  * UNCONFIRMED values (settle before the real-domain cutover — see SOURCE-MATERIAL-MAP.md):
  *   - phone: old site had 3 county numbers; this is the single number the live homepage uses
- *   - foundedYear: logo says 2007; state records say 2011
+ *   - foundedYear: SETTLED 2026-07-28, the client confirmed 2007
  *   - stats: provisional figures shown with a disclaimer
  */
+
+/**
+ * Founding year. **Client decision 2026-07-28: 2007 is the answer, use it everywhere.**
+ * It is the year on the logo lockup ("Opening Doors Since 2007") and on the truck livery.
+ * Note for the record: BBB and Florida state records list incorporation as 2011, and Yelp says
+ * 2010. The client has confirmed 2007 as the date the business started trading, so that is what
+ * the site says.
+ *
+ * Anything expressing "years in business" must derive from this, never hardcode a number.
+ */
+const FOUNDED_YEAR = 2007;
 
 export const SITE = {
   name: "Trinity Garage Door Service",
@@ -15,8 +26,9 @@ export const SITE = {
   phoneHref: "tel:18132796785",
   areaLabel: "Lutz · Tampa Bay, FL",
   license: "FL GD13010 / GDI-09484",
-  foundedYear: 2007,
-  yearsLabel: "18+",
+  foundedYear: FOUNDED_YEAR,
+  /** Derived, so it can never drift out of date. Recomputed on every build. */
+  yearsLabel: `${new Date().getFullYear() - FOUNDED_YEAR}+`,
   instagram: "https://www.instagram.com/trinitygaragedoorservice/",
   /** Real Housecall Pro booking URL comes from env; falls back to the #book anchor. */
   bookingHref: process.env.NEXT_PUBLIC_BOOKING_URL || "#book",
@@ -79,7 +91,7 @@ export const SERVICE_OPTIONS = [
 
 /** Provisional homepage stats (shown with a "figures provisional" disclaimer). */
 export const STATS = [
-  { value: "18", accent: "+", label: "Years of Service" },
+  { value: String(new Date().getFullYear() - FOUNDED_YEAR), accent: "+", label: "Years of Service" },
   { value: "12k", accent: "+", label: "Doors Serviced" },
   { value: "4.9", accent: "★", label: "Average Rating" },
   { value: "6", accent: "", label: "Cities Covered" },

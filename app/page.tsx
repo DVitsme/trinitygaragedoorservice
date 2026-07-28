@@ -28,7 +28,7 @@ const whyCards: { icon: ReactNode; title: string; body: string }[] = [
 ];
 
 const stats = [
-  { v: <>18<span className="text-accent">+</span></>, label: "Years of Service" },
+  { v: <>{new Date().getFullYear() - SITE.foundedYear}<span className="text-accent">+</span></>, label: "Years of Service" },
   { v: <>12k<span className="text-accent">+</span></>, label: "Doors Serviced" },
   { v: <>4.9<span className="text-accent">★</span></>, label: "Average Rating" },
   { v: <>6</>, label: "Cities Covered" },
@@ -143,9 +143,9 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="relative">
-                <Image src={asset("team-group-in-showroom.jpg")} alt="The Trinity Garage Door team in their Tampa Bay showroom" width={620} height={430} className="h-[430px] w-full rounded-[8px] border-2 border-ink object-cover" />
+                <Image src={"/team/team-with-banner.jpg"} alt="The Trinity Garage Door team behind their branded banner" width={620} height={430} className="h-[430px] w-full rounded-[8px] border-2 border-ink object-cover" />
                 <div className="absolute -right-4 -top-4 rounded-[8px] border-2 border-ink bg-accent px-[18px] py-3.5 text-center">
-                  <div className="font-display text-[32px] font-black leading-none text-white">18+</div>
+                  <div className="font-display text-[32px] font-black leading-none text-white">{SITE.yearsLabel}</div>
                   <div className="mt-[3px] text-[10.5px] font-extrabold uppercase leading-tight tracking-[0.06em] text-white">Years in<br />Tampa Bay</div>
                 </div>
                 <div className="absolute -bottom-[34px] -left-[26px] w-[168px] rounded-[8px] border-2 border-accent bg-ink p-2.5 max-nav:hidden">

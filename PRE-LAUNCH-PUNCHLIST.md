@@ -48,9 +48,8 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
 | # | Decision | Shipping now | Owner |
 |---|---|---|---|
 | P1-1 | **Phone — which number leads sitewide** | Contact page lists **all three county lines** ✅. Everywhere else still uses the Pasco number, while their trucks and BBB lead with Hillsborough. | CLIENT |
-| P1-2 | **Founding year** | "since 2007" sitewide. Four conflicting sources: 2007 (logo/trucks), 2010 (Yelp), 2011 (BBB + Sunbiz). | CLIENT |
 | P1-3 | **Canonical NAP / address** | JSON-LD omits address/geo on purpose. We have 18125 N US Hwy 41 Ste 208, Lutz FL 33549 pending confirmation. **[HIGH-RISK] for local SEO.** | CLIENT |
-| P1-4 | **Provisional stats** | `12k+` doors, `4.9★`, `18+` yrs, `6` cities. Note Google now shows **5.0 from 597 reviews**. | CLIENT |
+| P1-4 | **Provisional stats** | `12k+` doors, `4.9★`, `6` cities (years now derived from 2007 ✅). Note Google now shows **5.0 from 597 reviews**. | CLIENT |
 | P1-5 | **Office hours + public email** | Hours conflict: Google says Mon–Sat 7am–9pm, their door says Mon–Fri 8am–5:30pm. No public email exists. | CLIENT |
 | P1-6 | **Brand install-vs-service split** | Data already corrected in `BRAND_CATALOG` and rendering correctly. Needs sign-off only. | CLIENT |
 
@@ -115,6 +114,7 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
 ### 2026-07-28 — Real photography and profile links
 | Item | Result |
 |---|---|
+| **P1-2** Founding year | **SETTLED.** Client confirmed **2007**. `FOUNDED_YEAR` in `lib/site.ts` is now the single source and the years-in-business figure derives from it, so it cannot go stale. Fixed a live bug: the site showed **18+** when 2026 minus 2007 is **19**. |
 | **P2-13** Imagery | **DONE.** The **AI-generated owner photo is gone**, replaced with Jason's real studio portrait. Real team, fleet, job and technician photos placed sitewide. 53 curated images. Detail + remaining gaps: `MEDIA-INVENTORY.md`. |
 | Before/after photos | **DONE.** Recovered 25 genuine pairs by splitting the client's fused composites. Homepage "Before photo coming soon" placeholder is gone. |
 | Photo repetition | **DONE.** Six photos previously covered 13 pages; every page now has its own. |

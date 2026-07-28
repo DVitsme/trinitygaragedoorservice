@@ -12,7 +12,7 @@ Things only Jason or Simone can answer or provide. Tick them off as they come in
 | # | Ask | Why it matters | Status |
 |---|---|---|---|
 | 1 | **Which phone number is the main one?** | **Contact page now lists all three county lines.** Everywhere else still shows the Pasco number, while their trucks and BBB show the Hillsborough one. Tell me which should be the main number sitewide. | ◐ |
-| 2 | **What year did the business start?** | Their logo and trucks say 2007. State records say 2011. Yelp says 2010. It is on the logo, so we need the real answer. | ☐ |
+| 2 | ~~What year did the business start?~~ | **ANSWERED 2026-07-28: 2007.** Now used sitewide, and the "years in business" figure is calculated from it so it can never go stale. | ☑ |
 | 3 | **Confirm the address** | We have 18125 N US Hwy 41, Ste 208, Lutz FL 33549. Needed for Google and the site. | ☐ |
 | 4 | **What are the real office hours?** | Google says Mon to Sat, 7am to 9pm. Their front door says Mon to Fri, 8am to 5:30pm. | ☐ |
 | 5 | **Email account for website leads** | Sign up for Resend (free) and verify their domain, or give me DNS access to do it. **Without this the contact form looks like it works but no one gets the lead.** | ☐ |
@@ -26,7 +26,7 @@ Things only Jason or Simone can answer or provide. Tick them off as they come in
 |---|---|---|---|
 | 7 | **Cloudflare account access** | To turn on real spam protection for the form. Takes 2 minutes. | ☐ |
 | 8 | **Domain / DNS access** | To point trinitygaragedoorservice.com at the new site. | ☐ |
-| 9 | **Confirm the numbers we quote** | Site says 12,000+ doors serviced, 18+ years, 4.9 stars, 6 cities. Are these true? | ☐ |
+| 9 | **Confirm the numbers we quote** | Site says 12,000+ doors serviced, 4.9 stars, 6 cities. Are these true? (Years is now calculated from 2007, so that one is handled.) | ☐ |
 | 10 | **Confirm brands they INSTALL vs only REPAIR** | We list install = Clopay, C.H.I., Hörmann, Amarr, LiftMaster. Everything else repair only. | ☐ |
 | 11 | **Mailing address for the privacy policy** | Legal requirement. Can be the Lutz suite. | ☐ |
 | 12 | **Have a lawyer glance at the privacy policy** | It is a solid starting template, not legal advice. | ☐ |
@@ -72,6 +72,7 @@ The site is fully stocked with real photos now. These would make it noticeably b
 ---
 
 ## Changelog
+- **2026-07-28** Founding year answered: **2007**. Site now says 19+ years (was showing a stale 18+).
 - **2026-07-28** Contact page now lists all three county lines, so ask #1 is half answered: we
   still need to know which number leads everywhere else on the site.
 - **2026-07-28** Created. Added photo/video asks and quick decisions surfaced by the media hunt.
