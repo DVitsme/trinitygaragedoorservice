@@ -41,9 +41,38 @@ There are **two Yelp pages** and **two Facebook pages** for the business.
 **Why it matters:** Reviews and traffic get split between them. They should claim and merge the
 duplicates. This is free and takes a phone call.
 
-### Their founding year is inconsistent
-Logo and trucks say 2007. State records say 2011. Yelp says 2010.
-**Why it matters:** It is printed on their logo. Worth getting straight once and using everywhere.
+### Their start date says something different in four places
+**Decided: the website uses 2007.** That is settled and live. But the rest of the internet does
+not agree, and that is worth a two minute conversation.
+
+| Where | What it says |
+|---|---|
+| Their logo, trucks and website | **2007** |
+| Yelp ("Established in") | **2010** |
+| BBB ("Business started") | **2011** |
+| Florida state records (Sunbiz) | **2011** (incorporated) |
+| Angi ("16 years of experience") | implies about **2010** |
+
+**The likely explanation, and it is a perfectly normal one:** Jason started doing the work in
+2007, and formally incorporated the company in 2011. Those are two different facts, and both can
+be true. "Opening Doors Since 2007" is about when they started serving customers.
+
+**Why it matters:**
+1. **Google cross-checks business details across directories.** When the same business reports
+   different facts in different places, it weakens confidence in the listing, and local search
+   ranking is built on exactly that kind of consistency.
+2. **A customer can see it.** Someone who reads "Since 2007" on the site and then finds "Business
+   started 2011" on BBB may read it as a stretch, even though it is not.
+
+**What to do:**
+- **Update the "established" field on Yelp and BBB to 2007.** They control both. This is the fix.
+- **Leave the state record alone.** Sunbiz is a legal record of *incorporation*, it is not wrong
+  and should not be changed. It is answering a different question.
+- **Fix the Angi "years of experience"** number while they are in there.
+
+**Ask Jason to confirm the story:** did he start trading in 2007 and incorporate in 2011? If so
+everything above holds and it is a simple listings cleanup. If the business genuinely began in
+2011, we should change the logo tagline and the site, which is a bigger conversation.
 
 ### Two blog posts were advertising expired deals
 Old posts still promoted "$50 off springs" and an "August Special, 10% off". We removed the
@@ -115,5 +144,6 @@ Ranked by impact.
 ---
 
 ## Changelog
+- **2026-07-28** Rewrote the founding-year item: 2007 is decided and live, so it is now about the four sources disagreeing and what to fix on Yelp/BBB/Angi.
 - **2026-07-28** Created. Added findings from the media hunt: AI photo replaced, phone/hours
   conflicts, duplicate listings, expired blog offers.

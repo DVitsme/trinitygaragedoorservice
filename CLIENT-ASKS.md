@@ -32,6 +32,23 @@ Things only Jason or Simone can answer or provide. Tick them off as they come in
 | 12 | **Have a lawyer glance at the privacy policy** | It is a solid starting template, not legal advice. | ☐ |
 | 13 | **Is "veteran owned" true?** | It is on their Angi profile but nowhere on their website. If true it is a strong selling point we should use. | ☐ |
 | 14 | **Which Facebook page is the real one?** | There are two. We are linking the LLC one. The other is an "Inc" page we could not open. | ☐ |
+| 15 | **Confirm the 2007 story** | Did Jason start doing the work in 2007 and incorporate in 2011? If yes, everything is consistent and it is just a listings cleanup. If the business really began in 2011, the logo tagline needs rethinking. | ☐ |
+
+---
+
+## 🔧 FOR THEM TO GO FIX (their own listings, not our website)
+
+These do not block us. They are things only Trinity can change, and each one helps Google trust
+their business details.
+
+| # | Action | Why it matters | Status |
+|---|---|---|---|
+| A | **Change "established" to 2007 on Yelp and BBB** | Yelp says 2010, BBB says 2011, the site says 2007. Mismatched details weaken local search ranking. **Leave the Florida state record alone** — that one records incorporation and is a different fact. | ☐ |
+| B | **Fix "16 years of experience" on Angi** | Implies 2010. Should match 2007. | ☐ |
+| C | **Claim and merge the duplicate Yelp page** | There are two. Reviews and traffic get split between them. | ☐ |
+| D | **Sort out the two Facebook pages** | An LLC page and an Inc page. Pick one and retire the other. | ☐ |
+| E | **Fix the hours on Google** | Google says Mon to Sat 7am to 9pm, their front door says Mon to Fri 8am to 5:30pm. Customers see the Google one. | ☐ |
+| F | **Claim and optimise the Google Business Profile** | Their single biggest source of local leads. They already have 5.0 stars from 597 reviews. | ☐ |
 
 ---
 
@@ -41,10 +58,10 @@ The site is fully stocked with real photos now. These would make it noticeably b
 
 | # | Ask | Why it matters | Status |
 |---|---|---|---|
-| 15 | **Original video files** for the 3 minute promo and the 13 second door clip | **Biggest visual win available.** The copies online are low quality and one is in a format browsers refuse to play. The homepage hero uses video. | ☐ |
-| 16 | **2 or 3 job photos per city** (Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, Tampa) | We have hundreds of job photos but no idea which town each is in, so city pages use generic ones. | ☐ |
-| 17 | **The 47 photos off their Yelp page** | Yelp blocks us from downloading them. Easier for them to send. | ☐ |
-| 18 | **Any commercial job photos** | They sell commercial doors but we found zero photos of commercial work. | ☐ |
+| 16 | **Original video files** for the 3 minute promo and the 13 second door clip | **Biggest visual win available.** The copies online are low quality and one is in a format browsers refuse to play. The homepage hero uses video. | ☐ |
+| 17 | **2 or 3 job photos per city** (Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, Tampa) | We have hundreds of job photos but no idea which town each is in, so city pages use generic ones. | ☐ |
+| 18 | **The 47 photos off their Yelp page** | Yelp blocks us from downloading them. Easier for them to send. | ☐ |
+| 19 | **Any commercial job photos** | They sell commercial doors but we found zero photos of commercial work. | ☐ |
 
 ---
 
@@ -52,12 +69,12 @@ The site is fully stocked with real photos now. These would make it noticeably b
 
 | # | Ask | Options | Status |
 |---|---|---|---|
-| 19 | The old "promo discounts" page | Send visitors to Contact, or bring the promos back? | ☐ |
-| 20 | Their old Lutz blog post | Keep it as a blog post, or point it at the Lutz service area page? | ☐ |
-| 21 | An old blog post says repairs run **"$65 to $600"** | Still accurate, or should we cut the prices? | ☐ |
-| 22 | Blog post dates | Ours are approximate. Do they have the real publish dates? | ☐ |
-| 23 | One blog image is a paid stock photo | Does their licence cover the new website? If not we swap it. | ☐ |
-| 24 | Manufacturer product photos | Are they allowed to use Clopay / C.H.I. / LiftMaster images as a dealer? | ☐ |
+| 20 | The old "promo discounts" page | Send visitors to Contact, or bring the promos back? | ☐ |
+| 21 | Their old Lutz blog post | Keep it as a blog post, or point it at the Lutz service area page? | ☐ |
+| 22 | An old blog post says repairs run **"$65 to $600"** | Still accurate, or should we cut the prices? | ☐ |
+| 23 | Blog post dates | Ours are approximate. Do they have the real publish dates? | ☐ |
+| 24 | One blog image is a paid stock photo | Does their licence cover the new website? If not we swap it. | ☐ |
+| 25 | Manufacturer product photos | Are they allowed to use Clopay / C.H.I. / LiftMaster images as a dealer? | ☐ |
 
 ---
 
@@ -65,13 +82,14 @@ The site is fully stocked with real photos now. These would make it noticeably b
 
 | # | Ask | Why it matters | Status |
 |---|---|---|---|
-| 25 | **Housecall Pro plan level** | Their marketing tools and lead sync need the Essentials plan. Booking already works on any plan. | ☐ |
-| 26 | **Google account access** | To turn on the "are you in our service area?" address checker. Costs about nothing to run. | ☐ |
-| 27 | **Google Business Profile access** | So we can optimise the single biggest source of local leads. | ☐ |
+| 26 | **Housecall Pro plan level** | Their marketing tools and lead sync need the Essentials plan. Booking already works on any plan. | ☐ |
+| 27 | **Google account access** | To turn on the "are you in our service area?" address checker. Costs about nothing to run. | ☐ |
+| 28 | **Google Business Profile access** | So we can optimise the single biggest source of local leads. | ☐ |
 
 ---
 
 ## Changelog
+- **2026-07-28** Added a "for them to go fix" section (their listings) and a question to confirm the 2007 trading vs 2011 incorporation story.
 - **2026-07-28** Founding year answered: **2007**. Site now says 19+ years (was showing a stale 18+).
 - **2026-07-28** Contact page now lists all three county lines, so ask #1 is half answered: we
   still need to know which number leads everywhere else on the site.
