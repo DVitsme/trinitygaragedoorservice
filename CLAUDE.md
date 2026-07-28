@@ -28,6 +28,20 @@ The **Book a Repair** page (`app/book-a-repair/`, ported from `handoff/06-book-a
 
 **REVISIT after we have the Housecall Pro login + account data:** grab the real booking URL + embed snippet, decide modal vs inline-iframe, and evaluate whether MAX is worth it for lead sync. Until then the Book a Repair buttons open `bookingHref` (set the env var to make them live).
 
+## 📋 LIVING CLIENT DOCS — keep these current (they are used in meetings)
+
+Two glanceable docs at the repo root that the user reads **during client meetings**. They are
+deliberately written in plain language, no jargon, short lines.
+
+- **`CLIENT-ASKS.md`** — everything we need FROM Jason/Simone (decisions, accounts, photos),
+  grouped by urgency with tick boxes.
+- **`CLIENT-NOTES.md`** — what to TELL them (wins, problems found, advice worth giving).
+
+**Whenever work surfaces a new client decision, blocker, or finding, add it to the right doc,
+bump the "Last updated" date, and append a one-line changelog entry.** When an item is answered
+or resolved, tick it and move it out rather than leaving it stale. These summarise; the depth
+lives in `PRE-LAUNCH-PUNCHLIST.md`, `MEDIA-INVENTORY.md`, and `LAUNCH-CHECKLIST.md`.
+
 ## Project skills (`.claude/skills/`) — invoke by name, or they auto-trigger by description
 
 Repeatable workflows + hard-won knowledge, pulled out of this file so they load on demand and can run
