@@ -124,7 +124,10 @@ export function Breadcrumb({ items, onDark = true }: { items: { label: string; h
           ) : (
             <span className={onDark ? "text-white" : "text-ink"}>{it.label}</span>
           )}
-          {i < items.length - 1 && <span className="opacity-50">/</span>}
+          {/* Decorative separator. `opacity-50` compounded with the inherited text-white/70 to
+              about 3.4:1, which fails WCAG AA; 80% clears it and it is hidden from screen
+              readers since it carries no meaning. */}
+          {i < items.length - 1 && <span aria-hidden="true" className="opacity-80">/</span>}
         </span>
       ))}
     </nav>

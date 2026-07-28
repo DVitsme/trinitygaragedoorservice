@@ -111,7 +111,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* Contact card */}
           <div className="mt-12 rounded-[12px] bg-ink p-[30px_32px] text-white">
-            <div className="text-[12.5px] font-extrabold uppercase tracking-[0.14em] text-accent">Need A Hand?</div>
+            <div className="text-[12.5px] font-extrabold uppercase tracking-[0.14em] text-accent-on-dark">Need A Hand?</div>
             <h2 className="m-0 mt-2.5 font-display text-[22px] font-extrabold uppercase leading-[1.15] text-white">
               We&apos;re Local, And We Answer The Phone
             </h2>

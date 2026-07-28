@@ -65,7 +65,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-[46px] flex flex-wrap items-center justify-between gap-4 border-t-2 border-[#2a2a2a] py-[22px]">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13px] font-medium text-[#6a6a6a]">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13px] font-medium text-[#8a8a8a]">
             <span>© {new Date().getFullYear()} {SITE.legalName} · Licensed &amp; Insured · {SITE.license}</span>
             <span aria-hidden="true">·</span>
             <a href="/privacy-policy/" className="text-[#8a8a8a] no-underline hover:text-accent">Privacy Policy</a>

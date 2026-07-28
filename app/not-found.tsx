@@ -28,7 +28,7 @@ export default function NotFound() {
       <section className="relative overflow-hidden border-b-[5px] border-accent bg-[#161616] px-6 py-[96px]">
         <div className="absolute inset-0" style={{ background: "radial-gradient(circle at 80% 28%, rgba(184,32,42,0.3), transparent 50%)" }} />
         <div className="relative z-[2] mx-auto max-w-[860px] text-center">
-          <div className="font-display text-[clamp(64px,12vw,132px)] font-black uppercase leading-none text-accent [text-shadow:0_2px_30px_rgba(0,0,0,0.55)]">404</div>
+          <div className="font-display text-[clamp(64px,12vw,132px)] font-black uppercase leading-none text-accent-on-dark [text-shadow:0_2px_30px_rgba(0,0,0,0.55)]">404</div>
           <h1 className="m-0 mt-3 font-display text-[clamp(26px,4.2vw,44px)] font-black uppercase leading-[1.02] tracking-[-0.015em] text-white">
             This Door <span className="inline-block bg-accent px-3 text-white">Won&apos;t Open</span>
           </h1>
