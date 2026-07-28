@@ -4,6 +4,41 @@
 grounded in the current code (not memory) and validated against live Google / Housecall Pro
 docs and current SEO/ADA guidance.
 
+---
+
+## ✅ CLEARED 2026-07-27 (built, verified, and deployed)
+
+Everything that did not need the client or an external key is **done and live** on
+`https://trinity-garage-door.derrick-2fd.workers.dev`. Verified: build green (50 pages),
+linkinator **134 links / 0 broken** against the live site, all 17 new routes 200.
+
+| Item | Result |
+|---|---|
+| **P0-1** Resources pages | **DONE.** `/resources/{faq,safety-tips,troubleshooting,blog}/` + all 13 blog posts. The sitewide footer 404s are gone. |
+| **P1-7** Housecall Pro booking | **DONE.** Real booking URL wired; every Book Online / Book a Repair CTA works. |
+| **P1-9** Legacy 301 map | **DONE.** Full WordPress map in `next.config.ts` (services, 10 brand pages, brochures, resources, booking, `/blogs/<slug>/`). |
+| **P1-10** Sitemap | **DONE.** 2 URLs → **45**, derived from `ROUTES`/`AREAS`/posts. |
+| **P1-11** Canonical / site URL | **DONE.** `NEXT_PUBLIC_SITE_URL` set; staging `pages.dev` fallback replaced with the production origin. |
+| **P2-1 / P2-2** Homepage mocks | **DONE.** Fake calendar (stuck on a past month) replaced with a real booking hand-off; dead ZIP input replaced with honest CTAs. |
+| **P2-5 / P2-6 / P2-7** Brand assets | **DONE.** Favicon set, 1200×630 OG + Twitter image, branded 404 with nav and phone CTA. |
+| **P2-8** Security headers | **DONE.** HSTS, nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy, conservative CSP. Via `next.config` (not `_headers`, a Pages convention the Worker ignores). |
+| **P2-9** Accessibility | **PARTIAL.** All real axe contrast failures fixed (footer greys, brand red on dark via a new `accent-on-dark` token, breadcrumb separator). Remaining reports are false positives (axe cannot resolve the gradient hero background). Broader WCAG pass still open. |
+| **P2-11** Dead code | **DONE.** `REVIEWS`, `BRANDS`, and `pageMetadata()` removed. |
+| **P2-15** Alt text | **DONE (already clean).** 33 images, all with good alts; the one empty alt is a correct decorative case. |
+| *(new)* Dead footer links | **DONE.** 4 dead `href="#"` socials + dead BBB link removed; Privacy Policy link added. |
+| *(new)* Blog on Workers | **DONE.** Posts are baked at build time (`scripts/generate-blog.mjs`) because `fs` reads fail in the Worker. |
+
+**Decisions still needed from tonight's work**
+- `/promo-discounts/` currently 301s to `/contact/` (no `/specials/` page exists). Confirm.
+- The Lutz blog post is live at `/resources/blog/professional-garage-door-repair-services-in-lutz/`.
+  The locked IA suggested 301ing it to `/service-areas/lutz/` instead. Confirm which.
+- `understanding-garage-doors-and-garage-door-repair` states a **"$65 to $600"** repair range
+  (the client's own 2024 copy, kept verbatim). Confirm it is still accurate or we should cut it.
+- Blog dates are month precision and approximate; `BlogPosting` schema deliberately omits
+  `datePublished` rather than assert an inferred date. Supply real dates to enable it.
+- The 6 project skills in `.claude/skills/` are **not committed** (`.gitignore` ignores
+  `/.claude/skills/`). Un-ignore them if they should travel with the repo.
+
 - **This is the master "what's left" tracker.** For the exact key/command runbook see
   **`LAUNCH-CHECKLIST.md`**; for the client-decision detail see the `trinity-open-decisions`
   memory; for the two shelved features see `handoff/SERVICE-AREA-CHECKER-RESEARCH.md` and
