@@ -267,13 +267,62 @@ they sit at `opacity: 0` until scrolled into view. Capturing with `captureBeyond
 photographs an invisible section. Scroll it into view first. The bundled `screenshot.sh` is immune
 because its very tall window puts everything in view.
 
-### Phase 3 · Match routes into Housecall Pro booking · **S** · depends on the booking modal
+### Phase 3 · Match routes into Housecall Pro booking · **S** · ✅ **DONE 2026-07-28**
 
-- [ ] Depends on `UPGRADE-PLAN.md` §4 item 1, mounting `window.HCPWidget` and switching
-      `components/book-online-button.tsx` to `openModal()`
-- [ ] The match state's primary CTA opens the modal in place rather than a new tab
-- [ ] Ask Jason for a booking link tagged to this section, so it is attributable
-      (`CLIENT-ASKS` #32)
+- [x] Embed script mounted **once** in `app/layout.tsx`, `strategy="afterInteractive"`
+- [x] `components/book-online-button.tsx` calls `window.HCPWidget.openModal()`, keeping the
+      `window.open` fallback
+- [x] The match state's Book Online opens the modal in place. **All 13 Book Online buttons on the
+      site were upgraded at once**, since that component is the single mount point
+- [ ] Still to ask Jason: a booking link tagged to this section, for attribution (`CLIENT-ASKS` #32)
+
+The script src is derived from `NEXT_PUBLIC_BOOKING_URL` in `lib/site.ts`, so one env var drives
+both the modal and its fallback and they can never point at different accounts. If the variable is
+unset the script simply does not mount and every button keeps its old behaviour.
+
+#### Measured before committing to mounting it site wide
+
+The worry was shipping a booking app to every visitor. Probed with CDP:
+
+| | housecallpro bytes |
+|---|---|
+| Page load, nobody clicks | **5,197** (just `script.js`) |
+| Opening the modal | the booking app, and only then |
+
+HCP creates its iframe with `loading="lazy"` behind `display:none`, so the heavy booking bundle is
+**not** fetched until someone opens it. That is what makes a site wide mount cheap.
+
+#### Verified, including the paths that are easy to assume
+
+| Check | Result |
+|---|---|
+| Modal opens over the page | ✅ `.hcp-widget` goes `none` → `flex`, no new tab |
+| From the zip checker's match card | ✅ same, end to end from typing `33549` |
+| **`?booking` deep link** | ✅ auto-opens with no click and no code of ours |
+| **Script blocked** (ad blocker, offline, bad token) | ✅ falls back to the correct hosted URL |
+| **Their unscoped `<style>` injection** | ✅ 1,604 chars, **every** selector namespaced `.hcp-*`, nothing leaks into our design |
+
+The fallback matters more than it looks: `window.HCPWidget` is assigned only at the **end** of
+their init and their init bails early on a bad token, so the global can legitimately be missing.
+It is wrapped in `try/catch` as well, because a booking is too valuable to lose to an exception.
+
+#### ⚠️ Finding: the modal asks for the zip code too
+
+HCP's booking flow **opens with its own zip gate**, "Let us check if we operate in your area". So a
+visitor who checks `33549` with us is asked again a moment later.
+
+Not fixable from our side: prefill via URL is unsupported (we grepped their 651 KB bundle for
+`first_name`, `email`, `phone`, `prefill` and found nothing), and `openModalWithParams()` takes an
+undocumented cross origin schema. **Do not build on it without probing first.**
+
+Left as is, because the checker earns its place anyway:
+1. It answers **before** the visitor loads a third party app at all.
+2. **Out of area visitors never reach HCP's gate.** They get our phone number instead, which is
+   exactly the Precision Garage Door dead end the research warned about.
+
+*Not established:* what HCP actually shows for an out of area zip. Driving their cross origin
+iframe from the parent CDP target did not work, and it was not worth more time on someone else's
+product.
 
 ### Phase 4 · The miss captures a lead · **M** · blocked on the lead path
 

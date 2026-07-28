@@ -32,6 +32,23 @@ export const SITE = {
   instagram: "https://www.instagram.com/trinitygaragedoorservice/",
   /** Real Housecall Pro booking URL comes from env; falls back to the #book anchor. */
   bookingHref: process.env.NEXT_PUBLIC_BOOKING_URL || "#book",
+  /**
+   * Housecall Pro's embed script, derived from the SAME booking URL so one env var drives both the
+   * modal and its fallback link and they can never point at different accounts.
+   *
+   * Their hosted URL is `.../book/{orgName}/{token}`, and the script takes those as query params.
+   * Neither is a secret: both ship in the client supplied public snippet and in the booking link
+   * already on every page. Returns "" if the URL is unset or an unexpected shape, which simply
+   * means no script mounts and every Book Online button keeps its `window.open` behaviour.
+   *
+   * Measured cost of mounting this site wide: 5,197 bytes. It creates its iframe with
+   * `loading="lazy"` behind `display:none`, so the heavy booking app is NOT fetched until the
+   * modal actually opens.
+   */
+  bookingWidgetSrc: (() => {
+    const m = (process.env.NEXT_PUBLIC_BOOKING_URL || "").match(/\/book\/([^/]+)\/([^/?#]+)/);
+    return m ? `https://online-booking.housecallpro.com/script.js?token=${m[2]}&orgName=${m[1]}` : "";
+  })(),
 } as const;
 
 /**

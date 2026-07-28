@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Hanken_Grotesk } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
+import { SITE } from "@/lib/site";
 import { UtilityBar } from "@/components/sections/utility-bar";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/sections/site-footer";
@@ -59,6 +61,21 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <main id="content" tabIndex={-1} className="overflow-x-clip bg-white pb-[76px] nav:pb-0">{children}</main>
         <SiteFooter />
         <StickyMobileBar />
+        {/*
+          Housecall Pro's booking widget, mounted ONCE for the whole site. Every "Book Online"
+          button goes through components/book-online-button.tsx, which calls the global this
+          defines; without it those buttons still work, they just open a new tab instead.
+
+          `afterInteractive` rather than `lazyOnload`: it is only 5,197 bytes and it creates its
+          iframe with loading="lazy" behind display:none, so the booking app itself is not fetched
+          until someone opens the modal. Loading it early costs almost nothing and avoids a window
+          where an early click falls back to a new tab.
+
+          The script reads its own token and orgName off this src, so buttons need no data-* props.
+          It does NOT bind any click handlers of its own (verified against their source), which is
+          why our button keeps its own handler and styling.
+        */}
+        {SITE.bookingWidgetSrc && <Script src={SITE.bookingWidgetSrc} strategy="afterInteractive" />}
       </body>
     </html>
   );
