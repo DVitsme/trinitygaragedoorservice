@@ -28,6 +28,26 @@ The **Book a Repair** page (`app/book-a-repair/`, ported from `handoff/06-book-a
 
 **REVISIT after we have the Housecall Pro login + account data:** grab the real booking URL + embed snippet, decide modal vs inline-iframe, and evaluate whether MAX is worth it for lead sync. Until then the Book a Repair buttons open `bookingHref` (set the env var to make them live).
 
+## Project skills (`.claude/skills/`) — invoke by name, or they auto-trigger by description
+
+Repeatable workflows + hard-won knowledge, pulled out of this file so they load on demand and can run
+bundled scripts. All self-contained (no MCP required; each notes where Chrome DevTools MCP would slot
+in later). Shared design DNA: `.claude/skills/shared/bold-trade-design-system.md`.
+
+- **`verify-page`** — screenshot QA at all four breakpoints from the PRODUCTION server (never `next
+  dev` — Turbopack drops CSS chunks in headless Chrome). Bundles `screenshot.sh` + `crop.py`.
+- **`new-page`** — scaffold an on-brand route from `copy/**` with the block library (undesigned pages
+  like Resources).
+- **`port-design`** — port a `.dc.html` design 1:1 (new claude.ai/design pages).
+- **`launch-audit`** — broken-links + WCAG + perf/SEO against the local prod build (`audit.sh` wraps
+  linkinator + pa11y-ci + unlighthouse). Feeds `PRE-LAUNCH-PUNCHLIST.md`.
+- **`copy-voice`** — lint/write copy to the voice rules (no dashes, no AI tells, never invent);
+  bundles `lint-copy.sh`.
+- **`deploy`** — the safe Cloudflare deploy (`pnpm run deploy`, baked `NEXT_PUBLIC_*`, secrets, D1).
+
+`.shots/` and `.audit/` are throwaway output dirs (git-ignored). Outstanding launch work lives in
+`PRE-LAUNCH-PUNCHLIST.md`.
+
 ## What this is
 
 Marketing site for **Trinity Garage Door Service** (Tampa Bay garage-door company). It is a

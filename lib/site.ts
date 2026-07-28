@@ -78,36 +78,15 @@ export const NAV_ABOUT = [
   { label: "Reviews", href: "/about/reviews/" },
 ] as const;
 
-/**
- * 10 partner brands in carousel order. All render on uniform white cards (some logos
- * have baked-in colored blocks — see ASSET-PLACEMENT-GUIDE.md). `relationship` is for
- * the future /doors/brands/ catalog and is UNRESOLVED (hub said service-only, detail
- * pages claimed install) — confirm before that page ships.
+/*
+ * Removed 2026-07-27: the `BRANDS` and `REVIEWS` exports.
+ *   - BRANDS was superseded by BRAND_CATALOG (below), which carries the corrected
+ *     install-vs-service split plus a door/opener category.
+ *   - REVIEWS held four fabricated sample quotes and was superseded by GOOGLE_REVIEWS,
+ *     the 8 real named Google reviews.
+ * Both had zero importers. They are gone rather than left as competing second sources of
+ * truth for brand and review content, which is a live footgun when editing copy.
  */
-export const BRANDS = [
-  { name: "Clopay", file: "brandlogo-clopay.png", relationship: "install" },
-  { name: "C.H.I. Overhead Doors", file: "brandlogo-chi.png", relationship: "service" },
-  { name: "Hörmann", file: "brandlogo-hormann.png", relationship: "service" },
-  { name: "Amarr", file: "brandlogo-amarr.png", relationship: "service" },
-  { name: "LiftMaster", file: "brandlogo-liftmaster.png", relationship: "install" },
-  { name: "Chamberlain", file: "brandlogo-chamberlain.png", relationship: "service" },
-  { name: "Genie", file: "brandlogo-genie.png", relationship: "service" },
-  { name: "Craftsman", file: "brandlogo-craftsman.png", relationship: "service" },
-  { name: "Linear", file: "brandlogo-linear.png", relationship: "service" },
-  { name: "Wayne Dalton", file: "brandlogo-wayne-dalton.jpg", relationship: "service" },
-] as const;
-
-/**
- * Reviews. These are the placeholder SAMPLES the live homepage ships ("Live Google
- * reviews syncing soon"). The 8 real named Google reviews are in
- * site-audit/01-homepage-and-company.md — swap them in (or wire a live feed) later.
- */
-export const REVIEWS = [
-  { quote: "Called at 7am with a snapped spring, fixed by lunch. Fair price, no pressure.", name: "Sarah M.", city: "Lutz", initial: "S" },
-  { quote: "Door came off the track and wouldn't budge. Same day fix, smoother than ever.", name: "Mike R.", city: "Tampa", initial: "M" },
-  { quote: "New door looks fantastic and the crew cleaned up everything. Easy to schedule.", name: "Dana K.", city: "Oldsmar", initial: "D" },
-  { quote: "Honest, on time, and the price quoted was the price I paid. Highly recommend.", name: "Carlos V.", city: "Wesley Chapel", initial: "C" },
-] as const;
 
 /** Instagram grid tiles (real job-site photos). */
 export const IG_TILES = [
@@ -151,6 +130,9 @@ export const ROUTES = {
   contact: "/contact/",
   privacy: "/privacy-policy/",
   faq: "/resources/faq/",
+  blog: "/resources/blog/",
+  safetyTips: "/resources/safety-tips/",
+  troubleshooting: "/resources/troubleshooting/",
   bookRepair: "/book-a-repair/",
   estimate: "/get-service/?intent=estimate",
 } as const;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
 import { SITE, ROUTES, BRAND_CATALOG, asset } from "@/lib/site";
 import { AutoplayVideo } from "@/components/autoplay-video";
+import { BookOnlineButton } from "@/components/book-online-button";
 import { TrustStrip } from "@/components/blocks/trust-strip";
 import { Reveal } from "@/components/blocks/reveal";
 
@@ -95,7 +96,7 @@ export default function HomePage() {
             Fast, honest garage door repair across Tampa Bay, broken springs, off track doors, and dead openers fixed same day, often within hours.
           </p>
           <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
-            <a href="#book" className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">Book a Repair</a>
+            <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">Book a Repair</Link>
             <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">
               <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
             </a>
@@ -284,9 +285,14 @@ export default function HomePage() {
                     <Link key={c.slug} href={`/service-areas/${c.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{c.name}</Link>
                   ))}
                 </div>
-                <div className="mt-6 flex max-w-[400px] gap-2.5">
-                  <input placeholder="ENTER YOUR ZIP CODE" aria-label="Enter your ZIP code" className="flex-1 rounded-[6px] border-2 border-ink px-4 py-3 text-[14px] font-bold uppercase tracking-[0.03em] outline-none placeholder:text-[#999]" />
-                  <Link href={ROUTES.serviceAreas} className="rounded-[6px] bg-accent px-[22px] py-3 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline">Check</Link>
+                {/* Was a ZIP input that did nothing (typing a ZIP and pressing Check just linked
+                    to the hub), which reads as a broken feature. Honest CTAs until the real
+                    address checker ships. See handoff/SERVICE-AREA-CHECKER-RESEARCH.md. */}
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <Link href={ROUTES.serviceAreas} className="rounded-[6px] bg-accent px-[22px] py-3 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark">See All Service Areas</Link>
+                  <span className="text-[14.5px] font-medium text-body">
+                    Not sure we reach you? <a href={SITE.phoneHref} className="font-bold text-accent no-underline">Call {SITE.phoneDisplay}</a>
+                  </span>
                 </div>
               </div>
             </div>
@@ -341,36 +347,38 @@ export default function HomePage() {
                   </span>
                 </a>
               </div>
-              {/* Booking mock (visual; Confirm links to the real scheduler) */}
+              {/* Real booking hand-off. This used to render a mock calendar hardcoded to a fixed
+                  month with fake time slots, which went stale and read as a broken widget. Live
+                  availability comes from Housecall Pro, so we frame it and hand off. */}
               <div className="rounded-[8px] border-2 border-ink bg-white p-[26px]">
                 <div className="flex items-center justify-between">
                   <h3 className="m-0 font-display text-[19px] font-extrabold uppercase text-ink">Book Online</h3>
-                  <span className="text-[12px] font-bold text-[#8a8a8a]">Housecall Pro</span>
+                  <span className="rounded-[5px] bg-cream px-2.5 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-[#6a6a6a]">Housecall Pro</span>
                 </div>
-                <div className="mt-[18px] text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[#666]">What do you need?</div>
-                <div className="mt-[7px] flex items-center justify-between rounded-[6px] border-2 border-ink px-[15px] py-3 text-[15px] font-semibold text-ink">
-                  Garage door repair
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M6 9l6 6 6-6" /></svg>
-                </div>
-                <div className="mt-[18px] flex items-center justify-between">
-                  <span className="text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[#666]">Pick a day</span>
-                  <span className="text-[13px] font-extrabold text-ink">June 2026</span>
-                </div>
-                <div className="mt-2 grid grid-cols-5 gap-[7px]">
-                  {[["MON", "16"], ["TUE", "17"], ["WED", "18"], ["THU", "19"], ["FRI", "20"]].map(([d, n], i) => (
-                    <div key={i} className={`rounded-[6px] py-[9px] text-center ${i === 1 ? "border-2 border-accent bg-accent" : "border-2 border-[#e3e0da]"}`}>
-                      <div className={`text-[10px] font-extrabold ${i === 1 ? "text-white/85" : "text-[#999]"}`}>{d}</div>
-                      <div className={`font-display text-[16px] font-extrabold ${i === 1 ? "text-white" : "text-ink"}`}>{n}</div>
-                    </div>
+                <p className="mt-3 text-[15px] leading-[1.55] text-body">
+                  Real availability from our schedule. Pick the service and a window that suits you, and you get a confirmation straight away.
+                </p>
+                <ol className="mt-[18px] flex list-none flex-col gap-3 p-0">
+                  {[
+                    { t: "Tell us what is going on", d: "Repair, tune up, opener, or a new door." },
+                    { t: "Pick your time", d: "Live openings, including same day when we have it." },
+                    { t: "We confirm and show up", d: "Text and email confirmation, no phone tag." },
+                  ].map((s, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <span className="flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[6px] bg-accent font-display text-[13px] font-extrabold text-white">{i + 1}</span>
+                      <span>
+                        <span className="block text-[14.5px] font-extrabold text-ink">{s.t}</span>
+                        <span className="block text-[13.5px] leading-[1.5] text-body">{s.d}</span>
+                      </span>
+                    </li>
                   ))}
-                </div>
-                <div className="mt-4 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[#666]">Available times</div>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {([["8:00 AM", false], ["10:30 AM", true], ["1:00 PM", false], ["3:30 PM", false]] as const).map(([t, sel], i) => (
-                    <span key={i} className={`rounded-[6px] px-[15px] py-[9px] text-[14px] ${sel ? "border-2 border-accent bg-[rgba(184,32,42,0.08)] font-extrabold text-accent" : "border-2 border-[#e3e0da] font-bold text-ink"}`}>{t}</span>
-                  ))}
-                </div>
-                <a href={SITE.bookingHref} className="mt-[22px] block w-full rounded-[7px] bg-accent py-[15px] text-center text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline">Confirm Booking</a>
+                </ol>
+                <BookOnlineButton className="mt-[22px] block w-full rounded-[7px] bg-accent py-[15px] text-center text-[15px] font-extrabold uppercase tracking-[0.04em] text-white">
+                  Book Online Now
+                </BookOnlineButton>
+                <Link href={ROUTES.bookRepair} className="mt-3 block text-center text-[13.5px] font-bold text-[#6a6a6a] no-underline hover:text-accent">
+                  See how booking works
+                </Link>
               </div>
             </div>
           </Reveal>
@@ -414,7 +422,7 @@ export default function HomePage() {
               <p className="mt-3 text-[17px] font-medium text-white/90">Same day slots fill fast, book online or call our 24/7 line.</p>
             </div>
             <div className="flex flex-wrap gap-[13px]">
-              <a href="#book" className="rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">Book a Repair</a>
+              <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">Book a Repair</Link>
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] border-2 border-white px-7 py-4 text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-white hover:text-accent">
                 <Phone className="h-[18px] w-[18px]" strokeWidth={2.2} /> {SITE.phoneDisplay}
               </a>

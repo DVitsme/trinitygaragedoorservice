@@ -21,14 +21,14 @@ const hanken = Hanken_Grotesk({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://trinity-garage-bold-trade.pages.dev",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://trinitygaragedoorservice.com",
   ),
   title: {
-    default: "Trinity Garage Door Service — Tampa Bay Garage Door Repair & Installation",
+    default: "Trinity Garage Door Service | Tampa Bay Garage Door Repair & Installation",
     template: "%s · Trinity Garage Door Service",
   },
   description:
-    "Family-owned garage door repair, replacement, and installation across Tampa Bay. 24/7 emergency service, same-day repairs, licensed and insured.",
+    "Family owned garage door repair, replacement, and installation across Tampa Bay. 24/7 emergency service, same day repairs, licensed and insured.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

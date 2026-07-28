@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FacebookIcon, InstagramIcon, LinkedinIcon, YelpIcon, GoogleIcon } from "@/components/social-icons";
+import { InstagramIcon } from "@/components/social-icons";
 import { SITE, asset } from "@/lib/site";
 
 const FOOTER_SERVICES = [
@@ -16,12 +16,16 @@ const FOOTER_RESOURCES = [
   { label: "FAQ", href: "/resources/faq/" },
 ];
 
+/**
+ * Only profiles we have a real URL for are rendered. Facebook, LinkedIn, Yelp, and Google
+ * previously shipped as `href="#"`, which put four dead links on every page of the site and
+ * broke the project's no-dead-links rule (handoff F2).
+ *
+ * TODO(client): add the real Facebook, Yelp, and Google Business Profile URLs here. The icons
+ * are already built in components/social-icons.tsx, so each is a one line addition.
+ */
 const SOCIALS = [
-  { Icon: FacebookIcon, label: "Facebook", href: "#" },
   { Icon: InstagramIcon, label: "Instagram", href: SITE.instagram },
-  { Icon: LinkedinIcon, label: "LinkedIn", href: "#" },
-  { Icon: YelpIcon, label: "Yelp", href: "#" },
-  { Icon: GoogleIcon, label: "Google", href: "#" },
 ];
 
 export function SiteFooter() {
@@ -61,8 +65,10 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-[46px] flex flex-wrap items-center justify-between gap-4 border-t-2 border-[#2a2a2a] py-[22px]">
-          <div className="text-[13px] font-medium text-[#6a6a6a]">
-            © {new Date().getFullYear()} {SITE.legalName} · Licensed &amp; Insured · {SITE.license}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13px] font-medium text-[#6a6a6a]">
+            <span>© {new Date().getFullYear()} {SITE.legalName} · Licensed &amp; Insured · {SITE.license}</span>
+            <span aria-hidden="true">·</span>
+            <a href="/privacy-policy/" className="text-[#8a8a8a] no-underline hover:text-accent">Privacy Policy</a>
           </div>
           <div className="flex items-center gap-2.5">
             {SOCIALS.map(({ Icon, label, href }) => (
@@ -76,13 +82,14 @@ export function SiteFooter() {
                 <Icon className="h-[17px] w-[17px]" />
               </a>
             ))}
-            <a
-              href="#"
-              aria-label="Better Business Bureau"
+            {/* Badge, not a link: we have no BBB profile URL, and `href="#"` shipped a dead
+                link on every page. TODO(client): supply the BBB listing URL to make it a link. */}
+            <span
+              title="BBB accredited, A+ rating"
               className="flex h-9 items-center justify-center rounded-[7px] border-2 border-[#2a2a2a] px-3 text-[12px] font-extrabold tracking-[1px] text-[#cfcfcf]"
             >
               BBB
-            </a>
+            </span>
           </div>
         </div>
       </div>

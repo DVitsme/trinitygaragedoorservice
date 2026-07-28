@@ -11,8 +11,10 @@
   "observability": {
     "enabled": true
   },
+  // NOTE: NEXT_PUBLIC_* are inlined at BUILD time from .env.local, so this runtime var does
+  // NOT reach browser code. Kept in sync only so the two can't disagree in the dashboard.
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://trinity-garage-door.workers.dev"
+    "NEXT_PUBLIC_SITE_URL": "https://trinitygaragedoorservice.com"
   },
   // D1 lead store (Phase 2). Remote DB created via `wrangler d1 create trinity-leads`.
   // Local dev/migrations use `pnpm db:migrate:local`; remote uses `pnpm db:migrate`.
