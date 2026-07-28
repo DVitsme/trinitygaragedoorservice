@@ -27,12 +27,19 @@ export function ServiceAreaMap({
   className,
   showLabels = true,
   caption = true,
+  children,
 }: {
   className?: string;
   /** City labels. Turn off where the map renders small enough that they would collide. */
   showLabels?: boolean;
   /** The corner badge. Off for tight placements. */
   caption?: boolean;
+  /**
+   * Overlay slot, for `ServiceAreaMapMarker`. Anything here is positioned against this root, whose
+   * padding box matches the SVG exactly, so an overlay using the same viewBox lines up to the
+   * pixel. Putting the marker outside this component instead would offset it by the 2px border.
+   */
+  children?: React.ReactNode;
 }) {
   /**
    * Label placement, tuned by hand for these six towns. Land O' Lakes anchors right-to-left so it
@@ -96,6 +103,8 @@ export function ServiceAreaMap({
           );
         })}
       </svg>
+
+      {children}
 
       {caption && (
         // Bottom RIGHT, not left: the Pinellas peninsula runs down the bottom left of the real

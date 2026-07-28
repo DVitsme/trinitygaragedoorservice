@@ -31,11 +31,13 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import zlib from "node:zlib";
 import { execFileSync } from "node:child_process";
 
 const ROOT = process.cwd();
 const CACHE = path.join(ROOT, ".geo-cache");
 const OUT = path.join(ROOT, "lib", "service-area-geo.json");
+const LOOKUP_OUT = path.join(ROOT, "lib", "service-area-lookup.json");
 const ZIPS_SRC = path.join(ROOT, "lib", "service-area-zips.json");
 
 /** Census vintages. Bump deliberately; county lines are stable year to year. */
@@ -229,26 +231,62 @@ const zipPtDoc = readJson(zipPtsPath);
 const zipPoints = {};
 for (const f of zipPtDoc.features ?? []) {
   const [lon, lat] = f.geometry.coordinates;
-  zipPoints[f.properties.ZCTA5CE20] = project(lon, lat);
+  // Rounded to whole viewBox units. These ride in the CLIENT bundle, and at the sizes this map
+  // renders one unit is under half a pixel, so the decimal was costing bytes to move a marker by
+  // an invisible amount.
+  zipPoints[f.properties.ZCTA5CE20] = project(lon, lat).map(Math.round);
 }
 
 const missing = ZIPS.filter((z) => !zipPoints[z]);
 if (missing.length) log(`⚠️  ${missing.length} zip(s) had no ZCTA polygon: ${missing.join(", ")}`);
 
-const payload = {
-  _generated: "pnpm geo:gen — do not edit by hand",
-  _source:
-    "US Census Cartographic Boundary Files (counties 2023 500k, ZCTA 2020 500k) and Gazetteer Places 2024, all public domain. Zip list from lib/service-area-zips.json, verified against Trinity's live Housecall Pro service zone.",
-  _note:
-    "Paths are already projected to viewBox coordinates (Web Mercator). No projection or map library is needed at runtime.",
-  viewBox: `0 0 ${VW} ${VH}`,
-  footprint,
-  counties,
-  cities,
-  zipPoints,
-};
+const SOURCE =
+  "US Census Cartographic Boundary Files (counties 2023 500k, ZCTA 2020 500k) and Gazetteer Places 2024, all public domain. Zip list from lib/service-area-zips.json, verified against Trinity's live Housecall Pro service zone.";
 
-fs.writeFileSync(OUT, JSON.stringify(payload));
-const bytes = fs.statSync(OUT).size;
-log(`wrote lib/service-area-geo.json (${bytes.toLocaleString()} bytes)`);
-log(`viewBox 0 0 ${VW} ${VH} | footprint ${footprint.length} chars | counties ${counties.reduce((n, c) => n + c.d.length, 0)} chars | ${Object.keys(zipPoints).length} zip points`);
+// ---- 1. the map, imported by a SERVER component only.
+// Holds every path string, so it must never be imported from a "use client" module or the whole
+// geometry ends up in the browser bundle.
+fs.writeFileSync(
+  OUT,
+  JSON.stringify({
+    _generated: "pnpm geo:gen — do not edit by hand",
+    _source: SOURCE,
+    _note:
+      "Paths are already projected to viewBox coordinates (Web Mercator). No projection or map library is needed at runtime. SERVER ONLY: importing this from a client component ships every path to the browser.",
+    viewBox: `0 0 ${VW} ${VH}`,
+    footprint,
+    counties,
+    cities,
+  }),
+);
+
+// ---- 2. the zip lookup, imported by the CLIENT checker.
+// Deliberately a separate file from the map: the checker needs zip -> city/county/point and
+// nothing else, and bundling it with the geometry would multiply its cost for no reason.
+// City and county names are interned into arrays and referenced by index, which is most of the
+// saving given how many zips share a city (Tampa alone has 27).
+const cityNames = [...new Set(Object.values(zipData.zips).map((z) => z.city))].sort();
+const countyNames = [...new Set(Object.values(zipData.zips).map((z) => z.county))].sort();
+const lookup = {};
+for (const [zip, { city, county }] of Object.entries(zipData.zips)) {
+  const pt = zipPoints[zip];
+  lookup[zip] = [cityNames.indexOf(city), countyNames.indexOf(county), ...(pt ?? [])];
+}
+fs.writeFileSync(
+  LOOKUP_OUT,
+  JSON.stringify({
+    _generated: "pnpm geo:gen — do not edit by hand",
+    _source: SOURCE,
+    _note:
+      "zips[zip] = [cityIndex, countyIndex, x, y]. x/y are viewBox coordinates matching viewBox below, so an overlay SVG using the same viewBox lines up with the map exactly.",
+    viewBox: `0 0 ${VW} ${VH}`,
+    cities: cityNames,
+    counties: countyNames,
+    zips: lookup,
+  }),
+);
+
+const gz = (p) => zlib.gzipSync(fs.readFileSync(p), { level: 9 }).length;
+log(`wrote lib/service-area-geo.json    ${fs.statSync(OUT).size.toLocaleString()} bytes (${gz(OUT).toLocaleString()} gzipped) — server only`);
+log(`wrote lib/service-area-lookup.json ${fs.statSync(LOOKUP_OUT).size.toLocaleString()} bytes (${gz(LOOKUP_OUT).toLocaleString()} gzipped) — client`);
+log(`viewBox 0 0 ${VW} ${VH} | footprint ${footprint.length} chars | counties ${counties.reduce((n, c) => n + c.d.length, 0)} chars | ${Object.keys(zipPoints).length} zip points | ${cityNames.length} cities`);

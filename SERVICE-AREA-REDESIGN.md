@@ -213,15 +213,59 @@ moved to the **bottom right** where the real geography leaves empty space.
 | `content/blog/how-a-new-garage-door-can-boost-your-homes-curb-appeal.md` still says three counties | Live blog post, outside the `app/` sweep |
 | `pnpm lint` fails | **Pre-existing**, verified by stashing this work and re-running on a clean tree. An ESLint 9 config error ("Converting circular structure to JSON"), unrelated to this change |
 
-### Phase 2 · The zip checker · **S/M** · no blockers
+### Phase 2 · The zip checker · **S/M** · ✅ **DONE 2026-07-28**
 
-- [ ] Bake the 783 byte lookup from `lib/service-area-zips.json`
-- [ ] `components/service-area-checker.tsx`, `"use client"`, no network call at all
-- [ ] Three result states per §3. Match and miss both keep the phone visible
-- [ ] Wire the map to react: drop a pin at the matched zip's centroid
-- [ ] Place on the homepage and `/service-areas/`. Not on the other two pages
+- [x] `lib/service-area-lookup.json`, baked by the same `pnpm geo:gen`
+- [x] `components/service-area-checker.tsx`, `"use client"`, **no network call at all**
+- [x] Three result states per §3. Every state keeps a way to reach a human on screen
+- [x] The map reacts: a ring drops on the matched zip
+- [x] On the homepage and `/service-areas/`. Not on `/services/` or `/contact/`
 
-**Ships value alone:** answers the question every caller asks first, instantly, offline.
+**Client cost: about 3.8 KB gzipped**, of which the 130 zip lookup is 1,818 bytes.
+
+#### Two data files, on purpose
+
+`service-area-geo.json` (2,367 gzipped) holds every SVG path and is **server only**.
+`service-area-lookup.json` (1,818 gzipped) holds `zip -> [cityIdx, countyIdx, x, y]` and is the
+only one the client component imports. Verified after building: **zero client chunks contain the
+map geometry**, and the lookup is present as expected. Importing the geo file from a `"use client"`
+module would ship the whole map to every visitor, so both files carry a header comment saying so.
+
+The `x, y` are viewBox coordinates rounded to whole units, matching the map's own viewBox, so the
+marker overlay lines up exactly with no runtime projection. One unit is under half a pixel at the
+sizes this renders, so the decimals were only costing bytes.
+
+#### Verified by driving real Chrome, not by eye
+
+Screenshots cannot prove a form works. Node 22 ships a `WebSocket`, so a dependency free CDP
+script (`scratchpad/cdp-test.mjs`) typed into the real input through React's native value setter
+and read the live DOM back:
+
+| Input | Result | Marker |
+|---|---|---|
+| `33549` | "Good news. We cover Lutz." + Hillsborough County + Book Online + Call | ✅ shown |
+| `90210` | "Let's check 90210 by phone." + Call | not shown |
+| `335` | "Enter a five digit zip code." | not shown |
+
+Logic also unit checked across the whole table: all **130/130** zips resolve to a valid city,
+county and map point, and `33549-1234`, ` 33549 ` and `3354 9` all normalise to a match while
+`abcde` and `335` correctly read as typos rather than as "we do not serve you".
+
+#### Decisions worth keeping
+
+- **The marker is hollow rings, not a filled dot.** A matched zip usually sits under an existing
+  city pin. Check `33549` and it lands on Lutz, and a solid marker hid both the pin and its label.
+- **A miss captures nothing yet.** The plan called for "or leave your number" here, but that posts
+  into the lead path that `UPGRADE-PLAN.md` §9 documents nine defects in, with Turnstile on always
+  pass dummy keys. Sending fresh traffic into it would be worse than a phone number. Marked
+  `TODO(Phase 4)` in the file.
+- **"No trip charge" is still held back** pending `CLIENT-ASKS` #25b. The match state ships the
+  **two hour arrival window** instead, which is equally verified and is not a price promise.
+
+⚠️ **QA gotcha, cost a cycle:** these sections are wrapped in `<Reveal>` (Motion `whileInView`), so
+they sit at `opacity: 0` until scrolled into view. Capturing with `captureBeyondViewport` therefore
+photographs an invisible section. Scroll it into view first. The bundled `screenshot.sh` is immune
+because its very tall window puts everything in view.
 
 ### Phase 3 · Match routes into Housecall Pro booking · **S** · depends on the booking modal
 
@@ -277,9 +321,9 @@ be cleanly measurable from its first entry.
 
 | | |
 |---|---|
-| **Map as actually delivered, gzipped** | **2,239 bytes** (measured on the rendered HTML) |
-| Path geometry alone, gzipped | 1,051 bytes |
-| Zip lookup for Phase 2, gzipped | 783 bytes |
-| Mapbox GL JS v3 | 499 KB |
+| **Map, as delivered in the HTML, gzipped** | **2,239 bytes** |
+| **Checker, client JavaScript, gzipped** | **~3,800 bytes** (1,818 of it the zip lookup) |
+| **Both phases together** | **~6 KB**, no API key, no runtime request, $0 |
+| Mapbox GL JS v3, before drawing anything | 499 KB |
 | MapLibre GL JS | 245 KB |
 | Google Maps at 20k views/mo | ~$70/mo |

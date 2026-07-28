@@ -6,6 +6,7 @@ import { SITE, ROUTES } from "@/lib/site";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { TrustStrip } from "@/components/blocks/trust-strip";
 import { ServiceAreaMap } from "@/components/blocks/service-area-map";
+import { ServiceAreaProvider, ServiceAreaChecker, ServiceAreaMapMarker } from "@/components/service-area-checker";
 import { Reveal } from "@/components/blocks/reveal";
 
 export const metadata: Metadata = {
@@ -163,19 +164,24 @@ export default function ServiceAreasHubPage() {
       <section className="bg-cream border-t-2 border-ink">
         <div className="mx-auto max-w-[1200px] px-5 py-20 nav:px-8">
           <Reveal>
-            <div className="grid items-center gap-11 nav:grid-cols-2">
-              <div>
-                <div className={eyebrowCls}>Where We Work</div>
-                <h2 className={`${h2Cls} text-ink`}>All Over Tampa Bay</h2>
-                <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, and the towns around them. Not sure you&apos;re in range? Give us a call and ask.</p>
-                <div className="mt-[22px] flex flex-wrap gap-2.5">
-                  {[towns[5], towns[0], towns[1], towns[2], towns[3], towns[4]].map((a) => (
-                    <Link key={a.slug} href={`/service-areas/${a.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{a.name}</Link>
-                  ))}
+            <ServiceAreaProvider>
+              <div className="grid items-center gap-11 nav:grid-cols-2">
+                <div>
+                  <div className={eyebrowCls}>Where We Work</div>
+                  <h2 className={`${h2Cls} text-ink`}>All Over Tampa Bay</h2>
+                  <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, and the towns around them. That is 130 zip codes and 41 towns in all.</p>
+                  <ServiceAreaChecker className="mt-[22px]" />
+                  <div className="mt-[22px] flex flex-wrap gap-2.5">
+                    {[towns[5], towns[0], towns[1], towns[2], towns[3], towns[4]].map((a) => (
+                      <Link key={a.slug} href={`/service-areas/${a.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{a.name}</Link>
+                    ))}
+                  </div>
                 </div>
+                <ServiceAreaMap className="mx-auto max-w-[380px]">
+                  <ServiceAreaMapMarker />
+                </ServiceAreaMap>
               </div>
-              <ServiceAreaMap className="mx-auto max-w-[380px]" />
-            </div>
+            </ServiceAreaProvider>
           </Reveal>
         </div>
       </section>

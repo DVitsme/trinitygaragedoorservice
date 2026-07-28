@@ -8,6 +8,7 @@ import { AutoplayVideo } from "@/components/autoplay-video";
 import { BookOnlineButton } from "@/components/book-online-button";
 import { TrustStrip } from "@/components/blocks/trust-strip";
 import { ServiceAreaMap } from "@/components/blocks/service-area-map";
+import { ServiceAreaProvider, ServiceAreaChecker, ServiceAreaMapMarker } from "@/components/service-area-checker";
 import { Reveal } from "@/components/blocks/reveal";
 
 export const metadata: Metadata = {
@@ -155,7 +156,10 @@ export default function HomePage() {
                   <div className="mt-[3px] text-[10.5px] font-extrabold uppercase leading-tight tracking-[0.06em] text-white">Years in<br />Tampa Bay</div>
                 </div>
                 <div className="absolute -bottom-[34px] -left-[26px] w-[168px] rounded-[8px] border-2 border-accent bg-ink p-2.5 max-nav:hidden">
-                  <Image src={"/team/owner-jason-grunder.jpg"} alt="Jason, Owner" width={148} height={190} className="block h-[190px] w-full rounded-[6px] bg-[#2a2a2a] object-cover object-top" />
+                  {/* width MUST equal the parent's content box or next/image warns that one
+                      dimension was modified and the other was not: 168px wide, less the 2px
+                      border each side, less p-2.5 (10px) each side = 144. */}
+                  <Image src={"/team/owner-jason-grunder.jpg"} alt="Jason, Owner" width={144} height={190} className="block h-[190px] w-full rounded-[6px] bg-[#2a2a2a] object-cover object-top" />
                   <div className="mt-2 text-center text-[15px] font-extrabold uppercase tracking-[0.03em] text-white">Jason · Owner</div>
                 </div>
               </div>
@@ -269,29 +273,33 @@ export default function HomePage() {
         <div className="mx-auto max-w-[1200px] px-5 py-[92px] nav:px-8">
           <Reveal>
             {/* Copy leads, map supports. The real footprint is portrait (taller than wide), which
-                is the actual shape of their zone, so the map column is the narrower one. */}
-            <div className="grid items-center gap-11 nav:grid-cols-[1.15fr_0.85fr]">
-              <div>
-                <div className={eyebrowCls}>Service Areas</div>
-                <h2 className="mt-3 font-display text-[clamp(26px,3.2vw,38px)] font-extrabold uppercase leading-[1.04] text-ink">We Cover the Whole Tampa Bay Area</h2>
-                <p className="mt-3.5 text-[16.5px] leading-[1.58] text-body">Local techs based in Lutz means shorter drive times across Hillsborough, Pinellas, Pasco, Hernando and Polk.</p>
-                <div className="mt-[22px] flex flex-wrap gap-2.5">
-                  {cities.map((c) => (
-                    <Link key={c.slug} href={`/service-areas/${c.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{c.name}</Link>
-                  ))}
+                is the actual shape of their zone, so the map column is the narrower one.
+                The provider is only sharing the checked zip between the checker and the map
+                marker; the map itself stays a server component passed through as children. */}
+            <ServiceAreaProvider>
+              <div className="grid items-center gap-11 nav:grid-cols-[1.15fr_0.85fr]">
+                <div>
+                  <div className={eyebrowCls}>Service Areas</div>
+                  <h2 className="mt-3 font-display text-[clamp(26px,3.2vw,38px)] font-extrabold uppercase leading-[1.04] text-ink">We Cover the Whole Tampa Bay Area</h2>
+                  <p className="mt-3.5 text-[16.5px] leading-[1.58] text-body">Local techs based in Lutz means shorter drive times across Hillsborough, Pinellas, Pasco, Hernando and Polk. That is 130 zip codes and 41 towns.</p>
+                  <ServiceAreaChecker className="mt-[22px]" />
+                  <div className="mt-[22px] flex flex-wrap gap-2.5">
+                    {cities.map((c) => (
+                      <Link key={c.slug} href={`/service-areas/${c.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{c.name}</Link>
+                    ))}
+                  </div>
+                  <div className="mt-5 flex flex-wrap items-center gap-3">
+                    <Link href={ROUTES.serviceAreas} className="text-[14.5px] font-bold text-accent no-underline hover:underline">See all service areas</Link>
+                    <span className="text-[14.5px] font-medium text-body">
+                      or call <a href={SITE.phoneHref} className="font-bold text-accent no-underline">{SITE.phoneDisplay}</a>
+                    </span>
+                  </div>
                 </div>
-                {/* Was a ZIP input that did nothing (typing a ZIP and pressing Check just linked
-                    to the hub), which reads as a broken feature. The real checker lands in
-                    Phase 2. See SERVICE-AREA-REDESIGN.md. */}
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <Link href={ROUTES.serviceAreas} className="rounded-[6px] bg-accent px-[22px] py-3 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark">See All Service Areas</Link>
-                  <span className="text-[14.5px] font-medium text-body">
-                    Not sure we reach you? <a href={SITE.phoneHref} className="font-bold text-accent no-underline">Call {SITE.phoneDisplay}</a>
-                  </span>
-                </div>
+                <ServiceAreaMap className="max-w-[430px] max-nav:mx-auto">
+                  <ServiceAreaMapMarker />
+                </ServiceAreaMap>
               </div>
-              <ServiceAreaMap className="max-w-[430px] max-nav:mx-auto" />
-            </div>
+            </ServiceAreaProvider>
           </Reveal>
         </div>
       </section>

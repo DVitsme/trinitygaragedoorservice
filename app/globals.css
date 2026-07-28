@@ -88,9 +88,18 @@ img {
 .bt-book-btn { animation: bt-pulse 2.6s ease-out infinite; }
 .bt-book-btn:hover { animation: none; }
 
+/* Halo behind the service-area map marker. Opacity only, no transform: scaling an SVG circle
+   needs transform-box/transform-origin and behaves inconsistently across engines. */
+@keyframes bt-map-ping {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.bt-map-ping { animation: bt-map-ping 2.2s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   .bt-marquee,
-  .bt-book-btn {
+  .bt-book-btn,
+  .bt-map-ping {
     animation: none;
   }
   html {
