@@ -496,6 +496,26 @@ with a real write.**
   dedupe. **There is no idempotency key** — always search before create.
 - **`GET /leads` filters** work on `status`; `pipeline_status` is not a filter.
 
+### ✅ Pre-flight schema questions — ANSWERED, no write required (2026-07-28)
+These were the three unknowns blocking the first lead write. All three are settled by inspection.
+
+| Question | Answer |
+|---|---|
+| Is `lead_source` a **name** or an **id**? | **A bare string.** Real leads carry `"Angi Leads"`, `"Yelp"`. So send **`"Trinity Website"`** directly — no lookup, no id. |
+| Are `tags` required, and must they pre-exist? | **Neither.** `tags` is a list and is **empty on every lead sampled** — they do not tag leads at all. Omit it. |
+| Will an address with **no street** be accepted? Our form has no street field. | **Yes. 41 of 100 leads with an address have no `street` value.** Street-less addresses are normal in their real data. |
+
+**One correction to the write schema:** `job_fields` uses **`job_type_uuid`** and
+`business_unit_uuid`, *not* `job_type_id` as some docs suggest.
+
+**Customer fields actually populated** on real leads: `first_name`, `last_name`, `email`,
+`mobile_number`, `notifications_enabled`, `lead_source`. Consistently empty: `home_number`,
+`work_number`, `company`, `notes`, `tags`. Our contact form maps onto the populated set exactly.
+
+**What remains before a production write:** only the supervised test lead itself (fake name,
+`@example.com`, a **555-0142** number, `notifications_enabled: false`), then Jason deletes it in
+the HCP web app. There is still **no DELETE endpoint**, so that cleanup step is not optional.
+
 ### Cleanup has no API path
 **There is no `DELETE` for customers, jobs, leads or estimates.** Deleting a test record means a
 human clicking in the HCP web app. Deletes there are soft and restorable, and none of them notify
