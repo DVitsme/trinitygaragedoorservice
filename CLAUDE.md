@@ -2,6 +2,56 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🚩 START HERE (updated 2026-07-28)
+
+**Read `UPGRADE-PLAN.md` first.** It is the plan of record: a full-project audit against the
+client's live Housecall Pro data, with every finding verified against the **deployed** site rather
+than source. Everything below in this file is still true but predates it.
+
+**We now have working Housecall Pro API access.** Two keys in `.env.local`
+(`HOUSE_CALL_PRO_APY_KEY`, `HOUSE_CALL_PRO_DRIVE_SOCIAL_API_KEY`), both full access, both live.
+Reference: **`HOUSECALL-PRO-API.md`**. Three things that file corrects, which older notes get wrong:
+- **Live availability EXISTS** — `GET /company/schedule_availability/booking_windows`. Earlier
+  notes say it does not. They probed **root-level** paths; the real ones are nested under
+  `/company/`. **A root-level 404 proves nothing on this API.**
+- **`/leads` exists** and accepts an inline customer, so a contact-form lead is one POST.
+- The booking widget global is **`window.HCPWidget.openModal()`**, not `window.HousecallPro`.
+
+**Their account is live production: 6,001 customers, no sandbox, and NO DELETE endpoint for
+customers/jobs/leads/estimates.** Reads are safe. Any write is effectively permanent and cleanup
+is a human clicking in the HCP web app. Scheduling a job texts the real customer.
+
+⚠️ **Never surface `GET /events`** — it returns employees' medical appointments and family
+commitments.
+
+### Facts now verified from their own system
+Address **18125 US-41 Ste 208, Lutz FL 33549** · geo **28.1372004, -82.4625826** · phone
+**(813) 279-6785** (matches the site) · **booking hours Mon-Fri 08:00-16:00** · arrival window
+**120 min** · trip charge **$0** · service area **130 zips / 41 cities / 5 counties**
+(`lib/service-area-zips.json`, verified 130/130) · only **two** job types, Install and Repair.
+
+### The two business facts that should drive priorities
+1. **The website produces almost no work.** 1 of the 300 most recent jobs carries the "Trinity
+   Website" lead source. Half their jobs are repeat customers.
+2. **They serve 41 cities and have 6 city pages.** Ranked by *real job volume*, the biggest gaps
+   are New Port Richey (4.6%), Zephyrhills (3.3%), Odessa (3.3%) and **Trinity (3.0%)** — the
+   company is named Trinity Garage Door Service and has no page for the town.
+
+### Do not "fix" these, they are deliberate
+- **The 24/7 claims and the JSON-LD `openingHoursSpecification`** are untouched **on purpose**,
+  pending `CLIENT-ASKS` #4b. A phone line answering around the clock is a different claim from
+  online booking hours; both can be true. **Ask, do not assume.**
+- **"12k+ Doors Serviced"** stays. HCP records start Oct 2019, so nothing available can disprove
+  a lifetime figure covering 2007 onward.
+
+### Traps that will waste an hour
+- **`HOURS`, `STATS`, `SERVICES` and `IG_TILES` in `lib/site.ts` have ZERO importers.** The
+  homepage keeps local copies. Editing `lib/site.ts` alone changes nothing on the page.
+- **`next.config.ts` sets `images: { unoptimized: true }`** — `next/image` does NOT resize on
+  serve here, whatever `content/blog/README.md` claims. The blog ships 21 MB.
+- **Prefer real data over inference.** A Census-based city ranking put Spring Hill at #2; actual
+  HCP job counts put it near the bottom at 0.8%. The API can answer these questions directly.
+
 ## ✅ DESIGN-PORT BUILD COMPLETE (2026-06-22)
 
 The 1:1 design → Next.js build is **done**. Every approved `*.dc.html` "Bold Trade" design (in `trinitygaragedoorservice.com/`) is now a live Next.js page, each `pnpm build`-green and **production-screenshot-verified 1:1**. Final build: **32 static pages, 0 errors**. **~27 commits ahead of origin/main, UNPUSHED** — the user pushes via `! git push origin main` (the auto-mode classifier blocks me from pushing to main).

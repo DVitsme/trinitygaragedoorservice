@@ -74,6 +74,65 @@ be true. "Opening Doors Since 2007" is about when they started serving customers
 everything above holds and it is a simple listings cleanup. If the business genuinely began in
 2011, we should change the logo tagline and the site, which is a bigger conversation.
 
+### An outside marketing company has full access to their customer list
+**Raise this calmly. It is a housekeeping problem, not a scandal.**
+
+Their Housecall Pro account has two API keys. One is labelled for **Drive Social Media**, a
+marketing agency. We tested it. It opens the whole account.
+
+That means whoever holds it can read:
+- All **6,001 customer records**, with home addresses, phone numbers and emails
+- All **8,211 invoices**, with the amounts
+- Their staff's **personal calendar entries**. We saw medical appointments and family
+  commitments belonging to named employees.
+
+Three things make this worth fixing:
+1. Housecall Pro only offers "full access" or "read only". There is no way to give someone just
+   the marketing numbers.
+2. **Read only still sees everything.** It only stops them changing things.
+3. **Housecall Pro keeps no record of who used a key or when.** If they ever wanted to check, they
+   could not.
+
+**Drive Social Media is a real, established agency** (about 200 to 500 staff, Inc. 5000 listed,
+A+ with the BBB). Nothing suggests they have done anything wrong. This is about the door being
+wider than the job needs.
+
+**What to ask Jason:**
+- Is Drive Social still working with you? If not, delete that key. Access does not expire.
+- If they are, ask them to switch to read only.
+- Make a separate key for the website, so one can be turned off without breaking the other.
+
+### They are paying for the most expensive plan
+Housecall Pro's **MAX** plan is about **$299 a month**. We can prove they are on it, because the
+part of the system we tested only works on MAX.
+
+**Why it matters:** MAX includes advanced reporting, full system access and several tools that
+cost extra on lower plans. If they are not using those, they are paying roughly **$150 a month
+more than the middle plan** for features sitting idle. Either start using them or drop a tier.
+
+**One thing this does save them:** we no longer need Zapier or any other connector to push website
+leads into their system. That is included.
+
+### Three blog pictures were made by AI, and the files admit it
+Their old blog used AI generated images. Three are still on the site, and the picture files carry
+a **hidden tag naming the AI that made them**. Google, Facebook and LinkedIn can read that tag and
+put an "AI generated" label on it.
+
+One of them is the **first picture anyone sees** when they open the blog.
+
+**Why it matters:** the site tells people "no stock photos, no catalog renders" on the portfolio
+page. And we already took an AI photo of Jason off the site for the same reason. **This is not
+something we added, it came across from the old website.**
+
+**Easy fix:** they have hundreds of real job photos. We swap three pictures and it is done.
+
+### The blog is very slow on a phone
+The blog page sends **21 MB of pictures**. On a phone on cellular that is a bad experience, and
+Google measures it.
+
+**Why it matters:** it is fixable in an afternoon, and it is the slowest page on an otherwise very
+fast site.
+
 ### Two blog posts were advertising expired deals
 Old posts still promoted "$50 off springs" and an "August Special, 10% off". We removed the
 offers and kept the articles.
@@ -94,23 +153,94 @@ invoicing, card payments and financing.
 **Action:** do not let anyone sell them Podium, Birdeye, Mailchimp or a separate payment system.
 Just switch on what they are already paying for.
 
-### 3. The cheapest way to buy leads in their trade
+### 3. They serve a much bigger area than their website admits
+**This is probably the biggest growth item on the list.**
+
+Their own Housecall Pro service area covers **130 zip codes, five counties and 41 towns**:
+Hillsborough, Pinellas, Pasco, Hernando and part of Polk. Their trip charge is **$0**.
+
+The website has pages for **six towns**. So **35 towns they already drive to are invisible.**
+
+The biggest ones missing:
+
+| Town | Roughly |
+|---|---|
+| St. Petersburg | 357,000 people |
+| Clearwater | 183,000 |
+| Lakeland | 161,000 |
+| Spring Hill | 115,000 |
+| Largo | 106,000 |
+| Brandon | 97,000 |
+| Riverview | 92,000 |
+
+**Why it matters:** people search "garage door repair" plus their own town. If the page never
+names the town, it will not come up. Spring Hill and Largo in particular are full of older
+single family homes, which is exactly where repair work comes from. Riverview and Wesley Chapel
+are full of new build homes, which is where installs come from.
+
+**Action:** confirm the list is current, then add pages for the biggest towns. Nothing to buy,
+and no new area to cover. They already go there.
+
+**We checked where their trucks actually go**, using 1,198 recent jobs from their own system. The
+six towns with pages cover five of their top six markets, so whoever chose them chose well. But
+these towns have **no page at all**:
+
+| Town | Share of their recent work |
+|---|---|
+| New Port Richey | **4.6%** |
+| Zephyrhills | 3.3% |
+| Odessa | 3.3% |
+| **Trinity** | **3.0%** |
+| Clearwater | 2.6% |
+| St Petersburg | 2.5% |
+
+**The one to point at in the meeting: they do 3% of their work in a town called Trinity, the
+company is called Trinity Garage Door Service, and there is no page for it.**
+
+Worth knowing the other way too: **Oldsmar has a page but is only their 15th busiest town.**
+
+### 4. What their competitors are doing, and where the gaps are
+We looked at eight garage door companies, including their biggest local rival.
+
+**Banko Overhead Doors is out-covering them badly.** Banko has a page for **150+ towns across 12
+Florida counties**. Trinity has **six**. Banko is not just defending Tampa, they are going after
+the whole corridor.
+
+**But in Hernando County, Spring Hill and Brooksville, the local competitor's website is barely
+functional.** Static pages from an old website builder, no booking, no blog, and two menu links
+that go to the same page by mistake. Trinity already serves that area. It is the easiest market
+on the board to take.
+
+**Four things almost nobody in the industry has, that Trinity could:**
+
+| Thing | Who has it |
+|---|---|
+| Real Google reviews showing live on the site | **Nobody.** Every competitor uses a screenshot, a link, or a broken widget. Trinity has 5.0 from 597 |
+| Named technicians with photos | **Nobody.** Everyone says "background checked" without naming a soul. Trinity has real names and real photos already |
+| "Veteran owned" | **Nobody claims it.** Several offer a military discount. **Is it true for Trinity?** |
+| An actual price on the website | Only one of eight. The biggest national company says outright it will not publish prices |
+
+**Also worth knowing:** every competitor's "design your door" tool we tested was **broken or
+missing**. And the industry trade body (the International Door Association) runs a "find a
+verified dealer" directory that only one of the eight competitors uses. Both are cheap wins.
+
+### 5. The cheapest way to buy leads in their trade
 **Google Local Services Ads.** You pay per lead, the ads sit above everything else, and for garage
 door companies leads average around **$49** versus about **$145** on regular Google Ads.
 It runs off their Google profile and needs no website work.
 
-### 4. They cannot tell which advertising works
+### 6. They cannot tell which advertising works
 There is no tracking on anything today.
 **Action:** free website analytics now, and call tracking (about $30/month) if they start spending
 on ads. Phone calls are how this business converts, so untracked calls means untracked money.
 
-### 5. Accessibility is a real legal risk
+### 7. Accessibility is a real legal risk
 Small businesses get sued over inaccessible websites. About 3,100 federal cases in 2025, usually
 starting with a $10,000 to $25,000 demand letter.
 **Action:** we have already fixed the contrast problems. Do **not** let anyone sell them an
 "accessibility widget", those are actively targeted by the people filing the lawsuits.
 
-### 6. Their old website links will not break
+### 8. Their old website links will not break
 Every old page address will forward to the matching new one automatically.
 **Why it matters:** they keep their Google ranking and any links other sites point at them.
 
@@ -144,6 +274,8 @@ Ranked by impact.
 ---
 
 ## Changelog
+- **2026-07-28** Full project audit. Added: three AI generated blog pictures (inherited from the old site), the 21 MB slow blog page, and a competitor comparison across eight companies.
+- **2026-07-28** Tested their Housecall Pro keys. Added three items: the outside agency with full access to the customer list, the fact they are on the $299 MAX plan, and the service area being far bigger than the site says.
 - **2026-07-28** Rewrote the founding-year item: 2007 is decided and live, so it is now about the four sources disagreeing and what to fix on Yelp/BBB/Angi.
 - **2026-07-28** Created. Added findings from the media hunt: AI photo replaced, phone/hours
   conflicts, duplicate listings, expired blog offers.
