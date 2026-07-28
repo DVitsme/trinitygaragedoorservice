@@ -22,6 +22,34 @@ export const SITE = {
   bookingHref: process.env.NEXT_PUBLIC_BOOKING_URL || "#book",
 } as const;
 
+/**
+ * Public business profiles. Verified 2026-07-28 from Trinity's own listings.
+ *
+ * These replaced the four dead `href="#"` links the footer used to ship on every page. Facebook
+ * was confirmed by rendering the page ("Trinity Garage Door Service, LLC | Lutz FL"); the Yelp URL
+ * is the one supplied by the client. BBB, Angi and HomeAdvisor sit behind bot protection so they
+ * cannot be re-checked by script, but each was sourced from a page that rendered successfully and
+ * served that business's own images.
+ *
+ * NOTE: there is no LinkedIn *company* page. Jason has a personal profile
+ * (linkedin.com/in/jason-grunder-1419a53a) which is deliberately NOT linked as a business profile.
+ * Two duplicate listings exist (a second Yelp page and a second Facebook page) and should be
+ * claimed/merged by the client, since split listings dilute local SEO.
+ */
+export const SOCIAL = {
+  instagram: "https://www.instagram.com/trinitygaragedoorservice/",
+  facebook: "https://www.facebook.com/TrinityGarageDoorServiceLLC/",
+  google: "https://maps.google.com/?cid=10290920847269897858",
+  yelp: "https://www.yelp.com/biz/trinity-garage-door-service-inc-lutz-3",
+  bbb: "https://www.bbb.org/us/fl/lutz/profile/garage-doors/trinity-garage-door-service-inc-0653-90160231",
+  angi: "https://www.angi.com/companylist/us/fl/lutz/trinity-garage-door-service-inc-reviews-6578196.htm",
+  /** Not linked in the footer today, kept here so it is not lost. */
+  homeAdvisor: "https://www.homeadvisor.com/rated.TrinityGarageDoor.89828475.html",
+  nextdoor: "https://nextdoor.com/pages/trinity-garage-door-service-inc-tampa-fl/",
+  /** Deep link that opens the Google review form for this place. */
+  googleWriteReview: "https://search.google.com/local/writereview?placeid=ChIJC6icp3C5wogRgiYvqfyx0I4",
+} as const;
+
 /** Service types for the contact / free-estimate form. */
 export const SERVICE_OPTIONS = [
   "Garage door repair",

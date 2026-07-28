@@ -1,4 +1,4 @@
-import { SITE, CITIES } from "@/lib/site";
+import { SITE, CITIES, SOCIAL } from "@/lib/site";
 import { absoluteUrl } from "@/lib/seo";
 
 /**
@@ -32,7 +32,18 @@ export function LocalBusinessJsonLd() {
         closes: "23:59",
       },
     ],
-    sameAs: [SITE.instagram],
+    // Every verified profile, so Google can tie these listings to one entity. Only profiles
+    // confirmed to belong to this business are listed; Jason's personal LinkedIn is excluded.
+    sameAs: [
+      SOCIAL.instagram,
+      SOCIAL.facebook,
+      SOCIAL.google,
+      SOCIAL.yelp,
+      SOCIAL.bbb,
+      SOCIAL.angi,
+      SOCIAL.homeAdvisor,
+      SOCIAL.nextdoor,
+    ],
   };
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }

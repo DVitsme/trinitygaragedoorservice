@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { InstagramIcon } from "@/components/social-icons";
-import { SITE, asset } from "@/lib/site";
+import { FacebookIcon, InstagramIcon, YelpIcon, GoogleIcon } from "@/components/social-icons";
+import { SITE, SOCIAL, asset } from "@/lib/site";
 
 const FOOTER_SERVICES = [
   { label: "Emergency Repair", href: "/services/repair/emergency/" },
@@ -17,15 +17,21 @@ const FOOTER_RESOURCES = [
 ];
 
 /**
- * Only profiles we have a real URL for are rendered. Facebook, LinkedIn, Yelp, and Google
- * previously shipped as `href="#"`, which put four dead links on every page of the site and
- * broke the project's no-dead-links rule (handoff F2).
- *
- * TODO(client): add the real Facebook, Yelp, and Google Business Profile URLs here. The icons
- * are already built in components/social-icons.tsx, so each is a one line addition.
+ * Real business profiles, sourced from Trinity's own listings (see SOCIAL in lib/site.ts).
+ * These replaced the four dead `href="#"` links this footer used to ship on every page.
+ * LinkedIn is intentionally absent: there is no company page, only Jason's personal profile.
  */
 const SOCIALS = [
-  { Icon: InstagramIcon, label: "Instagram", href: SITE.instagram },
+  { Icon: InstagramIcon, label: "Instagram", href: SOCIAL.instagram },
+  { Icon: FacebookIcon, label: "Facebook", href: SOCIAL.facebook },
+  { Icon: GoogleIcon, label: "Google Business Profile", href: SOCIAL.google },
+  { Icon: YelpIcon, label: "Yelp", href: SOCIAL.yelp },
+];
+
+/** Directories with no icon in the set; rendered as wordmark chips instead. */
+const BADGES = [
+  { label: "BBB", title: "BBB accredited, A+ rating", href: SOCIAL.bbb },
+  { label: "ANGI", title: "Angi Super Service Award winner", href: SOCIAL.angi },
 ];
 
 export function SiteFooter() {
@@ -77,19 +83,24 @@ export function SiteFooter() {
                 href={href}
                 aria-label={label}
                 {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex h-9 w-9 items-center justify-center rounded-[7px] border-2 border-[#2a2a2a] text-[#cfcfcf]"
+                className="flex h-9 w-9 items-center justify-center rounded-[7px] border-2 border-[#2a2a2a] text-[#cfcfcf] transition-colors hover:border-accent hover:text-white"
               >
                 <Icon className="h-[17px] w-[17px]" />
               </a>
             ))}
-            {/* Badge, not a link: we have no BBB profile URL, and `href="#"` shipped a dead
-                link on every page. TODO(client): supply the BBB listing URL to make it a link. */}
-            <span
-              title="BBB accredited, A+ rating"
-              className="flex h-9 items-center justify-center rounded-[7px] border-2 border-[#2a2a2a] px-3 text-[12px] font-extrabold tracking-[1px] text-[#cfcfcf]"
-            >
-              BBB
-            </span>
+            {BADGES.map(({ label, title, href }) => (
+              <a
+                key={label}
+                href={href}
+                title={title}
+                aria-label={title}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-9 items-center justify-center rounded-[7px] border-2 border-[#2a2a2a] px-3 text-[12px] font-extrabold tracking-[1px] text-[#cfcfcf] no-underline transition-colors hover:border-accent hover:text-white"
+              >
+                {label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

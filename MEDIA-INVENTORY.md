@@ -86,8 +86,11 @@ being deployed but never served); four duplicate/AI assets deleted.
   `ChIJC6icp3C5wogRgiYvqfyx0I4`; review link and profile URL captured.
 - **"Veteran owned and operated"** appears on Angi but **nowhere on the site**. Worth confirming.
 - **Duplicate listings to claim/merge:** a second Yelp page and a second Facebook page.
-- **Footer social URLs** (currently only Instagram is wired): Facebook
-  `facebook.com/TrinityGarageDoorServiceLLC/`, BBB, Angi, HomeAdvisor, Nextdoor profiles all found.
+- **Footer social URLs — now wired.** Instagram, Facebook, Google Business Profile and Yelp render
+  as icons; BBB and Angi as wordmark chips. All eight profiles (incl. HomeAdvisor and Nextdoor)
+  are in `SOCIAL` in `lib/site.ts` and are listed in the `LocalBusiness` `sameAs` array so Google
+  can tie the listings to one entity. **LinkedIn is deliberately excluded** — there is no company
+  page, only Jason's personal profile.
 
 ## Provenance note
 Everything placed on the site comes from **Trinity's own channels** (their website media library,
