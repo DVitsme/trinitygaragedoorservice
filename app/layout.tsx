@@ -23,10 +23,16 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "https://trinitygaragedoorservice.com",
   ),
-  title: {
-    default: "Trinity Garage Door Service | Tampa Bay Garage Door Repair & Installation",
-    template: "%s · Trinity Garage Door Service",
-  },
+  /**
+   * NO `template` here, deliberately. Every page file already ends its own title with
+   * "| Trinity Garage Door Service", so a template appended the brand a SECOND time:
+   * the spring repair page rendered at 103 characters as
+   *   "Garage Door Spring Repair & Replacement | Trinity Garage Door Service · Trinity Garage Door Service"
+   * Google truncates around 60, so the visible result was spent on a repeated brand name.
+   *
+   * If you ever reinstate a template, strip the brand out of all 33 page titles first.
+   */
+  title: "Trinity Garage Door Service | Tampa Bay Garage Door Repair & Installation",
   description:
     "Family owned garage door repair, replacement, and installation across Tampa Bay. 24/7 emergency service, same day repairs, licensed and insured.",
 };

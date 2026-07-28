@@ -27,11 +27,21 @@ const whyCards: { icon: ReactNode; title: string; body: string }[] = [
   { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Same Day Service", body: "Most repairs done the same day, often within hours." },
 ];
 
+/**
+ * Homepage stats. Every figure here must be defensible:
+ *  - Years:  derived from SITE.foundedYear, so it cannot go stale.
+ *  - 12k+:   lifetime figure. Housecall Pro only holds records from Oct 2019 (7,673 jobs since),
+ *            so it neither proves nor disproves this. Left as the client's own claim.
+ *  - 5.0★:   Google Business Profile, checked 2026-07-28. HCP has no reviews endpoint, so this
+ *            is hand maintained. Re-check the rating AND the count together before each launch.
+ *  - 5:      counties in Trinity's real Housecall Pro service zone (130 zips, 41 cities).
+ *            Counties rather than cities so the number stays consistent with a nav that lists 6.
+ */
 const stats = [
   { v: <>{new Date().getFullYear() - SITE.foundedYear}<span className="text-accent">+</span></>, label: "Years of Service" },
   { v: <>12k<span className="text-accent">+</span></>, label: "Doors Serviced" },
-  { v: <>4.9<span className="text-accent">★</span></>, label: "Average Rating" },
-  { v: <>6</>, label: "Cities Covered" },
+  { v: <>5.0<span className="text-accent">★</span></>, label: "From 597 Reviews" },
+  { v: <>5</>, label: "Counties Covered" },
 ];
 
 /**
@@ -107,7 +117,7 @@ export default function HomePage() {
               <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
             </a>
           </div>
-          <div className="mt-[26px] text-[12.5px] font-extrabold uppercase tracking-[0.12em] text-white/[0.78]">Licensed &amp; Insured · Same Day Service · 6 Cities Covered</div>
+          <div className="mt-[26px] text-[12.5px] font-extrabold uppercase tracking-[0.12em] text-white/[0.78]">Licensed &amp; Insured · Same Day Service · 5 Counties Covered</div>
         </div>
       </section>
 
@@ -221,7 +231,6 @@ export default function HomePage() {
               <span className="absolute bottom-[18px] left-0 bg-accent px-4 py-[9px] text-[12.5px] font-extrabold uppercase tracking-[0.06em] text-white">Watch a finished door open smoothly</span>
             </div>
           </Reveal>
-          <div className="mt-3.5 text-center text-[12.5px] font-semibold text-[#999]">Figures provisional, final stats confirmed before launch.</div>
         </div>
       </section>
 
@@ -284,7 +293,7 @@ export default function HomePage() {
               <div>
                 <div className={eyebrowCls}>Service Areas</div>
                 <h2 className="mt-3 font-display text-[clamp(26px,3.2vw,38px)] font-extrabold uppercase leading-[1.04] text-ink">We Cover the Whole Tampa Bay Area</h2>
-                <p className="mt-3.5 text-[16.5px] leading-[1.58] text-body">Local techs based in Lutz means shorter drive times and same day arrival across six cities.</p>
+                <p className="mt-3.5 text-[16.5px] leading-[1.58] text-body">Local techs based in Lutz means shorter drive times across Hillsborough, Pinellas, Pasco, Hernando and Polk.</p>
                 <div className="mt-[22px] flex flex-wrap gap-2.5">
                   {cities.map((c) => (
                     <Link key={c.slug} href={`/service-areas/${c.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{c.name}</Link>

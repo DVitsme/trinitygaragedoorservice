@@ -9,7 +9,7 @@ import { Reveal } from "@/components/blocks/reveal";
 export const metadata: Metadata = {
   title: "Reviews | Trinity Garage Door Service Tampa Bay",
   description:
-    "Real Google reviews from Tampa Bay homeowners after Trinity worked on their garage doors. 4.9 on Google, BBB A+ accredited. Call (813) 279-6785.",
+    "Real Google reviews from Tampa Bay homeowners after Trinity worked on their garage doors. 5.0 on Google from 597 reviews, BBB A+ accredited. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/about/reviews/" },
 };
 
@@ -47,7 +47,7 @@ export default function ReviewsPage() {
           <div className="mt-7 flex flex-wrap items-center gap-[18px]">
             <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.08] px-[18px] py-2.5">
               <span className="text-[16px] tracking-[2px] text-accent">★★★★★</span>
-              <span className="text-[15px] font-extrabold text-white">4.9 on Google</span>
+              <span className="text-[15px] font-extrabold text-white">5.0 on Google, 597 reviews</span>
             </div>
             <div className="inline-flex items-center gap-2.5 text-[14px] font-bold text-white">
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-[4px] bg-white text-[11px] font-black text-[#0a4ea2]">A+</span>

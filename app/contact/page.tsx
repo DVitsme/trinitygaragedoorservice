@@ -131,7 +131,14 @@ export default function ContactPage() {
                   <ContactForm />
                 </div>
                 <p className="mt-3 text-center text-[12.5px] font-medium text-[#8a8a8a]">
-                  A real person gets back to you fast. We don&apos;t share your info. See our{" "}
+                  {/*
+                    Was "We don't share your info", which is not true and is the kind of absolute
+                    claim FDUTPA lets customers sue over (it carries fee shifting). The form data
+                    already reaches Cloudflare, Turnstile and Resend, and the privacy policy says
+                    so. This wording is accurate today and stays accurate when leads start going
+                    into Housecall Pro.
+                  */}
+                  A real person gets back to you fast. We use your details to answer you and schedule the work, nothing else. See our{" "}
                   <Link href={ROUTES.privacy} className="font-bold text-accent no-underline">privacy policy</Link>.
                 </p>
               </div>

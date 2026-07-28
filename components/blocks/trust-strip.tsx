@@ -2,9 +2,15 @@ import Image from "next/image";
 import { asset } from "@/lib/site";
 
 /**
- * Dark trust strip — exact port of the design (handoff 02). Angi + Elite badges,
- * 4.9 on Google, red dividers, BBB A+ chip, license line. The 4.9 is the design's
- * visual text; JSON-LD aggregateRating is omitted until reviews are real (G6).
+ * Dark trust strip — port of the design (handoff 02). Angi + Elite badges, Google rating,
+ * red dividers, BBB A+ chip, license line.
+ *
+ * The rating is HAND MAINTAINED: Housecall Pro has no reviews endpoint, so nothing here can
+ * refresh it. Checked 2026-07-28 against the Google Business Profile: 5.0 from 597 reviews
+ * (the design shipped 4.9, which understated them). Re-check rating and count together.
+ *
+ * JSON-LD aggregateRating stays omitted on purpose (G6) — self-serving review markup is
+ * ineligible, and the rating already shows in the Business Profile where searchers see it.
  */
 export function TrustStrip() {
   return (
@@ -13,7 +19,7 @@ export function TrustStrip() {
         <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={296} height={310} className="h-[58px] w-auto" />
         <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={162} height={160} className="h-12 w-auto" />
         <span className="inline-flex items-center gap-2 text-[15px] font-bold text-white">
-          <span className="tracking-[1px] text-accent">★★★★★</span> 4.9 on Google
+          <span className="tracking-[1px] text-accent">★★★★★</span> 5.0 on Google, 597 reviews
         </span>
         <span className="h-[26px] w-[2px] bg-accent" />
         <span className="inline-flex items-center gap-2 text-[15px] font-extrabold text-white">

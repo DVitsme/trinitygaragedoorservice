@@ -28,7 +28,13 @@ export type RepairDetailData = {
   heroImageAlt: string;
   h1: ReactNode; // includes the red-box keyword span
   heroLead: string;
-  primaryCta?: "repair" | "estimate"; // default repair
+  /**
+   * Which hero button is the red one. Default "repair".
+   * Use "phone" on pages where booking is the WRONG action: Housecall Pro only seats
+   * appointments Mon to Fri 8 to 4, so sending someone with a door stuck open at 11pm
+   * into the booking flow offers them Monday morning.
+   */
+  primaryCta?: "repair" | "estimate" | "phone";
   intro: { eyebrow: string; title: string; paras: string[]; image: string; imageAlt: string; badge: string };
   signs: { eyebrow: string; title: string; lead?: string; cards: SignCard[]; note: { icon: ReactNode; title: string; body: string } };
   index?: { eyebrow: string; title: string; lead?: string; rows: IdxRow[]; calloutIcon?: ReactNode; callout: ReactNode };
@@ -91,12 +97,22 @@ export function RepairDetailLayout({ d }: { d: RepairDetailData }) {
         </h1>
         <p className="mt-6 max-w-[660px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">{d.heroLead}</p>
         <div className="mt-[30px] flex flex-wrap gap-[13px]">
-          <Link href={primary.href} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">
-            {primary.label}
-          </Link>
-          <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">
-            <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
-          </a>
+          {(() => {
+            const red = "rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark";
+            const white = "rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline";
+            const phoneFirst = d.primaryCta === "phone";
+            const call = (
+              <a key="call" href={SITE.phoneHref} className={`inline-flex items-center gap-2.5 ${phoneFirst ? red : white}`}>
+                <Phone className={`h-[18px] w-[18px] ${phoneFirst ? "text-white" : "text-accent"}`} strokeWidth={2.2} /> Call {SITE.phoneDisplay}
+              </a>
+            );
+            const book = (
+              <Link key="book" href={primary.href} className={phoneFirst ? white : red}>
+                {primary.label}
+              </Link>
+            );
+            return phoneFirst ? [call, book] : [book, call];
+          })()}
         </div>
       </PhotoHero>
 

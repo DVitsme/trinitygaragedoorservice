@@ -17,6 +17,10 @@ const ico = (size: number, paths: ReactNode, sw: number | string = 2) => (
 
 const emergency: RepairDetailData = {
   canonicalPath: "/services/repair/emergency/",
+  // Phone leads here, not booking. Housecall Pro only seats appointments Mon to Fri 8 to 4,
+  // so the booking flow would answer a 2am emergency with "Monday morning". This page's own
+  // copy already tells people to call for a true emergency; the buttons now agree with it.
+  primaryCta: "phone",
   breadcrumb: [
     { label: "Home", href: "/" },
     { label: "Services", href: "/services/" },
