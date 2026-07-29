@@ -150,7 +150,18 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="relative">
-                <Image src={"/team/team-with-banner.jpg"} alt="The Trinity Garage Door team behind their branded banner" width={620} height={430} className="h-[430px] w-full rounded-[8px] border-2 border-ink object-cover" />
+                {/* Same file as the /about/our-story/ hero, deliberately. It is the same
+                    photograph (verified pixel wise, mean difference ~1/255), so shipping a second
+                    copy would have cost 200 KB for nothing.
+                    next.config.ts sets images.unoptimized, so this file IS what the visitor
+                    downloads. Re-encoding was tested at several sizes and qualities and every
+                    attempt came out LARGER, so it is committed exactly as supplied. */}
+                {/* The height drops below the nav breakpoint on purpose. A fixed 430px against a
+                    ~350px wide phone makes a PORTRAIT box for a landscape photo, and object-cover
+                    then throws away the sides: at 430px two of the six people are cropped out
+                    entirely and a third is cut in half. 260px puts the box back near the photo's
+                    own 1.5 aspect, so almost nothing is lost. */}
+                <Image src={"/team/team-in-office.jpg"} alt="The Trinity Garage Door Service team in their Lutz office" width={2048} height={1366} className="h-[430px] w-full rounded-[8px] border-2 border-ink object-cover max-nav:h-[260px]" priority={false} />
                 <div className="absolute -right-4 -top-4 rounded-[8px] border-2 border-ink bg-accent px-[18px] py-3.5 text-center">
                   <div className="font-display text-[32px] font-black leading-none text-white">{SITE.yearsLabel}</div>
                   <div className="mt-[3px] text-[10.5px] font-extrabold uppercase leading-tight tracking-[0.06em] text-white">Years in<br />Tampa Bay</div>
