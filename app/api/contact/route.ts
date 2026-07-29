@@ -47,9 +47,13 @@ export async function POST(req: Request) {
 
   // Send the notification email (best-effort; dormant until a Resend domain is verified).
   let emailed = false;
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL;
+  // .trim() is not decoration. A trailing space had crept into CONTACT_FROM_EMAIL, and dotenv does
+  // not trim unquoted values, so Resend would have received "addr@domain.com " as the from address
+  // and rejected the send. Every lead would have been lost silently, because the send is wrapped in
+  // a try/catch that only logs.
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const to = process.env.CONTACT_TO_EMAIL?.trim();
+  const from = process.env.CONTACT_FROM_EMAIL?.trim();
   if (apiKey && to && from) {
     try {
       const resend = new Resend(apiKey);
