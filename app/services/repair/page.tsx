@@ -77,7 +77,7 @@ const faqs = [
   { q: "Can I replace a spring myself?", a: "We'd really rather you didn't. Garage door springs hold a tremendous amount of tension, and they can hurt you badly if they let go while you're working on them. This is a job for someone with the right tools and the training to use them." },
   { q: "How long should my springs and opener last?", a: "Springs usually run about seven to ten years, depending on how often you use the door and how well it's kept up. Openers tend to go ten to fifteen. Florida's climate can shorten both, so don't be surprised if yours wear a little sooner." },
   { q: "Do you charge for an estimate?", a: "No. Estimates are free. We'll look at the door, tell you what it needs, and give you a price with no pressure to book on the spot." },
-  { q: "How fast can you get here?", a: "Often the same day. For emergencies we're around the clock, so call us and we'll tell you the soonest we can be there." },
+  { q: "How fast can you get here?", a: "Often the same day. For emergencies call us till 9pm and we'll tell you the soonest we can be there." },
 ];
 
 const eyebrowCls = "text-[13px] font-extrabold uppercase tracking-[0.16em] text-accent";
@@ -232,17 +232,17 @@ export default function RepairHubPage() {
           <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-7 px-5 py-16 text-center nav:px-8">
             <div className="max-w-[760px]">
               <span className="inline-flex items-center gap-2.5 rounded-full bg-[rgba(0,0,0,0.18)] px-3.5 py-[7px] text-[13px] font-extrabold uppercase tracking-[0.14em] text-white">
-                <span className="h-2 w-2 rounded-full bg-white" /> Same Day &amp; 24/7
+                <span className="h-2 w-2 rounded-full bg-white" /> Same Day Service
               </span>
               <h2 className="m-0 mt-4 font-display text-[clamp(26px,3.6vw,42px)] font-black uppercase leading-none">It Always Breaks at the Worst Moment</h2>
               <p className="mt-3.5 text-[17px] font-medium leading-[1.58] text-white/90">
-                Your car is stuck inside and you're already late, or it's nine at night and the door won't close and you can't leave the house wide open. We keep same day spots open for exactly that, and we run a 24/7 emergency line for the calls that can't wait until morning.
+                Your car is stuck inside and you're already late, or it's nine at night and the door won't close and you can't leave the house wide open. We keep same day spots open for exactly that, and the phones are answered till 9pm for the calls that can't wait.
               </p>
             </div>
             <a href={SITE.phoneHref} className="inline-flex flex-none items-center gap-3.5 rounded-[8px] bg-white px-[26px] py-5 no-underline">
               <Phone className="h-[26px] w-[26px] text-accent" strokeWidth={2} />
               <span>
-                <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-accent-dark">Call the 24/7 line</span>
+                <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-accent-dark">Call us till 9pm</span>
                 <span className="block font-display text-[24px] font-black text-accent">{SITE.phoneDisplay}</span>
               </span>
             </a>

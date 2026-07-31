@@ -202,7 +202,7 @@ export function RepairDetailLayout({ d }: { d: RepairDetailData }) {
             <a href={SITE.phoneHref} className="inline-flex flex-none items-center gap-3.5 rounded-[8px] bg-white px-[26px] py-5 no-underline">
               <Phone className="h-[26px] w-[26px] text-accent" strokeWidth={2} />
               <span>
-                <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-accent-dark">Call the 24/7 line</span>
+                <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-accent-dark">Call us till 9pm</span>
                 <span className="block font-display text-[24px] font-black text-accent">{SITE.phoneDisplay}</span>
               </span>
             </a>

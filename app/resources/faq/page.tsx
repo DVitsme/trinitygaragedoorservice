@@ -58,13 +58,13 @@ const groups: Group[] = [
       },
       {
         q: "How soon can you come out?",
-        a: <>Often the same day. Call early and there&apos;s a good chance we can have a technician at your house within a couple of hours. For emergencies we answer 24/7.</>,
-        plain: "Often the same day. Call early and there's a good chance we can have a technician at your house within a couple of hours. For emergencies we answer 24/7.",
+        a: <>Often the same day. Call early and there&apos;s a good chance we can have a technician at your house within a couple of hours. For emergencies we answer till 9pm.</>,
+        plain: "Often the same day. Call early and there's a good chance we can have a technician at your house within a couple of hours. For emergencies we answer till 9pm.",
       },
       {
         q: "Do you offer emergency service?",
-        a: <>We do, around the clock. A broken spring or a door stuck open does not wait for business hours, so neither do we. Here&apos;s our <A href={ROUTES.emergency}>emergency repair</A> page.</>,
-        plain: "We do, around the clock. A broken spring or a door stuck open does not wait for business hours, so neither do we.",
+        a: <>We do. A broken spring or a door stuck open does not wait for business hours, so we keep the phones answered till 9pm. Here&apos;s our <A href={ROUTES.emergency}>emergency repair</A> page.</>,
+        plain: "We do. A broken spring or a door stuck open does not wait for business hours, so we keep the phones answered till 9pm.",
       },
     ],
   },

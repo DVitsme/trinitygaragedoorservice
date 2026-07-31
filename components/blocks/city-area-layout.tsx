@@ -33,7 +33,7 @@ const doCards: { label: string; href: string; icon: ReactNode }[] = [
   { label: "Opener repair & replacement", href: ROUTES.opener, icon: ico(<><rect x="4" y="5" width="16" height="10" rx="1" /><path d="M12 15v4M8 21h8" /></>) },
   { label: "New installation & replacement", href: ROUTES.installation, icon: ico(<path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-7h6v7" />) },
   { label: "Tune ups to keep it running longer", href: ROUTES.tuneUp, icon: ico(<path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4l-2.5 2.5-2-2z" />) },
-  { label: "24/7 emergency repair", href: ROUTES.emergency, icon: ico(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>) },
+  { label: "Emergency repair", href: ROUTES.emergency, icon: ico(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>) },
 ];
 
 export function CityAreaLayout({ d }: { d: CityAreaData }) {

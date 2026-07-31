@@ -13,7 +13,7 @@ import { Reveal } from "@/components/blocks/reveal";
 export const metadata: Metadata = {
   title: "Garage Door Services Tampa Bay | Trinity Garage Door Service",
   description:
-    "Garage door installation, repair, replacement, springs, openers, and off track repair across Tampa Bay. Family owned, licensed, 24/7 emergency. Call (813) 279-6785.",
+    "Garage door installation, repair, replacement, springs, openers, and off track repair across Tampa Bay. Family owned, licensed, phones answered till 9pm. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/services/" },
 };
 
@@ -143,12 +143,12 @@ export default function ServicesHubPage() {
                 <div>
                   <h3 className="m-0 font-display text-[21px] font-extrabold uppercase text-white">When It Can&apos;t Wait</h3>
                   <p className="mt-1.5 max-w-[560px] text-[15.5px] leading-[1.5] text-[#a8a8a8]">
-                    A broken spring the morning of work, or a door stuck wide open overnight. We run a 24/7 emergency line for exactly that. Call it and we&apos;ll get someone headed your way.
+                    A broken spring the morning of work, or a door stuck wide open overnight. We keep the phones answered till 9pm for exactly that. Call and we&apos;ll get someone headed your way.
                   </p>
                 </div>
               </div>
               <span className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-[7px] bg-accent px-6 py-[15px] text-[14px] font-extrabold uppercase tracking-[0.04em] text-white">
-                24/7 Emergency Repair {learnMoreArrow}
+                Emergency Repair {learnMoreArrow}
               </span>
             </Link>
           </Reveal>
@@ -208,7 +208,7 @@ export default function ServicesHubPage() {
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,46px)] font-black uppercase leading-none">Get In Touch</h2>
             <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">
-              Call Trinity at (813) 279-6785, or send us a message and we&apos;ll get back to you fast. The estimate is free and the advice is honest, and our emergency line runs around the clock. Opening doors in Tampa Bay since 2007.
+              Call Trinity at (813) 279-6785, or send us a message and we&apos;ll get back to you fast. The estimate is free and the advice is honest, and the phones are answered till 9pm. Opening doors in Tampa Bay since 2007.
             </p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">

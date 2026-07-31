@@ -377,7 +377,7 @@ export default function TroubleshootingPage() {
         <Reveal>
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,44px)] font-black uppercase leading-none">When to call Trinity</h2>
-            <p className="mx-auto mt-4 max-w-[720px] text-[17.5px] font-medium leading-[1.55] text-white/90">We&apos;re all for fixing the small stuff yourself. But your safety and the life of your door come first. If you hit one of the bigger problems above, or you just are not sure, give us a call at (813) 279-6785. Most repairs are same day, and we run a 24/7 line for emergencies. Family owned, licensed and insured (GD13010 and GDI-09484), serving Tampa Bay since 2007.</p>
+            <p className="mx-auto mt-4 max-w-[720px] text-[17.5px] font-medium leading-[1.55] text-white/90">We&apos;re all for fixing the small stuff yourself. But your safety and the life of your door come first. If you hit one of the bigger problems above, or you just are not sure, give us a call at (813) 279-6785. Most repairs are same day, and the phones are answered till 9pm. Family owned, licensed and insured (GD13010 and GDI-09484), serving Tampa Bay since 2007.</p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">
                 <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}

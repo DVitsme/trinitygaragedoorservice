@@ -115,7 +115,7 @@ export default function ReviewsPage() {
         <Reveal>
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,46px)] font-black uppercase leading-none">Had Us Out To Your Place?</h2>
-            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">A quick Google review really helps a small local company like ours, and we read every one. And if your door is giving you trouble right now, don&apos;t wait it out. Call (813) 279-6785. We answer 24/7.</p>
+            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">A quick Google review really helps a small local company like ours, and we read every one. And if your door is giving you trouble right now, don&apos;t wait it out. Call (813) 279-6785. We answer till 9pm.</p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">
                 <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}

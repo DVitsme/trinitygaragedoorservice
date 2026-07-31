@@ -49,7 +49,7 @@ export function RedBand({
         </div>
         {phoneCard && (
           <div className="rounded-[10px] border-2 border-white bg-white p-7 text-center text-ink">
-            <div className="text-[12px] font-extrabold uppercase tracking-[0.14em] text-accent">Call us 24/7</div>
+            <div className="text-[12px] font-extrabold uppercase tracking-[0.14em] text-accent">Call us till 9pm</div>
             <a href={SITE.phoneHref} className="mt-2 block font-display text-[clamp(26px,4vw,34px)] font-black text-ink no-underline">{SITE.phoneDisplay}</a>
             <Cta href={SITE.phoneHref} variant="accent" size="lg" full className="mt-4">
               <Phone className="h-[18px] w-[18px]" strokeWidth={2.2} /> Call Now

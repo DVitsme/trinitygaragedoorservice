@@ -37,7 +37,7 @@ export const metadata: Metadata = {
    */
   title: "Trinity Garage Door Service | Tampa Bay Garage Door Repair & Installation",
   description:
-    "Family owned garage door repair, replacement, and installation across Tampa Bay. 24/7 emergency service, same day repairs, licensed and insured.",
+    "Family owned garage door repair, replacement, and installation across Tampa Bay. Same day repairs, phones answered till 9pm, licensed and insured.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

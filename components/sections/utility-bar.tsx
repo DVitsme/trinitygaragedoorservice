@@ -8,7 +8,7 @@ export function UtilityBar() {
         <div className="flex flex-wrap items-center gap-[18px]">
           <span className="inline-flex items-center gap-2 uppercase tracking-[0.05em]">
             <span className="h-[7px] w-[7px] rounded-full bg-white" />
-            24/7 Emergency Service
+            Phones Answered Till 9pm
           </span>
           <span className="opacity-45">|</span>
           <a

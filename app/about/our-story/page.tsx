@@ -35,7 +35,7 @@ const doCards: { label: string; href: string; icon: ReactNode }[] = [
   { label: "Doors that have jumped the track", href: ROUTES.offTrack, icon: ico(<path d="M7 3v18M17 3v18M7 8h10M7 14l10-4" />) },
   { label: "New installation & full replacement", href: ROUTES.installation, icon: ico(<path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-7h6v7" />) },
   { label: "Opener repair & replacement", href: ROUTES.opener, icon: ico(<><rect x="4" y="5" width="16" height="10" rx="1" /><path d="M12 15v4M8 21h8" /></>) },
-  { label: "24/7 emergency repair", href: ROUTES.emergency, icon: ico(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>) },
+  { label: "Emergency repair", href: ROUTES.emergency, icon: ico(<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>) },
   { label: "See all services", href: ROUTES.services, icon: ico(<path d="M4 6h16M4 12h16M4 18h16" />) },
 ];
 
@@ -48,7 +48,7 @@ const faqs = [
   { q: "Are you really family owned?", a: "Yes. Trinity is family owned and run right here in Tampa Bay. We're not a franchise of a national brand." },
   { q: "Do you charge for estimates?", a: "No. Estimates are free. We'll come look at the job and give you a real number with no obligation to book." },
   { q: "Are you licensed and insured?", a: "Yes, fully licensed, bonded, and insured in Florida under GD13010 and GDI-09484." },
-  { q: "Do you offer emergency service?", a: "We do, 24/7. A broken spring or a door stuck halfway doesn't wait for business hours, so neither do we." },
+  { q: "Do you offer emergency service?", a: "We do. A broken spring or a door stuck halfway doesn't wait for business hours, so neither do we." },
   { q: "How soon can you come out?", a: "Often the same day. Call early and there's a good chance we can have a technician at your house within a couple of hours." },
 ];
 

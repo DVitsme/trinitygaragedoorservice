@@ -4,7 +4,7 @@ import { CityAreaLayout, type CityAreaData } from "@/components/blocks/city-area
 export const metadata: Metadata = {
   title: "Garage Door Repair in Land O' Lakes, FL | Trinity Garage Door Service",
   description:
-    "Garage door service and new door installation across Land O' Lakes, FL. Family owned, same day repairs, free estimates, 24/7 emergencies. Call (813) 279-6785.",
+    "Garage door service and new door installation across Land O' Lakes, FL. Family owned, same day repairs, free estimates, phones answered till 9pm. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/service-areas/land-o-lakes/" },
 };
 

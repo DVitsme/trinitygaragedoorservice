@@ -4,7 +4,7 @@ import { CityAreaLayout, type CityAreaData } from "@/components/blocks/city-area
 export const metadata: Metadata = {
   title: "Garage Door Repair in Oldsmar, FL | Trinity Garage Door Service",
   description:
-    "Garage door repair, springs, openers, and new doors in Oldsmar, FL. Family owned, same day service, free estimates, 24/7 emergencies. Call (813) 279-6785.",
+    "Garage door repair, springs, openers, and new doors in Oldsmar, FL. Family owned, same day service, free estimates, phones answered till 9pm. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/service-areas/oldsmar/" },
 };
 

@@ -23,7 +23,7 @@ const ico = (size: number, paths: ReactNode, sw: number | string = 2) => (
 );
 
 const whyCards: { icon: ReactNode; title: string; body: string }[] = [
-  { icon: ico(26, (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>)), title: "24/7 Response", body: "A real person day or night for emergencies." },
+  { icon: ico(26, (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>)), title: "Fast Response", body: "A real person answers the phone till 9pm." },
   { icon: ico(26, (<><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7-7V3h6.6l7.4 7.4a2 2 0 0 1 0 2.8z" /><circle cx="7.5" cy="7.5" r="1.2" fill="currentColor" stroke="none" /></>)), title: "Upfront Pricing", body: "A clear price before we start; no surprises." },
   { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "FL GD13010 / GDI-09484, bonded & insured." },
   { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Same Day Service", body: "Most repairs done the same day, often within hours." },
@@ -357,7 +357,7 @@ export default function HomePage() {
                 <a href={SITE.phoneHref} className="mt-[26px] inline-flex items-center gap-3.5 rounded-[8px] border-2 border-[#333] bg-[#222] px-5 py-4 no-underline">
                   <span className="flex h-12 w-12 flex-none items-center justify-center rounded-[7px] bg-accent text-white"><Phone className="h-[22px] w-[22px]" strokeWidth={2} /></span>
                   <span>
-                    <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#9a9a9a]">Prefer to call? 24/7</span>
+                    <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#9a9a9a]">Prefer to call? Till 9pm</span>
                     <span className="block font-display text-[23px] font-extrabold text-white">{SITE.phoneDisplay}</span>
                   </span>
                 </a>
@@ -434,7 +434,7 @@ export default function HomePage() {
           <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-8 px-5 py-[72px] nav:px-8">
             <div>
               <h2 className="m-0 max-w-[620px] font-display text-[clamp(27px,3.8vw,44px)] font-black uppercase leading-none">Don&apos;t Wait, Get Your Door Fixed Today</h2>
-              <p className="mt-3 text-[17px] font-medium text-white/90">Same day slots fill fast, book online or call our 24/7 line.</p>
+              <p className="mt-3 text-[17px] font-medium text-white/90">Same day slots fill fast, book online or call us till 9pm.</p>
             </div>
             <div className="flex flex-wrap gap-[13px]">
               <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">Book a Repair</Link>

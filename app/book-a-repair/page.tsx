@@ -37,14 +37,14 @@ const steps = [
 ];
 
 const whyCards: { icon: ReactNode; title: string; body: string }[] = [
-  { icon: ico(26, (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>)), title: "Same Day Help", body: "Most repairs can go on the schedule for the same day, with 24/7 for true emergencies." },
+  { icon: ico(26, (<><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>)), title: "Same Day Help", body: "Most repairs can go on the schedule for the same day, and the phones are answered till 9pm." },
   { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "Honest & Local", body: "Family owned in Tampa Bay since 2007. We tell you what it needs, not what's easiest to sell." },
   { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "Bonded and insured under FL GD13010 and GDI-09484. Your home and your door are protected." },
   { icon: ico(26, (<><path d="M4 4h16v12H5.2L4 17.2z" /><path d="M8 9h8M8 12h5" /></>)), title: "Clear Confirmation", body: "A text and email the moment you book, and a heads up when your tech is on the way." },
 ];
 
 const otherWays: { icon: ReactNode; title: string; body: string; href: string; foot: ReactNode }[] = [
-  { icon: ico(26, <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />), title: "Call Us 24/7", body: "Talk to a real person any time, day or night. Best for emergencies or when you'd rather explain it out loud.", href: SITE.phoneHref, foot: <span className="font-display text-[18px] font-extrabold text-accent">{SITE.phoneDisplay}</span> },
+  { icon: ico(26, <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />), title: "Call Us Till 9pm", body: "Talk to a real person, not a menu. Best for emergencies or when you'd rather explain it out loud.", href: SITE.phoneHref, foot: <span className="font-display text-[18px] font-extrabold text-accent">{SITE.phoneDisplay}</span> },
   { icon: ico(26, (<><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></>)), title: "Request A Free Estimate", body: "Weighing a new door or a bigger job? We'll come take a look and give you an honest number, no pressure.", href: ROUTES.estimate, foot: "Get Started" },
   { icon: ico(26, <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />), title: "Send A Message", body: "Put it in writing and we'll get back to you fast. Tell us about your door and what's going on.", href: ROUTES.contact, foot: "Contact Us" },
 ];
@@ -54,7 +54,7 @@ const faqs = [
   { q: "Will I get an exact arrival time?", a: "You'll choose an arrival window, like 10am to 12pm, rather than an exact minute. That gives our techs room for traffic and the job before yours, and we'll let you know when your tech is on the way." },
   { q: "Is there a deposit?", a: "Some jobs take a small card deposit to hold your slot, and you'll see that clearly before you confirm. Plenty of bookings don't require one at all." },
   { q: "How do I change or cancel?", a: "Just call us at (813) 279-6785. Changes and cancellations are handled by phone so nothing slips through, and we're happy to find you a better time." },
-  { q: "It's an emergency. Should I book online or call?", a: "For a true emergency, like a broken spring with your car trapped or a door stuck open, call us at (813) 279-6785. Our line is open 24/7 and we'll get someone headed your way fast." },
+  { q: "It's an emergency. Should I book online or call?", a: "For a true emergency, like a broken spring with your car trapped or a door stuck open, call us at (813) 279-6785. Our phones are answered till 9pm and we'll get someone headed your way fast." },
 ];
 
 const eyebrowCls = "text-[13px] font-extrabold uppercase tracking-[0.16em] text-accent";
@@ -83,7 +83,7 @@ export default function BookARepairPage() {
               <Breadcrumb items={breadcrumb} />
               <div className="mt-4 flex items-center gap-3.5">
                 <span className="h-1 w-[52px] bg-accent" />
-                <span className="text-[13px] font-extrabold uppercase tracking-[0.22em] text-white">Book Online · 24/7</span>
+                <span className="text-[13px] font-extrabold uppercase tracking-[0.22em] text-white">Book Online</span>
               </div>
               <h1 className="m-0 mt-[18px] max-w-[640px] font-display text-[clamp(34px,5.4vw,60px)] font-black uppercase leading-[0.98] tracking-[-0.015em] text-white [text-shadow:0_2px_22px_rgba(0,0,0,0.5)]">
                 Book Your Repair In <span className="inline-block bg-accent px-3 text-white">A Few Taps</span>
@@ -124,7 +124,7 @@ export default function BookARepairPage() {
                 <Phone className="h-5 w-5 text-accent" strokeWidth={2.2} />
                 <span className="font-display text-[17px] font-extrabold text-white">{SITE.phoneDisplay}</span>
               </a>
-              <div className="mt-2.5 text-center text-[13px] font-semibold text-[#6a6a6a]">Prefer to talk it through? We answer 24/7.</div>
+              <div className="mt-2.5 text-center text-[13px] font-semibold text-[#6a6a6a]">Prefer to talk it through? We answer till 9pm.</div>
             </div>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function BookARepairPage() {
         <Reveal>
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,46px)] font-black uppercase leading-none">Let&apos;s Get Your Door Fixed</h2>
-            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">Book online in about a minute and pick the arrival window that works for you, or call us 24/7. Family owned, licensed and insured, serving Tampa Bay since 2007.</p>
+            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">Book online in about a minute and pick the arrival window that works for you, or call us till 9pm. Family owned, licensed and insured, serving Tampa Bay since 2007.</p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <BookOnlineButton className="inline-flex items-center gap-2.5 rounded-[9px] bg-white px-[34px] py-[18px] font-display text-[16px] font-extrabold uppercase tracking-[0.03em] text-accent">
                 {calCheck(19)} Book Online

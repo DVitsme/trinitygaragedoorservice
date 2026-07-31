@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import { RepairDetailLayout, type RepairDetailData } from "@/components/blocks/repair-detail-layout";
 
 export const metadata: Metadata = {
-  title: "24/7 Emergency Garage Door Repair in Tampa Bay | Trinity",
+  title: "Emergency Garage Door Repair in Tampa Bay | Trinity",
   description:
-    "Garage door stuck, broken, or off track? Trinity runs a 24/7 emergency line across Tampa Bay. A real person answers and we come fast. Call (813) 279-6785.",
+    "Garage door stuck, broken, or off track? Trinity answers the phones till 9pm across Tampa Bay. A real person answers and we come fast. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/services/repair/emergency/" },
 };
 
@@ -27,7 +27,7 @@ const emergency: RepairDetailData = {
     { label: "Repair", href: "/services/repair/" },
     { label: "Emergency Repair" },
   ],
-  heroEyebrow: "24/7 Emergency Repair",
+  heroEyebrow: "Emergency Repair",
   heroImage: "svc-offtrack-ladder-top-section.jpg",
   heroImageAlt: "Trinity technician on an after hours emergency garage door call",
   h1: (
@@ -36,7 +36,7 @@ const emergency: RepairDetailData = {
     </>
   ),
   heroLead:
-    "A garage door never breaks at a convenient time, the morning you're late, the night you're locking up, or right after a storm. You don't want a voicemail and a callback next week. Trinity answers 24/7, every day of the year, with a real person and a tech on the way.",
+    "A garage door never breaks at a convenient time, the morning you're late, the night you're locking up, or right after a storm. You don't want a voicemail and a callback next week. Trinity answers right up to 9pm, with a real person and a tech on the way.",
   intro: {
     eyebrow: "The Short Version",
     title: "A Real Person, A Tech On The Way",
@@ -82,9 +82,9 @@ const emergency: RepairDetailData = {
     ),
   },
   redBand: {
-    badge: "Same Day & 24/7",
+    badge: "Same Day Service",
     title: "A Garage Door Emergency Won't Wait",
-    lead: "It's the morning you have to be somewhere, or the night you can't leave the house wide open. A real person answers our 24/7 line, the trucks carry common parts, and most emergencies are fixed on the first visit.",
+    lead: "It's the morning you have to be somewhere, or the night you can't leave the house wide open. A real person answers till 9pm, the trucks carry common parts, and most emergencies are fixed on the first visit.",
   },
   whatWeDo: {
     eyebrow: "What To Expect From An Emergency Call",
@@ -93,7 +93,7 @@ const emergency: RepairDetailData = {
     imageAlt: "Trinity technicians on an emergency garage door call",
     badge: "Fixed Fast",
     items: [
-      { strong: "A person answers, not a machine.", rest: "Day or night, holidays included. You reach someone who can get a technician headed your way." },
+      { strong: "A person answers, not a machine.", rest: "Right up to 9pm. You reach someone who can get a technician headed your way." },
       { strong: "The trucks carry common parts.", rest: "Springs, cables, rollers, and brackets, so most emergencies are fixed in a single visit, often within a couple of hours." },
       { strong: "You hear the price first.", rest: "Even at two in the morning, you get the number before we start. No surprises on the bill." },
       { strong: "We'll tell you if it can wait.", rest: "If the problem can safely hold until regular hours and save you a little, we'll say so. We won't use a late night call to pad the bill." },
@@ -106,15 +106,15 @@ const emergency: RepairDetailData = {
     title: "A Family Shop, Not A Call Center",
     lead: "We've been opening doors around here since 2007, across Hillsborough, Pinellas, Pasco, Hernando and Polk.",
     cards: [
-      { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "We Answer When It Matters", body: "A real person picks up our 24/7 line, holidays included. We won't use a late call to pad the bill." },
-      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, plus a 24/7 line for when your door quits at a bad hour." },
+      { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "We Answer When It Matters", body: "A real person picks up the phone till 9pm. We won't use a late call to pad the bill." },
+      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, and the phones are answered till 9pm when your door quits at a bad hour." },
       { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "Bonded and insured under FL GD13010 and GDI-09484." },
       { icon: ico(26, (<><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></>)), title: "Fair, Upfront Pricing", body: "A price you hear up front, with free estimates every time." },
     ],
   },
   faqHeading: { eyebrow: "Emergency Questions We Hear A Lot", title: "Frequently Asked" },
   faqs: [
-    { q: "Do you really answer at night and on weekends?", a: "Yes. Our emergency line is open 24/7, holidays included. Call (813) 279-6785 and you'll reach a person who can get a technician headed your way." },
+    { q: "How late can I call?", a: "The phones are answered till 9pm. Call (813) 279-6785 and you'll reach a real person, not a machine, who can tell you the soonest we can get a technician to you." },
     { q: "My car is stuck in the garage. Can you get it out?", a: "Usually, yes. Tell us when you call and we'll come ready to open the door safely so you can get your vehicle out." },
     { q: "The door won't close and I have to leave. What now?", a: "Call us right away. If we can't be there before you go, we'll talk you through securing it as best you can so the house isn't left wide open." },
     { q: "Should I try to fix it myself in the meantime?", a: "For anything involving the springs or cables, please don't. They hold enough tension to hurt you badly. Keep clear of the door and let a technician handle it." },
@@ -122,7 +122,7 @@ const emergency: RepairDetailData = {
   ],
   closing: {
     title: "Call Us Now",
-    lead: "If your garage door can't wait, call Trinity at (813) 279-6785 any time, day or night. We'll get a technician to you fast and get your door working and your house secure again.",
+    lead: "If your garage door can't wait, call Trinity at (813) 279-6785 up to 9pm. We'll get a technician to you fast and get your door working and your house secure again.",
   },
 };
 

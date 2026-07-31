@@ -26,6 +26,51 @@ export const SITE = {
   phoneHref: "tel:18132796785",
   areaLabel: "Lutz · Tampa Bay, FL",
   license: "FL GD13010 / GDI-09484",
+
+  /**
+   * Verified 2026-07-28 from Trinity's own Housecall Pro company record, which is the address they
+   * dispatch from, so it is authoritative. `CLIENT-ASKS` #3, answered.
+   */
+  address: {
+    street: "18125 US-41 Ste 208",
+    city: "Lutz",
+    region: "FL",
+    postalCode: "33549",
+    country: "US",
+    lat: 28.1372004,
+    lng: -82.4625826,
+  },
+
+  /**
+   * ⚠️ **THE HOURS LIVE HERE AND NOWHERE ELSE. Change them here, never in a page.**
+   *
+   * Settled on the 2026-07-29 call. The site previously claimed **24/7 in 62 places** and its
+   * JSON-LD told Google the business was open 00:00 to 23:59, seven days. Jason's position was that
+   * 24/7 meant the phone gets answered, not that anyone is dispatched; Simone, with him on the
+   * phone, gave the practical answer and Derrick confirmed the exact wording with her: **say the
+   * phones are answered till 9pm**.
+   *
+   * There is residual disagreement between the two of them, which is precisely why every phrase is
+   * derived from these constants. If Jason insists it really is 24/7, it is one edit here.
+   *
+   * ⚠️ **`bookingDays` is deliberately Monday to Friday**, not Saturday. Simone said customers can
+   * book Monday to Saturday; their own API returns **242 booking windows over 21 days with zero on
+   * a Saturday**. Publishing Saturday would send people to an empty calendar. Blocked on
+   * `CLIENT-ASKS` #4a: either Jason adds Saturday hours in Housecall Pro, or this stays as is.
+   */
+  hours: {
+    /** When a human answers the phone. Short form, for badges and inline CTAs. */
+    phoneShort: "till 9pm",
+    /** Long form, for prose and cards. */
+    phoneLong: "We answer the phones till 9pm",
+    /** When a customer can actually book a slot online. */
+    bookingLabel: "8am to 4pm",
+    bookingDays: "Monday to Friday",
+    /** For JSON-LD. 24 hour clock. */
+    opens: "08:00",
+    closes: "21:00",
+    schemaDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as string[],
+  },
   foundedYear: FOUNDED_YEAR,
   /** Derived, so it can never drift out of date. Recomputed on every build. */
   yearsLabel: `${new Date().getFullYear() - FOUNDED_YEAR}+`,
@@ -143,7 +188,7 @@ export const CITIES = [
 
 /** Services mega-menu (NAVBAR-SPEC.md). */
 export const NAV_REPAIR = [
-  { label: "24/7 Emergency Repair", href: "/services/repair/emergency/" },
+  { label: "Emergency Repair", href: "/services/repair/emergency/" },
   { label: "Spring Repair", href: "/services/repair/spring/" },
   { label: "Opener Repair", href: "/services/repair/opener/" },
   { label: "Off Track Repair", href: "/services/repair/off-track/" },
@@ -230,7 +275,7 @@ export const ROUTES = {
 export const HOURS = {
   office: "Mon to Sat, 7am to 9pm",
   sunday: "Closed Sundays",
-  emergency: "24/7 for emergencies",
+  emergency: "Phones answered till 9pm",
 } as const;
 
 /** Services-hub cards (handoff 03 Services hub). Icons are lucide-react names. */

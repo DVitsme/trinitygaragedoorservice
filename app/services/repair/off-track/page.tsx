@@ -38,7 +38,7 @@ const offTrack: RepairDetailData = {
     title: "When Your Door Jumps The Track",
     paras: [
       "You'll know it when you see it. One side hangs lower than the other, a roller or two has popped out of the metal track, and the whole door looks like it's leaning in. Sometimes it's stuck wide open, sometimes jammed halfway and won't go either way.",
-      "It's not a problem to put off. We're family owned and based right here in Tampa Bay, and we keep a 24/7 line for the ones that can't wait, like a door stuck open overnight.",
+      "It's not a problem to put off. We're family owned and based right here in Tampa Bay, and we answer the phones till 9pm for the ones that can't wait, like a door stuck open overnight.",
     ],
     image: "svc-offtrack-top-seal.jpg",
     imageAlt: "Trinity technicians realigning a garage door",
@@ -80,9 +80,9 @@ const offTrack: RepairDetailData = {
     ),
   },
   redBand: {
-    badge: "Same Day & 24/7",
+    badge: "Same Day Service",
     title: "Stuck Open Or Jammed Shut?",
-    lead: "An off track door can't wait, especially one stuck wide open overnight. We keep a 24/7 line for exactly that, and we'll come ready to get your car out safely if it's trapped inside.",
+    lead: "An off track door can't wait, especially one stuck wide open overnight. We answer till 9pm for exactly that, and we'll come ready to get your car out safely if it's trapped inside.",
   },
   whatWeDo: {
     eyebrow: "When You Need A New Track",
@@ -105,7 +105,7 @@ const offTrack: RepairDetailData = {
     lead: "We've been opening doors around here since 2007, across Hillsborough, Pinellas, Pasco, Hernando and Polk.",
     cards: [
       { icon: ico(26, <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3 3-5 7-5s7 2 7 5M17 11l2 2 4-4" />), title: "Honest Diagnosis", body: "If a simple repair will hold, that's what we'll do. We don't pad the bill." },
-      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, plus a 24/7 line for when your door quits at a bad hour." },
+      { icon: ico(26, <path d="M13 2L4 14h6l-1 8 9-12h-6z" />), title: "Fast & Same Day", body: "Same day help, and the phones are answered till 9pm when your door quits at a bad hour." },
       { icon: ico(26, (<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6z" /><path d="M9 12l2 2 4-4" /></>)), title: "Licensed & Insured", body: "Bonded and insured under FL GD13010 and GDI-09484." },
       { icon: ico(26, (<><path d="M9 12l2 2 4-4" /><circle cx="12" cy="12" r="9" /></>)), title: "Fair, Upfront Pricing", body: "A price you hear up front, with free estimates every time." },
     ],

@@ -3,8 +3,19 @@ import { absoluteUrl } from "@/lib/seo";
 
 /**
  * LocalBusiness schema for local SEO. Rendered once in the root layout.
- * TODO once NAP is confirmed: add street address + geo. Do NOT add aggregateRating
- * until reviews are real (Google penalizes unverified review markup).
+ *
+ * Still NO `aggregateRating`: Google penalises unverified review markup, and we have 8 of their 597
+ * reviews. That stays out until the reviews are pulled properly.
+ *
+ * ✅ **NAP completed 2026-07-28/29.** Street address and geo now present, sourced from their own
+ * Housecall Pro company record. Their absence was the HIGH-RISK local SEO gap in the punch list:
+ * `LocalBusiness` without a street address is a much weaker entity signal, and this is a business
+ * whose customers overwhelmingly arrive through local search.
+ *
+ * ✅ **Opening hours corrected.** This block previously declared `00:00` to `23:59`, seven days,
+ * which told Google the business was **open 24 hours a day**. It is structured data Google can
+ * republish, so it was the most exposed version of the 24/7 claim on the whole site. Hours now come
+ * from `SITE.hours` and match what the client actually confirmed.
  */
 export function LocalBusinessJsonLd() {
   const data = {
@@ -19,17 +30,24 @@ export function LocalBusinessJsonLd() {
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Lutz",
-      addressRegion: "FL",
-      addressCountry: "US",
+      streetAddress: SITE.address.street,
+      addressLocality: SITE.address.city,
+      addressRegion: SITE.address.region,
+      postalCode: SITE.address.postalCode,
+      addressCountry: SITE.address.country,
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE.address.lat,
+      longitude: SITE.address.lng,
     },
     areaServed: CITIES.map((c) => ({ "@type": "City", name: `${c.name}, FL` })),
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-        opens: "00:00",
-        closes: "23:59",
+        dayOfWeek: SITE.hours.schemaDays,
+        opens: SITE.hours.opens,
+        closes: SITE.hours.closes,
       },
     ],
     // Every verified profile, so Google can tie these listings to one entity. Only profiles

@@ -64,8 +64,18 @@ export function SiteFooter() {
               <a href={SITE.phoneHref} className="font-heading text-[18px] font-extrabold text-white no-underline">
                 {SITE.phoneDisplay}
               </a>
-              <span>24/7 Emergency Service</span>
-              <span>Lutz, FL · Tampa Bay</span>
+              <span>Phones Answered Till 9pm</span>
+              {/*
+                The real street address, in the footer on every page. Google reads a consistent NAP
+                (name, address, phone) across a site as an entity signal, and this business gets
+                most of its customers through local search. It matches the LocalBusiness JSON-LD
+                exactly, which is the point: a mismatch is worse than an omission.
+              */}
+              <address className="not-italic leading-[1.5]">
+                {SITE.address.street}
+                <br />
+                {SITE.address.city}, {SITE.address.region} {SITE.address.postalCode}
+              </address>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ import { ContactForm } from "@/components/contact-form";
 export const metadata: Metadata = {
   title: "Contact Trinity Garage Door Service | Tampa Bay",
   description:
-    "Call, book online, or send a message. Family owned garage door service across Tampa Bay, 24/7 for emergencies. Call (813) 279-6785.",
+    "Call, book online, or send a message. Family owned garage door service across Tampa Bay, phones answered till 9pm. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/contact/" },
 };
 
@@ -67,7 +67,7 @@ export default function ContactPage() {
                       <Phone className="h-[22px] w-[22px]" strokeWidth={2} />
                     </span>
                     <span>
-                      <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#9a9a9a]">Call us 24/7 for emergencies</span>
+                      <span className="block text-[11.5px] font-extrabold uppercase tracking-[0.08em] text-[#9a9a9a]">Call us till 9pm</span>
                       <span className="block font-display text-[16px] font-extrabold uppercase text-white">Dial the line for your county</span>
                     </span>
                   </div>
@@ -106,7 +106,7 @@ export default function ContactPage() {
                     <div className="flex items-center justify-between gap-3 border-t border-[#ececec] pt-3">
                       <span className="text-[15px] font-bold text-ink">Emergencies</span>
                       <span className="inline-flex items-center gap-1.5 text-[14.5px] font-extrabold text-accent">
-                        <span className="h-2 w-2 rounded-full bg-accent" /> 24/7, every day
+                        <span className="h-2 w-2 rounded-full bg-accent" /> Phones answered till 9pm
                       </span>
                     </div>
                   </div>
@@ -166,19 +166,15 @@ export default function ContactPage() {
                     </Link>
                   ))}
                 </div>
-                {/*
-                  ⚠️ STALE PLACEHOLDER — DELETE THIS LINE when the NAP ships.
-                  The address is no longer unconfirmed: 18125 US-41 Ste 208, Lutz FL 33549, geo
-                  28.1372004 / -82.4625826, read from Trinity's own Housecall Pro company record
-                  on 2026-07-28 (CLIENT-ASKS #3, answered). So this sentence now tells the customer
-                  something untrue about us.
-                  It was left in place deliberately rather than patched here: the address has to
-                  land in the footer, the LocalBusiness JSON-LD and this page together, or the site
-                  ends up with a worse inconsistency than the placeholder. That is UPGRADE-PLAN.md
-                  §10 item 4 and PRE-LAUNCH-PUNCHLIST P1-3. Replace this div with the real address
-                  as part of that work, not on its own.
-                */}
-                <div className="mt-[18px] text-[13px] font-semibold text-[#8a8a8a]">Street address &amp; map to be added once the business address is confirmed.</div>
+                {/* Placeholder removed 2026-07-29: the address shipped here, in the footer and in
+                    the LocalBusiness JSON-LD together, which is why it was held until now. */}
+                <address className="mt-[18px] not-italic text-[15px] leading-[1.6] text-body">
+                  <strong className="font-bold text-ink">{SITE.name}</strong>
+                  <br />
+                  {SITE.address.street}
+                  <br />
+                  {SITE.address.city}, {SITE.address.region} {SITE.address.postalCode}
+                </address>
               </div>
               <ServiceAreaMap className="mx-auto max-w-[380px]" />
             </div>
