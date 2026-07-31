@@ -49,6 +49,23 @@ export const SITE = {
     const m = (process.env.NEXT_PUBLIC_BOOKING_URL || "").match(/\/book\/([^/]+)\/([^/?#]+)/);
     return m ? `https://online-booking.housecallpro.com/script.js?token=${m[2]}&orgName=${m[1]}` : "";
   })(),
+  /**
+   * Google Tag Manager container, supplied by Annek's ads specialist 2026-07-29.
+   *
+   * Hardcoded rather than read from an env var on purpose: it is public (it ships in the page
+   * source of every site that uses GTM), and a `NEXT_PUBLIC_` var is baked at BUILD time, so a
+   * build that happened to miss it would silently ship a site with no tracking and no error. In
+   * version control it cannot go missing.
+   *
+   * ⚠️ Measured 2026-07-29: `gtm.js` for this container is **158 KB gzipped while EMPTY**, and its
+   * GA4 tag pulls a further ~149 KB when it fires. The site's entire third party weight before this
+   * was 5,197 bytes. Browsers have partitioned the HTTP cache per site since 2020, so there is no
+   * shared CDN saving. This is a real cost accepted deliberately for attribution.
+   *
+   * Set `NEXT_PUBLIC_GTM_DISABLE=1` to turn it off locally, so screenshot QA and dev work do not
+   * fire real conversions into the client's Google Ads account.
+   */
+  gtmId: "GTM-MXNSKF57",
 } as const;
 
 /**

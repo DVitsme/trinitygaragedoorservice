@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 /**
  * "Book Online" trigger — the single mount point for Housecall Pro's online-booking embed.
@@ -47,6 +48,7 @@ export function BookOnlineButton({
   "aria-label"?: string;
 }) {
   const openBooking = () => {
+    track({ event: "book_online_click", link_location: ariaLabel });
     // Preferred path: HCP's modal, over the page. Wrapped because their script assigns the global
     // at the end of init and can throw if the token did not resolve; a booking is too valuable to
     // lose to an exception.

@@ -4,6 +4,7 @@ import Script from "next/script";
 import { useState, type FormEvent } from "react";
 import { CITIES, SERVICE_OPTIONS } from "@/lib/site";
 import { isValidPhone } from "@/lib/lead-validation";
+import { track } from "@/lib/analytics";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -65,6 +66,9 @@ export function ContactForm({ intent }: { intent?: string }) {
         setStatus("error");
         return;
       }
+      // Fired here, not on button click: this only runs once the API has confirmed the lead was
+      // actually captured, so the conversion count matches reality rather than intent.
+      track({ event: "generate_lead", lead_source: intent === "estimate" ? "estimate-form" : "contact-form" });
       setStatus("success");
     } catch {
       setError("Network error. Please call us at (813) 279-6785.");

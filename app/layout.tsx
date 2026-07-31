@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Hanken_Grotesk } from "next/font/google";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { UtilityBar } from "@/components/sections/utility-bar";
@@ -40,9 +41,40 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  /**
+   * Off in local dev and in any build that sets NEXT_PUBLIC_GTM_DISABLE, so screenshot QA and
+   * `next dev` never fire real conversions into the client's live Google Ads account.
+   */
+  const gtmEnabled = Boolean(SITE.gtmId) && process.env.NEXT_PUBLIC_GTM_DISABLE !== "1";
+
   return (
     <html lang="en" className={hanken.variable}>
+      {/*
+        Google Tag Manager, via Next's official component rather than the raw snippet the ads
+        specialist supplied. Verified against the package source: it emits a byte equivalent
+        dataLayer init, the same `gtm.start` timestamp and the same `event: 'gtm.js'` push, so his
+        tags and triggers behave exactly as they would with his paste. The difference is that it
+        loads `afterInteractive` instead of blocking head parse, which is what keeps the speed he
+        complimented. Placement as a sibling of <body> is what Next's own example does.
+      */}
+      {gtmEnabled && <GoogleTagManager gtmId={SITE.gtmId} />}
       <body>
+        {/*
+          The <noscript> fallback, which @next/third-parties does NOT include. Google still ships it
+          as standard and GOV.UK measured JS failing on about 1.1% of visits, so it is worth the two
+          lines. Safe in React: <noscript> contents are inert, there is nothing to hydrate.
+        */}
+        {gtmEnabled && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${SITE.gtmId}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+              title="Google Tag Manager"
+            />
+          </noscript>
+        )}
         <a
           href="#content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-[100] focus:rounded-[7px] focus:bg-ink focus:px-4 focus:py-2 focus:font-semibold focus:text-white"

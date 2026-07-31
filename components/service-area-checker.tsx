@@ -6,6 +6,7 @@ import lookup from "@/lib/service-area-lookup.json";
 import { SITE } from "@/lib/site";
 import { BookOnlineButton } from "@/components/book-online-button";
 import { cn } from "@/lib/utils";
+import { track } from "@/lib/analytics";
 
 /**
  * "Do you come out to my house?" — answered instantly, offline.
@@ -84,7 +85,13 @@ export function ServiceAreaChecker({ className }: { className?: string }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          setResult(check(value));
+          const r = check(value);
+          setResult(r);
+          // Tells the ads specialist how much demand arrives from outside the service area, which
+          // is the single most useful signal for where to expand or where to stop paying for clicks.
+          if (r.kind === "match" || r.kind === "miss") {
+            track({ event: "zip_check", zip_result: r.kind === "match" ? "in_area" : "out_of_area", zip: r.zip });
+          }
         }}
       >
         <label htmlFor={inputId} className="block font-display text-[17px] font-extrabold uppercase leading-[1.15] text-ink">

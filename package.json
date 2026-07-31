@@ -17,6 +17,7 @@
     "geo:gen": "node scripts/generate-service-area-geo.mjs"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.12",
     "@opennextjs/cloudflare": "^1.19.11",
     "@react-email/components": "^1.0.12",
     "class-variance-authority": "^0.7.1",
