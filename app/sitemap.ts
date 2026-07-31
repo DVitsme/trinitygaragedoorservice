@@ -6,64 +6,52 @@ import { getAllPosts } from "@/lib/blog";
 /**
  * Every indexable route. Derived from ROUTES / AREAS / the blog index rather than hand listed, so
  * a new page cannot silently go missing from the sitemap.
+ *
+ * ⚠️ **No `priority`, no `changeFrequency`, and no blanket `lastModified`.** Google has stated
+ * publicly that it ignores the first two, so they were pure noise. `lastModified` was worse than
+ * noise: it was set to the build timestamp for EVERY url, which told Google that all 45 pages
+ * changed every time we deployed. Google only trusts lastmod when it is consistently accurate, so a
+ * value that is always "now" teaches it to disregard ours. Blog posts carry their real date; every
+ * other page omits it rather than lying.
+ *
+ * ⚠️ `/book-a-repair/thank-you/` is deliberately absent. It is `noindex` and exists only to catch
+ * Housecall Pro's booking redirect. Do not add it.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-
-  const entries: Array<{ path: string; priority: number; changeFrequency: "daily" | "weekly" | "monthly" | "yearly" }> = [
-    { path: ROUTES.home, priority: 1, changeFrequency: "weekly" },
+  // Plain paths. Nothing else, because nothing else survives to the output.
+  const paths: string[] = [
+    ROUTES.home,
 
     // Services
-    { path: ROUTES.services, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.repair, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.emergency, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.spring, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.opener, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.offTrack, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.cablesRollers, priority: 0.8, changeFrequency: "monthly" },
-    { path: ROUTES.tuneUp, priority: 0.8, changeFrequency: "monthly" },
-    { path: ROUTES.installation, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.replacement, priority: 0.9, changeFrequency: "monthly" },
+    ROUTES.services, ROUTES.repair, ROUTES.emergency, ROUTES.spring, ROUTES.opener,
+    ROUTES.offTrack, ROUTES.cablesRollers, ROUTES.tuneUp, ROUTES.installation, ROUTES.replacement,
 
     // Service areas
-    { path: ROUTES.serviceAreas, priority: 0.8, changeFrequency: "monthly" },
-    ...AREAS.map((a) => ({ path: `/service-areas/${a.slug}/`, priority: 0.8, changeFrequency: "monthly" as const })),
+    ROUTES.serviceAreas,
+    ...AREAS.map((a) => `/service-areas/${a.slug}/`),
 
     // Doors
-    { path: ROUTES.doorTypes, priority: 0.8, changeFrequency: "monthly" },
-    { path: ROUTES.brands, priority: 0.7, changeFrequency: "monthly" },
-    { path: ROUTES.brochures, priority: 0.6, changeFrequency: "monthly" },
+    ROUTES.doorTypes, ROUTES.brands, ROUTES.brochures,
 
     // About
-    { path: ROUTES.aboutStory, priority: 0.7, changeFrequency: "monthly" },
-    { path: ROUTES.portfolio, priority: 0.6, changeFrequency: "monthly" },
-    { path: ROUTES.reviewsPage, priority: 0.7, changeFrequency: "monthly" },
+    ROUTES.aboutStory, ROUTES.portfolio, ROUTES.reviewsPage,
 
     // Convert
-    { path: ROUTES.bookRepair, priority: 0.9, changeFrequency: "monthly" },
-    { path: ROUTES.contact, priority: 0.8, changeFrequency: "monthly" },
-    { path: "/get-service/", priority: 0.7, changeFrequency: "monthly" },
+    ROUTES.bookRepair, ROUTES.contact, "/get-service/",
 
     // Resources
-    { path: ROUTES.blog, priority: 0.7, changeFrequency: "weekly" },
-    { path: ROUTES.faq, priority: 0.7, changeFrequency: "monthly" },
-    { path: ROUTES.safetyTips, priority: 0.6, changeFrequency: "monthly" },
-    { path: ROUTES.troubleshooting, priority: 0.6, changeFrequency: "monthly" },
+    ROUTES.blog, ROUTES.faq, ROUTES.safetyTips, ROUTES.troubleshooting,
 
     // Legal
-    { path: ROUTES.privacy, priority: 0.3, changeFrequency: "yearly" },
+    ROUTES.privacy,
   ];
 
+  // Blog posts DO get a lastmod, because we have a real date for them. `date` is month precision
+  // ("2026-03"), which is honest: it is the month the post was published, not a fabricated instant.
   const posts = getAllPosts().map((p) => ({
-    path: `${ROUTES.blog}${p.slug}/`,
-    priority: 0.5,
-    changeFrequency: "monthly" as const,
+    url: absoluteUrl(`${ROUTES.blog}${p.slug}/`),
+    ...(p.date ? { lastModified: new Date(`${p.date}-01`) } : {}),
   }));
 
-  return [...entries, ...posts].map(({ path, priority, changeFrequency }) => ({
-    url: absoluteUrl(path),
-    lastModified: now,
-    changeFrequency,
-    priority,
-  }));
+  return [...paths.map((path) => ({ url: absoluteUrl(path) })), ...posts];
 }

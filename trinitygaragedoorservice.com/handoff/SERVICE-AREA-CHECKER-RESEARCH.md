@@ -1,3 +1,15 @@
+> ## ⛔ SUPERSEDED, do not build from this
+>
+> **Replaced by `SERVICE-AREA-REDESIGN.md` at the repo root, and already shipped 2026-07-28.**
+>
+> This document assumed the checker needed a **Google Maps Platform key**, a billing account and
+> the Places API. It needed none of them. The shipped version runs entirely client side against
+> `lib/service-area-zips.json` (verified 130/130 against Trinity's live Housecall Pro zone) in
+> **1,818 bytes gzipped**, with no key, no billing and no runtime request. The map beside it is a
+> server rendered SVG built from public domain US Census boundaries, not a map library.
+>
+> Kept only as a record of what was considered and why it was not chosen.
+
 # Future feature — "Are you in our area?" address checker (Google) — RESEARCH (2026-06-22)
 
 Replace the **ZIP input mock** in the home page's "We Cover the Whole Tampa Bay Area" section
