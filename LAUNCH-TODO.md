@@ -26,29 +26,26 @@ Source docs: `CLIENT-ASKS.md` (what we need from them), `UPGRADE-PLAN.md` (the H
 
 ---
 
-## 🔴 PHASE 0 · Make the revenue path actually work
+## ✅ PHASE 0 · Make the revenue path actually work · **COMPLETE 2026-07-29**
 
-> **Status 2026-07-29: code complete, secrets pushed, remote migration applied.** Remaining in this
-> phase is the end to end verification against the deployed Worker, which needs a deploy first.
+Nothing else mattered if a lead could be submitted and lost. It could: production had **zero
+secrets**, so the live form skipped spam checking, sent no email, and returned success anyway.
 
-Nothing else matters if a lead can be submitted and lost. **Zero secrets are currently set on the
-production Worker** (`wrangler secret list` returns `[]`), so today the live form skips spam
-checking, sends no email, and returns success regardless.
-
-| # | Task | Notes |
+| # | Task | Outcome |
 |---|---|---|
-| 0.1 | ✅ **Trim whitespace in `.env.local`** | Done 2026-07-29. `CONTACT_FROM_EMAIL` had a **trailing space**, and dotenv does not trim unquoted values, so Resend would have rejected every send. Backup written alongside. |
-| 0.2 | ✅ **`.trim()` the three email env reads in `route.ts`** | Done. Defensive, so this class of typo cannot silently kill leads again. |
-| 0.3 | ✅ **DONE 2026-07-29.** All four secrets are on the Worker (`RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`), verified by name via `wrangler secret list`. Values piped through stdin, never in argv or shell history. | `wrangler secret put` for `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`. **`NEXT_PUBLIC_TURNSTILE_SITE_KEY` is NOT a secret**, it is baked at build time, so it needs a rebuild and redeploy instead. |
-| 0.4 | ✅ **DECIDED 2026-07-29: leave `CONTACT_TO_EMAIL` at `@digitaldog.io` until after go live.** | **Deliberate, do not "fix" this.** Derrick keeps every test lead landing in his own inbox so the whole path can be verified without Barbara receiving noise from a site that is not live yet. **Switch to `trinitygaragedoorservice@gmail.com` as a go live step**, once traffic is real. The route now splits `CONTACT_TO_EMAIL` on commas, so the switch can be to both addresses without a code change. Tracked as **5.9** in the cutover phase. |
-| 0.5 | 🔴 **Fix the nine lead path defects** | `UPGRADE-PLAN.md` §9. The two that bite hardest: the client **discards the `emailed` flag** and always shows success (`contact-form.tsx:45`), and **the phone is never validated** (`phone: "x"` passes), which is the only way this business calls anyone back. |
-| 0.6 | 🔴 **Turnstile must fail OPEN on outage, closed on a real verdict** | Today a Cloudflare siteverify outage returns 400 to every visitor and takes the whole form offline (`route.ts:111`). Also stop hard blocking submission when the token is absent (`contact-form.tsx:26`), which makes an ad blocker silently break the form forever. |
-| 0.7 | **Add `GET /api/contact` health check** | Returns `{d1, resend, turnstile}` so one curl proves the revenue path after any deploy. |
-| 0.8 | **Per sink status columns in D1** | So a partial failure is visible instead of swallowed. Remote D1 already has the `leads` table and holds **0 rows**, so nothing has been lost yet. |
-| 0.9 | **Create `.dev.vars`** | It does not exist, so `pnpm preview` (the only way to exercise the real Workers runtime locally) runs with no secrets. This is why the failure has never been reproducible locally. |
+| 0.1 | Trim whitespace in `.env.local` | ✅ `CONTACT_FROM_EMAIL` had a **trailing space**, and dotenv does not trim unquoted values, so Resend would have rejected every send. Backup written alongside. |
+| 0.2 | `.trim()` the email env reads | ✅ Defensive, so this class of typo cannot silently kill leads again. |
+| 0.3 | Push secrets to production | ✅ All four on the Worker, verified by name via `wrangler secret list`. Values piped through stdin, never in argv or history. `NEXT_PUBLIC_TURNSTILE_SITE_KEY` deliberately excluded, it is baked at build time and cannot be a secret. |
+| 0.4 | Where leads go | ✅ **Deliberately left at `@digitaldog.io` until go live**, so the whole path can be verified without Barbara getting noise from a site that is not live. Switch is tracked as **5.9**. |
+| 0.5 | The nine lead path defects | ✅ **The one that mattered:** the resend SDK does not throw on API errors, it returns `{data, error}`, so a rejected send was being recorded as a success. Phone is now validated (NANP, 16/16 on real and malformed input). Client reads the response instead of always showing the success card. `source` is no longer hardcoded. |
+| 0.6 | Turnstile fail open on outage | ✅ Fails **open** on our own misconfiguration and on Cloudflare outages, **closed** only on a verdict implicating the visitor. Idempotency key so a retry cannot burn the single use token. Client no longer hard blocks when the token is missing, which had made the form unusable behind an ad blocker. |
+| 0.7 | `GET /api/contact` health check | ✅ Returns `{db, resend, mailTo, mailFrom, turnstile, turnstileIsTestKey}` so one curl proves the revenue path after a deploy. |
+| 0.8 | Per sink status | ✅ Route reports `email` and `db` separately and returns **503 with the phone number** when every durable sink fails. Migration `0002` added `phone_e164`, applied local **and remote**. |
+| 0.9 | `.dev.vars` | ✅ Created, gitignored, server side secrets only. This is why the bug class was never reproducible locally. |
 
-**Exit test:** submit the live form, confirm the email lands, confirm the D1 row, confirm a bad
-Turnstile token is rejected and a missing one is not.
+**Remaining:** the end to end test against the deployed Worker, which needs a deploy. Submit the
+live form, confirm the email arrives, confirm the D1 row, confirm a bad Turnstile token is rejected
+and a missing one is not.
 
 ---
 
