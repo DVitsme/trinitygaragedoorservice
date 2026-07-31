@@ -60,8 +60,8 @@ flow, so we own the form now.
 | 1.1 | **Build the form** | Fields per Jason: **first name, last name, phone, email, zip**, plus a free text box for the problem. **No pricing, no package picker.** Lloyd wanted fewer fields; Jason overrode. |
 | 1.2 | **Reuse the `/get-service/` design** | Lloyd picked it out unprompted as nicer than HCP's popup. It also needs a design port anyway (it still ships legacy `bg-sand`/`font-heading` tokens and **18 CTAs land on it**). |
 | 1.3 | **Send email first, then push to HCP** | Email to Barbara is the lighter call, so it fires first; the HCP `POST /leads` follows via `ctx.waitUntil` so a slow CRM never slows the form. |
-| 1.4 | **Retire the booking modal** | Supersedes the `window.HCPWidget.openModal()` work shipped 2026-07-28. **Keep the ZIP checker** — Lloyd's actual complaint was HCP demanding a zip with no skip, and ours answers that before anyone reaches a form. |
-| 1.5 | **Decide the thank you page's fate** | `/book-a-repair/thank-you/` exists only to catch HCP's booking redirect. If booking is gone, it becomes the **form** thank you page instead, which is better: our own form CAN fire a conversion event, where HCP's iframe could not. |
+| 1.4 | ⏸️ **DEFERRED to after launch, on purpose** | The booking modal and all 13 Book Online buttons **stay exactly as they are for now**. The client chose the form as the primary path, but self service booking still works and costs nothing to leave in place, and they may want a version of it back later. Revisit once real lead volume shows whether anyone was using it. See **6.9**. |
+| 1.5 | ⏸️ **DEFERRED to after launch** | `/book-a-repair/thank-you/` stays live and `noindex`, catching HCP's booking redirect if Jason switches it on. It is not wasted either way: if booking is later retired it becomes the form thank you page instead. See **6.9**. |
 | 1.6 | **The supervised HCP test lead** | `CLIENT-ASKS` #34b. No test mode, no DELETE endpoint, so Jason must delete it himself. Needs a separate API key named "website" first (#31). |
 | 1.7 | **Lloyd's Google Sheets copy of leads** | He wants lead quality feedback for ad optimisation. Reasonable, but decide the mechanism: a Sheets append is another failure point on the revenue path. **Recommend reading from D1 or HCP instead of adding a third sink.** |
 
@@ -141,6 +141,7 @@ The zone is staged and waiting. Do 5.1 **before** anyone touches nameservers.
 | 6.6 | **Build time data bake** | Hours, service area and job types refreshed from HCP by script, **refresh only, never chained to `build`**, so an HCP outage can never fail a deploy. |
 | 6.7 | **Monthly blog workflow** | Annek send copy by email once a month, we publish. No CMS wanted. |
 | 6.8 | **Hosting conversation** | Derrick to raise after launch. |
+| 6.9 | 🔔 **REMINDER: decide the fate of online booking** | Deferred from Phase 1 (**1.4** and **1.5**) at the client's request, so a version of it can be brought back if they want one. Everything is still in place and working: the HCP booking modal, all **13** Book Online buttons, `/book-a-repair/`, and the `noindex` thank you page. **What to look at before deciding:** once the lead form has real volume, compare form submissions against actual HCP online bookings. If nobody books online, retire the modal and repoint those 13 CTAs at the form, and the thank you page becomes the form's confirmation, which is strictly better because our own form CAN fire a conversion event where HCP's cross origin iframe could not. If people DO book online, keep both and stop treating it as a decision. |
 
 ---
 
