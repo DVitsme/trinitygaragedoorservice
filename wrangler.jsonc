@@ -3,7 +3,11 @@
   "name": "trinity-garage-door",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-25",
-  "compatibility_flags": ["nodejs_compat"],
+  // nodejs_compat_populate_process_env is what puts secrets on process.env. It is ON by default
+  // only for compatibility_date >= 2025-04-01, and ours is 2025-03-25, seven days short. Every
+  // route handler reads secrets via process.env, so this is stated explicitly rather than left to
+  // a date comparison nobody would think to check.
+  "compatibility_flags": ["nodejs_compat", "nodejs_compat_populate_process_env"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
