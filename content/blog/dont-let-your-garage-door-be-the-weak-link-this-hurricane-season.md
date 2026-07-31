@@ -4,7 +4,7 @@ slug: "dont-let-your-garage-door-be-the-weak-link-this-hurricane-season"
 date: "2025-08"
 dateApprox: true
 category: "Hurricane Prep"
-featuredImage: "/blog/weak-link-hurricane.png"
+featuredImage: "/blog/weak-link-hurricane.jpg"
 featuredImageAlt: ""
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/dont-let-your-garage-door-be-the-weak-link-this-hurricane-season/"
 status: "published"

@@ -136,7 +136,11 @@ const posts = files.flatMap((file) => {
     dateApprox: fm.dateApprox === true,
     category: String(fm.category ?? "Garage Doors"),
     featuredImage: String(fm.featuredImage ?? ""),
-    featuredImageAlt: IMAGE_ALT[slug] ?? `Illustration for ${title}`,
+    // Frontmatter wins when it is filled in. IMAGE_ALT below was written when every source
+      // `featuredImageAlt` was empty, but it silently overrode the frontmatter, so swapping an
+      // image left the old alt text describing a picture that no longer existed. That is worse
+      // than no alt text, because a screen reader is told something confidently untrue.
+      featuredImageAlt: String(fm.featuredImageAlt ?? "").trim() || IMAGE_ALT[slug] || `Illustration for ${title}`,
     excerpt: deriveExcerpt(md),
     html: marked.parse(md, { async: false }),
   }];

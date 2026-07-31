@@ -4,7 +4,7 @@ slug: "why-routine-garage-door-maintenance-matters-more-during-storm-season"
 date: "2025-07"
 dateApprox: true
 category: "Hurricane Prep"
-featuredImage: "/blog/maintenance-storm-season.png"
+featuredImage: "/blog/maintenance-storm-season.jpg"
 featuredImageAlt: ""
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/why-routine-garage-door-maintenance-matters-more-during-storm-season/"
 status: "published"

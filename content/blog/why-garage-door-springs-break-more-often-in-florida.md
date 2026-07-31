@@ -4,8 +4,8 @@ slug: "why-garage-door-springs-break-more-often-in-florida"
 date: "2026-03"
 dateApprox: true
 category: "Springs"
-featuredImage: "/blog/springs-break-florida.png"
-featuredImageAlt: ""
+featuredImage: "/assets/svc-spring-torsion-shaft.jpg"
+featuredImageAlt: "A Trinity technician working on a garage door torsion spring shaft"
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/why-garage-door-springs-break-more-often-in-florida/"
 status: "published"
 ---

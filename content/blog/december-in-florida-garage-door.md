@@ -4,8 +4,8 @@ slug: "december-in-florida-garage-door"
 date: "2025-12"
 dateApprox: true
 category: "Maintenance"
-featuredImage: "/blog/december-in-florida.png"
-featuredImageAlt: ""
+featuredImage: "/assets/svc-install-barn-door.jpg"
+featuredImageAlt: "The Trinity crew fitting a new garage door"
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/december-in-florida-garage-door/"
 status: "published"
 ---

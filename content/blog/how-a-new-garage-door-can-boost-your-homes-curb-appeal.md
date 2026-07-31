@@ -4,7 +4,7 @@ slug: "how-a-new-garage-door-can-boost-your-homes-curb-appeal"
 date: "2025-05"
 dateApprox: true
 category: "Buying Guides"
-featuredImage: "/blog/curb-appeal.png"
+featuredImage: "/blog/curb-appeal.jpg"
 featuredImageAlt: ""
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/how-a-new-garage-door-can-boost-your-homes-curb-appeal/"
 status: "published"

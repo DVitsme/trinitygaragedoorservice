@@ -4,8 +4,8 @@ slug: "floridas-february-temperature-swings-and-your-garage-door-why-your-spring
 date: "2026-02"
 dateApprox: true
 category: "Springs"
-featuredImage: "/blog/february-temperature-swings.png"
-featuredImageAlt: ""
+featuredImage: "/assets/svc-cables-track-interior.jpg"
+featuredImageAlt: "A Trinity technician checking the cables and track inside a garage"
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/floridas-february-temperature-swings-and-your-garage-door-why-your-springs-matter-more-than-you-think/"
 status: "published"
 ---

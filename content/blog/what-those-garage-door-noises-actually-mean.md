@@ -4,7 +4,7 @@ slug: "what-those-garage-door-noises-actually-mean"
 date: "2026-01"
 dateApprox: true
 category: "Diagnostics"
-featuredImage: "/blog/noises-actually-mean.png"
+featuredImage: "/blog/noises-actually-mean.jpg"
 featuredImageAlt: ""
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/what-those-garage-door-noises-actually-mean/"
 status: "published"

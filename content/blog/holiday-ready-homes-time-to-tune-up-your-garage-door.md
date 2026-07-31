@@ -4,7 +4,7 @@ slug: "holiday-ready-homes-time-to-tune-up-your-garage-door"
 date: "2025-11"
 dateApprox: true
 category: "Maintenance"
-featuredImage: "/blog/holiday-ready-homes.png"
+featuredImage: "/blog/holiday-ready-homes.jpg"
 featuredImageAlt: ""
 sourceUrl: "https://trinitygaragedoorservice.com/blogs/holiday-ready-homes-time-to-tune-up-your-garage-door/"
 status: "published"
