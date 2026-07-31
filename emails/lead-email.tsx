@@ -21,7 +21,7 @@ export function LeadEmail({ name, phone, email, city, service, message }: LeadEm
   return (
     <Html>
       <Head />
-      <Preview>{`New lead: ${name} — ${service ?? "garage door"}`}</Preview>
+      <Preview>{`New lead: ${name}, ${service ?? "garage door"}, ${phone}`}</Preview>
       <Body style={{ backgroundColor: "#f2f0ec", fontFamily: "Arial, Helvetica, sans-serif", margin: 0, padding: "24px" }}>
         <Container style={{ backgroundColor: "#ffffff", border: "2px solid #1a1a1a", borderRadius: "8px", maxWidth: "560px", margin: "0 auto", overflow: "hidden" }}>
           <Section style={{ backgroundColor: "#1a1a1a", padding: "18px 24px" }}>
@@ -30,11 +30,26 @@ export function LeadEmail({ name, phone, email, city, service, message }: LeadEm
             </Heading>
           </Section>
           <Section style={{ padding: "20px 24px" }}>
+            {/*
+              The label ends with a colon on purpose. The visual gap comes from `width: 76px`, which
+              is CSS, and Resend generates a text/plain alternative with the CSS stripped. Without
+              the colon that version rendered as "Name(813) 555-0100", label jammed into value, in
+              any client showing plain text.
+
+              Phone and email are real links so the office can tap to call straight from the
+              notification, which is the entire purpose of this email.
+            */}
             {rows.map(([label, value]) =>
               value ? (
                 <Text key={label} style={{ margin: "0 0 8px", fontSize: "14px", color: "#1a1a1a" }}>
-                  <strong style={{ display: "inline-block", width: "76px", color: "#b8202a" }}>{label}</strong>
-                  {value}
+                  <strong style={{ display: "inline-block", width: "76px", color: "#b8202a" }}>{label}:</strong>
+                  {label === "Phone" ? (
+                    <a href={`tel:${value.replace(/\D/g, "")}`} style={{ color: "#1a1a1a", fontWeight: 700 }}>{value}</a>
+                  ) : label === "Email" ? (
+                    <a href={`mailto:${value}`} style={{ color: "#1a1a1a" }}>{value}</a>
+                  ) : (
+                    value
+                  )}
                 </Text>
               ) : null,
             )}

@@ -155,7 +155,9 @@ async function sendEmail(
         to: to.split(",").map((t) => t.trim()).filter(Boolean),
         from,
         replyTo: lead.email,
-        subject: `New ${lead.service ?? "garage door"} lead — ${lead.name} — ${lead.phone}`,
+        // Phone in the subject on purpose: the office can call back from the notification list
+        // without opening anything. Commas rather than dashes, per the house copy rule.
+        subject: `New ${lead.service ?? "garage door"} lead: ${lead.name}, ${lead.phone}`,
         react: LeadEmail(lead),
       },
       { idempotencyKey },
