@@ -2,13 +2,18 @@ import { NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Resend } from "resend";
 import { LeadEmail } from "@/emails/lead-email";
+import { after } from "next/server";
 import { isValidPhone, toE164, formatPhone, isTurnstileTestSecret } from "@/lib/lead-validation";
+import { pushLeadToHcp, HcpPermanentError } from "@/lib/housecall-pro";
 import { SITE } from "@/lib/site";
 
 type Payload = {
+  firstName?: string;
+  lastName?: string;
   name?: string;
   phone?: string;
   email?: string;
+  zip?: string;
   city?: string;
   service?: string;
   message?: string;
@@ -33,7 +38,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "invalid_json", message: "Invalid request." }, { status: 400 });
   }
 
-  const name = data.name?.trim();
+  const firstName = data.firstName?.trim() ?? "";
+  const lastName = data.lastName?.trim() ?? "";
+  // `name` stays supported so any older cached client bundle keeps working through a deploy.
+  const name = (data.name?.trim() || `${firstName} ${lastName}`.trim()) || undefined;
   const phone = data.phone?.trim();
 
   if (!name) {
@@ -67,6 +75,9 @@ export async function POST(req: Request) {
 
   const lead = {
     name,
+    firstName,
+    lastName,
+    zip: data.zip?.trim() || undefined,
     phone: formatPhone(phone),
     phoneE164: toE164(phone) ?? undefined,
     email: data.email?.trim() || undefined,
@@ -84,10 +95,52 @@ export async function POST(req: Request) {
    */
   const idempotencyKey = await hashKey(`${lead.phoneE164}|${lead.name}|${lead.message ?? ""}`);
 
-  const [emailStatus, dbStatus] = await Promise.all([
+  const [emailStatus, leadId] = await Promise.all([
     sendEmail(lead, idempotencyKey),
     storeLead(lead, req),
   ]);
+  const dbStatus: SinkStatus = leadId === null ? "failed" : "ok";
+
+  /**
+   * Push to Housecall Pro AFTER responding, so a CRM that takes 0.4 to 1.7 seconds never makes the
+   * visitor wait and a CRM outage can never fail a submission that already succeeded.
+   *
+   * ⚠️ **Deliberately inert until two things happen**, see CLIENT-ASKS #31 and #34b. HCP has no test
+   * mode and no DELETE endpoint, so the FIRST push is permanent and only Jason can remove it. He
+   * also needs to create a separate API key named "website" so this can be switched off without
+   * breaking the marketing company's access. Setting HCP_LEAD_SYNC_ENABLED=1 is the switch, which
+   * means this ships merged, deployed and safely off, and cannot be forgotten in a launch scramble.
+   *
+   * The Turnstile interlock is the second gate: never push spam into a system where cleanup is a
+   * human clicking, every spam lead adds a customer record to the 6,000 they mail postcards to, and
+   * spam would corrupt the "Trinity Website" lead source the client will judge this rebuild by.
+   */
+  const hcpKey = process.env.HOUSE_CALL_PRO_APY_KEY?.trim();
+  const hcpEnabled =
+    process.env.HCP_LEAD_SYNC_ENABLED === "1" &&
+    Boolean(hcpKey) &&
+    Boolean(secret) &&
+    !isTurnstileTestSecret(secret) &&
+    verdict === "pass" &&
+    leadId !== null;
+
+  if (hcpEnabled) {
+    after(async () => {
+      try {
+        const { id } = await pushLeadToHcp(
+          { firstName, lastName, phone: phone!, email: lead.email, zip: lead.zip, message: lead.message },
+          hcpKey!,
+        );
+        // Recorded immediately. With no idempotency key on their side, this row IS our guard: if
+        // hcp_lead_id is set, the push happened and must never be repeated.
+        await markHcp(leadId!, "sent", { hcpLeadId: id });
+      } catch (err) {
+        const permanent = err instanceof HcpPermanentError;
+        console.error("[contact] HCP push failed", { leadId, permanent, err: String(err) });
+        await markHcp(leadId!, permanent ? "rejected" : "failed", { error: String(err) });
+      }
+    });
+  }
 
   // The whole point: if EVERY durable sink failed, the lead is gone. Say so and give them the
   // phone number, instead of showing a success card over a lost customer.
@@ -129,6 +182,9 @@ export async function GET() {
     turnstile: Boolean(secret),
     // Loud on purpose. A dummy key makes the form LOOK protected while accepting everything.
     turnstileIsTestKey: isTurnstileTestSecret(secret),
+    // Expected FALSE until Jason is on hand: HCP has no test mode and no delete, so the first push
+    // is permanent. See CLIENT-ASKS #31 and #34b.
+    hcpLeadSync: process.env.HCP_LEAD_SYNC_ENABLED === "1" && Boolean(process.env.HOUSE_CALL_PRO_APY_KEY?.trim()),
   });
 }
 
@@ -173,24 +229,26 @@ async function sendEmail(
   }
 }
 
+/** Returns the new row id, or null on failure. The id is what the HCP push updates afterwards. */
 async function storeLead(
   lead: {
     name: string; phone: string; phoneE164?: string; email?: string;
-    city?: string; service?: string; message?: string; source: string;
+    zip?: string; city?: string; service?: string; message?: string; source: string;
   },
   req: Request,
-): Promise<SinkStatus> {
+): Promise<number | null> {
   try {
     const { env } = getCloudflareContext();
-    await env.DB.prepare(
-      `INSERT INTO leads (name, phone, phone_e164, email, city, service, message, source, user_agent, ip)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    const row = await env.DB.prepare(
+      `INSERT INTO leads (name, phone, phone_e164, email, zip, city, service, message, source, user_agent, ip)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     )
       .bind(
         lead.name,
         lead.phone,
         lead.phoneE164 ?? null,
         lead.email ?? null,
+        lead.zip ?? null,
         lead.city ?? null,
         lead.service ?? null,
         lead.message ?? null,
@@ -198,11 +256,30 @@ async function storeLead(
         req.headers.get("user-agent") ?? null,
         req.headers.get("cf-connecting-ip") ?? null,
       )
-      .run();
-    return "ok";
+      .first<{ id: number }>();
+    return row?.id ?? null;
   } catch (err) {
     console.error("[contact] D1 insert failed:", err);
-    return "failed";
+    return null;
+  }
+}
+
+/** Records the outcome of the background HCP push, so a silent failure is still discoverable. */
+async function markHcp(
+  leadId: number,
+  status: "sent" | "failed" | "rejected",
+  opts: { hcpLeadId?: string; error?: string } = {},
+): Promise<void> {
+  try {
+    const { env } = getCloudflareContext();
+    await env.DB.prepare(
+      `UPDATE leads SET hcp_status = ?, hcp_lead_id = COALESCE(?, hcp_lead_id),
+         hcp_attempts = hcp_attempts + 1, hcp_last_error = ? WHERE id = ?`,
+    )
+      .bind(status, opts.hcpLeadId ?? null, opts.error ?? null, leadId)
+      .run();
+  } catch (err) {
+    console.error("[contact] could not record HCP outcome:", err);
   }
 }
 
