@@ -49,7 +49,7 @@ and a missing one is not.
 
 ---
 
-## 🟠 PHASE 1 · Rebuild the lead form (the call's main decision)
+## 🟢 PHASE 1 · Rebuild the lead form · **SHIPPED 2026-07-29**, 1.6 and 1.7 outstanding
 
 Jason chose a short form and a callback over self service booking, explicitly to keep pricing off
 the site. Housecall Pro's embed cannot be trimmed, its zip gate, service picker and pricing are one
@@ -57,9 +57,9 @@ flow, so we own the form now.
 
 | # | Task | Notes |
 |---|---|---|
-| 1.1 | **Build the form** | Fields per Jason: **first name, last name, phone, email, zip**, plus a free text box for the problem. **No pricing, no package picker.** Lloyd wanted fewer fields; Jason overrode. |
-| 1.2 | **Reuse the `/get-service/` design** | Lloyd picked it out unprompted as nicer than HCP's popup. It also needs a design port anyway (it still ships legacy `bg-sand`/`font-heading` tokens and **18 CTAs land on it**). |
-| 1.3 | **Send email first, then push to HCP** | Email to Barbara is the lighter call, so it fires first; the HCP `POST /leads` follows via `ctx.waitUntil` so a slow CRM never slows the form. |
+| 1.1 | ✅ **DONE, deployed.** Six fields exactly as Jason specified. Verified in a real browser: labels, autocomplete tokens, aria-invalid plus role=alert, blur validation that clears when fixed. Fixed two defects on the way, 15px inputs (Safari zooms anything under 16px) and a natively disabled submit button (drops out of the accessibility tree). | Fields per Jason: **first name, last name, phone, email, zip**, plus a free text box for the problem. **No pricing, no package picker.** Lloyd wanted fewer fields; Jason overrode. |
+| 1.2 | ✅ **DONE, deployed.** Rebuilt with hero, breadcrumb, trust strip and a phone panel. **Stays a real page, not a modal**: a modal has no URL, and Ads Landing Page reporting and Quality Score are per URL. | Lloyd picked it out unprompted as nicer than HCP's popup. It also needs a design port anyway (it still ships legacy `bg-sand`/`font-heading` tokens and **18 CTAs land on it**). |
+| 1.3 | ✅ **DONE, and deliberately inert.** Uses `next/after`, not `ctx.waitUntil`. Gated behind `HCP_LEAD_SYNC_ENABLED` plus a real non test Turnstile verdict, so it is deployed and safely off until 1.6. Health check reports `hcpLeadSync: false`. | Email to Barbara is the lighter call, so it fires first; the HCP `POST /leads` follows via `ctx.waitUntil` so a slow CRM never slows the form. |
 | 1.4 | ⏸️ **DEFERRED to after launch, on purpose** | The booking modal and all 13 Book Online buttons **stay exactly as they are for now**. The client chose the form as the primary path, but self service booking still works and costs nothing to leave in place, and they may want a version of it back later. Revisit once real lead volume shows whether anyone was using it. See **6.9**. |
 | 1.5 | ⏸️ **DEFERRED to after launch** | `/book-a-repair/thank-you/` stays live and `noindex`, catching HCP's booking redirect if Jason switches it on. It is not wasted either way: if booking is later retired it becomes the form thank you page instead. See **6.9**. |
 | 1.6 | **The supervised HCP test lead** | `CLIENT-ASKS` #34b. No test mode, no DELETE endpoint, so Jason must delete it himself. Needs a separate API key named "website" first (#31). |
@@ -67,25 +67,25 @@ flow, so we own the form now.
 
 ---
 
-## 🟠 PHASE 2 · Make the site tell the truth about hours and address
+## 🟢 PHASE 2 · Hours and address · **2.1, 2.4, 2.5, 2.6 SHIPPED 2026-07-29**
 
-All settled facts now, no client input needed.
+2.2 and 2.7 are the only things left, and both need the client.
 
 | # | Task | Notes |
 |---|---|---|
-| 2.1 | 🔴 **Remove the 24/7 claim** | ~**30 places**, plus the JSON-LD `openingHoursSpecification` that currently tells Google **open 24 hours, 7 days**. Replace with **"we answer the phones till 9pm"**, which is what Simone actually confirmed. |
+| 2.1 | ✅ **DONE, deployed.** **62 occurrences across 28 files**, not the ~30 estimated, plus the JSON-LD that was declaring `00:00` to `23:59` seven days. Also caught the same promise in other words ("day or night", "holidays included"). Everything derives from `SITE.hours` now, so if Jason overrules Simone it is one edit. | ~**30 places**, plus the JSON-LD `openingHoursSpecification` that currently tells Google **open 24 hours, 7 days**. Replace with **"we answer the phones till 9pm"**, which is what Simone actually confirmed. |
 | 2.2 | 🔴 **Resolve the Saturday conflict BEFORE publishing hours** | `CLIENT-ASKS` #4a. Simone said customers can book Monday to Saturday. Their API returns **242 booking windows over 21 days with zero on a Saturday**. Publishing Saturday sends people to an empty calendar. Either Jason adds Saturday in HCP, or the site says Monday to Friday. |
-| 2.3 | **Booking hours copy** | 8am to 4pm, **two hour arrival windows**, last appointment 4 to 6, closed Sunday. |
-| 2.4 | **Roll out the verified NAP** | 18125 US-41 Ste 208, Lutz FL 33549, geo 28.1372004 / -82.4625826. Footer, `LocalBusiness` JSON-LD, and the contact page **together**. ⚠️ **This also deletes the stale visible placeholder** on `/contact/` that still tells customers the address is unconfirmed (marked in the file). |
-| 2.5 | **Add the open/closed indicator** | Now unblocked by 2.1 to 2.3. The utility bar's static dot becomes true and specific. Compute client side from a baked schedule, **zero API calls**. Must never render "Closed" beside a phone number we say is answered. |
+| 2.3 | ◐ **Times done, days blocked.** 8am to 4pm and the two hour window are live. The day range waits on 2.2. | 8am to 4pm, **two hour arrival windows**, last appointment 4 to 6, closed Sunday. |
+| 2.4 | ✅ **DONE, deployed.** Street address and geo were **absent from the schema entirely** and the address appeared in one file. Now in `SITE.address`, the footer of every page and the JSON-LD, from one source. Stale `/contact/` placeholder removed. | 18125 US-41 Ste 208, Lutz FL 33549, geo 28.1372004 / -82.4625826. Footer, `LocalBusiness` JSON-LD, and the contact page **together**. ⚠️ **This also deletes the stale visible placeholder** on `/contact/` that still tells customers the address is unconfirmed (marked in the file). |
+| 2.5 | ✅ **DONE, deployed.** Computed in **Lutz's timezone, not the visitor's**, which is the bug this widget usually ships with. Client only, so a static page cannot freeze it at build time. 10/10 on boundaries including DST in both directions. Width reserved at 300px because the labels swing 183px and would otherwise reflow the bar. | Now unblocked by 2.1 to 2.3. The utility bar's static dot becomes true and specific. Compute client side from a baked schedule, **zero API calls**. Must never render "Closed" beside a phone number we say is answered. |
 | 2.6 | **877 number** | ✅ **Not in the codebase**, so nothing to change here. Jason said it is not needed, so it is a **listings cleanup on their side only**. |
 | 2.7 | **Privacy policy** | Needs the mailing address (#11), an effective date, a contact email, **and a cookie disclosure** because GA is going on (see 3.3). Then a lawyer glance (#12). |
 
 ---
 
-## 🟡 PHASE 3 · Analytics and attribution
+## 🟢 PHASE 3 · Analytics and attribution · **SHIPPED 2026-07-29**
 
-Blocked only on Lloyd sending the GTM container.
+GTM is installed, verified and deployed. See `GTM-NOTES.md`. The rest is Lloyd's side, and the email at **5.10** tells him exactly what.
 
 | # | Task | Notes |
 |---|---|---|
