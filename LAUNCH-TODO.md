@@ -28,6 +28,9 @@ Source docs: `CLIENT-ASKS.md` (what we need from them), `UPGRADE-PLAN.md` (the H
 
 ## 🔴 PHASE 0 · Make the revenue path actually work
 
+> **Status 2026-07-29: code complete, secrets pushed, remote migration applied.** Remaining in this
+> phase is the end to end verification against the deployed Worker, which needs a deploy first.
+
 Nothing else matters if a lead can be submitted and lost. **Zero secrets are currently set on the
 production Worker** (`wrangler secret list` returns `[]`), so today the live form skips spam
 checking, sends no email, and returns success regardless.
@@ -36,7 +39,7 @@ checking, sends no email, and returns success regardless.
 |---|---|---|
 | 0.1 | ✅ **Trim whitespace in `.env.local`** | Done 2026-07-29. `CONTACT_FROM_EMAIL` had a **trailing space**, and dotenv does not trim unquoted values, so Resend would have rejected every send. Backup written alongside. |
 | 0.2 | ✅ **`.trim()` the three email env reads in `route.ts`** | Done. Defensive, so this class of typo cannot silently kill leads again. |
-| 0.3 | 🔴 **Push the secrets to production** | `wrangler secret put` for `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`. **`NEXT_PUBLIC_TURNSTILE_SITE_KEY` is NOT a secret**, it is baked at build time, so it needs a rebuild and redeploy instead. |
+| 0.3 | ✅ **DONE 2026-07-29.** All four secrets are on the Worker (`RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`), verified by name via `wrangler secret list`. Values piped through stdin, never in argv or shell history. | `wrangler secret put` for `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `TURNSTILE_SECRET_KEY`. **`NEXT_PUBLIC_TURNSTILE_SITE_KEY` is NOT a secret**, it is baked at build time, so it needs a rebuild and redeploy instead. |
 | 0.4 | ✅ **DECIDED 2026-07-29: leave `CONTACT_TO_EMAIL` at `@digitaldog.io` until after go live.** | **Deliberate, do not "fix" this.** Derrick keeps every test lead landing in his own inbox so the whole path can be verified without Barbara receiving noise from a site that is not live yet. **Switch to `trinitygaragedoorservice@gmail.com` as a go live step**, once traffic is real. The route now splits `CONTACT_TO_EMAIL` on commas, so the switch can be to both addresses without a code change. Tracked as **5.9** in the cutover phase. |
 | 0.5 | 🔴 **Fix the nine lead path defects** | `UPGRADE-PLAN.md` §9. The two that bite hardest: the client **discards the `emailed` flag** and always shows success (`contact-form.tsx:45`), and **the phone is never validated** (`phone: "x"` passes), which is the only way this business calls anyone back. |
 | 0.6 | 🔴 **Turnstile must fail OPEN on outage, closed on a real verdict** | Today a Cloudflare siteverify outage returns 400 to every visitor and takes the whole form offline (`route.ts:111`). Also stop hard blocking submission when the token is absent (`contact-form.tsx:26`), which makes an ad blocker silently break the form forever. |
@@ -117,7 +120,7 @@ The zone is staged and waiting. Do 5.1 **before** anyone touches nameservers.
 
 | # | Task | Notes |
 |---|---|---|
-| 5.1 | 🔴🔴 **Unproxy the non website DNS records, or their EMAIL BREAKS at cutover** | Cloudflare's import set `proxied=true` on everything it could, including **`mail`, `email`, `autodiscover`, `cpanel`, `webdisk`, `whm`, `admin`**. Their mail is **Microsoft 365** (MX → `...mail.protection.outlook.com`). The proxy only carries HTTP, so proxied mail hostnames break Outlook client connectivity the moment DNS goes live. **Grey cloud all of them first.** The MX records themselves are correctly unproxied already. |
+| 5.1 | ✅ **DONE 2026-07-29, 15 records grey clouded, 0 failures.** Verified after: **0 mail critical records still proxied**. Only apex, `www` and the dead `_domainconnect` remain proxied, which is correct. Safe to have done now because the zone is still `pending`, so Cloudflare is not authoritative and the change is inert until cutover. ⚠️ Original note kept for context: | Cloudflare's import set `proxied=true` on everything it could, including **`mail`, `email`, `autodiscover`, `cpanel`, `webdisk`, `whm`, `admin`**. Their mail is **Microsoft 365** (MX → `...mail.protection.outlook.com`). The proxy only carries HTTP, so proxied mail hostnames break Outlook client connectivity the moment DNS goes live. **Grey cloud all of them first.** The MX records themselves are correctly unproxied already. |
 | 5.2 | **Back up the WordPress site** | Full export before anything changes. Derrick owns this. |
 | 5.3 | **Add the Worker custom domain** | Apex plus `www`. The account has 5 custom domains configured and **none of them is Trinity's**, so this is genuinely missing. Replaces the apex `A → 192.124.249.158` (Sucuri, fronting the old WordPress). |
 | 5.4 | **Redirect map from the old URLs** | Every old WordPress path to its new equivalent, so rankings and inbound links survive. |
@@ -158,3 +161,29 @@ The zone is staged and waiting. Do 5.1 **before** anyone touches nameservers.
 | **Simone** | The veteran owned answer. Son is the veteran, Jason owns the company | Claim risk |
 | **Simone/Jason** | Confirm 12,000+ doors (#9), install vs repair brands (#10), mailing address (#11) | 2.7 |
 | **Simone/Jason** | Can we say "no trip charge"? (#25b) $0 in both zones in their own system | Copy win |
+
+---
+
+## Infrastructure state, recorded 2026-07-29
+
+Cloudflare state is not in version control, so it is written down here.
+
+**Secrets on the Worker** (names only): `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`,
+`TURNSTILE_SECRET_KEY`. `NEXT_PUBLIC_TURNSTILE_SITE_KEY` is deliberately absent, it is baked at
+build time from `.env.local` and cannot be a Worker secret.
+
+**Remote D1**: migrations `0001` and `0002` applied. `leads` now has `phone_e164`. **0 rows**, so
+nothing has ever been lost.
+
+**DNS**, zone `pending`: 15 records grey clouded. Still proxied on purpose: apex `@` and `www`,
+which will point at the Worker at cutover.
+
+**Worth deleting before cutover:** `_domainconnect` (GoDaddy's Domain Connect, useless once
+Cloudflare is authoritative), and `cpanel` / `whm`, which CNAME to `sucuriip.trinitygaragedoorservice.com`
+**that does not exist as a record**. Left in place for now because deleting records is the client's
+call, not ours.
+
+⚠️ **`CLOUDFLARE_API_TOKEN` was removed from `.env.local` on purpose.** Wrangler reads `.env` files
+and that token shadowed the OAuth login while lacking D1 permission, which made `wrangler d1
+--remote` fail with 7403 and would have affected deploys. `CLOUDFLARE_API_DNS_TOKEN` is zone scoped,
+does not shadow anything, and stays.
