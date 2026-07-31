@@ -29,8 +29,15 @@ const FIELDS: Field[] = ["firstName", "lastName", "phone", "email", "zip"];
  * caused a zoom on every mobile visit to the most important form on the site.
  */
 const labelCls = "mb-1.5 block text-[13px] font-extrabold uppercase tracking-[0.06em] text-[#555]";
+/**
+ * ⚠️ **No `outline-none` here.** It was removed after a keyboard audit: the only focus signal was
+ * the border changing from ink to accent, which is a colour-only cue on a border that is already
+ * there. That is weak for anyone tabbing through, and colour alone fails 1.4.1. There is now a real
+ * offset outline as well, which is the thing you can actually see.
+ */
 const fieldBase =
-  "w-full rounded-md border-2 bg-white px-4 py-3 text-[16px] text-ink outline-none scroll-mb-[96px]";
+  "w-full rounded-md border-2 bg-white px-4 py-3 text-[16px] text-ink scroll-mb-[96px] " +
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 const okCls = `${fieldBase} border-ink focus:border-accent`;
 const errCls = `${fieldBase} border-accent`;
 

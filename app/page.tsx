@@ -93,7 +93,7 @@ export default function HomePage() {
       {/* HERO (video) */}
       <section className="relative overflow-hidden border-b-[5px] border-accent px-6 py-[128px] max-nav:py-[92px]">
         <div className="absolute inset-0 z-0">
-          <AutoplayVideo src={asset("hero-video.mp4")} poster={asset("door-after-brown-dusk-2car.jpg")} className="h-full w-full object-cover" />
+          <AutoplayVideo src={asset("hero-loop.mp4")} webm={asset("hero-loop.webm")} poster={asset("door-after-brown-dusk-2car.jpg")} className="h-full w-full object-cover" />
         </div>
         <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(180deg, rgb(10 10 10 / calc(var(--ov) * .72)) 0%, rgb(10 10 10 / calc(var(--ov) * .9)) 55%, rgb(10 10 10 / var(--ov)) 100%)" }} />
         <div className="relative z-[2] mx-auto max-w-[1000px] text-center">
