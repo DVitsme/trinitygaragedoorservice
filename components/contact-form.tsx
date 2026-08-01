@@ -118,10 +118,18 @@ export function ContactForm({ intent }: { intent?: string }) {
           email: get("email"),
           zip: get("zip"),
           message: get("message"),
-          // What they picked, if they picked anything. The select is optional, so fall back to what
-          // the CTA they arrived through implies, which is what this field held before the select
-          // existed. `source` below still records the door they came in by either way.
-          service: get("service") || (isEstimate ? "Free estimate" : "Repair"),
+          /*
+            ONLY what the customer actually picked. Deliberately NOT falling back to a value derived
+            from the CTA.
+
+            The first version wrote a skipped dropdown as "Repair", which made "skipped" and "chose
+            a repair" indistinguishable in the data, destroying the one signal that answers whether
+            this optional field earns its place. `source` below already records which door they came
+            in by, so nothing is lost: that is the field for CTA intent, and this is the field for
+            what the customer told us. The lead email renders rows conditionally, so an empty
+            service simply omits the row rather than showing a blank one.
+          */
+          service: get("service") || undefined,
           source: isEstimate ? "estimate-form" : "contact-form",
           token,
         }),

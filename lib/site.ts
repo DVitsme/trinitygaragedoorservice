@@ -173,11 +173,18 @@ export const COUNTY_PHONES = [
  * "Off track" was hyphenated here while nothing rendered it. It is user facing now, so it follows
  * the no dashes rule in `copy/services/_VOICE-AND-RULES.md` like the rest of the site.
  */
+/**
+ * ⚠️ Order and wording are deliberate. The first version led with "Garage door repair", which is a
+ * SUPERSET of the three options under it. Combined with primacy effects that one entry would have
+ * quietly absorbed the specific picks, and the field would have reported almost nothing beyond
+ * "repair", which we already knew from the CTA. The specific causes now come first, most common
+ * break first, and the catch all sits after them as "Another repair".
+ */
 export const SERVICE_OPTIONS = [
-  "Garage door repair",
   "Spring repair",
   "Opener repair",
   "Off track repair",
+  "Another repair",
   "New installation",
   "Door replacement",
   "Not sure / something else",
