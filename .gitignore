@@ -66,3 +66,7 @@ next-env.d.ts
 .audit/
 .media-hunt/
 .geo-cache/
+
+# Full mirror of the old WordPress site, captured at the 2026-08-01 cutover (219MB).
+# Kept out of git: it is a rollback/reference artifact, not source.
+.wp-backup/

@@ -81,6 +81,11 @@ const nextConfig: NextConfig = {
 
       // Blog: slugs are unchanged, only the prefix moves (/blogs/ → /resources/blog/).
       { source: "/blogs/", destination: "/resources/blog/", permanent: true },
+      // WordPress category archives sat under /blogs/category/:name/ and were in the old sitemap,
+      // so Google knows them. `:slug` below matches ONE segment only, so without this rule the
+      // archive falls through to a 404 rather than being caught. We have no category IA, so it
+      // lands on the blog index. Kept above :slug for readability; the two cannot collide.
+      { source: "/blogs/category/:name/", destination: "/resources/blog/", permanent: true },
       { source: "/blogs/:slug/", destination: "/resources/blog/:slug/", permanent: true },
     ];
   },

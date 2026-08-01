@@ -15,6 +15,32 @@
   "observability": {
     "enabled": true
   },
+  // ⚠️ MUST stay true. Adding `routes` makes wrangler disable workers.dev BY DEFAULT, which silently
+  // 404'd trinity-garage-door.derrick-2fd.workers.dev on the first cutover deploy. That URL is the
+  // fallback we verify against when the custom domain is in doubt, so it is pinned explicitly.
+  "workers_dev": true,
+  // Live hostnames, attached 2026-08-01 at the WordPress cutover.
+  //
+  // ROUTES, not `custom_domain: true`. A custom domain makes Cloudflare OWN the DNS record, so it
+  // refuses when one already exists: "Hostname already has externally managed DNS records. Delete
+  // them first." Deleting was not an option here, because this zone's SOA minimum is 1800, so a
+  // resolver that asked during the gap would cache the missing answer for up to 30 minutes.
+  //
+  // A route needs no DNS surgery. It matches at the edge BEFORE the origin is contacted, so the
+  // apex record can keep pointing at Sucuri and never be dialled. The only requirement is that the
+  // hostname is PROXIED (orange cloud), which apex and www both are.
+  //
+  // ⚠️ The apex needs its OWN pattern. `*.trinitygaragedoorservice.com/*` matches subdomains only
+  // and does NOT match the bare apex, which is exactly why www went live and the apex stayed on
+  // WordPress. Listed explicitly rather than as a wildcard so the Worker can never intercept a mail
+  // hostname if one is ever orange-clouded by mistake.
+  //
+  // ⚠️ ROLLBACK: remove both entries and redeploy. The apex A record still points at Sucuri, so the
+  // old WordPress site returns on its own with no DNS change needed.
+  "routes": [
+    { "pattern": "trinitygaragedoorservice.com/*", "zone_name": "trinitygaragedoorservice.com" },
+    { "pattern": "www.trinitygaragedoorservice.com/*", "zone_name": "trinitygaragedoorservice.com" }
+  ],
   // NOTE: NEXT_PUBLIC_* are inlined at BUILD time from .env.local, so this runtime var does
   // NOT reach browser code. Kept in sync only so the two can't disagree in the dashboard.
   "vars": {
