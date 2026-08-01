@@ -148,8 +148,8 @@ export function SiteHeader() {
             href={estimate ? ROUTES.estimate : ROUTES.getStarted}
             className="hidden rounded-[7px] bg-accent px-[22px] py-[13px] text-[13.5px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark nav:inline-block"
           >
-            {estimate ? "Free Estimate" : "Get Started"}
-            <span className="sr-only">{estimate ? " for a free estimate" : " with a garage door repair"}</span>
+            {estimate ? "Free Estimate" : "Request Service"}
+            <span className="sr-only">{estimate ? " on a new garage door" : " for your garage door"}</span>
           </Link>
           <MobileMenu />
         </div>

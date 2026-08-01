@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Phone } from "lucide-react";
-import { SITE } from "@/lib/site";
+import { SITE, asset } from "@/lib/site";
+import { AutoplayVideo } from "@/components/autoplay-video";
 import { ContactForm } from "@/components/contact-form";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { TrustStrip } from "@/components/blocks/trust-strip";
@@ -42,13 +43,51 @@ export default async function GetServicePage({
 
   return (
     <>
-      <section className="border-b-[5px] border-accent bg-ink">
-        <div className="mx-auto max-w-[1200px] px-5 py-[64px] nav:px-8">
-          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: isEstimate ? "Free Estimate" : "Get Started" }]} />
+      {/*
+        HERO. `bg-ink` stays as the base colour so the section is never a bright flash before the
+        poster paints, and so it degrades to the old flat panel if the video fails entirely.
+
+        Reusing `hero-loop` rather than adding a new asset is deliberate: it is already optimised to
+        381 KB MP4 / 347 KB WebM and it is the homepage hero, so most people arriving here have it in
+        cache already and this page costs them nothing.
+
+        ⚠️ The video is `aria-hidden` inside AutoplayVideo and carries no information, so there is no
+        caption or transcript obligation. It must stay decorative for that to hold.
+      */}
+      <section className="relative overflow-hidden border-b-[5px] border-accent bg-ink">
+        {/*
+          ⚠️ **Hidden below 768px.** On a phone the FORM is the hero, and the video sits behind it
+          costing data, battery and decode jank for something almost entirely covered by the scrim
+          and the content. It also crops hardest at narrow widths, which is where the subject is most
+          likely to be lost. `bg-ink` below carries the section on mobile exactly as it did before.
+        */}
+        <div className="absolute inset-0 z-0 max-md:hidden">
+          <AutoplayVideo
+            src={asset("hero-loop.mp4")}
+            webm={asset("hero-loop.webm")}
+            poster={asset("hero-loop-poster.jpg")}
+            className="h-full w-full object-cover object-center"
+          />
+        </div>
+        {/*
+          Contrast scrim. The H1 and body are white over moving footage, so contrast cannot be
+          eyeballed against one frame: it has to hold for every frame. The source is a bright garage
+          interior, so this is deliberately heavy, and it deepens toward the bottom where the body
+          copy and breadcrumb sit over the busiest part of the picture.
+        */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.88) 45%, rgba(10,10,10,0.94) 100%)",
+          }}
+        />
+        <div className="relative z-[2] mx-auto max-w-[1200px] px-5 py-[92px] max-nav:py-[68px] nav:px-8">
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: isEstimate ? "Free Estimate" : "Request Service" }]} />
           <div className="mt-4 flex items-center gap-3.5">
             <span className="h-1 w-[52px] bg-accent" />
             <span className="text-[13px] font-extrabold uppercase tracking-[0.22em] text-white">
-              {isEstimate ? "Free Estimate" : "Get Started"}
+              {isEstimate ? "Free Estimate" : "Request Service"}
             </span>
           </div>
           <h1 className="m-0 mt-[18px] max-w-[820px] font-display text-[clamp(30px,4.8vw,54px)] font-black uppercase leading-[1.0] text-white">

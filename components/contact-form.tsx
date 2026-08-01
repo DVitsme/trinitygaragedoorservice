@@ -1,8 +1,8 @@
 "use client";
 
 import Script from "next/script";
-import { useState, useId, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
-import { isValidPhone, isValidEmail } from "@/lib/lead-validation";
+import { useState, useId, useRef, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
+import { isValidPhone, isValidEmail, normalizePhone, maskPhoneDisplay, caretAfterDigit } from "@/lib/lead-validation";
 import { track } from "@/lib/analytics";
 // Costs nothing extra in the bundle: lib/site.ts is already client side via mobile-menu and open-now.
 import { SERVICE_OPTIONS } from "@/lib/site";
@@ -77,8 +77,67 @@ export function ContactForm({ intent }: { intent?: string }) {
   const onBlur = (f: Field) => (e: FocusEvent<HTMLInputElement>) =>
     setErrors((p) => ({ ...p, [f]: validate(f, e.target.value) || undefined }));
 
+  /**
+   * Live `(813) 279 - 6785` masking.
+   *
+   * ⚠️ **Deliberately UNCONTROLLED.** The DOM owns the value and we rewrite it in place. If this JS
+   * ever fails, the field degrades to a plain working `<input type="tel">`. A controlled input whose
+   * state stopped updating would refuse typing altogether, and this is the only way the business
+   * ever contacts a customer, so an unformatted number beats a dead field every time.
+   *
+   * Runs on React's onChange, which maps to the native `input` event and therefore fires on
+   * AUTOFILL as well as typing. Never move this to keydown: autofill does not fire key events, and
+   * Android IME keyboards report `event.key` as "Unidentified".
+   */
+  const prevDigits = useRef("");
+
+  function maskPhone(e: ChangeEvent<HTMLInputElement>) {
+    const el = e.currentTarget;
+    const native = e.nativeEvent as InputEvent;
+    if (native?.isComposing) return; // let an IME finish composing first
+
+    const caret = el.selectionStart ?? el.value.length;
+    let before = normalizePhone(el.value.slice(0, caret)).length;
+    let digits = el.value.replace(/\D/g, "");
+
+    // A NANP area code can never begin with 1, so a leading 1 is unambiguously a trunk/country
+    // code. Handles someone pasting or autofilling "+1 813 279 6785".
+    if (digits.length > 1 && digits[0] === "1") {
+      digits = digits.slice(1);
+      if (before > 0) before -= 1;
+    }
+
+    // Deleting a SEPARATOR leaves the digit stream identical, so a naive reformat would be a no-op
+    // and the key would appear dead. Remove the digit the user was actually aiming at instead.
+    // Keyed off inputType rather than event.key, per the Android IME note above.
+    const sameLength = digits.length === prevDigits.current.length;
+    if (sameLength && native?.inputType === "deleteContentBackward" && before > 0) {
+      digits = digits.slice(0, before - 1) + digits.slice(before);
+      before -= 1;
+    } else if (sameLength && native?.inputType === "deleteContentForward" && before < digits.length) {
+      digits = digits.slice(0, before) + digits.slice(before + 1);
+    }
+
+    // Capped here and NOT with a maxLength attribute: maxLength truncates a pasted or autofilled
+    // "+18132796785" before this code ever sees it, so the country code could never be stripped.
+    digits = digits.slice(0, 10);
+    before = Math.min(before, digits.length);
+
+    const next = maskPhoneDisplay(digits);
+    el.value = next;
+    try {
+      const pos = caretAfterDigit(next, before);
+      el.setSelectionRange(pos, pos);
+    } catch {
+      // setSelectionRange throws on type="number"/"email". This field is type="tel", so this is
+      // belt and braces; the displayed value is already correct either way.
+    }
+    prevDigits.current = digits;
+  }
+
   /** Clear the moment it is fixed, rather than making them submit again to find out. */
   const onChange = (f: Field) => (e: ChangeEvent<HTMLInputElement>) => {
+    if (f === "phone") maskPhone(e);
     if (errors[f] && !validate(f, e.target.value)) setErrors((p) => ({ ...p, [f]: undefined }));
   };
 
@@ -161,26 +220,41 @@ export function ContactForm({ intent }: { intent?: string }) {
     );
   }
 
-  const field = (f: Field, label: string, extra: InputHTMLAttributes<HTMLInputElement>) => (
-    <div>
-      <label className={labelCls} htmlFor={fid(f)}>{label}</label>
-      <input
-        id={fid(f)}
-        name={f}
-        required
-        aria-required="true"
-        aria-invalid={errors[f] ? true : undefined}
-        aria-describedby={errors[f] ? eid(f) : undefined}
-        onBlur={onBlur(f)}
-        onChange={onChange(f)}
-        className={errors[f] ? errCls : okCls}
-        {...extra}
-      />
-      {errors[f] && (
-        <p id={eid(f)} role="alert" className="mt-1.5 text-[14px] font-semibold text-accent">{errors[f]}</p>
-      )}
-    </div>
-  );
+  /**
+   * `hint` satisfies WCAG 3.3.2, which explicitly asks for the data format to be stated "especially
+   * if they are out of the customary formats". `(999) 999 - 9999` is out of the customary format.
+   *
+   * It is a persistent element, NOT a placeholder, because a placeholder vanishes on the first
+   * keystroke and so cannot serve as an instruction. Stated up front rather than announced on
+   * change: an aria-live region here would fire on every single keystroke.
+   */
+  const field = (f: Field, label: string, extra: InputHTMLAttributes<HTMLInputElement>, hint?: string) => {
+    const hid = `${uid}-${f}-hint`;
+    const describedBy = [errors[f] ? eid(f) : null, hint ? hid : null].filter(Boolean).join(" ");
+    return (
+      <div>
+        <label className={labelCls} htmlFor={fid(f)}>{label}</label>
+        <input
+          id={fid(f)}
+          name={f}
+          required
+          aria-required="true"
+          aria-invalid={errors[f] ? true : undefined}
+          aria-describedby={describedBy || undefined}
+          onBlur={onBlur(f)}
+          onChange={onChange(f)}
+          className={errors[f] ? errCls : okCls}
+          {...extra}
+        />
+        {hint && !errors[f] && (
+          <p id={hid} className="mt-1.5 text-[13px] leading-[1.4] text-[#777]">{hint}</p>
+        )}
+        {errors[f] && (
+          <p id={eid(f)} role="alert" className="mt-1.5 text-[14px] font-semibold text-accent">{errors[f]}</p>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -191,7 +265,14 @@ export function ContactForm({ intent }: { intent?: string }) {
       <p className="mb-4 text-[14.5px] text-body">All fields are needed except where noted.</p>
       <form onSubmit={onSubmit} noValidate className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {field("firstName", "First name", { type: "text", autoComplete: "given-name" })}
-        {field("phone", "Phone", { type: "tel", inputMode: "tel", autoComplete: "tel" })}
+        {/* NO maxLength here, on purpose. See the note in maskPhone: it would truncate an autofilled
+            "+18132796785" before the country code could be stripped. */}
+        {field(
+          "phone",
+          "Phone",
+          { type: "tel", inputMode: "tel", autoComplete: "tel" },
+          "10 digit US number. Formats as you type.",
+        )}
         {field("email", "Email", { type: "email", inputMode: "email", autoComplete: "email" })}
         {/* NEVER type="number" for a zip: it strips leading zeros and adds spinner arrows. */}
         {field("zip", "Zip code", {

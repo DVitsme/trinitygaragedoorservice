@@ -33,12 +33,38 @@ export function AutoplayVideo({
     const v = ref.current;
     if (!v) return;
     v.muted = true;
-    const go = () => {
-      v.play().catch(() => {});
+
+    /**
+     * ⚠️ **Respect prefers-reduced-motion.** A silent, looping, full bleed background video is
+     * exactly the kind of continuous motion that triggers symptoms for people with vestibular
+     * disorders, and it runs behind the text they are trying to read. When the OS setting is on we
+     * never call play(), so the poster shows as a still image and the page is completely usable.
+     *
+     * Wired as a listener, not a one time read, so toggling the OS setting takes effect without a
+     * reload. Older Safari only has addListener, hence the fallback.
+     */
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const sync = () => {
+      if (mq.matches) {
+        v.pause();
+        // Back to the first frame, so it matches the poster rather than freezing mid motion.
+        try { v.currentTime = 0; } catch { /* not seekable yet, harmless */ }
+      } else {
+        v.play().catch(() => {});
+      }
     };
-    go();
-    v.addEventListener("canplay", go, { once: true });
-    return () => v.removeEventListener("canplay", go);
+
+    sync();
+    v.addEventListener("canplay", sync, { once: true });
+    if (mq.addEventListener) mq.addEventListener("change", sync);
+    else mq.addListener(sync);
+
+    return () => {
+      v.removeEventListener("canplay", sync);
+      if (mq.removeEventListener) mq.removeEventListener("change", sync);
+      else mq.removeListener(sync);
+    };
   }, []);
 
   return (

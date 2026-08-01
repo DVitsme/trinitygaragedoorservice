@@ -292,7 +292,9 @@ export const ROUTES = {
   troubleshooting: "/resources/troubleshooting/",
   bookRepair: "/book-a-repair/",
   /**
-   * The primary nav CTA since 2026-08-01, labelled "Get Started".
+   * The primary nav CTA since 2026-08-01. Labelled "Request Service": it names the action, matches
+   * the destination's own "Request My Callback" button, and avoids promising a calendar the way
+   * "Book a Repair" does now that this leads to a callback form rather than to booking.
    *
    * ⚠️ The URL deliberately stays `/get-service/`. Only the wording changed. Renaming the route
    * would break the verified 301 map, the sitemap, and every Google Ads final URL Lloyd is running.

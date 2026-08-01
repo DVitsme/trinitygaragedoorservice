@@ -45,6 +45,45 @@ export function toE164(raw: string | undefined | null): string | null {
   return isValidPhone(d) ? `+1${d}` : null;
 }
 
+/**
+ * Progressive display mask for the phone field, `(813) 279 - 6785`.
+ *
+ * ⚠️ **A separator is never rendered before the digit that follows it.** `(813` stays open until the
+ * area code is complete, and the " - " only appears with the seventh digit. That single rule removes
+ * the whole backspace trap class of bug, where deleting a character makes the formatter immediately
+ * re-add it and the field looks frozen.
+ *
+ * Purely cosmetic. `normalizePhone` strips this back to digits and `toE164` is what gets stored, so
+ * a mask failure can never corrupt the submitted number.
+ */
+export function maskPhoneDisplay(digits: string): string {
+  const d = digits.slice(0, 10);
+  if (d.length === 0) return "";
+  if (d.length < 3) return `(${d}`;
+  if (d.length === 3) return `(${d})`;
+  if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)} - ${d.slice(6)}`;
+}
+
+/**
+ * Character index just after the nth digit of a masked string.
+ *
+ * The caret has to be anchored to a DIGIT COUNT, not a character offset. The usual
+ * "save selectionStart, restore it after render" trick works only for transforms that preserve
+ * length; a mask changes it, so "8134" becoming "(813) 4" makes the old offset meaningless.
+ */
+export function caretAfterDigit(masked: string, n: number): number {
+  if (n <= 0) return 0;
+  let seen = 0;
+  for (let i = 0; i < masked.length; i++) {
+    if (masked[i] >= "0" && masked[i] <= "9" && ++seen === n) {
+      // If only separators follow, jump to the end so the caret never parks inside punctuation.
+      return /\d/.test(masked.slice(i + 1)) ? i + 1 : masked.length;
+    }
+  }
+  return masked.length;
+}
+
 /** (813) 279-6785 for humans. Office staff read these out of an email, so format on display. */
 export function formatPhone(raw: string | undefined | null): string {
   const d = normalizePhone(raw);

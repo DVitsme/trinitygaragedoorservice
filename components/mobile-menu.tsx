@@ -98,8 +98,8 @@ export function MobileMenu() {
               onClick={close}
               className="rounded-[7px] bg-accent py-3.5 text-center text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline"
             >
-              {estimate ? "Free Estimate" : "Get Started"}
-              <span className="sr-only">{estimate ? " for a free estimate" : " with a garage door repair"}</span>
+              {estimate ? "Free Estimate" : "Request Service"}
+              <span className="sr-only">{estimate ? " on a new garage door" : " for your garage door"}</span>
             </Link>
           </div>
         </div>
