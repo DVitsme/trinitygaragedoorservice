@@ -29,7 +29,11 @@ import { normalizePhone } from "@/lib/lead-validation";
 
 export type HcpLead = {
   firstName: string;
-  lastName: string;
+  /**
+   * Optional since 2026-08-01. The client asked us to stop collecting a last name on the call
+   * ("Barbara gets the rest when she calls them back"), so this is now almost always absent.
+   */
+  lastName?: string;
   phone: string;
   email?: string;
   zip?: string;
@@ -50,7 +54,11 @@ export async function pushLeadToHcp(lead: HcpLead, apiKey: string): Promise<{ id
     note: lead.message || undefined,
     customer: {
       first_name: lead.firstName,
-      last_name: lead.lastName,
+      // OMITTED rather than sent empty. We stopped collecting a last name on 2026-08-01, and an
+      // empty string is a different thing from an absent field to an API we cannot safely probe:
+      // HCP has no sandbox and no DELETE, so a rejected or malformed write is a real customer
+      // record a human has to clean up. Send nothing and let their side leave it blank.
+      last_name: lead.lastName?.trim() || undefined,
       mobile_number: normalizePhone(lead.phone),
       email: lead.email || undefined,
       notifications_enabled: false,

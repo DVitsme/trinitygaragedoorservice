@@ -4,21 +4,34 @@ import Script from "next/script";
 import { useState, useId, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
 import { isValidPhone, isValidEmail } from "@/lib/lead-validation";
 import { track } from "@/lib/analytics";
+// Costs nothing extra in the bundle: lib/site.ts is already client side via mobile-menu and open-now.
+import { SERVICE_OPTIONS } from "@/lib/site";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 type Status = "idle" | "submitting" | "success" | "error";
-type Field = "firstName" | "lastName" | "phone" | "email" | "zip";
+type Field = "firstName" | "phone" | "email" | "zip";
 
-const FIELDS: Field[] = ["firstName", "lastName", "phone", "email", "zip"];
+const FIELDS: Field[] = ["firstName", "phone", "email", "zip"];
 
 /**
  * The lead form.
  *
- * Fields chosen by Jason on the 2026-07-29 call: first name, last name, phone, email, zip, plus a
- * free text box. **No pricing and no service picker**, deliberately, because he does not want a
- * price on screen before a conversation. His ads specialist wanted fewer fields; Jason overrode
- * him, because the office needs to know where someone is before calling back.
+ * Fields agreed on the 2026-07-29 call, quoting the transcript rather than memory, because an
+ * earlier note recorded this wrong and we shipped a field the client had asked us to remove.
+ *
+ * **Last name is deliberately ABSENT.** Simone at 12:18: *"I don't know if we need their last
+ * name... Barbara, who answers the phones, gets these forms. Once she calls them, she can get the
+ * rest of these details. However, first name is required, phone number, email address, zip code is
+ * required. That's it."* Derrick agreed on the call: *"we can drop off the last."*
+ *
+ * **Zip IS required**, and that was contested. Lloyd wanted only name, email and phone, arguing
+ * people forget their zip. Simone kept it for Jason's team: *"they're going to want to know where
+ * they're located"*, so the office does not spend time on a caller in Atlanta.
+ *
+ * **No pricing.** Jason: *"I don't want to scare people... they may just call around and say what
+ * are you charging. I'd rather just them fill out the information, we call them back."* That rules
+ * out HCP's package picker, which carries prices. It does NOT rule out the service select below.
  *
  * **Single step, not chunked.** The multi step evidence people quote is drawn from long forms; at
  * six fields the difference is noise. Showing everything at once is also the direct fix for the
@@ -54,7 +67,6 @@ export function ContactForm({ intent }: { intent?: string }) {
   function validate(f: Field, v: string): string {
     const s = v.trim();
     if (f === "firstName" && !s) return "Please enter your first name.";
-    if (f === "lastName" && !s) return "Please enter your last name.";
     if (f === "phone" && !isValidPhone(s)) return "Enter a 10 digit phone number so we can call you back.";
     if (f === "email" && !isValidEmail(s)) return "Enter a valid email address.";
     if (f === "zip" && !/^\d{5}$/.test(s.replace(/\D/g, "").slice(0, 5))) return "Enter your 5 digit zip code.";
@@ -102,14 +114,14 @@ export function ContactForm({ intent }: { intent?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           firstName: get("firstName"),
-          lastName: get("lastName"),
           phone: get("phone"),
           email: get("email"),
           zip: get("zip"),
           message: get("message"),
-          // Derived from the CTA they arrived through, not asked. The service picker was dropped,
-          // but the office still benefits from knowing which door the lead came in.
-          service: isEstimate ? "Free estimate" : "Repair",
+          // What they picked, if they picked anything. The select is optional, so fall back to what
+          // the CTA they arrived through implies, which is what this field held before the select
+          // existed. `source` below still records the door they came in by either way.
+          service: get("service") || (isEstimate ? "Free estimate" : "Repair"),
           source: isEstimate ? "estimate-form" : "contact-form",
           token,
         }),
@@ -171,13 +183,55 @@ export function ContactForm({ intent }: { intent?: string }) {
       <p className="mb-4 text-[14.5px] text-body">All fields are needed except where noted.</p>
       <form onSubmit={onSubmit} noValidate className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {field("firstName", "First name", { type: "text", autoComplete: "given-name" })}
-        {field("lastName", "Last name", { type: "text", autoComplete: "family-name" })}
         {field("phone", "Phone", { type: "tel", inputMode: "tel", autoComplete: "tel" })}
         {field("email", "Email", { type: "email", inputMode: "email", autoComplete: "email" })}
         {/* NEVER type="number" for a zip: it strips leading zeros and adds spinner arrows. */}
         {field("zip", "Zip code", {
           type: "text", inputMode: "numeric", pattern: "[0-9]*", maxLength: 10, autoComplete: "postal-code",
         })}
+
+        {/*
+          Optional service select. Agreed on the 2026-07-29 call and missed in the original build.
+
+          A NATIVE <select>, not a custom listbox: it gets the platform picker on mobile for free,
+          which is the control this audience already knows, and it is keyboard and screen reader
+          correct without us reimplementing anything.
+
+          ⚠️ 16px, same as the inputs. Safari zooms any focused form control under 16px, and this
+          sits directly above the submit button on the page 24 CTAs land on.
+
+          The empty first option is deliberate. Preselecting a service would put words in the
+          customer's mouth and quietly skew what the office sees, on a field nobody has to answer.
+        */}
+        <div className="sm:col-span-2">
+          <label className={labelCls} htmlFor={fid("service")}>
+            What do you need help with? <span className="normal-case text-[#888]">(optional)</span>
+          </label>
+          <select
+            id={fid("service")}
+            name="service"
+            defaultValue=""
+            className={`${okCls} appearance-none pr-11`}
+            /*
+              Inline style, not a Tailwind arbitrary value. `bg-[url("data:...")]` silently produced
+              NO arrow, because Tailwind needs spaces in arbitrary values written as underscores and
+              this data URI is full of them. It compiled clean and shipped a select that looked
+              exactly like a text input, which a build can never catch. Caught by screenshotting it.
+            */
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%231a1a1a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "right 14px center",
+              backgroundSize: "18px",
+            }}
+          >
+            <option value="">Choose one, or leave this blank</option>
+            {SERVICE_OPTIONS.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
 
         <div className="sm:col-span-2">
           <label className={labelCls} htmlFor={fid("message")}>

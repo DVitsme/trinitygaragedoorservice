@@ -18,10 +18,11 @@ export function StickyMobileBar() {
         Call
       </a>
       <Link
-        href={estimate ? ROUTES.estimate : ROUTES.bookRepair}
+        href={estimate ? ROUTES.estimate : ROUTES.getStarted}
         className="flex flex-1 items-center justify-center rounded-[7px] bg-accent py-3.5 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline"
       >
-        {estimate ? "Free Estimate" : "Book a Repair"}
+        {estimate ? "Free Estimate" : "Get Started"}
+        <span className="sr-only">{estimate ? " for a free estimate" : " with a garage door repair"}</span>
       </Link>
     </div>
   );

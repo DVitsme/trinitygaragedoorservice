@@ -44,11 +44,11 @@ export default async function GetServicePage({
     <>
       <section className="border-b-[5px] border-accent bg-ink">
         <div className="mx-auto max-w-[1200px] px-5 py-[64px] nav:px-8">
-          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: isEstimate ? "Free Estimate" : "Get Service" }]} />
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: isEstimate ? "Free Estimate" : "Get Started" }]} />
           <div className="mt-4 flex items-center gap-3.5">
             <span className="h-1 w-[52px] bg-accent" />
             <span className="text-[13px] font-extrabold uppercase tracking-[0.22em] text-white">
-              {isEstimate ? "Free Estimate" : "Get Service"}
+              {isEstimate ? "Free Estimate" : "Get Started"}
             </span>
           </div>
           <h1 className="m-0 mt-[18px] max-w-[820px] font-display text-[clamp(30px,4.8vw,54px)] font-black uppercase leading-[1.0] text-white">

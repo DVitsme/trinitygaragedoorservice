@@ -94,11 +94,12 @@ export function MobileMenu() {
               Call {SITE.phoneDisplay}
             </a>
             <Link
-              href={estimate ? ROUTES.estimate : ROUTES.bookRepair}
+              href={estimate ? ROUTES.estimate : ROUTES.getStarted}
               onClick={close}
               className="rounded-[7px] bg-accent py-3.5 text-center text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline"
             >
-              {estimate ? "Free Estimate" : "Book a Repair"}
+              {estimate ? "Free Estimate" : "Get Started"}
+              <span className="sr-only">{estimate ? " for a free estimate" : " with a garage door repair"}</span>
             </Link>
           </div>
         </div>

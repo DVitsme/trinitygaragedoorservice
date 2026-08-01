@@ -158,11 +158,26 @@ export const COUNTY_PHONES = [
 ] as const;
 
 /** Service types for the contact / free-estimate form. */
+/**
+ * The optional "what do you need help with" select on the lead form.
+ *
+ * Agreed on the 2026-07-29 call and then missed in the build. Derrick at 12:28: *"Do you want to
+ * add in then a small section, a select about what they want, just not make it required?"* Lloyd had
+ * asked for it a few minutes earlier: *"maybe their concerns are repair or maybe installations."*
+ * Wired up for the first time on 2026-08-01; until then this constant had zero importers.
+ *
+ * ⚠️ **No prices, and not a package picker.** That is Jason's line and it is specifically about
+ * price on screen: *"I don't want to scare people... they may just call around and say what are you
+ * charging."* Naming a service is fine. Attaching a number to it is not.
+ *
+ * "Off track" was hyphenated here while nothing rendered it. It is user facing now, so it follows
+ * the no dashes rule in `copy/services/_VOICE-AND-RULES.md` like the rest of the site.
+ */
 export const SERVICE_OPTIONS = [
   "Garage door repair",
   "Spring repair",
   "Opener repair",
-  "Off-track repair",
+  "Off track repair",
   "New installation",
   "Door replacement",
   "Not sure / something else",
@@ -269,6 +284,14 @@ export const ROUTES = {
   safetyTips: "/resources/safety-tips/",
   troubleshooting: "/resources/troubleshooting/",
   bookRepair: "/book-a-repair/",
+  /**
+   * The primary nav CTA since 2026-08-01, labelled "Get Started".
+   *
+   * ⚠️ The URL deliberately stays `/get-service/`. Only the wording changed. Renaming the route
+   * would break the verified 301 map, the sitemap, and every Google Ads final URL Lloyd is running.
+   * Same page as `estimate` below, without the `?intent=estimate` flag that retitles it.
+   */
+  getStarted: "/get-service/",
   estimate: "/get-service/?intent=estimate",
 } as const;
 

@@ -145,10 +145,11 @@ export function SiteHeader() {
             {SITE.phoneDisplay}
           </a>
           <Link
-            href={estimate ? ROUTES.estimate : ROUTES.bookRepair}
+            href={estimate ? ROUTES.estimate : ROUTES.getStarted}
             className="hidden rounded-[7px] bg-accent px-[22px] py-[13px] text-[13.5px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark nav:inline-block"
           >
-            {estimate ? "Free Estimate" : "Book a Repair"}
+            {estimate ? "Free Estimate" : "Get Started"}
+            <span className="sr-only">{estimate ? " for a free estimate" : " with a garage door repair"}</span>
           </Link>
           <MobileMenu />
         </div>

@@ -17,8 +17,21 @@ these reverse things already shipped.**
    site**: *"I don't want to scare people... they may just call around and say what are you
    charging."* Housecall Pro's embed cannot be trimmed (its zip gate, service picker and pricing
    are one flow, take it or leave it), so we build our own.
-   **Fields, per Jason:** first name, last name, phone, email, **zip**, plus a free text box for
-   what the problem is. **No pricing, no package picker.**
+   ⚠️ **CORRECTED 2026-08-01 against the transcript. The earlier version of this line was wrong and
+   we shipped a field the client had asked us to remove.** It said "Fields, per Jason: first name,
+   **last name**, phone, email, zip". Jason was not in that part of the call, he had answered other
+   questions by phone that morning. **Simone and Lloyd settled the fields, and they dropped the last
+   name.** Simone at 12:18: *"I don't know if we need their last name... Barbara, who answers the
+   phones, gets these forms. Once she calls them, she can get the rest of these details. However,
+   first name is required, phone number, email address, zip code is required. That's it."*
+   **Actual agreed fields:** first name, phone, email, **zip**, plus a free text box for what the
+   problem is, plus **an optional select for what they need** (Derrick proposed it at 12:28, *"a
+   small section, a select about what they want, just not make it required"*, and it was agreed).
+   **Zip was contested and kept:** Lloyd wanted only name, email and phone; Simone kept zip so the
+   office does not spend time on a caller in Atlanta.
+   **No pricing, no package picker.** This is Jason's constraint and it is about **price on screen**,
+   not about asking which service. Lloyd's *"maybe we can skip this one"* at 14:00 referred to
+   Housecall Pro's **package** picker, which carries prices, not to a plain service select.
    **Where it goes:** email to `trinitygaragedoorservice@gmail.com` (Barbara) **first**, then push
    to Housecall Pro leads for Lloyd's attribution. Email is the lighter call so it fires first.
    ⚠️ **This supersedes the `window.HCPWidget.openModal()` work shipped on 2026-07-28.**
