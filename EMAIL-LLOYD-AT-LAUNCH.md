@@ -1,7 +1,7 @@
 # Email to Lloyd, to send AFTER the site is live
 
-**Do not send before cutover.** Two of the four asks only make sense once real traffic is arriving,
-and the Clarity question is easier for him to check against live data.
+✅ **THE SITE WENT LIVE 2026-08-01. This is now due to send.** Every day it waits is a day of live
+traffic with no GA4 measurement ID in the container, which cannot be backfilled.
 
 Copy the text below the line into Gmail. Nothing here has been sent.
 
@@ -16,9 +16,11 @@ Two notes for you first:
 
 ---
 
-Subject: GTM is live, four things need you
+Subject: Trinity is live, five things need you
 
 Lloyd,
+
+The new site went live today at trinitygaragedoorservice.com, apex and www both.
 
 Your container GTM-MXNSKF57 is installed and firing. I checked it in a real browser rather than
 assuming the install took: dataLayer initialises, gtm.js fires, and the container stamps
@@ -31,7 +33,7 @@ behave exactly as they would with your paste. The difference is that it loads af
 rather than blocking the page, which is what keeps the speed you liked. I added the noscript iframe
 by hand, because that component leaves it out.
 
-Four things on your side.
+Five things on your side.
 
 1. Turn on Enhanced Measurement in GA4, specifically "Page changes based on browser history
 events". The site does client side navigation, so moving between pages never fires a normal page
@@ -54,6 +56,14 @@ alongside it. So session recording is live on the site as a side effect of an ad
 wrong about the mechanism, but the requests are definitely there. If it's meant to be on, it's
 worth checking the masking so it can't capture what somebody types into the contact form. If it
 isn't, it switches off in Microsoft Advertising without touching the site.
+
+5. Point your ad final URLs at the new addresses. Every old URL redirects, and I tested that the
+redirects keep gclid and your utm parameters intact, including the one that adds a parameter of its
+own, so nothing is broken today and attribution is safe. But a redirect on a paid click costs you a
+hop, and the Ads landing page report will keep reporting the old URL. The three that probably matter
+to you: request-an-estimate is now /get-service/, schedule-a-repair is now /book-a-repair/, and the
+service pages moved from slugs like /services/garage-door-spring-repair-and-replacement/ to
+/services/repair/spring/. Ask me for the full old to new list and I'll send it.
 
 Three events are wired for you to build custom event triggers on. generate_lead carries a
 lead_source of either contact-form or estimate-form, and it fires only after the server confirms
