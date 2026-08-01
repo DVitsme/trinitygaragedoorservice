@@ -78,7 +78,7 @@ export function ContactForm({ intent }: { intent?: string }) {
     setErrors((p) => ({ ...p, [f]: validate(f, e.target.value) || undefined }));
 
   /**
-   * Live `(813) 279 - 6785` masking.
+   * Live `(813) 279-6785` masking.
    *
    * ⚠️ **Deliberately UNCONTROLLED.** The DOM owns the value and we rewrite it in place. If this JS
    * ever fails, the field degrades to a plain working `<input type="tel">`. A controlled input whose
@@ -221,8 +221,12 @@ export function ContactForm({ intent }: { intent?: string }) {
   }
 
   /**
-   * `hint` satisfies WCAG 3.3.2, which explicitly asks for the data format to be stated "especially
-   * if they are out of the customary formats". `(999) 999 - 9999` is out of the customary format.
+   * `hint` serves WCAG 3.3.2, which asks for the data format to be stated. The mask now uses the
+   * customary US format, so this is no longer strictly required, but it is kept because it warns
+   * that the field REFORMATS AS YOU TYPE. That is the surprising part, and the one GOV.UK objection
+   * to masking that still applies here: someone transcribing a number off another screen wants to
+   * check what they typed against the source, and characters appearing that they did not type makes
+   * that harder. Saying so up front costs one line.
    *
    * It is a persistent element, NOT a placeholder, because a placeholder vanishes on the first
    * keystroke and so cannot serve as an instruction. Stated up front rather than announced on

@@ -46,12 +46,18 @@ export function toE164(raw: string | undefined | null): string | null {
 }
 
 /**
- * Progressive display mask for the phone field, `(813) 279 - 6785`.
+ * Progressive display mask for the phone field, `(813) 279-6785`.
+ *
+ * Standard US convention, no spaces around the hyphen. A spaced variant was requested first and
+ * dropped: it is two characters wider on a 320px screen, it reads as a typo to some people, and
+ * VoiceOver inserts a pause at a hyphen ONLY when it has spaces around it. This output now matches
+ * `formatPhone` below exactly for a complete number, so what someone types is character for
+ * character what the office reads in the lead email.
  *
  * ⚠️ **A separator is never rendered before the digit that follows it.** `(813` stays open until the
- * area code is complete, and the " - " only appears with the seventh digit. That single rule removes
- * the whole backspace trap class of bug, where deleting a character makes the formatter immediately
- * re-add it and the field looks frozen.
+ * area code is complete, and the hyphen only appears with the seventh digit. That single rule
+ * removes the whole backspace trap class of bug, where deleting a character makes the formatter
+ * immediately re-add it and the field looks frozen.
  *
  * Purely cosmetic. `normalizePhone` strips this back to digits and `toE164` is what gets stored, so
  * a mask failure can never corrupt the submitted number.
@@ -62,7 +68,7 @@ export function maskPhoneDisplay(digits: string): string {
   if (d.length < 3) return `(${d}`;
   if (d.length === 3) return `(${d})`;
   if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
-  return `(${d.slice(0, 3)}) ${d.slice(3, 6)} - ${d.slice(6)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
 }
 
 /**
