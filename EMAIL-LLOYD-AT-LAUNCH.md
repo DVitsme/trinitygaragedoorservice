@@ -1,7 +1,18 @@
-# Email to Lloyd, to send AFTER the site is live
+# Email to Lloyd — ✅ REWRITTEN AND SENT 2026-08-01
 
-✅ **THE SITE WENT LIVE 2026-08-01. This is now due to send.** Every day it waits is a day of live
-traffic with no GA4 measurement ID in the container, which cannot be backfilled.
+**Sent.** Derrick rewrote it in his own voice and sent it the day the site went live. **Reply
+expected Monday or Tuesday, 3 or 4 August.** Kept below as the record of what was asked, so the
+reply can be checked against it.
+
+**What to watch for in his reply, in priority order:**
+1. **The GA4 measurement ID.** Until it is in the container, live traffic is going unrecorded and
+   cannot be backfilled. This is the one with a running cost.
+2. **Enhanced Measurement, "page changes based on browser history events."** Without it pageviews
+   never fire on this site at all, because navigation is client side.
+3. **Microsoft Clarity.** If he says it should stay on, the masking needs checking so it cannot
+   record what someone types into the lead form.
+4. **The Sheets request.** He was told no and offered a query against D1 instead. Expect him to come
+   back with columns and a frequency.
 
 Copy the text below the line into Gmail. Nothing here has been sent.
 
