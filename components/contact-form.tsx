@@ -124,6 +124,20 @@ export function ContactForm({ intent }: { intent?: string }) {
     before = Math.min(before, digits.length);
 
     const next = maskPhoneDisplay(digits);
+    prevDigits.current = digits;
+
+    /**
+     * ⚠️ **Only touch the DOM when the mask actually changes something.**
+     *
+     * Writing `el.value` and re-seating the caret on EVERY keystroke, even when the text is already
+     * correct, is what turns a cooperating browser extension into a fight. Writing assistants and
+     * translators attach to inputs, write to them, and dispatch their own events; if we also rewrite
+     * on every event the two can ping pong, and the field appears to freeze and then snap back.
+     *
+     * Nothing changed means nothing to do, so leave the caret exactly where the browser put it.
+     */
+    if (el.value === next) return;
+
     el.value = next;
     try {
       const pos = caretAfterDigit(next, before);
@@ -132,7 +146,6 @@ export function ContactForm({ intent }: { intent?: string }) {
       // setSelectionRange throws on type="number"/"email". This field is type="tel", so this is
       // belt and braces; the displayed value is already correct either way.
     }
-    prevDigits.current = digits;
   }
 
   /** Clear the moment it is fixed, rather than making them submit again to find out. */
@@ -270,17 +283,34 @@ export function ContactForm({ intent }: { intent?: string }) {
       <form onSubmit={onSubmit} noValidate className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {field("firstName", "First name", { type: "text", autoComplete: "given-name" })}
         {/* NO maxLength here, on purpose. See the note in maskPhone: it would truncate an autofilled
-            "+18132796785" before the country code could be stripped. */}
+            "+18132796785" before the country code could be stripped.
+
+            ⚠️ The `data-gramm*` attributes and `spellCheck={false}` opt this field out of Grammarly
+            and the browser's spell checker. A phone number has nothing to grammar check, and writing
+            assistants attach to inputs, inject an overlay and dispatch their own events, which is a
+            known way for a masked field to appear to freeze and then reset. Reported from a real
+            browser on 2026-08-01 whose console showed exactly that kind of injected overlay. */}
         {field(
           "phone",
           "Phone",
-          { type: "tel", inputMode: "tel", autoComplete: "tel" },
+          {
+            type: "tel",
+            inputMode: "tel",
+            autoComplete: "tel",
+            spellCheck: false,
+            autoCorrect: "off",
+            autoCapitalize: "off",
+            ...({ "data-gramm": "false", "data-gramm_editor": "false", "data-enable-grammarly": "false" } as Record<string, string>),
+          },
           "10 digit US number. Formats as you type.",
         )}
         {field("email", "Email", { type: "email", inputMode: "email", autoComplete: "email" })}
         {/* NEVER type="number" for a zip: it strips leading zeros and adds spinner arrows. */}
         {field("zip", "Zip code", {
           type: "text", inputMode: "numeric", pattern: "[0-9]*", maxLength: 10, autoComplete: "postal-code",
+          // Same reasoning as the phone field: a zip code has nothing to spell check or grammar check.
+          spellCheck: false, autoCorrect: "off", autoCapitalize: "off",
+          ...({ "data-gramm": "false", "data-gramm_editor": "false", "data-enable-grammarly": "false" } as Record<string, string>),
         })}
 
         {/*
