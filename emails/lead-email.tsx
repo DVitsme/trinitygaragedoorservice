@@ -56,7 +56,24 @@ export function LeadEmail({ name, phone, email, city, service, message }: LeadEm
             {message ? (
               <>
                 <Hr style={{ borderColor: "#e3e0da", margin: "12px 0" }} />
-                <Text style={{ fontSize: "14px", lineHeight: 1.5, color: "#1a1a1a", margin: 0 }}>{message}</Text>
+                {/*
+                  `pre-wrap` is load bearing, not styling. Without it HTML collapses the customer's
+                  line breaks and their description arrives as one run-on block. Someone typing
+                  "Door won't open." / "Spring looks broken." / "Can you come Tuesday?" on three
+                  lines is the normal case, and the office reads this to decide what van to send.
+                  Confirmed against a real delivered message on 2026-08-01.
+                */}
+                <Text
+                  style={{
+                    fontSize: "14px",
+                    lineHeight: 1.5,
+                    color: "#1a1a1a",
+                    margin: 0,
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {message}
+                </Text>
               </>
             ) : null}
           </Section>
