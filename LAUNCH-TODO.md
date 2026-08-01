@@ -111,9 +111,22 @@ GTM is installed, verified and deployed. See `GTM-NOTES.md`. The rest is Lloyd's
 
 ---
 
-## 🔴 PHASE 5 · Cutover · **GATED: no clearance to change nameservers**
+## 🟢 PHASE 5 · Cutover · **DONE 2026-08-01. THE SITE IS LIVE.**
 
-The zone is staged and waiting. Do 5.1 **before** anyone touches nameservers.
+`https://trinitygaragedoorservice.com` and `www` both serve the new site. Client asked to go live
+without answering the open questions, so **every item in "Still needed from the client" below is now
+outstanding against a LIVE site**, not a staging one.
+
+**⏰ ONE THING IS ON A CLOCK: see 5.9. Leads currently go ONLY to `derrick@digitaldog.io`, on
+purpose, for the first 24 hours. It must be widened on 2 Aug or the client receives nothing.**
+
+**What actually happened, because it differs from the plan:** `custom_domain: true` could not be
+used. Cloudflare refuses to attach a custom domain over an existing DNS record and offers no
+override in the current dashboard, and deleting the record first was unsafe because this zone's SOA
+minimum is 1800, so a resolver asking during the gap would cache the miss for up to 30 minutes.
+**Worker routes were used instead**, which match at the edge before the origin is contacted. The
+apex A record still points at Sucuri and is never dialled, which is also the one step rollback:
+remove the routes, redeploy, WordPress returns with no DNS change.
 
 | # | Task | Notes |
 |---|---|---|
@@ -124,7 +137,7 @@ The zone is staged and waiting. Do 5.1 **before** anyone touches nameservers.
 | 5.5 | **Bake `NEXT_PUBLIC_*` for the real domain** | `NEXT_PUBLIC_SITE_URL` is already `https://trinitygaragedoorservice.com` in `wrangler.jsonc`. Rebuild so canonicals, sitemap and OG tags all use it. |
 | 5.6 | **Add the real hostnames to Turnstile** | The widget's hostname allowlist needs the apex and `www`, not just the workers.dev address. |
 | 5.7 | ⏳ **Switch nameservers at GoDaddy** | To `dorthy.ns.cloudflare.com` and `zac.ns.cloudflare.com`. **Needs client clearance. Not approved yet.** |
-| 5.9 | 🔴 **Point `CONTACT_TO_EMAIL` at Barbara** | Held at `@digitaldog.io` on purpose until go live (see 0.4). At cutover set it to `trinitygaragedoorservice@gmail.com`, or both addresses comma separated for the first week so we can still see what arrives. `wrangler secret put CONTACT_TO_EMAIL`, no rebuild needed. **If this is forgotten, the client never receives a single lead.** |
+| 5.9 | ⏰ **DUE 2 AUGUST 2026. Add Barbara back to `CONTACT_TO_EMAIL`.** | **Current value is `derrick@digitaldog.io` ALONE.** Deliberate: Derrick is testing the forms for 24 hours from 1 Aug and forwarding by hand anything real that arrives, so the client's office does not get test noise on day one. **On 2 Aug set it to `derrick@digitaldog.io,trinitygaragedoorservice@gmail.com`** and keep both for the first week so we can still see what lands. The route splits on commas (`route.ts:211`), so a comma separated value is correct and was verified working on 1 Aug. One command, takes effect immediately, **no rebuild and no deploy**: <br>`printf '%s' 'derrick@digitaldog.io,trinitygaragedoorservice@gmail.com' \| pnpm exec wrangler secret put CONTACT_TO_EMAIL` <br>Confirm with `curl -s https://trinitygaragedoorservice.com/api/contact` (health check reports `mailTo`). ⚠️ **The site is LIVE. Every hour this is wrong is an hour of real leads the client cannot see.** |
 | 5.10 | 📧 **SEND THE EMAIL TO LLOYD.** Draft is written and waiting in `EMAIL-LLOYD-AT-LAUNCH.md` | **Do not send before cutover**, two of its four asks only make sense once real traffic is arriving. It tells him the four things only he can do: turn on GA4 Enhanced Measurement for browser history events (**without it, pageviews never fire on this site**, because navigation is client side), add GA4 to the container at all (it currently carries Ads, call tracking, DoubleClick and Bing UET but **no GA4 measurement ID**), use his own click trigger for phone calls, and confirm whether Microsoft Clarity session recording is meant to be running, since it arrived indirectly through the Bing UET tag rather than being chosen. ⚠️ **`phone_click` exists in our code as a type but is never fired.** The email says so deliberately. If anyone "corrects" that, he builds a trigger that reads zero on the conversion this business depends on most. |
 | 5.8 | **Post cutover verification** | HTTPS on both hostnames, `www` redirect, form end to end, **send a test email through Outlook both ways**, sitemap, robots, and spot check the redirect map. |
 
