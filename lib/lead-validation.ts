@@ -90,6 +90,17 @@ export function caretAfterDigit(masked: string, n: number): number {
   return masked.length;
 }
 
+/**
+ * US zip codes are five digits. ZIP+4 exists, but nothing here uses the +4: the service area is
+ * matched on the five digit zip and the office only needs to know roughly where someone is.
+ *
+ * Strips anything that is not a digit, so a pasted "33549-1234" or "FL 33549" reduces cleanly rather
+ * than failing validation for a reason the customer cannot see.
+ */
+export function maskZip(raw: string): string {
+  return raw.replace(/\D/g, "").slice(0, 5);
+}
+
 /** (813) 279-6785 for humans. Office staff read these out of an email, so format on display. */
 export function formatPhone(raw: string | undefined | null): string {
   const d = normalizePhone(raw);

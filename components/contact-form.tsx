@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import { useState, useId, useRef, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
-import { isValidPhone, isValidEmail, normalizePhone, maskPhoneDisplay, caretAfterDigit } from "@/lib/lead-validation";
+import { isValidPhone, isValidEmail, normalizePhone, maskPhoneDisplay, caretAfterDigit, maskZip } from "@/lib/lead-validation";
 import { track } from "@/lib/analytics";
 // Costs nothing extra in the bundle: lib/site.ts is already client side via mobile-menu and open-now.
 import { SERVICE_OPTIONS } from "@/lib/site";
@@ -148,9 +148,32 @@ export function ContactForm({ intent }: { intent?: string }) {
     }
   }
 
+  /**
+   * Digits only, five max. Same "only write when something changed" rule as the phone, for the same
+   * reason: rewriting on every keystroke is what makes a masked field fight a browser extension.
+   *
+   * Simpler caret maths than the phone because the output is pure digits, so the character index and
+   * the digit count are the same number.
+   */
+  function maskZipField(e: ChangeEvent<HTMLInputElement>) {
+    const el = e.currentTarget;
+    const caret = el.selectionStart ?? el.value.length;
+    const before = el.value.slice(0, caret).replace(/\D/g, "").length;
+    const next = maskZip(el.value);
+    if (el.value === next) return;
+    el.value = next;
+    try {
+      const pos = Math.min(before, next.length);
+      el.setSelectionRange(pos, pos);
+    } catch {
+      /* not selectable; the value is still correct */
+    }
+  }
+
   /** Clear the moment it is fixed, rather than making them submit again to find out. */
   const onChange = (f: Field) => (e: ChangeEvent<HTMLInputElement>) => {
     if (f === "phone") maskPhone(e);
+    if (f === "zip") maskZipField(e);
     if (errors[f] && !validate(f, e.target.value)) setErrors((p) => ({ ...p, [f]: undefined }));
   };
 
@@ -307,7 +330,9 @@ export function ContactForm({ intent }: { intent?: string }) {
         {field("email", "Email", { type: "email", inputMode: "email", autoComplete: "email" })}
         {/* NEVER type="number" for a zip: it strips leading zeros and adds spinner arrows. */}
         {field("zip", "Zip code", {
-          type: "text", inputMode: "numeric", pattern: "[0-9]*", maxLength: 10, autoComplete: "postal-code",
+          // maxLength 5, matching the US standard. ZIP+4 is not collected: the service area is
+          // matched on the 5 digit zip and the office does not need the +4.
+          type: "text", inputMode: "numeric", pattern: "[0-9]*", maxLength: 5, autoComplete: "postal-code",
           // Same reasoning as the phone field: a zip code has nothing to spell check or grammar check.
           spellCheck: false, autoCorrect: "off", autoCapitalize: "off",
           ...({ "data-gramm": "false", "data-gramm_editor": "false", "data-enable-grammarly": "false" } as Record<string, string>),

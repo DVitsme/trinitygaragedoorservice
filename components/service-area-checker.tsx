@@ -7,6 +7,7 @@ import { SITE } from "@/lib/site";
 import { BookOnlineButton } from "@/components/book-online-button";
 import { cn } from "@/lib/utils";
 import { track } from "@/lib/analytics";
+import { maskZip } from "@/lib/lead-validation";
 
 /**
  * "Do you come out to my house?" — answered instantly, offline.
@@ -105,16 +106,30 @@ export function ServiceAreaChecker({ className }: { className?: string }) {
             id={inputId}
             name="zip"
             inputMode="numeric"
+            pattern="[0-9]*"
             autoComplete="postal-code"
-            maxLength={10}
+            /* 5, the US standard. ZIP+4 is not used: the lookup matches on the 5 digit zip. */
+            maxLength={5}
             placeholder="33549"
+            spellCheck={false}
+            autoCorrect="off"
+            autoCapitalize="off"
+            /* Nothing to spell check or grammar check in a zip code, and writing assistants that
+               attach to inputs are a known cause of fields appearing to freeze then reset. */
+            data-gramm="false"
+            data-gramm_editor="false"
+            data-enable-grammarly="false"
             value={value}
             aria-describedby={resultId}
             onChange={(e) => {
-              setValue(e.target.value);
+              // Digits only. A pasted "33549-1234" or "FL 33549" reduces cleanly instead of failing
+              // the lookup for a reason the visitor cannot see.
+              setValue(maskZip(e.target.value));
               if (result.kind !== "idle") setResult({ kind: "idle" });
             }}
-            className="w-full rounded-md border-2 border-ink bg-white px-4 py-3 text-[15px] text-ink outline-none focus:border-accent"
+            /* ⚠️ 16px, not 15px. Safari zooms any focused input under 16px. This field had the same
+               defect the lead form was fixed for and was missed at the time. */
+            className="w-full rounded-md border-2 border-ink bg-white px-4 py-3 text-[16px] text-ink outline-none focus:border-accent"
           />
           <button
             type="submit"
