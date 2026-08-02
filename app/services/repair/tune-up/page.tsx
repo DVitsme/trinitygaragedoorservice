@@ -24,8 +24,8 @@ const tuneUp: RepairDetailData = {
     { label: "Tune Up" },
   ],
   heroEyebrow: "Tune Up & Maintenance",
-  heroImage: "svc-opener-rail-work.jpg",
-  heroImageAlt: "Trinity technician servicing and tuning up a garage door",
+  heroImage: "svc-tuneup-rail-check.jpg",
+  heroImageAlt: "Trinity technician checking the rail and hardware on a tune up",
   h1: (
     <>
       Garage Door <span className="inline-block bg-accent px-3 text-white">Tune Up</span>
@@ -40,8 +40,8 @@ const tuneUp: RepairDetailData = {
       "A yearly tune up keeps the door running smooth and catches the small stuff before it strands you with your car inside. When we service a door, we go through the whole system, not only the squeaky part.",
       "The good news is a little attention goes a long way, and a well kept door lasts many years longer than a neglected one. We'll tell you honestly what your door needs and what it doesn't.",
     ],
-    image: "svc-tuneup-rail-check.jpg",
-    imageAlt: "Trinity technician lubricating garage door hardware",
+    image: "svc-opener-service-tech.jpg",
+    imageAlt: "Trinity technician servicing a ceiling mounted garage door opener",
     badge: "Same Day Service",
   },
   signs: {
@@ -84,8 +84,8 @@ const tuneUp: RepairDetailData = {
   whatWeDo: {
     eyebrow: "A Few Things You Can Do Yourself",
     title: "Honest Homeowner Maintenance",
-    image: "svc-cables-track-interior.jpg",
-    imageAlt: "Trinity technicians tuning up a garage door",
+    image: "svc-strut-hardware-detail.jpg",
+    imageAlt: "Close up of a garage door strut and hinge, the hardware checked on every tune up",
     badge: "Twice A Year",
     items: [
       { strong: "The balance test.", rest: "With the door closed, pull the manual release, then lift it by hand to about waist height and let go. A healthy door mostly stays put. If it slides down or drifts up, the springs are out of balance, time to call." },

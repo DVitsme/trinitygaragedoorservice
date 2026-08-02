@@ -85,8 +85,8 @@ const cablesRollers: RepairDetailData = {
   whatWeDo: {
     eyebrow: "What We Do On The Visit",
     title: "Worked Safely, All The Way Through",
-    image: "svc-offtrack-frame-kneeling.jpg",
-    imageAlt: "Trinity technicians replacing garage door rollers",
+    image: "svc-rollers-hardware-bench.jpg",
+    imageAlt: "New rollers, hinges and roller brackets laid out before a Trinity replacement",
     badge: "Quiet & Smooth",
     items: [
       { strong: "We lock out the opener and secure the door.", rest: "Nothing can move while we work, since this hardware sits under spring tension." },

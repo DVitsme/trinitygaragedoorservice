@@ -28,8 +28,8 @@ const emergency: RepairDetailData = {
     { label: "Emergency Repair" },
   ],
   heroEyebrow: "Emergency Repair",
-  heroImage: "svc-offtrack-ladder-top-section.jpg",
-  heroImageAlt: "Trinity technician on an after hours emergency garage door call",
+  heroImage: "svc-emergency-night-call.jpg",
+  heroImageAlt: "Trinity technician on an after hours emergency garage door call, lit garage at night",
   h1: (
     <>
       Emergency Garage Door <span className="inline-block bg-accent px-3 text-white">Repair</span>
@@ -44,8 +44,8 @@ const emergency: RepairDetailData = {
       "That's what our emergency line is for. We keep room in the schedule for the calls that can't wait, and a real person answers, not a machine, even at two in the morning.",
       "We're family owned and based right here in Tampa Bay, so help is usually close by. Our trucks carry the common parts, so most emergencies are fixed in a single visit, often within a couple of hours.",
     ],
-    image: "svc-emergency-night-call.jpg",
-    imageAlt: "Trinity technician on an emergency garage door repair",
+    image: "svc-crew-branded-polo.jpg",
+    imageAlt: "Trinity crew on site, phone number on the back of the polo",
     badge: "Same Day Service",
   },
   signs: {
@@ -89,8 +89,8 @@ const emergency: RepairDetailData = {
   whatWeDo: {
     eyebrow: "What To Expect From An Emergency Call",
     title: "A Real Person, Then A Fast Fix",
-    image: "svc-offtrack-frame-kneeling.jpg",
-    imageAlt: "Trinity technicians on an emergency garage door call",
+    image: "svc-track-header-branded.jpg",
+    imageAlt: "Trinity technician working the door header on a call out",
     badge: "Fixed Fast",
     items: [
       { strong: "A person answers, not a machine.", rest: "Right up to 9pm. You reach someone who can get a technician headed your way." },

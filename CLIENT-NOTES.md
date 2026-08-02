@@ -7,6 +7,39 @@ Talking points for client meetings. Wins to share, problems to raise, and advice
 
 ---
 
+## 🔎 FROM THE 2 AUGUST PHOTO AUDIT (we reviewed 1,281 of their own images)
+
+Jason asked *"do you not have enough pictures?"*. **We have plenty.** Reviewing them turned up five
+things he should hear, in order of how much they matter.
+
+1. 🔴 **There is a marketing graphic with FABRICATED testimonials.** It is laid out like Twitter
+   posts, with invented names, invented handles, blue verified ticks and stock avatars. It is not on
+   the new website and never will be, but if it is still running on social it is a real credibility
+   risk, and inventing reviews is the kind of thing that draws complaints. **Worth him knowing
+   quietly.**
+2. 🔴 **Several graphics use STOCK MODELS presented as if they were Trinity people**, and one uses a
+   stock house that is visibly not Florida. Same category of problem as the AI blog images we
+   already replaced, and it came from the same place, the previous marketing vendor.
+3. 🟠 **The phone numbers on their own assets contradict the site.** The truck livery shows the
+   Hillsborough line, several graphics carry all three county numbers, and one carries an 877 number
+   that appears nowhere else. Jason already said the 877 is dead. **The truck wrap number is legible
+   at full size in the best truck photo we have**, so if we publish it, someone will notice the
+   mismatch. Not urgent, but it feeds the same "consistent details" point as the Yelp and BBB dates.
+4. 🟠 **One good photo shows a customer's face** and would need his permission before we publish it.
+   Everyone else in the set is staff, which is fine.
+5. **The real problem behind his complaint: only about 20 of these are actual photographs of work.**
+   The rest are designed graphics. And of the genuine photos, most were shot on a phone, in portrait,
+   inside a dim garage, looking upward. **That is why the pages feel repetitive even where the files
+   differ.** One proper shoot exists (the studio portrait of Jason, the team behind the banner, the
+   technician portraits) and it is noticeably better than everything else.
+
+**The ask that would fix this permanently:** next time a crew is on an interesting job, ask them for
+**five landscape photos**, taken a step back, in daylight, showing the specific part being worked on.
+Springs, an opener, a door off its track, cables. That is fifteen minutes of a technician's time and
+it would be worth more than everything in the archive.
+
+---
+
 ## ✅ GOOD NEWS TO LEAD WITH
 
 - **The new site is built and you can see it today.**
