@@ -2,8 +2,56 @@
 
 Things only Jason or Simone can answer or provide. Tick them off as they come in.
 
-**Living document.** Last updated: 2026-07-29. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
+**Living document.** Last updated: 2026-08-01. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
 `MEDIA-INVENTORY.md`, `LAUNCH-CHECKLIST.md`.
+
+---
+
+## 🆕 JASON'S VOICE UPDATE, 1 AUGUST (two messages, after the site went live)
+
+**Read this before acting on the 29 July block below, it changes two things.**
+
+### 1. He is rebuilding the Housecall Pro booking options himself. **This is his work, not ours.**
+Barbara test booked a repair and it "still looks good". He wants the **package pricing taken out**
+and replaced with four plain options a customer picks from:
+
+| Option | Price he stated |
+|---|---|
+| Service call | **$149** |
+| Garage door estimate, residential | **Free** |
+| Commercial garage door estimate | (not stated) |
+| Warranty call | (not stated) |
+
+⚠️ **This softens, but does not cancel, his "no pricing" rule.** On 29 July he said *"I don't want to
+scare people... they may just call around and say what are you charging."* He is not against all
+pricing, he is against the **package menu**. A single flat service call price is a different thing,
+and it is a genuine differentiator. **Our website copy still shows no prices.** Do not add $149 to
+any page without asking him, because a price on a web page and a price inside a booking flow are
+different commitments.
+
+**Three things to put back to him:**
+- 🔴 **$149 vs "no trip charge".** Their own HCP account reports a **$0 trip charge** in both zones
+  (#25b). "No trip charge" and "$149 service call" sound contradictory to a customer. Which is it,
+  and how should the site describe the two together?
+- **Is the commercial estimate free too**, or priced? He said the residential one is free and did
+  not say for commercial.
+- **What is a warranty call and is it chargeable?** Presumably free within a warranty period, but
+  that needs to be true before anyone books one.
+
+**Bears on `LAUNCH-TODO` 6.9**, the deferred decision on whether online booking survives. If the
+booking flow now offers four sensible options instead of a price list, keeping it is easier to
+defend. Revisit 6.9 once he has made the change.
+
+### 2. ⚠️ **The Saturday conflict (#4a) is STILL NOT ANSWERED.**
+He mentioned Barbara's booking test and said *"doesn't matter, I know you guys asked me that
+earlier"*, which is not an answer. The site still says **Monday to Friday**, which remains the safe
+reading, because their API returns **242 booking windows over 21 days with zero on a Saturday**.
+**Ask again, plainly: does he want Saturday added in Housecall Pro, yes or no?**
+
+### 3. New opener brochures supplied, and a complaint about repeated photos.
+Seven LiftMaster PDFs landed in `public/brochures/Aug-1/`. He also asked, about the site's photos:
+*"a lot of repetitive pictures in there. Do you guys not have enough pictures?"* **We do.** The local
+cache holds **1,281** of their own images. Both handled on our side, tracked in `LAUNCH-TODO.md`.
 
 ---
 
@@ -156,6 +204,11 @@ one thing worth a careful conversation.
 ---
 
 ## Changelog
+- **2026-08-01** Jason voice update after go live. He is rebuilding the **Housecall Pro booking
+  options himself**: package pricing out, replaced by service call **$149**, free residential
+  estimate, commercial estimate and a warranty call. Raised three follow ups, the sharpest being
+  **$149 vs the $0 trip charge** their own system reports. **#4a Saturday is still unanswered**, he
+  deflected it. New LiftMaster opener brochures supplied, and he asked why the site repeats photos.
 - **2026-07-31** Blog media cleaned up. **#24b done**, all three AI images replaced with real job photos. **#24 sharpened**, we can now name the two Shutterstock files. Blog images went from 21 MB to 1.8 MB.
 - **2026-07-29** Client call. Answered #1, #4, #4b, #5, #6, #29, #30, #36. Raised **#4a (Saturday booking conflict, verified against their API)** and **#6b (Sarasota)**. #5b licences **still open**, the answer given was about coverage not licensing. #13 veteran owned became more delicate, not less. Direction changes recorded at the top.
 - **2026-07-28** Booking thank you page built and live. Added #35 (Jason points HCP's booking redirect at it) and #36 (turn on analytics, recommend Cloudflare Web Analytics). Without both, bookings stay uncountable.

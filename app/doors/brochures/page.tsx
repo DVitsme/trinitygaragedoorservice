@@ -42,14 +42,33 @@ const chiDocs: Doc[] = [
   { label: "Recessed Panel", file: "chirecessed.pdf" },
   { label: "Timeless", file: "chitimeless.pdf" },
 ];
-const liftmasterDocs: Doc[] = [
-  { label: "Model 8160", file: "8160LM.pdf" },
-  { label: "Model 8165", file: "8165LM.pdf" },
-  { label: "Model 84505", file: "84505LM.pdf" },
-  { label: "Model 85870", file: "85870LM.pdf" },
-  { label: "Model 87504", file: "87504LM.pdf" },
-  { label: "Model 87802", file: "87802LM.pdf" },
-  { label: "Model 98022", file: "98022LM.pdf" },
+/**
+ * Current LiftMaster lineup, supplied by Jason on 2026-08-01 and replacing the seven older sheets.
+ *
+ * ⚠️ **The old files had to go, not just because they were dated.** Four of them (`8160LM`,
+ * `8165LM`, `84505LM`, `98022LM`) were third party reprints stamped with **devancocanada.com and a
+ * toll free 855 number**. Trinity's own website was handing customers a competing reseller's phone
+ * number. Verified with `pdftotext` across every brochure on the site; all seven replacements are
+ * clean LiftMaster originals.
+ *
+ * Labels carry the model exactly as printed inside the PDF, which is why 2420L and 4690L keep their
+ * L even though the supplied filenames dropped it. No horsepower is quoted for the 4690L because the
+ * brochure prints none, only "Heavy Duty DC Motor".
+ *
+ * Grouped by how the opener MOUNTS, not by residential versus commercial. Every one of these is
+ * residential: the two wall mount units look commercial but the 98032 sheet explicitly calls itself
+ * a residential opener.
+ */
+const liftmasterCeiling: Doc[] = [
+  { label: "Model 6690L, 1 1/4 HP belt drive with battery backup", file: "liftmaster-6690L.pdf" },
+  { label: "Model 6580L, 1 HP belt drive with battery backup", file: "liftmaster-6580L.pdf" },
+  { label: "Model 4690L, heavy duty chain drive with battery backup", file: "liftmaster-4690L.pdf" },
+  { label: "Model 2420L, 3/4 HP chain drive with battery backup", file: "liftmaster-2420L.pdf" },
+  { label: "Model 2220L, 3/4 HP chain drive with built in camera", file: "liftmaster-2220L.pdf" },
+];
+const liftmasterWallMount: Doc[] = [
+  { label: "Model 98032, wall mount for doors up to 1,100 lbs", file: "liftmaster-98032.pdf" },
+  { label: "Model 98022, wall mount with battery backup", file: "liftmaster-98022.pdf" },
 ];
 
 function PdfRow({ label, file }: Doc) {
@@ -144,7 +163,10 @@ export default function BrochuresPage() {
       <section className="bg-white border-t-2 border-ink">
         <div className="mx-auto max-w-[1200px] px-5 py-16 nav:px-8">
           <Reveal><BrandHeader logo="brandlogo-liftmaster.png" alt="LiftMaster" title="LiftMaster Openers" blurb="Spec sheets for popular models of the professional grade opener we install most. Want help matching one to your door? Just ask." logoBg="bg-cream" /></Reveal>
-          <Reveal><div className={pdfGrid.replace("mt-[22px]", "mt-[26px]")}>{liftmasterDocs.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
+          <Reveal><h3 className={`${groupLabel} mt-[26px]`}>Ceiling mount</h3></Reveal>
+          <Reveal><div className={pdfGrid}>{liftmasterCeiling.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
+          <Reveal><h3 className={`${groupLabel} mt-[30px]`}>Wall mount, frees up the ceiling</h3></Reveal>
+          <Reveal><div className={pdfGrid}>{liftmasterWallMount.map((d) => <PdfRow key={d.file} {...d} />)}</div></Reveal>
           <Reveal><div className="mt-5 text-[12.5px] font-semibold text-[#8a8a8a]">Each brochure opens as a PDF in a new tab. These are the manufacturer spec sheets for the lines we install and service.</div></Reveal>
         </div>
       </section>
