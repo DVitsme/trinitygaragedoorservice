@@ -199,9 +199,26 @@ export function ContactForm({ intent }: { intent?: string }) {
     setStatus("submitting");
     setFormError("");
 
-    // Deliberately NOT blocking on a missing token. An ad blocker used to make this form
-    // permanently unusable. The server decides, and it fails open.
+    /*
+      The client still does NOT block on a missing token; the server decides. What changed on
+      2026-08-03 is the server's answer: in production a missing token is now a REJECT, because that
+      branch returned before siteverify was ever called and is how spam was getting in.
+
+      ⚠️ Which makes the reset below load bearing. A cf-turnstile-response is redeemed exactly ONCE.
+      If the server rejects and the visitor presses submit again, the browser still holds the spent
+      token and Cloudflare answers `timeout-or-duplicate`, so a real customer would be locked out by
+      their own retry. Every path that lets them retry has to mint a fresh token first.
+    */
     const token = fd.get("cf-turnstile-response")?.toString();
+
+    /** Fresh token for the next attempt. Safe to call when the widget never mounted. */
+    const resetWidget = () => {
+      try {
+        (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+      } catch {
+        /* widget not mounted (blocked or still loading); nothing to reset */
+      }
+    };
 
     try {
       const res = await fetch("/api/contact", {
@@ -231,6 +248,7 @@ export function ContactForm({ intent }: { intent?: string }) {
       });
       const json = (await res.json().catch(() => ({}))) as { message?: string };
       if (!res.ok) {
+        resetWidget();
         setFormError(json.message ?? "Something went wrong. Please call us at (813) 279-6785.");
         setStatus("error");
         return;
@@ -239,6 +257,7 @@ export function ContactForm({ intent }: { intent?: string }) {
       track({ event: "generate_lead", lead_source: isEstimate ? "estimate-form" : "contact-form" });
       setStatus("success");
     } catch {
+      resetWidget();
       setFormError("Network error. Please call us at (813) 279-6785.");
       setStatus("error");
     }

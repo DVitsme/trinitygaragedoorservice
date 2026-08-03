@@ -68,7 +68,13 @@ export async function POST(req: Request) {
   const verdict = await verifyTurnstile(secret, data.token, req.headers.get("cf-connecting-ip"));
   if (verdict === "reject") {
     return NextResponse.json(
-      { error: "verification_failed", message: "Could not verify the request. Please try again." },
+      {
+        error: "verification_failed",
+        // Names the phone number on purpose. If the widget is being blocked outright, "try again"
+        // is advice that cannot work, and this is the only form the business has.
+        message:
+          "We could not verify that request. Please refresh and try again, or call us at (813) 279-6785 and we will take the details over the phone.",
+      },
       { status: 400 },
     );
   }
@@ -307,10 +313,32 @@ async function verifyTurnstile(
     console.error("[contact] TURNSTILE_SECRET_KEY is a Cloudflare TEST key in production. The form is unprotected.");
   }
 
-  // A missing token used to be an instant reject, which meant an ad blocker made the form
-  // permanently unusable for a real customer. Treat it as unverifiable, not as guilt.
+  /**
+   * ⚠️ **A MISSING TOKEN IS A REJECT IN PRODUCTION.** Changed 2026-08-03 after this exact path let
+   * spam through.
+   *
+   * The previous version returned "pass" here so an ad blocker could not make the form unusable.
+   * That reasoning had a hole: this branch returns BEFORE siteverify is ever called, so a submission
+   * with no token was never verified at all. Cloudflare's dashboard was right to warn that
+   * "siteverify isn't being called" while the code demonstrably rejected bad tokens: almost nothing
+   * was arriving WITH a token, so the verify call was never reached.
+   *
+   * The spam that prompted this arrived with no token, a California area code, a throwaway email
+   * domain and an SEO pitch in the message box.
+   *
+   * The distinction that matters: **an attacker controls whether a token is present. An attacker
+   * does NOT control whether Cloudflare is up or whether our secret is right.** So this branch fails
+   * closed, and the outage branches below stay fail open. Closing the door someone can walk through
+   * without adding a new way to lose real leads.
+   *
+   * Dev keeps the old behaviour so a local run without a widget still works.
+   */
   if (!token) {
-    console.warn("[contact] no Turnstile token present, accepting (ad blocker or script blocked)");
+    if (process.env.NODE_ENV === "production") {
+      console.warn("[contact] no Turnstile token present, REJECTING");
+      return "reject";
+    }
+    console.warn("[contact] no Turnstile token present, accepting (non production)");
     return "pass";
   }
 
