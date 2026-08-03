@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { useState, useId, useRef, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
+import { useState, useId, useRef, useEffect, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
 import { isValidPhone, isValidEmail, normalizePhone, maskPhoneDisplay, caretAfterDigit, maskZip } from "@/lib/lead-validation";
 import { track } from "@/lib/analytics";
 // Costs nothing extra in the bundle: lib/site.ts is already client side via mobile-menu and open-now.
@@ -89,6 +89,32 @@ export function ContactForm({ intent }: { intent?: string }) {
    * AUTOFILL as well as typing. Never move this to keydown: autofill does not fire key events, and
    * Android IME keyboards report `event.key` as "Unidentified".
    */
+  /**
+   * Turnstile error handler. **Required, not optional.** Without a `data-error-callback` the widget
+   * throws an UNCAUGHT exception when it fails, which on this form means the visitor sees nothing
+   * happen and the lead is silently lost.
+   *
+   * The error families need opposite advice, and telling the wrong one to disable their blocker is
+   * useless because it demonstrably does not fix their case:
+   *   `200500`      the iframe could not load at all, so something blocked challenges.cloudflare.com
+   *   `300*`/`600*` the widget loaded and ran, and the client was scored. Blockers are irrelevant;
+   *                 this is the Firefox strict / Lockdown Mode / Brave on ARM tail. Offer the phone.
+   */
+  const [tsError, setTsError] = useState("");
+  useEffect(() => {
+    const w = window as unknown as Record<string, unknown>;
+    w.__trinityTurnstileError = (code: unknown) => {
+      const c = String(code ?? "");
+      console.warn("[contact] Turnstile error", c);
+      setTsError(
+        c.startsWith("200")
+          ? "The verification box could not load, which usually means a browser extension is blocking it. Turn the blocker off for this page, or call us at (813) 279-6785."
+          : "Your browser could not complete the verification. Please call us at (813) 279-6785 and we will take the details over the phone.",
+      );
+    };
+    return () => { delete w.__trinityTurnstileError; };
+  }, []);
+
   const prevDigits = useRef("");
 
   function maskPhone(e: ChangeEvent<HTMLInputElement>) {
@@ -419,7 +445,12 @@ export function ContactForm({ intent }: { intent?: string }) {
             data-sitekey={TURNSTILE_SITE_KEY}
             data-theme="light"
             data-action="contact-form"
+            data-error-callback="__trinityTurnstileError"
           />
+        )}
+
+        {tsError && (
+          <p role="alert" className="text-[15px] font-semibold text-accent sm:col-span-2">{tsError}</p>
         )}
 
         {status === "error" && formError && (

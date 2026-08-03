@@ -333,11 +333,23 @@ async function verifyTurnstile(
    *
    * Dev keeps the old behaviour so a local run without a widget still works.
    */
-  if (!token) {
-    if (process.env.NODE_ENV === "production") {
-      console.warn("[contact] no Turnstile token present, REJECTING");
-      return "reject";
-    }
+  /**
+   * ⚠️ **We deliberately do NOT short circuit here. A missing token still goes to siteverify.**
+   *
+   * Rejecting immediately looks simpler and is subtly wrong. If Cloudflare itself is down, the
+   * widget script never loads, so a REAL customer also arrives with no token. An early reject would
+   * turn a Cloudflare outage into "nobody can contact this business", which is the failure the
+   * original fail open was written to avoid.
+   *
+   * Calling siteverify with an empty response separates the two cases, because the answer tells us
+   * which world we are in:
+   *   reachable, replies `missing-input-response` → the client really sent nothing → reject
+   *   unreachable, or replies `internal-error`    → Cloudflare is down → fail open, below
+   *
+   * Costs one request against an endpoint built for exactly this, and buys back outage resilience
+   * without leaving the door open.
+   */
+  if (!token && process.env.NODE_ENV !== "production") {
     console.warn("[contact] no Turnstile token present, accepting (non production)");
     return "pass";
   }
@@ -347,7 +359,7 @@ async function verifyTurnstile(
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const body = new URLSearchParams({ secret, response: token, idempotency_key: idempotencyKey });
+      const body = new URLSearchParams({ secret, response: token ?? "", idempotency_key: idempotencyKey });
       if (ip) body.set("remoteip", ip);
 
       const res = await fetch(SITEVERIFY, {
@@ -374,10 +386,19 @@ async function verifyTurnstile(
       }
 
       const codes = json["error-codes"] ?? [];
-      // Our misconfiguration. Deterministic, affects everyone, will not self heal. Log loudly and
-      // let the lead through rather than silently rejecting every customer.
+      /*
+        OUR misconfiguration ONLY, and the list is deliberately short.
+
+        ⚠️ `missing-input-response` and `bad-request` used to be here and that was a live bypass:
+        both are provoked by the `response` field, which is the one part of this call an ATTACKER
+        controls. A tokenless or malformed submission produced `missing-input-response`, matched this
+        branch, and was waved through as "our misconfiguration".
+
+        The rule for this list: fail open only on states the attacker CANNOT create. A wrong secret
+        is ours. An empty response is theirs.
+      */
       if (codes.some((c) =>
-        ["missing-input-secret", "invalid-input-secret", "bad-request", "missing-input-response"].includes(c),
+        ["missing-input-secret", "invalid-input-secret"].includes(c),
       )) {
         console.error("[contact] Turnstile is MISCONFIGURED, failing open:", codes);
         return "pass";
