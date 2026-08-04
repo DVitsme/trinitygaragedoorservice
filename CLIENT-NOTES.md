@@ -2,8 +2,34 @@
 
 Talking points for client meetings. Wins to share, problems to raise, and advice worth giving.
 
-**Living document.** Last updated: 2026-07-28. Deeper detail: `MEDIA-INVENTORY.md`,
+**Living document.** Last updated: 2026-08-03. Deeper detail: `MEDIA-INVENTORY.md`,
 `PRE-LAUNCH-PUNCHLIST.md`, `INTEGRATIONS` notes in `CLAUDE.md`.
+
+---
+
+## 🛡️ SPAM ON THE FORM, FOUND AND FIXED (3 AUGUST)
+
+**One spam submission reached the form.** It never reached Trinity, because leads are still going
+only to Derrick during the testing window. It was a marketing solicitation with a California area
+code and a throwaway email address.
+
+**The cause, in plain terms.** The form has always had Cloudflare's bot check on it. But the code
+had a deliberate escape hatch: if the bot check did not run at all, the submission was let through
+anyway, so that somebody with an aggressive ad blocker could still reach us. A spammer simply
+skipped the check entirely and walked through that gap. Cloudflare's own dashboard had been warning
+about this and it was right.
+
+**Now closed**, and verified from the outside in six different ways. A real submission from a real
+browser still goes through, tested twice.
+
+⚠️ **ONE THING TO WATCH IF ANYONE EVER ADDS A COOKIE BANNER.** The common WordPress consent tools
+block Cloudflare's bot check by default, filing it under "statistics". Adding a banner without
+allowlisting it would break the contact form completely. That is a far more likely way to lose leads
+than any ad blocker. **If a cookie banner is ever proposed, tell us first.**
+
+Worth knowing: the ad blocker worry that created the gap turned out to be mostly myth. The main
+blocker lists deliberately allow Cloudflare's checker through, because blocking it breaks logins all
+over the web.
 
 ---
 
