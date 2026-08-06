@@ -1,4 +1,4 @@
-# Email to Lloyd — ✅ REWRITTEN AND SENT 2026-08-01
+# Email to Lloyd — ✅ REWRITTEN AND SENT 2026-08-01 · 🆕 follow up drafted 2026-08-04
 
 **Sent.** Derrick rewrote it in his own voice and sent it the day the site went live. **Reply
 expected Monday or Tuesday, 3 or 4 August.** Kept below as the record of what was asked, so the
@@ -14,7 +14,79 @@ reply can be checked against it.
 4. **The Sheets request.** He was told no and offered a query against D1 instead. Expect him to come
    back with columns and a frequency.
 
-Copy the text below the line into Gmail. Nothing here has been sent.
+---
+
+## 🆕 FOLLOW UP TO SEND, 4 AUGUST. Booking came off the site.
+
+Trinity asked for Housecall Pro's online booking to be switched off, so it is off, and **two lines in
+the sent email below are now out of date.** He should hear it from us rather than find it.
+
+- Item 5 says *"schedule-a-repair is now /book-a-repair/"*. **It is now `/get-service/repair/`**, and
+  it is a single 301 rather than a chain.
+- The events paragraph says `generate_lead` carries `contact-form` or `estimate-form`. **There are
+  now 10 values.** Full table in `GTM-NOTES.md`.
+
+⚠️ **Lead with the reassurance, because it is the true part and it is the part he cares about:
+nothing of his breaks.** `/get-service/` and `/get-service/?intent=estimate` did **not** move, on
+purpose, precisely because his Google Ads final URLs point at them. They are also in the verified 301
+map and the sitemap. The 8 new form pages were added underneath that URL, never in place of it.
+
+⚠️ **Do not tell him `book_online_click` is gone.** It is not fired today but it is still in our code,
+and the switch back is one constant. Telling him to delete the tag creates work twice.
+
+Paste the block below into a reply on the same thread.
+
+---
+
+Subject: Re: Trinity is live, five things need you
+
+Lloyd,
+
+One change on our side, and it touches two things I told you on the 1st.
+
+Trinity asked for the Housecall Pro booking window to come off the site, so it's off as of today.
+Every button that used to open it now goes to a request form instead. It's switched off rather than
+ripped out, because they've said they'll likely want it back at some point.
+
+Shortest version first: nothing of yours breaks. /get-service/ and /get-service/?intent=estimate
+haven't moved and won't. Your final URLs point at them, so I left them exactly where they were.
+
+Two corrections to that email. schedule-a-repair now lands on /get-service/repair/ rather than
+/book-a-repair/, and it's one redirect, not a chain. And generate_lead now carries a lead_source that
+names the form, so instead of two values there are ten: contact-form and estimate-form as before,
+plus repair-form, spring-repair-form, opener-repair-form, off-track-form, cables-and-rollers-form,
+tune-up-form, replacement-form and emergency-form. Same event, same trigger, it just tells you more.
+
+There are also eight new landing pages you can point campaigns straight at, one per job:
+
+/get-service/repair/
+/get-service/spring-repair/
+/get-service/opener-repair/
+/get-service/off-track/
+/get-service/cables-and-rollers/
+/get-service/tune-up/
+/get-service/replacement/
+/get-service/emergency/
+
+Each is the same form under a headline that matches the ad, and each reports its own lead_source. So
+the Landing Page report will separate a spring click from an opener click, which it couldn't do when
+everything funnelled through one URL. Point a spring ad at the spring one and it should read better
+on relevance too.
+
+Last thing. book_online_click doesn't fire any more, because there's no modal left to click. Leave
+the tag where it is. The event is still in our code and it starts firing again the day booking comes
+back, and an idle trigger costs you nothing. I'd rather it sat there reading zero than have you
+delete it and rebuild it in a month.
+
+Derrick
+
+---
+
+## The email that was sent on 1 August, kept as the record
+
+⚠️ **Do not quote from below without checking it.** Item 5's `/book-a-repair/` line and the
+`generate_lead` / `book_online_click` paragraph were overtaken on 2026-08-04, see the follow up
+above. The text is unedited on purpose, so the reply can still be checked against what was asked.
 
 Two notes for you first:
 

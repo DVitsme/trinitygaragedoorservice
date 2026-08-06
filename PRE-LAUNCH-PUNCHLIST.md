@@ -1,7 +1,7 @@
 # PRE-LAUNCH PUNCH LIST — Trinity Garage Door
 
 **What is still outstanding before public go-live.** Living document.
-Last updated: **2026-07-28** · Live preview: https://trinity-garage-door.derrick-2fd.workers.dev
+Last updated: **2026-08-04** · Live preview: https://trinity-garage-door.derrick-2fd.workers.dev
 
 > **This file lists only what is LEFT.** Finished work moves to the [Cleared log](#cleared-log) at
 > the bottom so this stays a true to-do list.
@@ -78,7 +78,10 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
   email; should name what the form and analytics collect. **BOTH** (client/legal).
 - **P2-15 · 🔴 There is no analytics on the site. None.** Verified 2026-07-28: zero `gtag`,
   `cloudflareinsights`, Plausible, Fathom, PostHog or anything else, in source or on the deployed
-  Worker. The only two scripts we load at all are Turnstile and the Housecall Pro booking widget.
+  Worker. At that point the only two scripts we loaded were Turnstile and the Housecall Pro booking
+  widget. ⚠️ **Both halves of that sentence have since changed.** GTM shipped 2026-07-29
+  (`GTM-NOTES.md`), and on 2026-08-04 booking was switched off, so **the HCP widget script is no
+  longer mounted at all** (`app/layout.tsx` gates it on `BOOKING_MODE` in `lib/booking.ts`).
   **Consequence: nothing about this site is measurable** — not bookings, not the ZIP checker, not
   which pages produce leads. It is the reason `/book-a-repair/thank-you/` can only be counted
   roughly from server traffic rather than as a real conversion.
@@ -103,10 +106,11 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
   runtime request: the check runs client side against `lib/service-area-zips.json` (verified
   130/130 against their live HCP zone) in 1,818 bytes gzipped. The old plan in
   `handoff/SERVICE-AREA-CHECKER-RESEARCH.md` is superseded by `SERVICE-AREA-REDESIGN.md`.
-- ~~**P3-2 · Housecall Pro modal embed.**~~ ✅ **SHIPPED 2026-07-28.** All 13 Book Online buttons
-  open `window.HCPWidget.openModal()` over the page, keeping the `window.open` fallback for when
-  their script is blocked or fails to init. Costs 5,197 bytes on load; their iframe is
-  `loading="lazy"` so the booking app itself is not fetched until the modal opens.
+- ~~**P3-2 · Housecall Pro modal embed.**~~ ✅ Shipped 2026-07-28, then ⏸️ **SWITCHED OFF 2026-08-04**
+  at the client's request. The code is intact and gated, not deleted: `book-online-button.tsx` still
+  holds the whole `window.HCPWidget.openModal()` path and its `window.open` fallback, and the script
+  mount is still in `app/layout.tsx`. It just does not load, so the 5,197 bytes it cost are no longer
+  being spent. `BOOKING_MODE` in `lib/booking.ts` brings all of it back. See `LAUNCH-TODO` **6.9**.
 - **P3-3 · HCP back-office lead sync (optional).** Zapier on the Essentials plan can push contact
   form leads into HCP. **The MAX API cannot power a live booking calendar** — validated.
 - **P3-4 · Domain cutover.** Add `trinitygaragedoorservice.com` (+ `www`) as a Worker Custom
@@ -144,7 +148,7 @@ Verified: build green (50 pages), linkinator **134 links / 0 broken**, all 17 ne
 | Item | Result |
 |---|---|
 | **P0-1** Resources pages | **DONE + re-verified 2026-07-28.** `/resources/{faq,safety-tips,troubleshooting,blog}/` all return 200 live, the footer links to all four, and **13/13 blog posts return 200**. The sitewide footer 404s are gone. |
-| **P1-7** Housecall Pro booking | **DONE.** Real booking URL wired; every Book Online / Book a Repair CTA works. |
+| **P1-7** Housecall Pro booking | ⚠️ **REVERSED 2026-08-04 at the client's request, and this row is now history.** Was: "real booking URL wired; every Book Online / Book a Repair CTA works." **Booking is switched off**, gated behind `BOOKING_MODE` in `lib/booking.ts` rather than deleted, and every one of those CTAs now points at a request form under `/get-service/`. `/book-a-repair/` 307s to `/get-service/repair/`. Reversal and full detail: `LAUNCH-TODO` **6.9**. |
 | **P1-9** Legacy 301 map | **DONE.** Full WordPress map in `next.config.ts`. |
 | **P1-10** Sitemap | **DONE.** 2 URLs → 45, derived from `ROUTES`/`AREAS`/posts. |
 | **P1-11** Canonical / site URL | **DONE.** Was publishing a staging domain in robots/sitemap/JSON-LD while canonicals said the live domain. |

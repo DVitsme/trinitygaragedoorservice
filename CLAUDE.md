@@ -15,7 +15,9 @@ Reference: **`HOUSECALL-PRO-API.md`**. Three things that file corrects, which ol
   notes say it does not. They probed **root-level** paths; the real ones are nested under
   `/company/`. **A root-level 404 proves nothing on this API.**
 - **`/leads` exists** and accepts an inline customer, so a contact-form lead is one POST.
-- The booking widget global is **`window.HCPWidget.openModal()`**, not `window.HousecallPro`.
+- The booking widget global is **`window.HCPWidget.openModal()`**, not `window.HousecallPro`. ⚠️ Still
+  true, but **that widget no longer loads** — booking was switched off on 2026-08-04. See the Booking
+  section below.
 
 **Their account is live production: 6,001 customers, no sandbox, and NO DELETE endpoint for
 customers/jobs/leads/estimates.** Reads are safe. Any write is effectively permanent and cleanup
@@ -31,8 +33,21 @@ Address **18125 US-41 Ste 208, Lutz FL 33549** · geo **28.1372004, -82.4625826*
 (`lib/service-area-zips.json`, verified 130/130) · only **two** job types, Install and Repair.
 
 ### The two business facts that should drive priorities
-1. **The website produces almost no work.** 1 of the 300 most recent jobs carries the "Trinity
-   Website" lead source. Half their jobs are repeat customers.
+1. **The website produces few jobs, but big ones.** ⚠️ **Remeasured 2026-08-04 and the old figure
+   here was wrong.** The previous note said "1 of the 300 most recent jobs". A sweep of **all 7,698
+   jobs** finds **12** carrying the "Trinity Website" lead source, 10 completed, **11 of the 12
+   created in 2026**, worth **$23,298** at a mean of **$2,330**, which is about 2.7x their median
+   job. Few leads, large tickets. Half their jobs are still repeat customers.
+   - **Revenue by source is now readable**, because lead source tagging went from 92% null before
+     2023 to **0% null on July 2026's 93 paid invoices** ($149,800). That month: Repeat 46%
+     ($80,264), Google Maps $15,431, "Google" $23,051, **Google Ads $5,674**, Angi $5,259.
+   - **The money arrives by PHONE.** Repeat plus Maps plus organic dwarfs form fills, which is why
+     call measurement, not form measurement, is the largest tracking gap on the account.
+   - **We have never actually pushed a lead into HCP.** All 272 leads there are Angi or Yelp; those
+     12 website jobs were tagged by hand in the office. `HCP_LEAD_SYNC_ENABLED` is still off.
+   - How to reproduce: there is **no lead source filter on `/jobs`**. Start from
+     `GET /invoices?status[]=paid&paid_at_min=…&paid_at_max=…&page_size=200`, then resolve each
+     `invoice.job_id` via `GET /jobs/{id}` and read `job.lead_source`. ~94 calls per month.
 2. **They serve 41 cities and have 6 city pages.** Ranked by *real job volume*, the biggest gaps
    are New Port Richey (4.6%), Zephyrhills (3.3%), Odessa (3.3%) and **Trinity (3.0%)** — the
    company is named Trinity Garage Door Service and has no page for the town.
@@ -51,6 +66,9 @@ Address **18125 US-41 Ste 208, Lutz FL 33549** · geo **28.1372004, -82.4625826*
   serve here, whatever `content/blog/README.md` claims. The blog ships 21 MB.
 - **Prefer real data over inference.** A Census-based city ranking put Spring Hill at #2; actual
   HCP job counts put it near the bottom at 0.8%. The API can answer these questions directly.
+- **Booking CTAs: never hardcode a path and never link `ROUTES.bookRepair`.** Call `requestHref()`
+  from `lib/booking.ts`, which follows `BOOKING_MODE`. Setting `NEXT_PUBLIC_BOOKING_URL` alone does
+  **not** turn booking back on — `BOOKING_MODE` is the switch, and it lives in version control.
 
 ## ✅ DESIGN-PORT BUILD COMPLETE (2026-06-22)
 
@@ -66,17 +84,53 @@ The 1:1 design → Next.js build is **done**. Every approved `*.dc.html` "Bold T
 
 > The sections below describe the PRE-design-port state and are mostly historical now (the old `app/page.tsx`+`components/sections/` homepage was replaced). The **Gotchas** section still fully applies (esp. Archivo Expanded via `<link>` not `next/font/google`, `@/*`→repo root, keep the Turnstile/Resend/D1 infra). The `components/blocks/` + `accent/ink/cream` + `font-display/font-body` system is now the only architecture.
 
-## 🔖 Booking / Housecall Pro integration — SHELVED, revisit with the HCP login + real data (2026-06-22)
+## 🔖 Booking — Housecall Pro is SWITCHED OFF, not deleted (2026-08-04)
 
-The **Book a Repair** page (`app/book-a-repair/`, ported from `handoff/06-book-a-repair.md` + `handoff/Trinity Book a Repair (Bold Trade).dc.html`) is built. Its whole job is to **frame + launch HCP's booking** — no calendar/form on our side. Designer knowledge brief: `handoff/BOOK-A-REPAIR-HCP-BRIEF.md`.
+**Read `lib/booking.ts` first. It is the centre of this.** The client asked for online booking to
+come out and said they will want it back later, so **nothing was deleted, it is gated**.
 
-**Mechanism = the HCP embed: a "Book Online" button → modal popup over the page. No MAX plan needed.** `components/book-online-button.tsx` is the single mount point for all four "Book Online" buttons; today it opens the hosted booking URL (`NEXT_PUBLIC_BOOKING_URL` → `SITE.bookingHref`), with a documented `TODO(HCP)` to call HCP's modal open-API once their embed script is added. `ROUTES.bookRepair` now → `/book-a-repair/` (every site-wide "Book a Repair" CTA lands there). **To go live:** set `NEXT_PUBLIC_BOOKING_URL` to Trinity's HCP booking URL (HCP → Online Booking → Share), then drop in HCP's embed script + wire `openBooking()`.
+**One constant reverses the whole thing: `BOOKING_MODE` in `lib/booking.ts`, currently `"form"`.**
+Set it to `"housecall-pro"`, confirm `NEXT_PUBLIC_BOOKING_URL` is still in `.env.local`, rebuild, and
+that restores the modal, the widget `<Script>` in `app/layout.tsx`, the `/book-a-repair/` page, its
+sitemap entry, and removes the redirect. It is a hardcoded constant, **not** an env var, for the same
+reason as the GTM id: `NEXT_PUBLIC_*` is inlined at BUILD time, so a build that missed the variable
+would silently ship the wrong behaviour with no error. `next.config.ts` imports it too, so
+**`lib/booking.ts` must stay dependency free.**
 
-**Researched HCP options (2026-06-22), so we don't re-derive:**
+Still present and still type checked: the whole `HCPWidget.openModal()` path plus its hosted URL
+fallback in `components/book-online-button.tsx`, the `app/book-a-repair/` page (it still builds), and
+`bookingHref` / `bookingWidgetSrc` in `lib/site.ts`. Designer brief: `handoff/BOOK-A-REPAIR-HCP-BRIEF.md`.
+
+**What `"form"` mode does today:**
+- Every booking CTA is a `<Link>` from `requestHref(topic?)`, and every label that promised a calendar
+  now reads "Request Service" / "Request a Repair" (`requestLabel`). ⚠️ **Flipping the mode back does
+  NOT restore the old labels, on purpose** — a callback form is not a calendar. Grep `requestLabel`.
+- `app/get-service/[topic]/page.tsx` statically generates **8** request form pages from
+  `REQUEST_FORMS`: `repair, spring-repair, opener-repair, off-track, cables-and-rollers, tune-up,
+  replacement, emergency`. **`dynamicParams = false`** is load bearing: an invented slug 404s instead
+  of turning the route into a doorway page generator. They share
+  `components/blocks/request-form-layout.tsx` with `/get-service/`, so the form is identical
+  everywhere; only the hero copy and the lead source differ.
+- ⚠️ **`/get-service/` and `/get-service/?intent=estimate` did not move, and must not.** Both are in
+  the verified 301 map, in the sitemap, and in Lloyd's Google Ads final URLs. The `[topic]` pages are
+  additions beneath that URL, never a replacement for it.
+- `/book-a-repair/` **307s** to `/get-service/repair/` (`permanent: false` **on purpose** — a 308
+  cannot be taken back out of other people's caches and the client expects booking back) and is out of
+  the sitemap. `/schedule-a-repair/` 301s **straight** to `/get-service/repair/`, so there is no chain.
+- `/book-a-repair/thank-you/` is untouched, still `noindex`, still out of the sitemap.
+
+**Measurement, which is the point of having 8 pages:** each one posts a distinct `source`
+(`spring-repair-form`, and so on) to `/api/contact`, which reaches the D1 `leads` row, the office lead
+email (as "Came from", alongside Zip) and the `generate_lead` dataLayer event as `lead_source`.
+**`book_online_click` no longer fires** — a link produces a navigation to measure where a modal click
+did not — but the member stays in the `TrackEvent` union so the ads specialist's existing GTM tag
+survives the switch back. See `GTM-NOTES.md`.
+
+**Researched HCP options (2026-06-22), kept for when booking returns:**
 - **Website embeds (no MAX needed):** (1) "Book Online" button → **modal overlay** (documented, recommended); (2) **hosted link**; (3) Reserve with Google. There is **no official inline-iframe widget**, BUT `book.housecallpro.com` returns **no `X-Frame-Options` / no CSP `frame-ancestors`** (checked via `curl -I`), so a DIY inline `<iframe>` of the hosted URL *does* render — unsupported, height/scroll-fragile; test the real URL before relying on it.
 - **Public API = MAX plan only** (API key / OAuth, **server-side only — never put it in the browser**). **KEY FINDING:** the API is **back-office** (create customers / jobs / appointments, update job schedule + arrival windows, invoices, payments) and **does NOT expose a customer-facing bookable-availability endpoint**. So a MAX key **cannot** cleanly power a true live-availability calendar — you'd have to recompute availability yourself (rebuild HCP's scheduler; fragile). Realistic API-native option = a branded **"request a window, we confirm"** form (POST a job), NOT a live calendar. The better use of the MAX API = **back-office lead/data sync** (push `/contact` + estimate-form leads into HCP).
 
-**REVISIT after we have the Housecall Pro login + account data:** grab the real booking URL + embed snippet, decide modal vs inline-iframe, and evaluate whether MAX is worth it for lead sync. Until then the Book a Repair buttons open `bookingHref` (set the env var to make them live).
+**When booking comes back, the reversal checklist:** flip `BOOKING_MODE`, confirm `NEXT_PUBLIC_BOOKING_URL`, rebuild, then decide deliberately what the CTA labels should say (`requestLabel`), and re-check `LAUNCH-TODO` **1.5** (the thank you page) and `CLIENT-ASKS` **#35** (Jason's booking redirect), both of which are on hold rather than closed.
 
 ## 📋 LIVING CLIENT DOCS — keep these current (they are used in meetings)
 
@@ -229,6 +283,14 @@ uses a primitive; check first.
   them to change the live site; they feed it. Build assets live in `public/assets/`.
 - **D1 migrations are local-first**: `pnpm db:migrate:local` works with no network/login;
   remote needs `wrangler login`.
+- 🔴 **NEVER set `export const dynamicParams = false` on a dynamic route. It 404s the whole route on
+  Cloudflare.** It makes Next write `fallback: false` into `prerender-manifest.json`, and OpenNext's
+  router then fails to match the prerendered paths even though the pages ARE in `.open-next/cache/`
+  and listed as static routes in that same manifest. Cost: all 8 `/get-service/[topic]/` pages
+  returned 404 on the Worker while `pnpm build` was green and `next start` served them fine.
+  `app/resources/blog/[slug]/` is unaffected only because it leaves the flag at its default.
+  **To reject unknown slugs, call `notFound()` inside the page instead** (verified working on the
+  Worker). This is the canonical reason `pnpm preview` exists: see [[measure-dont-infer]].
 
 ## Content & copy rules
 

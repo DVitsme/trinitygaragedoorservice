@@ -2,16 +2,65 @@
 
 Talking points for client meetings. Wins to share, problems to raise, and advice worth giving.
 
-**Living document.** Last updated: 2026-08-03. Deeper detail: `MEDIA-INVENTORY.md`,
+**Living document.** Last updated: 2026-08-04. Deeper detail: `MEDIA-INVENTORY.md`,
 `PRE-LAUNCH-PUNCHLIST.md`, `INTEGRATIONS` notes in `CLAUDE.md`.
+
+---
+
+## 🗓️ ONLINE BOOKING IS OFF, AND THE FORMS TOOK ITS PLACE (4 AUGUST)
+
+Jason asked for Housecall Pro's online booking to come off the website. **It is off.** Nothing was
+thrown away, so if he wants it back later it is one setting on our side and it returns as it was.
+
+**What replaced it.** Every button that used to open the booking window now goes to a short request
+form. It is the same form everywhere, the same fields, and it still reaches Barbara's inbox the same
+way. What changed is that there is now **one form page per job**: springs, openers, a door off the
+track, cables and rollers, a tune up, a replacement, an emergency, and a general repair one. One
+form, several doors into it.
+
+**Two things this gives the office that the booking window never could.**
+
+1. **They can see which page the customer came from.** The lead email now has a line saying "Came
+   from spring repair" or "Came from off track", so whoever picks up the phone already knows what
+   the customer was reading a second before they filled it in.
+2. **The lead email now shows the customer's zip.** It was always being collected and the office
+   never saw it. Simone kept that field for exactly this reason, so nobody spends twenty minutes on
+   a caller in Atlanta. Now it is right there in the email.
+
+Over time this also answers the question nobody could answer before: **which parts of the website
+actually bring in work.**
+
+---
+
+## 📬 LEADS NOW GO STRAIGHT TO THE OFFICE (4 AUGUST)
+
+**The form is handed over.** Every submission now emails **both** office addresses,
+`babs.trinitygaragedoorservice@gmail.com` and `trinitygaragedoorservice@gmail.com`, at the same
+time. Nobody has to forward anything to anybody.
+
+Each email carries the customer's name, phone as a tap to call link, email, **zip**, what they said
+they need, their message, and a **"Came from"** line naming the exact page they filled it in on.
+
+Derrick stays on a silent copy for a few weeks to make sure nothing goes missing in the handover.
+It is a blind copy on purpose, so his address never shows up in the office's reply chain with a
+customer.
+
+**Worth saying out loud to them:** if a lead ever seems to be missing, check the spam folder first
+and mark it "not spam". Gmail decides that on its own the first few times a new sender writes, and
+the fix is one click that teaches it permanently.
 
 ---
 
 ## 🛡️ SPAM ON THE FORM, FOUND AND FIXED (3 AUGUST)
 
-**One spam submission reached the form.** It never reached Trinity, because leads are still going
-only to Derrick during the testing window. It was a marketing solicitation with a California area
-code and a throwaway email address.
+**One spam submission reached the form.** It never reached Trinity, because at the time leads were
+still going only to Derrick during the testing window. It was a marketing solicitation with a
+California area code and a throwaway email address.
+
+⚠️ **That testing window closed on 4 August.** Leads now go straight to the office, so a spam
+submission would land in front of Barbara rather than being caught first. The hole it came through
+is closed and was verified from the outside six ways, but it is worth them knowing that the safety
+net of "Derrick sees everything first" is gone by design.
 
 **The cause, in plain terms.** The form has always had Cloudflare's bot check on it. But the code
 had a deliberate escape hatch: if the bot check did not run at all, the submission was let through
@@ -70,8 +119,9 @@ it would be worth more than everything in the archive.
 
 - **The new site is built and you can see it today.**
   https://trinity-garage-door.derrick-2fd.workers.dev
-- **Online booking works.** Every "Book a Repair" button now opens their real Housecall Pro
-  scheduler.
+- **Every button now asks for the job in one short form.** Online booking came off on 4 August at
+  Jason's request, and the buttons go to a request form instead. See the note at the top of this
+  page for what that buys them.
 - **Their photos are all real now.** The old site had an **AI generated fake photo of Jason** on it.
   It is gone, replaced with his real studio portrait.
 - **We found 284 unused real photos** sitting in their own website's library that they were not
@@ -288,10 +338,40 @@ verified dealer" directory that only one of the eight competitors uses. Both are
 door companies leads average around **$49** versus about **$145** on regular Google Ads.
 It runs off their Google profile and needs no website work.
 
-### 6. They cannot tell which advertising works
-**There is still no analytics of any kind on the website. Not one line of it, confirmed 2026-07-28.**
-So right now nobody can answer the most basic question about the rebuild: did it bring in any work?
-That is uncomfortable given **1 of their 300 most recent jobs** came from the website.
+### 6. We can now tell which advertising works, and the answer is better than we thought
+**Rewritten 2026-08-04. The old version of this section said there was no analytics at all and that
+the website had produced one job. Both were out of date.** Tracking went live 29 July, and we have
+since measured their real numbers.
+
+**Good news to lead with. The website brings in few jobs, but big ones.** Twelve jobs all time carry
+the website as their source, ten of them finished, and eleven of the twelve happened this year. They
+came to **$23,298**, an average of **$2,330 a job**, which is roughly two and a half times their
+usual ticket.
+
+**Their own record keeping is what made this measurable, and it is worth telling them so.** Before
+2023, nine jobs in ten had no source recorded. On the 93 invoices they were paid for in July, it was
+**one hundred percent filled in**. That is the office doing something right, and everything below
+depends on them carrying on.
+
+**Where July's $149,800 actually came from:**
+
+| Where the work came from | Jobs | Paid |
+|---|---|---|
+| Repeat customers | 43 | $80,264 |
+| Google Maps | 14 | $15,431 |
+| Google (search) | 6 | $23,051 |
+| Google Ads | 6 | $5,674 |
+| Angi | 4 | $5,259 |
+| Nine other sources | 20 | $20,119 |
+
+**The honest read: the phone is the business.** Nearly half their money is repeat customers ringing
+a number they already have. That is why the next thing worth doing is measuring calls properly, not
+polishing form tracking.
+
+**What we shipped on 4 August:** every form now records which ad brought the person, and the office
+email says which page they filled it in on. Nothing was being recorded before, and an ad click
+cannot be recovered after the fact, so this was the one piece that had to happen now rather than
+later.
 
 This has become concrete rather than theoretical. We have just built the **booking thank you page**,
 which is the only supported way to know somebody finished booking. Without analytics it can only be
@@ -301,8 +381,10 @@ counted roughly, from server traffic. With analytics it becomes a real number.
 1. **Turn on Cloudflare Web Analytics. It is free, and the site already runs on Cloudflare.** No
    cookies, no consent banner, no speed cost, and it counts visits per page, which is exactly what
    the thank you page needs. This is a one line change for us.
-2. **Jason points Housecall Pro's booking redirect at that page** (`CLIENT-ASKS` #35). Two minutes
-   in his settings, and it is what turns bookings into a countable number.
+2. ⏸️ **ON HOLD since 4 August, do not ask him for this yet.** This step was Jason pointing
+   Housecall Pro's booking redirect at that page (`CLIENT-ASKS` #35). **Online booking is off now, so
+   there is nothing left for it to catch.** The request forms count themselves instead, which is the
+   better number. This goes straight back on the list the day booking returns.
 3. **Call tracking** (about $30/month) if they start spending on ads. Phone calls are how this
    business converts, so untracked calls means untracked money. Housecall Pro sells numbers too.
 
@@ -351,6 +433,10 @@ Ranked by impact.
 ---
 
 ## Changelog
+- **2026-08-04 (2nd)** Rewrote section 6. The old "no analytics at all, one job from the website" line was out of date. Replaced with the measured numbers: 12 website jobs at $2,330 average, and July's $149,800 broken down by where it came from.
+- **2026-08-04** Online booking switched off at Jason's request and replaced by request forms, one
+  per job. Added the note at the top, corrected the "online booking works" line, and put step 2 of
+  the measurement plan on hold along with `CLIENT-ASKS` #35.
 - **2026-07-28** Full project audit. Added: three AI generated blog pictures (inherited from the old site), the 21 MB slow blog page, and a competitor comparison across eight companies.
 - **2026-07-28** Tested their Housecall Pro keys. Added three items: the outside agency with full access to the customer list, the fact they are on the $299 MAX plan, and the service area being far bigger than the site says.
 - **2026-07-28** Rewrote the founding-year item: 2007 is decided and live, so it is now about the four sources disagreeing and what to fix on Yelp/BBB/Angi.

@@ -27,7 +27,7 @@ Live (preview) today: https://trinity-garage-door.derrick-2fd.workers.dev
 - ⚠️ Must use **Places API (New)** / `PlaceAutocompleteElement` — legacy Autocomplete is closed to new customers. See `trinitygaragedoorservice.com/handoff/SERVICE-AREA-CHECKER-RESEARCH.md`.
 
 ### NOT needed
-- **Housecall Pro API key** — booking uses the *embed/URL*, not the API (the MAX-plan API is shelved; see CLAUDE.md). You only need the **booking URL** (below).
+- **Anything Housecall Pro.** ⚠️ **Updated 2026-08-04: online booking is switched off at the client's request** (`BOOKING_MODE` in `lib/booking.ts` is `"form"`). Booking CTAs are links to our own request form pages, so **no booking URL and no HCP key is needed to launch**. Keep `NEXT_PUBLIC_BOOKING_URL` in `.env.local` anyway, it costs nothing and is half of turning booking back on. Reversal steps are in §6 below.
 - **Stripe**, **reCAPTCHA** — unused (reCAPTCHA was replaced by Turnstile).
 
 ---
@@ -41,7 +41,7 @@ Live (preview) today: https://trinity-garage-door.derrick-2fd.workers.dev
 ### 🌐 Build-time (in `.env.local`, then `pnpm run deploy`)
 ```ini
 NEXT_PUBLIC_SITE_URL=https://trinitygaragedoorservice.com
-NEXT_PUBLIC_BOOKING_URL=<Housecall Pro hosted booking URL — HCP → Online Booking → Share>
+NEXT_PUBLIC_BOOKING_URL=<HCP hosted booking URL — HCP → Online Booking → Share. INERT while BOOKING_MODE is "form">
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=<Turnstile site key>
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<restricted Maps key>   # when the checker is built
 ```
@@ -77,6 +77,14 @@ pnpm run deploy           # opennextjs-cloudflare build (bakes NEXT_PUBLIC_* fro
 - Point DNS at the Worker; set `NEXT_PUBLIC_SITE_URL` to the real domain and **redeploy** (it's build-time).
 - The 301 redirect map from the old WordPress URLs lives in `site-audit/NAVBAR-SPEC.md` / `next.config.ts`.
 
+## 6. Turning Housecall Pro booking back on (kept for when the client asks)
+Booking was switched off on **2026-08-04** at the client's request. It was **gated, not deleted**, so this is a code change plus a deploy, not a rebuild.
+1. `lib/booking.ts` → set `BOOKING_MODE` to `"housecall-pro"`.
+2. Confirm `NEXT_PUBLIC_BOOKING_URL` is in `.env.local` (build time, so it must be there *before* the build).
+3. `pnpm run deploy`.
+
+That one constant restores the modal, the widget `<Script>` in `app/layout.tsx`, the `/book-a-repair/` page and its sitemap entry, and removes the `/book-a-repair/` redirect. ⚠️ It does **not** restore the old CTA labels, deliberately: grep `requestLabel` and put booking wording back on purpose. Then revive `LAUNCH-TODO` **1.5** and `CLIENT-ASKS` **#35** (Jason's booking redirect), both parked rather than closed.
+
 ---
 
 ## Go-live order (quick)
@@ -86,7 +94,7 @@ pnpm run deploy           # opennextjs-cloudflare build (bakes NEXT_PUBLIC_* fro
 4. `pnpm db:migrate` (remote leads table).
 5. `pnpm run deploy` → test the contact form actually emails + stores.
 6. (When built) Google Maps key → set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, redeploy.
-7. Booking URL from HCP → set `NEXT_PUBLIC_BOOKING_URL`, redeploy → Book Online buttons go live.
+7. **Nothing booking related.** The conversion path is the request forms and they need no key. *(Was: "booking URL from HCP → Book Online buttons go live". Superseded 2026-08-04, see §6.)*
 8. Custom domain + DNS cutover; set real `NEXT_PUBLIC_SITE_URL`; redeploy.
 
 ## Still-open content decisions before launch (not keys)

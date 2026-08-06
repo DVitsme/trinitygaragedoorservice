@@ -2,7 +2,7 @@
 
 Things only Jason or Simone can answer or provide. Tick them off as they come in.
 
-**Living document.** Last updated: 2026-08-01. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
+**Living document.** Last updated: 2026-08-04. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
 `MEDIA-INVENTORY.md`, `LAUNCH-CHECKLIST.md`.
 
 ---
@@ -188,8 +188,38 @@ one thing worth a careful conversation.
 | 33 | **Which service area is current, 130 zip codes or 268?** | They have two saved. The 130 one has the technicians assigned to it, so we assume that is the live one. | ☐ |
 | 34 | **Do they want website leads pushed into Housecall Pro?** | We can make contact form submissions appear in their Job Inbox next to their Angi and Yelp leads. Nothing extra to buy, it is included in the plan they already pay for. | ☐ |
 | 36 | ~~Website analytics~~ | **ANSWERED 2026-07-29: Google Analytics, not Cloudflare.** They already run **GA plus Google Tag Manager** on the WordPress site. **Lloyd (Annek's ads specialist) is creating a separate GA property for the new site and sending the GTM container code.** We embed the container and he manages tags from his side. ⚠️ **This uses cookies, so the privacy policy must be updated the same day it goes on**, and it needs a cookie/consent line the Cloudflare option would have avoided. | ☑ |
-| 35 | 🔑 **Switch on the booking redirect in Housecall Pro (2 minutes, Jason only)** | **This is the only way we can ever tell you how many jobs the website brings in.** Housecall Pro does not tell a website when somebody finishes booking, so the one supported trick is to send them to a "thank you" page afterwards and count who lands on it. **We have built that page already, it is finished and waiting.** All Jason has to do is: **Settings → Online Booking → booking redirect**, and paste in `https://trinitygaragedoorservice.com/book-a-repair/thank-you/` (use the temporary workers.dev address instead if we have not moved the domain over yet). Nothing else changes for the customer, they just see a proper confirmation page instead of being left in the booking window. **Until he does this, every number about whether the new site works is a guess.** | ☐ |
+| 35 | ⏸️ **ON HOLD from 2026-08-04. Do not ask him yet.** Switch on the booking redirect in Housecall Pro (2 minutes, Jason only) | **On hold for one reason: online booking is switched off on the website, so there is nothing for this redirect to catch.** The website now counts leads from its own request forms instead, which is a better number anyway. **Nothing is lost.** The thank you page is still built and still live, and the moment booking goes back on, this ask goes straight back on the list. Original ask, kept word for word so it can be revived: *Housecall Pro does not tell a website when somebody finishes booking, so the one supported trick is to send them to a "thank you" page afterwards and count who lands on it. All Jason has to do is: **Settings → Online Booking → booking redirect**, and paste in `https://trinitygaragedoorservice.com/book-a-repair/thank-you/`. Nothing else changes for the customer, they just see a proper confirmation page instead of being left in the booking window.* | ⏸️ |
 | 34b | 🔴 **If yes: Jason has to be on hand for one 5 minute test** | **This is the only thing standing between us and switching it on, and we cannot do it without him.** Housecall Pro has **no test mode** and **no way to delete a lead through the software we use**. So we create one obviously fake test lead (fake name, a 555 phone number that cannot ring anyone, notifications turned off), check it lands in his Job Inbox, and then **he deletes it himself in Housecall Pro**. Deleting is reversible and does not message anyone. **We can create it. We cannot remove it.** Also needed from him first: **a separate API key just for the website**, so it can be switched off without breaking anything the marketing company uses. | ☐ |
+
+---
+
+## 📊 TRACKING WHAT THE ADVERTISING BRINGS IN (new, 2026-08-04)
+
+- [ ] **#38 · Jason and Simone · A yes or no. Are you happy for Google to see what a job is worth?**
+      To let Google Ads work out which ads bring the *profitable* work rather than just the most
+      form fills, we would send it the value of each finished job. That means the real money per job
+      sits inside the Google Ads account, where anyone with access to it can see it, including any
+      agency they work with now or later. **It is a business decision, not a technical one, and
+      nothing has been sent.** If the answer is no, everything still works, Google just counts leads
+      instead of pounds.
+
+- [ ] **#39 · Jason · Turn on Housecall Pro webhooks.** My Apps, then All Apps, then Webhooks. Admin
+      only, so it has to be him. We want `job.completed` and `invoice.paid`, and he needs to send us
+      the signing secret it gives him. **Not urgent**, and only worth doing if #38 comes back yes.
+      Without it we can still read the same information, just by asking their system every night
+      rather than being told.
+
+- [ ] **#40 · Barbara and whoever books the work · Keep filling in the lead source. Please pass on
+      that this is being done well.** On the 93 invoices they were paid for in July it was filled in
+      every single time. Before 2023 it was blank on nine jobs in ten. Every claim we can now make
+      about which advertising works rests on that one dropdown, and it is the office, not the
+      website, that fills it in.
+
+- [ ] **#41 · Lloyd · Which Google Ads account is the live one?** There are two IDs in his tag
+      container, `995017484` and `17056268955`. The conversion for the contact form is sitting on
+      the second one and has never once fired, because it is watching for a WordPress page element
+      this site has never had. Rebuilding it in the wrong account fixes nothing, so this answer
+      comes first. Full detail in `EMAIL-LLOYD-CONVERSION-TRACKING.md`.
 
 ---
 
@@ -204,6 +234,10 @@ one thing worth a careful conversation.
 ---
 
 ## Changelog
+- **2026-08-04 (2nd)** Conversion tracking dive. Added #38 to #41: the job value disclosure decision, Housecall Pro webhooks, praise for the office's lead source discipline, and the two Google Ads accounts question for Lloyd.
+- **2026-08-04** Online booking switched off on the website at the client's request, and every
+  booking button now goes to a request form. **#35 put on hold**, because there is no booking left
+  for that redirect to catch. It is paused, not dropped, and comes straight back if booking does.
 - **2026-08-01** Jason voice update after go live. He is rebuilding the **Housecall Pro booking
   options himself**: package pricing out, replaced by service call **$149**, free residential
   estimate, commercial estimate and a warranty call. Raised three follow ups, the sharpest being
@@ -220,4 +254,4 @@ one thing worth a careful conversation.
   still need to know which number leads everywhere else on the site.
 - **2026-07-28** Created. Added photo/video asks and quick decisions surfaced by the media hunt.
 
-*Key: ☐ open · ◐ partly handled · ☑ done*
+*Key: ☐ open · ◐ partly handled · ☑ done · ⏸️ on hold, paused for now, not dropped*
