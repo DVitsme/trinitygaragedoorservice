@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { requestHref } from "@/lib/booking";
 import { SITE, ROUTES, GOOGLE_REVIEWS, asset } from "@/lib/site";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { Reveal } from "@/components/blocks/reveal";
@@ -120,7 +121,7 @@ export default function ReviewsPage() {
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">
                 <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
               </a>
-              <Link href={ROUTES.bookRepair} className="rounded-[7px] border-2 border-white px-7 py-4 text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-white hover:text-ink">Book a Repair</Link>
+              <Link href={requestHref("repair")} className="rounded-[7px] border-2 border-white px-7 py-4 text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-white hover:text-ink">Request Service</Link>
             </div>
           </div>
         </Reveal>

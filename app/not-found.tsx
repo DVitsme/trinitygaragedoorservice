@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
+import { requestHref } from "@/lib/booking";
 import { SITE, ROUTES } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
  */
 const HELP = [
   { href: ROUTES.repair, title: "Garage Door Repair", desc: "Springs, cables, rollers, tracks, and openers." },
-  { href: ROUTES.bookRepair, title: "Book a Repair", desc: "Pick a time online and we will be there." },
+  { href: requestHref(), title: "Request Service", desc: "Tell us what is going on and a technician calls you back." },
   { href: ROUTES.services, title: "All Services", desc: "Repair, installation, and replacement." },
   { href: ROUTES.serviceAreas, title: "Service Areas", desc: "The six Tampa Bay cities we cover." },
   { href: ROUTES.blog, title: "Advice & Resources", desc: "FAQ, safety tips, and troubleshooting." },

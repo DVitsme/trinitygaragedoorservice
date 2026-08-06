@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
 import { SITE, ROUTES, BRAND_CATALOG, asset } from "@/lib/site";
+import { requestHref, requestLabel } from "@/lib/booking";
 import { AutoplayVideo } from "@/components/autoplay-video";
 import { BookOnlineButton } from "@/components/book-online-button";
 import { TrustStrip } from "@/components/blocks/trust-strip";
@@ -109,7 +110,7 @@ export default function HomePage() {
             Fast, honest garage door repair across Tampa Bay, broken springs, off track doors, and dead openers fixed same day, often within hours.
           </p>
           <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
-            <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">Book a Repair</Link>
+            <Link href={requestHref("repair")} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">{requestLabel}</Link>
             <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">
               <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
             </a>
@@ -351,9 +352,9 @@ export default function HomePage() {
           <Reveal>
             <div className="grid items-center gap-[50px] nav:grid-cols-2">
               <div>
-                <div className={eyebrowCls}>Book Now</div>
-                <h2 className="mt-3 font-display text-[clamp(28px,3.8vw,46px)] font-extrabold uppercase leading-none text-white">Book Your Repair in Under a Minute</h2>
-                <p className="mt-4 max-w-[430px] text-[17.5px] leading-[1.58] text-[#a8a8a8]">Pick a time that works for you and a local tech will be there, usually the same day.</p>
+                <div className={eyebrowCls}>Request Service</div>
+                <h2 className="mt-3 font-display text-[clamp(28px,3.8vw,46px)] font-extrabold uppercase leading-none text-white">Tell Us What Your Door Is Doing</h2>
+                <p className="mt-4 max-w-[430px] text-[17.5px] leading-[1.58] text-[#a8a8a8]">Send it over and a local tech calls you back, usually the same day.</p>
                 <a href={SITE.phoneHref} className="mt-[26px] inline-flex items-center gap-3.5 rounded-[8px] border-2 border-[#333] bg-[#222] px-5 py-4 no-underline">
                   <span className="flex h-12 w-12 flex-none items-center justify-center rounded-[7px] bg-accent text-white"><Phone className="h-[22px] w-[22px]" strokeWidth={2} /></span>
                   <span>
@@ -362,22 +363,24 @@ export default function HomePage() {
                   </span>
                 </a>
               </div>
-              {/* Real booking hand-off. This used to render a mock calendar hardcoded to a fixed
-                  month with fake time slots, which went stale and read as a broken widget. Live
-                  availability comes from Housecall Pro, so we frame it and hand off. */}
+              {/* This card has been through two versions and both were fiction. First a mock
+                  calendar hardcoded to a fixed month with fake time slots, which went stale and
+                  read as a broken widget. Then a hand off to Housecall Pro's live availability,
+                  which was true until the modal was switched off on 2026-08-04. It now describes
+                  the callback the customer actually gets, and nothing else. */}
               <div className="rounded-[8px] border-2 border-ink bg-white p-[26px]">
                 <div className="flex items-center justify-between">
-                  <h3 className="m-0 font-display text-[19px] font-extrabold uppercase text-ink">Book Online</h3>
-                  <span className="rounded-[5px] bg-cream px-2.5 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-[#6a6a6a]">Housecall Pro</span>
+                  <h3 className="m-0 font-display text-[19px] font-extrabold uppercase text-ink">Request Service</h3>
+                  <span className="rounded-[5px] bg-cream px-2.5 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] text-[#6a6a6a]">Takes a minute</span>
                 </div>
                 <p className="mt-3 text-[15px] leading-[1.55] text-body">
-                  Real availability from our schedule. Pick the service and a window that suits you, and you get a confirmation straight away.
+                  Six quick questions, no account, no waiting on hold. A real person reads it and calls you straight back.
                 </p>
                 <ol className="mt-[18px] flex list-none flex-col gap-3 p-0">
                   {[
                     { t: "Tell us what is going on", d: "Repair, tune up, opener, or a new door." },
-                    { t: "Pick your time", d: "Live openings, including same day when we have it." },
-                    { t: "We confirm and show up", d: "Text and email confirmation, no phone tag." },
+                    { t: "We call you back", d: "Usually the same day, and always a real person." },
+                    { t: "We book you in", d: "We find a time that works and confirm it with you." },
                   ].map((s, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <span className="flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[6px] bg-accent font-display text-[13px] font-extrabold text-white">{i + 1}</span>
@@ -388,11 +391,14 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ol>
-                <BookOnlineButton className="mt-[22px] block w-full rounded-[7px] bg-accent py-[15px] text-center text-[15px] font-extrabold uppercase tracking-[0.04em] text-white">
-                  Book Online Now
+                <BookOnlineButton topic="repair" className="mt-[22px] block w-full rounded-[7px] bg-accent py-[15px] text-center text-[15px] font-extrabold uppercase tracking-[0.04em] text-white">
+                  {requestLabel}
                 </BookOnlineButton>
-                <Link href={ROUTES.bookRepair} className="mt-3 block text-center text-[13.5px] font-bold text-[#6a6a6a] no-underline hover:text-accent">
-                  See how booking works
+                {/* Was "See how booking works", pointing at /book-a-repair/. That page framed the
+                    Housecall Pro modal and is redirected now, and there is no longer a booking
+                    process to explain, so the secondary action points at the work instead. */}
+                <Link href={ROUTES.repair} className="mt-3 block text-center text-[13.5px] font-bold text-[#6a6a6a] no-underline hover:text-accent">
+                  See what we fix
                 </Link>
               </div>
             </div>
@@ -434,10 +440,10 @@ export default function HomePage() {
           <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-8 px-5 py-[72px] nav:px-8">
             <div>
               <h2 className="m-0 max-w-[620px] font-display text-[clamp(27px,3.8vw,44px)] font-black uppercase leading-none">Don&apos;t Wait, Get Your Door Fixed Today</h2>
-              <p className="mt-3 text-[17px] font-medium text-white/90">Same day slots fill fast, book online or call us till 9pm.</p>
+              <p className="mt-3 text-[17px] font-medium text-white/90">Same day slots fill fast, send us the details or call us till 9pm.</p>
             </div>
             <div className="flex flex-wrap gap-[13px]">
-              <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">Book a Repair</Link>
+              <Link href={requestHref("repair")} className="rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">{requestLabel}</Link>
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] border-2 border-white px-7 py-4 text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-white hover:text-accent">
                 <Phone className="h-[18px] w-[18px]" strokeWidth={2.2} /> {SITE.phoneDisplay}
               </a>

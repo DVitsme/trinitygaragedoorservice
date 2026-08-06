@@ -24,6 +24,38 @@ type Payload = {
 /** Sink outcomes, so the response can tell the truth instead of always claiming success. */
 type SinkStatus = "ok" | "failed" | "skipped";
 
+/** What `middleware.ts` stashed about the ad click, if there was one. */
+type ClickIds = {
+  gclid?: string; gbraid?: string; wbraid?: string; msclkid?: string; landingPath?: string;
+};
+
+/**
+ * Pull the click identifiers back off the cookies middleware set.
+ *
+ * ⚠️ Values are passed through untouched. `gclid` is **case sensitive** and any normalisation here
+ * would silently break every offline conversion upload that uses it, months later, with no error.
+ */
+function clickIds(req: Request): ClickIds {
+  const header = req.headers.get("cookie");
+  if (!header) return {};
+  const jar = new Map(
+    header.split(";").map((part) => {
+      const i = part.indexOf("=");
+      return i === -1
+        ? ([part.trim(), ""] as const)
+        : ([part.slice(0, i).trim(), decodeURIComponent(part.slice(i + 1).trim())] as const);
+    }),
+  );
+  const get = (name: string) => jar.get(name) || undefined;
+  return {
+    gclid: get("tgd_gclid"),
+    gbraid: get("tgd_gbraid"),
+    wbraid: get("tgd_wbraid"),
+    msclkid: get("tgd_msclkid"),
+    landingPath: get("tgd_landing"),
+  };
+}
+
 const SITEVERIFY = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 /** Cloudflare publishes no number here, only "do not wait indefinitely". This is our choice. */
 const SITEVERIFY_TIMEOUT_MS = 4000;
@@ -93,6 +125,16 @@ export async function POST(req: Request) {
     // Was hardcoded "website", which made every lead from the 18 CTAs pointing at the estimate form
     // indistinguishable. Now the form says where it came from.
     source: data.source?.trim() || "website",
+    /*
+      Ad click attribution, read from the first party cookies `middleware.ts` set on the landing
+      request. NOT read from the request body: the browser attaches these automatically to this
+      same origin POST, so they cannot be spoofed by editing the form, and they survive the client
+      side navigation between the ad's landing page and whichever form the visitor eventually used.
+
+      Expect most of these to be null. Organic visitors and repeat customers have no click id, and
+      about half of Trinity's jobs are repeat customers. A null here is not a fault.
+    */
+    ...clickIds(req),
   };
 
   /**
@@ -163,7 +205,28 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ ok: true, email: emailStatus, db: dbStatus });
+  /*
+    `leadRef` becomes the Google Ads `transaction_id` on the `generate_lead` event. Google dedupes
+    conversions that share one: "if there are 2 conversions for the same conversion action with the
+    same transaction ID, Google Ads will know the second conversion is a duplicate". That is a
+    different mechanism from the Count setting, and Google says to use both.
+
+    ⚠️ It is the **idempotency key, not the D1 row id**, for two reasons.
+
+    First, the row id is a sequential integer, so returning it would tell anyone who submits the
+    form roughly how many leads this business has ever taken. Free information to give away, no
+    reason to give it.
+
+    Second, the semantics are already exactly right. This hash is `phoneE164|name|message`, so a
+    double submit of the same enquiry produces the SAME reference and Google collapses it, which is
+    what we want, while a genuinely new enquiry produces a new one. It is the same key Resend
+    already uses to stop the office getting two copies, so both dedupe on one definition of "the
+    same submission" rather than on two that could drift apart.
+
+    It is still joinable to D1 without storing anything new: recompute the hash from a row's
+    `phone_e164`, `name` and `message`.
+  */
+  return NextResponse.json({ ok: true, email: emailStatus, db: dbStatus, leadRef: idempotencyKey });
 }
 
 /**
@@ -184,7 +247,13 @@ export async function GET() {
     db,
     resend: Boolean(process.env.RESEND_API_KEY?.trim()),
     mailTo: Boolean(process.env.CONTACT_TO_EMAIL?.trim()),
+    // Counts only, never the addresses. Enough to prove the handover landed without printing
+    // anyone's inbox into a public endpoint.
+    mailToCount: (process.env.CONTACT_TO_EMAIL?.split(",").filter((s) => s.trim()).length ?? 0),
     mailFrom: Boolean(process.env.CONTACT_FROM_EMAIL?.trim()),
+    // Temporary monitoring copy. Expected TRUE for a few weeks after handover, then removed with
+    // `wrangler secret delete CONTACT_BCC_EMAIL` (runtime only, no deploy needed).
+    mailBcc: Boolean(process.env.CONTACT_BCC_EMAIL?.trim()),
     turnstile: Boolean(secret),
     // Loud on purpose. A dummy key makes the form LOOK protected while accepting everything.
     turnstileIsTestKey: isTurnstileTestSecret(secret),
@@ -196,14 +265,41 @@ export async function GET() {
 
 // ---------------------------------------------------------------------------- sinks
 
+/**
+ * ⚠️ **This signature must list every field the email actually renders.**
+ *
+ * It used to declare only `name`, `phone`, `email` and `service`, while the call site handed it the
+ * whole `lead` object. Excess property checks do not apply when you pass a variable, so it compiled,
+ * and `LeadEmail(lead)` rendered `zip`, `city` and `source` at runtime that the type said were not
+ * there. Harmless until someone reads this signature, concludes the zip never reaches the office,
+ * and "fixes" it, or destructures the parameter and silently drops three rows off the email nobody
+ * is checking. The type now tells the truth.
+ */
 async function sendEmail(
-  lead: { name: string; phone: string; email?: string; service?: string },
+  lead: {
+    name: string; phone: string; email?: string; service?: string;
+    zip?: string; city?: string; message?: string; source?: string;
+  },
   idempotencyKey: string,
 ): Promise<SinkStatus> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const to = process.env.CONTACT_TO_EMAIL?.trim();
   const from = process.env.CONTACT_FROM_EMAIL?.trim();
   if (!apiKey || !to || !from) return "skipped";
+
+  /**
+   * Silent monitoring copy, added 2026-08-04 when leads were handed over to the office.
+   *
+   * **Deliberately BCC and not a second `to`.** The office should see their own inbox and each
+   * other, not an agency address sitting in the recipient list of every customer enquiry. Reply all
+   * from Barbara would otherwise loop in a third party the customer never wrote to.
+   *
+   * ⚠️ **This is temporary.** It exists so the handover can be watched for a few weeks. It is a
+   * runtime secret, not baked at build time, so removing it is `wrangler secret delete
+   * CONTACT_BCC_EMAIL` with **no rebuild and no deploy**. Comma separated, same as `to`.
+   */
+  const bcc = process.env.CONTACT_BCC_EMAIL?.trim();
+  const addresses = (v: string) => v.split(",").map((t) => t.trim()).filter(Boolean);
 
   try {
     const resend = new Resend(apiKey);
@@ -213,8 +309,9 @@ async function sendEmail(
     // `error` is the actual fix; the try/catch below only catches genuine network throws.
     const { error } = await resend.emails.send(
       {
-        // Comma separated, so the office and we can both receive during launch week.
-        to: to.split(",").map((t) => t.trim()).filter(Boolean),
+        // Comma separated, so the whole office receives every lead.
+        to: addresses(to),
+        ...(bcc ? { bcc: addresses(bcc) } : {}),
         from,
         replyTo: lead.email,
         // Phone in the subject on purpose: the office can call back from the notification list
@@ -240,14 +337,15 @@ async function storeLead(
   lead: {
     name: string; phone: string; phoneE164?: string; email?: string;
     zip?: string; city?: string; service?: string; message?: string; source: string;
-  },
+  } & ClickIds,
   req: Request,
 ): Promise<number | null> {
   try {
     const { env } = getCloudflareContext();
     const row = await env.DB.prepare(
-      `INSERT INTO leads (name, phone, phone_e164, email, zip, city, service, message, source, user_agent, ip)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+      `INSERT INTO leads (name, phone, phone_e164, email, zip, city, service, message, source, user_agent, ip,
+                          gclid, gbraid, wbraid, msclkid, landing_path)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     )
       .bind(
         lead.name,
@@ -261,6 +359,11 @@ async function storeLead(
         lead.source,
         req.headers.get("user-agent") ?? null,
         req.headers.get("cf-connecting-ip") ?? null,
+        lead.gclid ?? null,
+        lead.gbraid ?? null,
+        lead.wbraid ?? null,
+        lead.msclkid ?? null,
+        lead.landingPath ?? null,
       )
       .first<{ id: number }>();
     return row?.id ?? null;

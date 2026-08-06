@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { requestHref } from "@/lib/booking";
 import { SITE, ROUTES, COUNTY_PHONES } from "@/lib/site";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { ServiceAreaMap } from "@/components/blocks/service-area-map";
@@ -11,7 +12,7 @@ import { ContactForm } from "@/components/contact-form";
 export const metadata: Metadata = {
   title: "Contact Trinity Garage Door Service | Tampa Bay",
   description:
-    "Call, book online, or send a message. Family owned garage door service across Tampa Bay, phones answered till 9pm. Call (813) 279-6785.",
+    "Call, request service online, or send a message. Family owned garage door service across Tampa Bay, phones answered till 9pm. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/contact/" },
 };
 
@@ -48,7 +49,7 @@ export default function ContactPage() {
           </div>
           <h1 className="m-0 mt-[18px] max-w-[920px] font-display text-[clamp(34px,5.6vw,62px)] font-black uppercase leading-[0.98] tracking-[-0.015em] text-white">Get In Touch</h1>
           <p className="mt-[22px] max-w-[680px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">
-            Call, book online, or send us a message, whatever is easiest. We&apos;re family owned and local, so you&apos;re talking to folks right here in Tampa Bay, not a call center three states away.
+            Call, request service online, or send us a message, whatever is easiest. We&apos;re family owned and local, so you&apos;re talking to folks right here in Tampa Bay, not a call center three states away.
           </p>
         </div>
       </section>
@@ -88,7 +89,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="mt-3.5 grid grid-cols-2 gap-3 max-xs:grid-cols-1">
-                  <Link href={ROUTES.bookRepair} className="flex items-center justify-center rounded-[9px] bg-accent px-4 py-4 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline">Book a Repair</Link>
+                  <Link href={requestHref("repair")} className="flex items-center justify-center rounded-[9px] bg-accent px-4 py-4 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white no-underline">Request Service</Link>
                   <Link href={ROUTES.estimate} className="flex items-center justify-center rounded-[9px] border-2 border-ink bg-white px-4 py-3.5 text-[14px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">Free Estimate</Link>
                 </div>
 
@@ -211,14 +212,14 @@ export default function ContactPage() {
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,46px)] font-black uppercase leading-none">Let&apos;s Get Your Door Handled</h2>
             <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">
-              However you reach us, we&apos;ll take care of it. Call the line for your county, book online, or send a message and we&apos;ll take it from there. Family owned and local since 2007, licensed and insured.
+              However you reach us, we&apos;ll take care of it. Call the line for your county, request service online, or send a message and we&apos;ll take it from there. Family owned and local since 2007, licensed and insured.
             </p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">
                 <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
               </a>
-              <Link href={ROUTES.bookRepair} className="rounded-[7px] border-2 border-white px-7 py-4 text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-white hover:text-ink">
-                Book a Repair
+              <Link href={requestHref("repair")} className="rounded-[7px] border-2 border-white px-7 py-4 text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-white hover:text-ink">
+                Request Service
               </Link>
             </div>
           </div>

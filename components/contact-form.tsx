@@ -1,9 +1,11 @@
 "use client";
 
 import Script from "next/script";
+import { useRouter } from "next/navigation";
 import { useState, useId, useRef, useEffect, type FormEvent, type InputHTMLAttributes, type FocusEvent, type ChangeEvent } from "react";
+import { THANK_YOU } from "@/lib/booking";
 import { isValidPhone, isValidEmail, normalizePhone, maskPhoneDisplay, caretAfterDigit, maskZip } from "@/lib/lead-validation";
-import { track } from "@/lib/analytics";
+import { track, type LeadSource } from "@/lib/analytics";
 // Costs nothing extra in the bundle: lib/site.ts is already client side via mobile-menu and open-now.
 import { SERVICE_OPTIONS } from "@/lib/site";
 
@@ -54,12 +56,35 @@ const fieldBase =
 const okCls = `${fieldBase} border-ink focus:border-accent`;
 const errCls = `${fieldBase} border-accent`;
 
-export function ContactForm({ intent }: { intent?: string }) {
+export function ContactForm({ intent, source }: { intent?: string; source?: LeadSource }) {
   const [status, setStatus] = useState<Status>("idle");
   const [formError, setFormError] = useState("");
   const [errors, setErrors] = useState<Partial<Record<Field, string>>>({});
   const uid = useId();
+  const router = useRouter();
+  const successRef = useRef<HTMLDivElement>(null);
   const isEstimate = intent === "estimate";
+
+  // See the note on the success card below: focus is what actually announces it, and what stops
+  // focus being dropped on the floor when the form unmounts.
+  useEffect(() => {
+    if (status === "success") successRef.current?.focus();
+  }, [status]);
+
+  /**
+   * Which door this lead came in by. Written to the `source` column, shown on the office's lead
+   * email, and sent as `lead_source` on `generate_lead`.
+   *
+   * The `?? ` fallback keeps `/get-service/` emitting the two values that already exist in the
+   * client's data. Only the per intent request form pages under `/get-service/[topic]/` pass a
+   * `source`, and they exist precisely so this value can tell them apart.
+   *
+   * ⚠️ This is NOT used to preselect the service dropdown below, even though the topic pages know
+   * the intent. Preselecting would make "skipped the field" and "chose this service" identical in
+   * the data, which is the one signal that answers whether that optional field earns its place.
+   * `source` records what they clicked; `service` records what they told us. Two different facts.
+   */
+  const leadSource: LeadSource = source ?? (isEstimate ? "estimate-form" : "contact-form");
 
   const fid = (f: string) => `${uid}-${f}`;
   const eid = (f: Field) => `${uid}-${f}-err`;
@@ -268,20 +293,43 @@ export function ContactForm({ intent }: { intent?: string }) {
             service simply omits the row rather than showing a blank one.
           */
           service: get("service") || undefined,
-          source: isEstimate ? "estimate-form" : "contact-form",
+          source: leadSource,
           token,
         }),
       });
-      const json = (await res.json().catch(() => ({}))) as { message?: string };
+      const json = (await res.json().catch(() => ({}))) as { message?: string; leadRef?: string };
       if (!res.ok) {
         resetWidget();
         setFormError(json.message ?? "Something went wrong. Please call us at (813) 279-6785.");
         setStatus("error");
         return;
       }
-      // Only once the API confirms capture, so the conversion count matches reality.
-      track({ event: "generate_lead", lead_source: isEstimate ? "estimate-form" : "contact-form" });
+      /*
+        ⚠️ **The conversion fires HERE, on the form page, and nothing fires on the thank you page.**
+        That is the whole design, and it is what makes the thank you page safe:
+
+          - refresh it            nothing fires
+          - press Back onto it    nothing fires
+          - bookmark or share it  nothing fires
+          - Googlebot crawls it   nothing fires
+
+        The only way to record a conversion is to actually submit a form and get a 200 back. A tag
+        bound to the thank you URL would fire on every one of those, and GTM's History Change
+        trigger fires on `popstate` too, so Back would double count. Do not "improve" this by moving
+        the push onto the thank you page.
+
+        A useful side effect: Google Ads reports the conversion URL from `location.pathname` at the
+        moment the tag fires, which is this form page. So the Ads webpages report already breaks
+        conversions down per form, with no extra configuration and no per form thank you URLs.
+
+        `track()` before `router.push()` needs no callback. A `router.push` is a SAME document
+        navigation, so nothing is torn down and the dataLayer, GTM's data model and any in flight
+        tag request all survive it. Only a `location.assign()` would need `eventCallback`.
+      */
+      track({ event: "generate_lead", lead_source: leadSource, transaction_id: json.leadRef });
+      // Rendered for the moment before the route resolves, and the fallback if it never does.
       setStatus("success");
+      router.push(THANK_YOU);
     } catch {
       resetWidget();
       setFormError("Network error. Please call us at (813) 279-6785.");
@@ -289,9 +337,28 @@ export function ContactForm({ intent }: { intent?: string }) {
     }
   }
 
+  /**
+   * The fallback confirmation, shown while `/thank-you/` resolves and left standing if it never
+   * does (a chunk that will not load, a navigation blocked by an extension). The lead is already in
+   * D1 and the office email is already sent by this point, so this can never be the difference
+   * between capturing a lead and losing one. It is only about whether the person believes it worked.
+   *
+   * ⚠️ **The `tabIndex`/`focus()` pair is load bearing, not decoration.** MDN is explicit that a
+   * live region has to exist first and be populated in a SECOND step to be announced; a `role`
+   * region that arrives already containing its text generally is not. This element replaces the
+   * whole form in one render, so it is exactly the case MDN warns about. Moving focus to it is what
+   * actually gets it read out. It also fixes the second half of the bug: the submit button held
+   * focus and is unmounted here, which drops focus to `document.body`, so the next Tab restarted
+   * from the top of the page with no sign anything had happened.
+   */
   if (status === "success") {
     return (
-      <div role="status" className="text-center">
+      <div
+        ref={successRef}
+        tabIndex={-1}
+        role="status"
+        className="text-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      >
         <h3 className="font-display text-[22px] font-extrabold uppercase text-ink">Thanks, we&apos;ve got it.</h3>
         <p className="mx-auto mt-2 max-w-[430px] text-[16px] leading-[1.55] text-body">
           A real person will call you back, usually the same day. Need us sooner? Call{" "}

@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+// Relative, not "@/lib/booking": tsconfig path aliases are not applied when Next loads this file.
+import { USE_REQUEST_FORM } from "./lib/booking";
 
 /**
  * Security headers. Set here rather than in `public/_headers`, which is a Cloudflare PAGES
@@ -72,9 +74,31 @@ const nextConfig: NextConfig = {
       { source: "/garage-door-safety-tips/", destination: "/resources/safety-tips/", permanent: true },
       { source: "/diy-garage-door-troubleshooting-guide/", destination: "/resources/troubleshooting/", permanent: true },
 
-      // Conversion pages. The old "schedule a repair" form could not actually schedule; the real
-      // Housecall Pro booking now lives on /book-a-repair/.
-      { source: "/schedule-a-repair/", destination: "/book-a-repair/", permanent: true },
+      /*
+        Conversion pages.
+
+        `/schedule-a-repair/` is a legacy WordPress URL whose form could not actually schedule
+        anything. It points at wherever booking currently lives, and it points there DIRECTLY rather
+        than via /book-a-repair/, so it never becomes a redirect chain.
+      */
+      { source: "/schedule-a-repair/", destination: USE_REQUEST_FORM ? "/get-service/repair/" : "/book-a-repair/", permanent: true },
+
+      /*
+        /book-a-repair/ exists only to frame and launch Housecall Pro's booking modal, and the modal
+        is switched off (`BOOKING_MODE` in lib/booking.ts). Every claim on that page, live
+        availability, picking a time slot, an instant confirmation, is false without it, so the route
+        is redirected rather than left standing. The page file stays: it is the thing that comes back
+        when booking does.
+
+        ⚠️ **`permanent: false` on purpose.** A 308 is cached hard by browsers and tells Google to
+        drop the URL, and the client has said they expect to want booking back. A 307 is reversible;
+        a 308 is a decision you cannot take back from other people's caches. Everything above it in
+        this list is a genuine one way move from the old WordPress site, which is why those are 308s
+        and this is not.
+      */
+      ...(USE_REQUEST_FORM
+        ? [{ source: "/book-a-repair/", destination: "/get-service/repair/", permanent: false }]
+        : []),
       { source: "/request-an-estimate/", destination: "/get-service/?intent=estimate", permanent: true },
       // TODO(client): no /specials/ page exists. Confirm whether promos return; until then → contact.
       { source: "/promo-discounts/", destination: "/contact/", permanent: true },

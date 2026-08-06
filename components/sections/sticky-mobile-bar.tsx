@@ -16,6 +16,22 @@ export function StickyMobileBar() {
       >
         <Phone className="h-[17px] w-[17px] text-accent" strokeWidth={2.2} />
         Call
+        {/*
+          ⚠️ **The number has to be in this anchor's TEXT, not only in its href.**
+
+          Google Ads call tracking works by walking text nodes for the configured number, rewriting
+          the visible text, and only THEN climbing to the enclosing anchor to rewrite its `href`. No
+          matching text means it never climbs, so this anchor kept the real number forever and every
+          call placed from it was invisible to Google Ads. This is the persistent call button on
+          every mobile page, on a business whose money arrives by phone, so it was the single most
+          expensive omission on the site.
+
+          `sr-only` rather than visible, because at 390px the bar is two equal buttons and
+          "Call (813) 279-6785" will not fit. It is a real text node either way, which is all the
+          tag walker cares about, and it doubles as an accessibility fix: "Call" alone is a vague
+          link name, and this gives it a real one.
+        */}
+        <span className="sr-only"> {SITE.phoneDisplay}</span>
       </a>
       <Link
         href={estimate ? ROUTES.estimate : ROUTES.getStarted}

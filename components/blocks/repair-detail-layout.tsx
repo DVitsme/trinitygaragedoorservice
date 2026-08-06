@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { SITE, ROUTES, asset } from "@/lib/site";
+import { requestHref, requestLabel } from "@/lib/booking";
 import { FaqJsonLd } from "@/components/json-ld";
 import { cn } from "@/lib/utils";
 import { PhotoHero } from "./hero";
@@ -30,11 +31,17 @@ export type RepairDetailData = {
   heroLead: string;
   /**
    * Which hero button is the red one. Default "repair".
-   * Use "phone" on pages where booking is the WRONG action: Housecall Pro only seats
-   * appointments Mon to Fri 8 to 4, so sending someone with a door stuck open at 11pm
-   * into the booking flow offers them Monday morning.
+   * Use "phone" on pages where a form is the WRONG first action: someone with a door stuck open at
+   * 11pm should be dialling, not typing. The phones are answered till 9pm and the form is a
+   * callback, so on those pages the form drops to the white secondary rather than disappearing.
    */
   primaryCta?: "repair" | "estimate" | "phone";
+  /**
+   * Which request form the "repair" CTA lands on, e.g. `"spring-repair"`. See `lib/booking.ts`.
+   * Omit and it falls back to the generic repair form, which is always a safe answer. Setting it
+   * is what lets the thank you page and Google Ads tell a spring lead from an opener lead.
+   */
+  formTopic?: string;
   intro: { eyebrow: string; title: string; paras: string[]; image: string; imageAlt: string; badge: string };
   signs: { eyebrow: string; title: string; lead?: string; cards: SignCard[]; note: { icon: ReactNode; title: string; body: string } };
   index?: { eyebrow: string; title: string; lead?: string; rows: IdxRow[]; calloutIcon?: ReactNode; callout: ReactNode };
@@ -68,7 +75,10 @@ const Eyebrow = ({ children }: { children: ReactNode }) => (
 );
 
 export function RepairDetailLayout({ d }: { d: RepairDetailData }) {
-  const primary = d.primaryCta === "estimate" ? { href: ROUTES.estimate, label: "Free Estimate" } : { href: ROUTES.bookRepair, label: "Book a Repair" };
+  const primary =
+    d.primaryCta === "estimate"
+      ? { href: ROUTES.estimate, label: "Free Estimate" }
+      : { href: requestHref(d.formTopic ?? "repair"), label: requestLabel };
 
   const breadcrumbLd = {
     "@context": "https://schema.org",

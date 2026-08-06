@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { requestHref } from "@/lib/booking";
 import { SITE, ROUTES, BRAND_CATALOG, asset } from "@/lib/site";
 import { FaqJsonLd } from "@/components/json-ld";
 import { PhotoHero } from "@/components/blocks/hero";
@@ -113,8 +114,8 @@ export default function RepairHubPage() {
           Same day garage door repair across Tampa Bay, springs, cables, rollers, tracks, openers, and tune ups. Family owned, honest pricing, free estimates.
         </p>
         <div className="mt-[30px] flex flex-wrap gap-[13px]">
-          <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">
-            Book a Repair
+          <Link href={requestHref("repair")} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">
+            Request a Repair
           </Link>
           <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">
             <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}

@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, ArrowRight } from "lucide-react";
+import { requestHref } from "@/lib/booking";
 import { SITE, ROUTES, asset } from "@/lib/site";
 import { PhotoHero } from "@/components/blocks/hero";
 import { Breadcrumb } from "@/components/blocks/primitives";
@@ -70,7 +71,7 @@ export default function OurStoryPage() {
         </h1>
         <p className="mt-6 max-w-[660px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">Trinity is a family owned company, and we&apos;ve kept Tampa Bay&apos;s garage doors moving since 2007. No call center, no runaround, no script to read off of. Just honest work at a fair price.</p>
         <div className="mt-[30px] flex flex-wrap gap-[13px]">
-          <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">Book a Repair</Link>
+          <Link href={requestHref("repair")} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">Request Service</Link>
           <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">
             <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
           </a>
@@ -231,7 +232,7 @@ export default function OurStoryPage() {
         <Reveal>
           <div className="mx-auto max-w-[1200px] px-5 py-[74px] text-center nav:px-8">
             <h2 className="m-0 font-display text-[clamp(28px,4vw,46px)] font-black uppercase leading-none">Let&apos;s Get Your Door Handled</h2>
-            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">Call Trinity at (813) 279-6785 to talk to a real person, or book a repair or a free estimate online. Family owned, licensed and insured, serving Tampa Bay since 2007.</p>
+            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] font-medium leading-[1.55] text-white/90">Call Trinity at (813) 279-6785 to talk to a real person, or request service or a free estimate online. Family owned, licensed and insured, serving Tampa Bay since 2007.</p>
             <div className="mt-[30px] flex flex-wrap justify-center gap-[13px]">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-accent no-underline">
                 <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}

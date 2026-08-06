@@ -156,9 +156,16 @@ export function ServiceAreaChecker({ className }: { className?: string }) {
               get a two hour arrival window.
             </p>
             <div className="mt-3.5 flex flex-wrap items-center gap-2.5">
-              <BookOnlineButton className="rounded-[7px] bg-accent px-6 py-3 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white">
-                Book Online
-              </BookOnlineButton>
+              {/*
+                No `children` on purpose. The component's own default label follows BOOKING_MODE,
+                so this reads "Request Service" while it points at the form and goes back to
+                "Book Online" the day the modal returns. A hardcoded label here would survive the
+                flip and start lying.
+              */}
+              <BookOnlineButton
+                topic="repair"
+                className="rounded-[7px] bg-accent px-6 py-3 text-[14px] font-extrabold uppercase tracking-[0.04em] text-white"
+              />
               <a
                 href={SITE.phoneHref}
                 className="inline-flex items-center gap-2 rounded-[7px] border-2 border-ink px-5 py-[10px] text-[14px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline transition-colors hover:bg-ink hover:text-white"
@@ -175,7 +182,7 @@ export function ServiceAreaChecker({ className }: { className?: string }) {
               Let&apos;s check {result.zip} by phone.
             </div>
             <p className="mt-2 text-[14.5px] leading-[1.5] text-body">
-              That one is outside the area we book online, but we cover a lot of ground in between and we
+              That one is outside the area we normally cover, but we cover a lot of ground in between and we
               travel for the right job. Give us a call and we&apos;ll tell you straight.
             </p>
             {/* TODO(Phase 4): capture name + phone here for out of area visitors. Blocked on the

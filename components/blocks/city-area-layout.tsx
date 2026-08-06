@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { SITE, ROUTES, asset } from "@/lib/site";
+import { requestHref, requestLabel } from "@/lib/booking";
 import { Breadcrumb } from "./primitives";
 import { TrustStrip } from "./trust-strip";
 import { Reveal } from "./reveal";
@@ -76,7 +77,7 @@ export function CityAreaLayout({ d }: { d: CityAreaData }) {
           </h1>
           <p className="mt-6 max-w-[660px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">{d.heroLead}</p>
           <div className="mt-[30px] flex flex-wrap gap-[13px]">
-            <Link href={ROUTES.bookRepair} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">Book a Repair</Link>
+            <Link href={requestHref("repair")} className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">{requestLabel}</Link>
             <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-white px-[30px] py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-ink no-underline">
               <Phone className="h-[18px] w-[18px] text-accent" strokeWidth={2.2} /> Call {SITE.phoneDisplay}
             </a>

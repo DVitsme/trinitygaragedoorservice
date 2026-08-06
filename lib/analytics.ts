@@ -18,9 +18,33 @@
  * `GTM-NOTES.md` for the one setting that has to be on for that to work.
  */
 
+/**
+ * Which form page a lead came from.
+ *
+ * `contact-form` and `estimate-form` are the two `/get-service/` variants and predate everything
+ * else, so they are named exactly as they always were: they are already in the client's lead data
+ * and in the ads specialist's container, and renaming them would split his reporting in half.
+ * Everything else is `<request form slug>-form`, minted by `lib/booking.ts` (`spring-repair-form`,
+ * `off-track-form`, and so on).
+ *
+ * A template literal type rather than a hand written union of every slug. It still rejects a
+ * mistyped free string, but it does not have to be edited every time a request form page is added,
+ * which is the kind of two place edit that silently rots.
+ */
+export type LeadSource = `${string}-form`;
+
 /** Every event this site can emit. Adding one here is the only way to add one at a call site. */
 export type TrackEvent =
-  | { event: "generate_lead"; lead_source: "contact-form" | "estimate-form" }
+  /**
+   * `lead_source` is not a name we invented. It is Google's own documented parameter on the
+   * `generate_lead` recommended event ("the source of the lead"), and it is not on GA4's reserved
+   * list, so it needs no renaming when GA4 finally lands.
+   *
+   * `transaction_id` is the Google Ads duplicate guard. Map it to the conversion tag's Transaction
+   * ID / Order ID field. Google dedupes two conversions on the same action that share one, which
+   * is a different mechanism from the Count setting; use both.
+   */
+  | { event: "generate_lead"; lead_source: LeadSource; transaction_id?: string }
   | { event: "phone_click"; link_location: string }
   | { event: "book_online_click"; link_location: string }
   | { event: "zip_check"; zip_result: "in_area" | "out_of_area"; zip: string };

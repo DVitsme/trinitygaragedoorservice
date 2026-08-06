@@ -49,6 +49,17 @@ const blocks: Block[] = [
   { p: "The site uses cookies that are needed for it to work and for spam protection, and it uses Google Analytics to understand how people find and use the site. We use Google Tag Manager to load these tools, and we use Google Ads conversion tracking to see which of our ads bring people here." },
   { p: "Google Analytics sets cookies named _ga and _ga_ followed by an ID, which last up to two years, and in some cases _gid, which lasts about a day. Most browsers now shorten cookie lifetimes to around 400 days no matter what the cookie asks for. These tell us things like which pages get visited and roughly where in Tampa Bay our visitors are, in a way that does not identify you by name." },
   { p: "Google does not store your full IP address in Google Analytics. It uses the address to work out a rough location, then discards it." },
+  /*
+    Added 2026-08-04 with the click capture in middleware.ts. It is our own first party cookie, so
+    nothing in the Google or Microsoft paragraphs covers it, and the policy has to name it.
+
+    ⚠️ Note what this sentence carefully does NOT say. It does not claim anything about what Google
+    receives, because the sentence two paragraphs above promises "It does not receive what you type
+    into our forms", and that promise is still true and must stay true. If Enhanced Conversions for
+    Leads is ever switched on, hashed contact details WOULD go to Google, that sentence becomes
+    false, and this page has to change before the tag ships, not after. See GTM-NOTES.md.
+  */
+  { p: "If you arrive here by clicking one of our ads, we store the ad click reference from that link in a cookie on your device for 90 days, so that if you later send us a form we can tell which ad brought you. It holds a reference number and the page you landed on, not your name or your details, and we do not use it to show you advertising." },
   { p: "We also use Microsoft advertising measurement, and Microsoft Clarity, which records how people move through the site so we can find pages that confuse visitors. Clarity records mouse movement, clicks and scrolling, and it is set to hide what you type into form fields." },
   { p: "If you would rather not be counted, Google publishes a browser add on that turns Google Analytics off across every site you visit. You can get it at tools.google.com/dlpage/gaoptout. Microsoft Clarity honors your browser's Do Not Track setting. You can also block cookies in your browser settings." },
   { h2: "Your Choices" },

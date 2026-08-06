@@ -33,6 +33,7 @@ const opener: RepairDetailData = {
   ),
   heroLead:
     "When the opener quits, the whole morning stops. The good news is most opener trouble is fixable, and a fair amount turns out to be a quick fix once you know what's wrong. We repair and replace openers all over Tampa Bay, every major brand.",
+  formTopic: "opener-repair",
   intro: {
     eyebrow: "The Short Version",
     title: "Most Opener Trouble Is Fixable",

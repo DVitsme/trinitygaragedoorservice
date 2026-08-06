@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/lib/seo";
 import { ROUTES, AREAS } from "@/lib/site";
+import { REQUEST_FORMS, USE_REQUEST_FORM } from "@/lib/booking";
 import { getAllPosts } from "@/lib/blog";
 
 /**
@@ -16,6 +17,11 @@ import { getAllPosts } from "@/lib/blog";
  *
  * ⚠️ `/book-a-repair/thank-you/` is deliberately absent. It is `noindex` and exists only to catch
  * Housecall Pro's booking redirect. Do not add it.
+ *
+ * ⚠️ **`/book-a-repair/` is absent too, and conditionally so.** With `BOOKING_MODE` set to `"form"`
+ * that route 301s to the repair request form, and a URL that redirects has no business in a
+ * sitemap: it tells Google to crawl something we have already told it not to have. The request form
+ * pages take its place below. Flip the constant back and the entry returns with the page.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   // Plain paths. Nothing else, because nothing else survives to the output.
@@ -37,7 +43,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ROUTES.aboutStory, ROUTES.portfolio, ROUTES.reviewsPage,
 
     // Convert
-    ROUTES.bookRepair, ROUTES.contact, "/get-service/",
+    ROUTES.contact, "/get-service/",
+    ...(USE_REQUEST_FORM
+      ? REQUEST_FORMS.map((f) => `/get-service/${f.slug}/`)
+      : [ROUTES.bookRepair]),
 
     // Resources
     ROUTES.blog, ROUTES.faq, ROUTES.safetyTips, ROUTES.troubleshooting,

@@ -5,8 +5,16 @@
 
 # Resend (contact / free-estimate email)
 RESEND_API_KEY=
+# Comma separated. Every address here receives every lead and they all see each other.
+# Live since the 2026-08-04 handover: the two office Gmail accounts.
 CONTACT_TO_EMAIL=
 CONTACT_FROM_EMAIL=
+# OPTIONAL, and temporary. A silent monitoring copy during the office handover, comma separated.
+# BCC rather than a second `to` on purpose: the office should not see an agency address in the
+# recipient list of every customer enquiry, and a reply all would otherwise loop in a third party
+# the customer never wrote to. Runtime only, so removing it is
+# `wrangler secret delete CONTACT_BCC_EMAIL` with no rebuild and no deploy.
+CONTACT_BCC_EMAIL=
 
 # Cloudflare Turnstile (form spam protection)
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=

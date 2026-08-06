@@ -35,7 +35,7 @@ const data: CityAreaData = {
     ],
   },
   closingLead:
-    "Call (813) 279-6785 for same day garage door service in Wesley Chapel, or book a repair or free estimate online. Family owned, licensed and insured under FL GD13010 and GDI-09484, serving Tampa Bay since 2007.",
+    "Call (813) 279-6785 for same day garage door service in Wesley Chapel, or request service or a free estimate online. Family owned, licensed and insured under FL GD13010 and GDI-09484, serving Tampa Bay since 2007.",
 };
 
 export default function WesleyChapelPage() {

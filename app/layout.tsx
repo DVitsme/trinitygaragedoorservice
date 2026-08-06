@@ -5,6 +5,7 @@ import Script from "next/script";
 import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
+import { USE_REQUEST_FORM } from "@/lib/booking";
 import { UtilityBar } from "@/components/sections/utility-bar";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/sections/site-footer";
@@ -94,9 +95,22 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <SiteFooter />
         <StickyMobileBar />
         {/*
-          Housecall Pro's booking widget, mounted ONCE for the whole site. Every "Book Online"
-          button goes through components/book-online-button.tsx, which calls the global this
-          defines; without it those buttons still work, they just open a new tab instead.
+          Housecall Pro's booking widget, mounted ONCE for the whole site.
+
+          ⚠️ **Not mounted today.** `BOOKING_MODE` in lib/booking.ts is "form", so booking CTAs are
+          links to our own request form pages and this script would load for nothing. The mount is
+          kept, not deleted: the client expects to want booking back, and flipping that one constant
+          (plus NEXT_PUBLIC_BOOKING_URL) restores this and every button with it.
+
+          ⚠️ The `USE_REQUEST_FORM` guard is what actually stops it, NOT the absence of the env var.
+          `NEXT_PUBLIC_BOOKING_URL` is still set in .env.local, so `bookingWidgetSrc` is still a real
+          URL and this shipped the script, plus a `<link rel="preload">` for it, on every page after
+          the buttons had already stopped using it. Caught by grepping the built HTML rather than the
+          source, which is the only place it was visible.
+
+          When it IS mounted: every "Book Online" button goes through
+          components/book-online-button.tsx, which calls the global this defines; without it those
+          buttons still work, they just open a new tab instead.
 
           `afterInteractive` rather than `lazyOnload`: it is only 5,197 bytes and it creates its
           iframe with loading="lazy" behind display:none, so the booking app itself is not fetched
@@ -107,7 +121,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           It does NOT bind any click handlers of its own (verified against their source), which is
           why our button keeps its own handler and styling.
         */}
-        {SITE.bookingWidgetSrc && <Script src={SITE.bookingWidgetSrc} strategy="afterInteractive" />}
+        {!USE_REQUEST_FORM && SITE.bookingWidgetSrc && (
+          <Script src={SITE.bookingWidgetSrc} strategy="afterInteractive" />
+        )}
       </body>
     </html>
   );

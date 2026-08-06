@@ -290,6 +290,13 @@ export const ROUTES = {
   blog: "/resources/blog/",
   safetyTips: "/resources/safety-tips/",
   troubleshooting: "/resources/troubleshooting/",
+  /**
+   * ⚠️ **Do not link to this directly.** With `BOOKING_MODE` set to `"form"` in `lib/booking.ts`
+   * the route 301s away and its page is unreachable, so a CTA pointing here costs a redirect hop
+   * and lands somewhere the label did not promise. Call `requestHref()` instead: it follows the
+   * mode, so the same call site works in both. This constant is what `requestHref` and the sitemap
+   * return to when booking comes back.
+   */
   bookRepair: "/book-a-repair/",
   /**
    * The primary nav CTA since 2026-08-01. Labelled "Request Service": it names the action, matches

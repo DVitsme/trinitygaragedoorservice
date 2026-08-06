@@ -17,10 +17,13 @@ const ico = (size: number, paths: ReactNode, sw: number | string = 2) => (
 
 const emergency: RepairDetailData = {
   canonicalPath: "/services/repair/emergency/",
-  // Phone leads here, not booking. Housecall Pro only seats appointments Mon to Fri 8 to 4,
-  // so the booking flow would answer a 2am emergency with "Monday morning". This page's own
-  // copy already tells people to call for a true emergency; the buttons now agree with it.
+  // Phone leads here, not the form. The form is a callback request, so it answers a 2am emergency
+  // with "someone will ring you", which is the wrong answer for a door stuck open. The phones are
+  // answered till 9pm. This page's own copy already tells people to call for a true emergency; the
+  // buttons agree with it. (The original reason was Housecall Pro only seating appointments Mon to
+  // Fri 8 to 4. Booking is switched off now, and the conclusion survives the reason.)
   primaryCta: "phone",
+  formTopic: "emergency",
   breadcrumb: [
     { label: "Home", href: "/" },
     { label: "Services", href: "/services/" },

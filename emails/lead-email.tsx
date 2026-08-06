@@ -4,18 +4,35 @@ export type LeadEmailProps = {
   name: string;
   phone: string;
   email?: string;
+  zip?: string;
   city?: string;
   service?: string;
   message?: string;
+  source?: string;
 };
 
-export function LeadEmail({ name, phone, email, city, service, message }: LeadEmailProps) {
+/**
+ * `zip` and `source` were added 2026-08-04 and are both fixes, not decoration.
+ *
+ * **Zip** was already being collected and stored, and the office never saw it. Simone kept that
+ * field over Lloyd's objection for one stated reason, that Jason's team "are going to want to know
+ * where they're located", and this email is the only thing they read. It was reaching D1 and
+ * stopping there.
+ *
+ * **Source** names the form the lead came from, e.g. `spring-repair-form`. Every booking CTA now
+ * lands on a request form page of its own (see `lib/booking.ts`), so this row tells whoever picks
+ * up the phone what the customer was reading a second before they filled it in.
+ */
+
+export function LeadEmail({ name, phone, email, zip, city, service, message, source }: LeadEmailProps) {
   const rows: Array<[string, string | undefined]> = [
     ["Name", name],
     ["Phone", phone],
     ["Email", email],
+    ["Zip", zip],
     ["City", city],
     ["Service", service],
+    ["Came from", source],
   ];
 
   return (

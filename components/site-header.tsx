@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { MobileMenu } from "@/components/mobile-menu";
+import { requestHref } from "@/lib/booking";
 import {
   SITE,
   asset,
@@ -81,8 +82,8 @@ export function SiteHeader() {
                   <MLink key={l.href} href={l.href}>{l.label}</MLink>
                 ))}
                 <MLink href={ROUTES.repair} all>All Repair Services</MLink>
-                <Link href={ROUTES.bookRepair} className="mt-2 flex items-center justify-center gap-2 rounded-[7px] bg-accent px-3.5 py-[11px] text-[13px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark">
-                  Book a Repair
+                <Link href={requestHref("repair")} className="mt-2 flex items-center justify-center gap-2 rounded-[7px] bg-accent px-3.5 py-[11px] text-[13px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark">
+                  Request a Repair
                 </Link>
               </div>
               <div className="px-1 py-3.5">
