@@ -118,11 +118,11 @@ and the Saturday booking conflict at #4a.
 
 | # | Ask | Why it matters | Status |
 |---|---|---|---|
-| 7 | **Cloudflare account access** | To turn on real spam protection for the form. Takes 2 minutes. | ☐ |
-| 8 | **Domain / DNS access** | To point trinitygaragedoorservice.com at the new site. | ☐ |
+| 7 | ~~**Cloudflare account access**~~ | ✅ **DONE.** Access granted and used. Cloudflare Turnstile is live on the form with a real (non test) secret, and the site itself now runs on their Cloudflare account. | ☑ |
+| 8 | ~~**Domain / DNS access**~~ | ✅ **DONE 2026-08-01.** trinitygaragedoorservice.com and www both serve the new site, via Worker routes rather than a nameserver change. ⚠️ **The nameserver switch itself is still not cleared** and is tracked separately at `LAUNCH-TODO` 5.7. | ☑ |
 | 9 | **Confirm the numbers we quote** | Site says 12,000+ doors serviced, 4.9 stars, 6 cities. Are these true? (Years is now calculated from 2007, so that one is handled.) | ☐ |
 | 10 | **Confirm brands they INSTALL vs only REPAIR** | We list install = Clopay, C.H.I., Hörmann, Amarr, LiftMaster. Everything else repair only. | ☐ |
-| 11 | **Mailing address for the privacy policy** | Legal requirement. Can be the Lutz suite. | ☐ |
+| 11 | ~~**Mailing address for the privacy policy**~~ | ✅ **DONE 2026-08-04.** Used the Lutz suite, 18125 US-41 Ste 208, Lutz FL 33549, taken from their own Housecall Pro company record rather than asked for again. It is composed from `SITE.address` in the page, so it can never drift from the footer or the JSON-LD. | ☑ |
 | 12 | **Have a lawyer glance at the privacy policy** | It is a solid starting template, not legal advice. | ☐ |
 | 13 | ⚠️ **"Veteran owned" needs a real answer, and the honest one is awkward** | **PART ANSWERED 2026-07-29.** Jason's **son** is the veteran and works in the business. **Jason owns the company and is not a veteran.** The son suggested adding the badge because "it'll help". Simone is checking with a contact and said **leave it on for now**, and she will tell Jason if it is a problem. Worth being blunt with her: "veteran owned" normally means **owned** by a veteran, and misusing it on a contractor site is the kind of claim that draws complaints. | ◐ |
 | 14 | **Which Facebook page is the real one?** | There are two. We are linking the LLC one. The other is an "Inc" page we could not open. | ☐ |
@@ -234,6 +234,7 @@ one thing worth a careful conversation.
 ---
 
 ## Changelog
+- **2026-08-04 (3rd)** Privacy policy placeholders filled from facts we already had, so #11 is closed and #7 and #8 ticked as done by the live site. #12, the lawyer glance, is the only privacy item left.
 - **2026-08-04 (2nd)** Conversion tracking dive. Added #38 to #41: the job value disclosure decision, Housecall Pro webhooks, praise for the office's lead source discipline, and the two Google Ads accounts question for Lloyd.
 - **2026-08-04** Online booking switched off on the website at the client's request, and every
   booking button now goes to a request form. **#35 put on hold**, because there is no booking left
