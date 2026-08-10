@@ -35,23 +35,40 @@ export function ReviewWall({ children }: { children: React.ReactNode }) {
    */
   const rootRef = useRef<HTMLDivElement>(null);
   const [offscreen, setOffscreen] = useState(false);
+  /**
+   * Start switch for the animations. The sets are created `animation-play-state: paused` and this
+   * single post hydration flip unpauses all four in one style recalc, so they share one start
+   * time. Without it, streamed HTML let a clone's animation clock start a few frames after its
+   * primary on some loads, leaving a permanent seam offset in that row. See globals.css.
+   */
+  const [ready, setReady] = useState(false);
+  useEffect(() => setReady(true), []);
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setOffscreen(!e.isIntersecting), { rootMargin: "200px 0px" });
+    // Read the LAST queued entry: IO delivers crossings in chronological order, and taking the
+    // first can land the state inverted after a fast scroll flick crosses the boundary twice.
+    const io = new IntersectionObserver(
+      (entries) => setOffscreen(!entries[entries.length - 1].isIntersecting),
+      { rootMargin: "200px 0px" },
+    );
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   return (
-    <div ref={rootRef} className="bt-reviews" data-reviews-paused={paused} data-reviews-offscreen={offscreen}>
-      {children}
+    <div ref={rootRef} className="bt-reviews flex flex-col" data-reviews-ready={ready} data-reviews-paused={paused} data-reviews-offscreen={offscreen}>
       {/*
+        The pause control comes FIRST in the DOM and is pushed below the rows visually with flex
+        `order`. Screen reader and magnifier users then learn the control exists before wading
+        through 30 cards of moving content, which is the W3C carousel guidance. Tab order is
+        unaffected (nothing inside the cards is focusable).
+
         No `aria-pressed`. The label itself already changes between "Pause reviews" and "Play
         reviews", and adding the state attribute on top makes a screen reader announce the same
         fact twice ("Play reviews, toggle button, not pressed").
       */}
-      <div className="bt-reviews-pause mt-7 flex justify-center">
+      <div className="bt-reviews-pause order-2 mt-7 flex justify-center">
         <button
           type="button"
           onClick={() => setPaused((p) => !p)}
@@ -61,6 +78,7 @@ export function ReviewWall({ children }: { children: React.ReactNode }) {
           {paused ? "Play reviews" : "Pause reviews"}
         </button>
       </div>
+      <div className="order-1">{children}</div>
     </div>
   );
 }

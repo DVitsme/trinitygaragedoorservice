@@ -90,10 +90,9 @@ bet, and #6b should be answered before it is promoted.
 
 **Two questions back to them, both in `CLIENT-ASKS` (#6b and #6c):**
 1. **Do they want it?** It is about an hour each way from Lutz.
-2. 🔴 **Does their licence cover Manatee?** GD13010 is Hillsborough and GDI-09484 is Pasco. If those
-   are county licences rather than state ones, they may not cover work there, and those numbers are
-   printed on every page of the site. **This one should be answered before anyone sells a Manatee
-   job.** Manatee also requires a permit for a garage door replacement.
+2. ~~Does their licence cover Manatee?~~ **Answered 10 August: yes, it covers all of Manatee**,
+   so the page now carries the licence line like every other town page. Still worth knowing:
+   Manatee requires a permit for a garage door replacement, tied to a Florida Product Approval.
 
 We deliberately stopped at the Manatee River and left Bradenton and Lakewood Ranch out, so the site
 does not promise more than they have agreed to.

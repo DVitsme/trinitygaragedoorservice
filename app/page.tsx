@@ -186,7 +186,7 @@ export default function HomePage() {
               <h2 className="mt-2.5 font-display text-[clamp(24px,3vw,34px)] font-extrabold uppercase leading-[1.05] text-ink">Trusted Brands &amp; Partners</h2>
             </div>
           </Reveal>
-          <div className="bt-marquee-mask mt-[34px] overflow-hidden">
+          <div className="bt-marquee-mask mt-[34px] overflow-clip">
             <div className="bt-marquee">
               {[...BRAND_CATALOG, ...BRAND_CATALOG].map((b, i) => (
                 <span key={i} aria-hidden={i >= BRAND_CATALOG.length} className="flex h-[88px] w-[172px] flex-none items-center justify-center rounded-[8px] border-2 border-ink bg-white p-4">
@@ -314,22 +314,26 @@ export default function HomePage() {
       </section>
 
       {/*
-        REVIEWS. Full bleed marquee rather than a grid, because Jason asked for "a lot more"
-        reviews on the page and volume is the whole point. The heading block keeps the 1200px
-        container; only the track runs edge to edge. Band stays cream: the section above is white
-        and the booking band below is ink, so turning this one dark would collapse the rhythm.
+        REVIEWS. A two row marquee rather than a grid, because Jason asked for "a lot more"
+        reviews on the page and volume is the whole point. Contained in the standard 1200px
+        container with the page's horizontal padding (client direction 2026-08-10: it was full
+        bleed at first and he wanted it off the screen edges); the cards fade out at the container
+        edges instead. Band stays cream: the section above is white and the booking band below is
+        ink, so turning this one dark would collapse the rhythm.
       */}
-      <section className="bg-cream border-t-2 border-ink py-[92px]">
-        <Reveal>
-          <div className="mx-auto max-w-[640px] px-5 text-center nav:px-8">
-            <div className={eyebrowCls}>Reviews</div>
-            <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.04] text-ink">Hundreds Of Neighbors Trust Trinity</h2>
-            <p className="mt-2.5 text-[13.5px] font-semibold text-[#8a8a8a]">Real Google reviews, word for word. 5.0 from 598 and counting. <Link href={ROUTES.reviewsPage} className="font-bold text-accent no-underline">Read them all</Link>.</p>
-          </div>
-        </Reveal>
-        <Reveal className="mt-[42px]">
-          <ReviewMarquee />
-        </Reveal>
+      <section className="bg-cream border-t-2 border-ink">
+        <div className="mx-auto max-w-[1200px] px-5 py-[92px] nav:px-8">
+          <Reveal>
+            <div className="mx-auto max-w-[640px] text-center">
+              <div className={eyebrowCls}>Reviews</div>
+              <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.04] text-ink">Hundreds Of Neighbors Trust Trinity</h2>
+              <p className="mt-2.5 text-[13.5px] font-semibold text-[#6a6a6a]">Real Google reviews, word for word. 5.0 from 598 and counting. <Link href={ROUTES.reviewsPage} className="font-bold text-accent underline underline-offset-2">Read them all</Link>.</p>
+            </div>
+          </Reveal>
+          <Reveal className="mt-[42px]">
+            <ReviewMarquee />
+          </Reveal>
+        </div>
       </section>
 
       {/* BOOKING BAND (dark) */}

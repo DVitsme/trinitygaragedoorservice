@@ -87,10 +87,10 @@ export default function ReviewsPage() {
                   <div className="text-[15px] tracking-[2px] text-accent" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
                   <p className="mt-[13px] text-[15.5px] font-medium leading-[1.6] text-[#2a2a2a]">&ldquo;{r.quote}&rdquo;</p>
                   <div className="mt-[18px] flex items-center gap-[11px] border-t-2 border-[#eee] pt-4">
-                    <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[6px] bg-ink text-[14px] font-extrabold uppercase text-white">{r.name[0]}</span>
+                    <span aria-hidden="true" className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[6px] bg-ink text-[14px] font-extrabold uppercase text-white">{r.name[0]}</span>
                     <div className="min-w-0">
                       <div className="truncate text-[14px] font-extrabold text-ink">{r.name}</div>
-                      <div className="text-[12px] font-semibold text-[#8a8a8a]">via Google</div>
+                      <div className="text-[12px] font-semibold text-[#6a6a6a]">via Google</div>
                     </div>
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function ReviewsPage() {
             </div>
           </Reveal>
           <Reveal>
-            <div className="mt-2 text-[12.5px] font-semibold text-[#8a8a8a]">Real Google reviews, reproduced word for word from our own Google Business Profile. There are hundreds more on <a href={SOCIAL.google} target="_blank" rel="noopener noreferrer" className="font-bold text-accent no-underline">our Google listing</a>.</div>
+            <div className="mt-2 text-[12.5px] font-semibold text-[#6a6a6a]">Real Google reviews, reproduced word for word from our own Google Business Profile. There are hundreds more on <a href={SOCIAL.google} target="_blank" rel="noopener noreferrer" className="font-bold text-accent no-underline">our Google listing</a>.</div>
           </Reveal>
         </div>
       </section>

@@ -7,10 +7,10 @@ import { CityAreaLayout, type CityAreaData } from "@/components/blocks/city-area
  * the Manatee River (34221 Palmetto, 34219 Parrish, 34222 Ellenton). Everything else in the county
  * is south of the river and deliberately excluded, so the copy and the zip checker agree.
  *
- * ⚠ The closing line on every other city page cites FL GD13010 and GDI-09484. Those are the
- * Hillsborough and Pasco county licences, so they are NOT repeated here. CLIENT-ASKS #5b (are
- * these county or state licences?) has to be answered before this page can make a licensing claim
- * in a sixth county. Do not "restore consistency" by pasting the other pages' closing line in.
+ * ✅ Licence coverage ANSWERED 2026-08-10: Derrick confirmed the licence covers all of Manatee,
+ * so the closing line now carries FL GD13010 and GDI-09484 like every other city page. CLIENT-ASKS
+ * #6c is closed; #5b (whether those are county or state licences) remains open but no longer
+ * blocks this page.
  */
 export const metadata: Metadata = {
   title: "Garage Door Repair in Palmetto, Parrish & Ellenton FL | Trinity Garage Door Service",
@@ -48,7 +48,7 @@ const data: CityAreaData = {
     ],
   },
   closingLead:
-    "Call (813) 279-6785 for garage door service in Palmetto, Parrish or Ellenton, or request service or a free estimate online. Family owned, and opening doors around Tampa Bay since 2007.",
+    "Call (813) 279-6785 for garage door service in Palmetto, Parrish or Ellenton, or request service or a free estimate online. Family owned, licensed and insured under FL GD13010 and GDI-09484, and opening doors around Tampa Bay since 2007.",
 };
 
 export default function ManateeCountyPage() {

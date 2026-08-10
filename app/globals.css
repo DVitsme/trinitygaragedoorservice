@@ -82,6 +82,14 @@ img {
   gap: 40px;
   animation: bt-marquee 32s linear infinite;
 }
+/* Courtesy pause parity with the review wall. ⚠️ NOT full WCAG 2.2.2 compliance: that needs a
+   visible, keyboard operable control, which this strip does not have yet. Logged in
+   PRE-LAUNCH-PUNCHLIST P2-9; hover alone is unavailable to touch and keyboard users. */
+@media (hover: hover) {
+  .bt-marquee:hover {
+    animation-play-state: paused;
+  }
+}
 .bt-marquee-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
@@ -94,13 +102,14 @@ img {
    by `N·w + N·gap`. So -50% lands exactly **gap/2 short** and the row jumps by that much every
    loop. Measured in Chrome on the logo strip: 20px of drift per cycle at gap:40px.
 
-   The fix used here: each copy is its own <ul>, and the animation moves ONE <ul> by
-   `calc(-100% - gap)`. Percentages resolve against the animated element, which is a single set, so
-   this is exact for any card widths. That matters because reviews vary in length.
+   The fix used here: each copy is its own <ul>, BOTH copies animate in lockstep, and each is
+   translated by `calc(-100% - gap)` where the percentage resolves against that set's own width.
+   Travel and copy offset derive from the same used width, so the loop is exact for any card
+   widths. Do not remove the animation from the clone; the two must move together.
 
-   Copies: the rule is `(k-1)·setWidth + (k-2)·gap >= viewport`. With 20 cards a set is ~6,800px,
-   far wider than any viewport, so **k=2 is provably enough here**. Short sets (a handful of cards)
-   would need k=3 or a gap appears at the loop point on wide monitors.
+   Copies: the rule is `(k-1)·setWidth + (k-2)·gap >= scroller width`. The marquee is clipped by
+   the 1200px page container, and a set of 15 cards is 5,380px, so **k=2 is provably enough**.
+   Short sets (a handful of cards) would need k=3 or a gap appears at the loop point.
 
    Direction: `animation-direction: reverse`, not a second keyframe.
    ⚠️ Must be listed in the prefers-reduced-motion block further down. */
@@ -115,7 +124,12 @@ img {
 }
 .bt-reviews-viewport {
   position: relative;
-  overflow: hidden;
+  /* `clip`, not `hidden`: a hidden box is still programmatically scrollable, so the day a card
+     gains a focusable, scrollIntoView on tab focus would shove the track sideways and permanently
+     misalign the marquee from its fades. `clip` removes the scroll mechanism outright. */
+  overflow: clip;
+  /* Self contain the z-indexed fade strips so they can never escape into an ancestor context. */
+  isolation: isolate;
 }
 /* Edge fade as OVERLAYS, deliberately not mask-image.
    ⚠️ Measured 2026-08-10 in headless Chrome: with mask-image on these viewports the marquee ran at
@@ -156,11 +170,25 @@ img {
   list-style: none;
   animation: bt-reviews-scroll var(--bt-rv-duration, 100s) linear infinite;
   animation-direction: var(--bt-rv-direction, normal);
-  /* Negative per row delays start each row mid cycle, so first paint is not three grid aligned
-     rows marching in step. ⚠️ Both sets in a row MUST carry the same delay or the copies desync
-     and the loop tears. The component passes it per row, so this holds by construction. */
+  /* Negative per row delays start each row mid cycle, so first paint is not two grid aligned
+     rows marching in step. Both sets in a row carry the same delay by construction. */
   animation-delay: var(--bt-rv-delay, 0s);
+  /* ⚠️ Created PAUSED, started together by the ready gate below. A CSS animation's clock starts
+     when the element is styled, and the clone sits ~15KB further down the streamed HTML, so on
+     some loads its animation began a few frames after its primary. Measured on 3 of 12 fresh
+     loads: a permanent 7 to 28px seam offset between the copies. Creating both paused and
+     unpausing them in ONE style recalc (review-wall.tsx flips data-reviews-ready in an effect)
+     gives all four sets the same start time. The negative delays still apply while paused, so
+     the first paint is desynced per row exactly as designed. Without JS the marquee stays
+     frozen, which costs nothing: the whole band is behind a Reveal that renders opacity 0
+     without JS anyway. */
+  animation-play-state: paused;
 }
+.bt-reviews[data-reviews-ready="true"] .bt-reviews-set {
+  animation-play-state: running;
+}
+/* ⚠️ Rule order is load bearing: every `paused` rule below must come AFTER the ready rule above,
+   so at equal specificity the pause wins whenever both apply. */
 /* The WCAG 2.2.2 control. See components/blocks/review-wall.tsx. */
 .bt-reviews[data-reviews-paused="true"] .bt-reviews-set {
   animation-play-state: paused;
@@ -210,22 +238,50 @@ img {
   .bt-reviews-set {
     animation: none;
   }
-  /* Stopping the animation alone would clip most of the reviews behind the mask with no way to
-     reach them. Hand the row back as a normal horizontal scroller instead, drop the edge fade so
-     nothing is cut off, hide the duplicate set (it has no purpose without motion) and hide the
-     pause button (there is nothing left to pause, and a dead control is worse than none). */
-  .bt-reviews-clone {
-    display: none;
-  }
+  /* Reduced motion gets a STATIC GRID, not a frozen marquee and not a horizontal scroller.
+     A frozen track clips most cards behind the container edge with no way to reach them, and the
+     first fallback here (three overflow-x scrollers) tested as exactly what a reduced motion user
+     did not ask for: an awkward sideways scroll region with no affordance. So: the clone and the
+     pause button disappear (no purpose without motion), the edge fades disappear (nothing to fade
+     into), each remaining set wraps into rows, and only the first few cards per set stay visible.
+     That reproduces the calm card grid this band had before it became a marquee. The rest of the
+     reviews are one click away behind "Read them all", which sits directly above in the heading. */
+  .bt-reviews-clone,
   .bt-reviews-pause {
     display: none;
   }
-  .bt-reviews-viewport {
-    overflow-x: auto;
+  /* ⚠️ Load bearing, found by two independent reviews: `.bt-reviews-track` keeps
+     `width: max-content` from the normal path, and a wrapping flex container inside a max-content
+     parent gets its full single line width, so `flex-wrap` NEVER engaged. On a phone with Reduce
+     Motion on, that rendered ONE clipped, unscrollable card per row (an SC 1.4.10 reflow failure)
+     while the comment below promised a grid. `display: contents` dissolves the track box so each
+     set becomes a block level flex container at viewport width, and the wrap actually happens. */
+  .bt-reviews-track {
+    display: contents;
+  }
+  .bt-reviews-set {
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  /* Below ~380px the container is narrower than the 340px card. Let the card shrink; the
+     line clamp absorbs the extra wraps and the fixed height holds the grid steady. */
+  .bt-reviews-set > li {
+    max-width: 100%;
+  }
+  /* 3 cards per set on desktop (3 x 340 + 2 x 20 = 1,060px fits the 1,136px container),
+     2 per set on phones. Two sets render, so the grid is 6 cards, or 4 on phones. */
+  .bt-reviews-set > li:nth-child(n + 4) {
+    display: none;
   }
   .bt-reviews-viewport::before,
   .bt-reviews-viewport::after {
     content: none;
+  }
+  @media (max-width: 560px) {
+    .bt-reviews-set > li:nth-child(n + 3) {
+      display: none;
+    }
   }
   html {
     scroll-behavior: auto;

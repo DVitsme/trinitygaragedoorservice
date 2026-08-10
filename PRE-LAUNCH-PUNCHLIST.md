@@ -70,7 +70,12 @@ Encoded tentatively in `lib/site.ts`. Plain-language versions live in **`CLIENT-
   they already have **5.0 from 597 reviews**. Claim, optimise, keep NAP identical to the site. **CLIENT.**
 - **P2-9 · Accessibility, broader WCAG 2.1 AA pass [HIGH-RISK].** Contrast failures are fixed;
   still to do: keyboard focus audit, an **accessibility statement** page, and the optional Radix
-  NavigationMenu/Accordion upgrade (G8). **Do NOT install an accessibility overlay widget** —
+  NavigationMenu/Accordion upgrade (G8). 🆕 **2026-08-10, from the review wall audit: the partner
+  logo marquee on the homepage fails WCAG 2.2.2** — it auto scrolls indefinitely with **no pause
+  mechanism**. The review wall beside it has a compliant pause button; the logo strip got a
+  hover pause as a stopgap, but hover is unavailable to touch and keyboard users, so it still
+  needs a visible control (or wire it into a shared page pause). pa11y will NOT flag this; it
+  needs a human tick. **Do NOT install an accessibility overlay widget** —
   plaintiffs specifically target overlay sites. **DEV.**
 - **P2-10 · Core Web Vitals pass.** Not yet measured. Watch the hero video weight and image sizing
   (target LCP ≤2.5s, INP ≤200ms, CLS ≤0.1). **DEV.**
