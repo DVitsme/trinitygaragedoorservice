@@ -45,13 +45,22 @@ const COUNTY_URL = "https://www2.census.gov/geo/tiger/GENZ2023/shp/cb_2023_us_co
 const ZCTA_URL = "https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_zcta520_500k.zip";
 const GAZ_URL = "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_gaz_place_12.txt";
 
-/** FIPS for the five counties in the zone. STATEFP 12 = Florida. */
+/**
+ * FIPS for the counties in the zone. STATEFP 12 = Florida.
+ *
+ * ⚠ Manatee is the odd one out. The first five are Trinity's verified Housecall Pro zone. Manatee
+ * was added 2026-08-10 by client direction and covers only the three zips north of the Manatee
+ * River (Parrish, Palmetto, Ellenton), not the whole county. The outline drawn here is still the
+ * full county boundary, because Census publishes counties, not half counties. See the _source note
+ * in lib/service-area-zips.json and CLIENT-ASKS #6b before treating it as settled.
+ */
 const COUNTIES = [
   { fips: "12057", name: "Hillsborough" },
   { fips: "12103", name: "Pinellas" },
   { fips: "12101", name: "Pasco" },
   { fips: "12053", name: "Hernando" },
   { fips: "12105", name: "Polk" },
+  { fips: "12081", name: "Manatee" },
 ];
 
 /**
@@ -69,6 +78,9 @@ const PIN_CITIES = [
   { name: "Palm Harbor", slug: "palm-harbor", gaz: "Palm Harbor CDP" },
   { name: "Oldsmar", slug: "oldsmar", gaz: "Oldsmar city" },
   { name: "Tampa", slug: "tampa", gaz: "Tampa city" },
+  // Labelled for the town, not the page. The page covers north Manatee generally, but a pin has to
+  // land somewhere real, and Palmetto is the anchor town and the closest point of the county to Lutz.
+  { name: "Palmetto", slug: "manatee-county", gaz: "Palmetto city" },
 ];
 
 /** Their actual dispatch address, verified from the Housecall Pro company record. */
@@ -254,6 +266,13 @@ fs.writeFileSync(
     _note:
       "Paths are already projected to viewBox coordinates (Web Mercator). No projection or map library is needed at runtime. SERVER ONLY: importing this from a client component ships every path to the browser.",
     viewBox: `0 0 ${VW} ${VH}`,
+    /**
+     * Counts for the map caption. Emitted rather than hardcoded in the component, because they
+     * WERE hardcoded ("130 Zip Codes, 5 Counties") and silently went stale the first time the zone
+     * changed. Anything that states a number about the zone should read it from here.
+     */
+    zipCount: Object.keys(zipData.zips).length,
+    countyCount: counties.length,
     footprint,
     counties,
     cities,

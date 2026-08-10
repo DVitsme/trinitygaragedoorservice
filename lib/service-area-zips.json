@@ -1,137 +1,543 @@
 {
-  "_source": "Trinity's Housecall Pro service zone 'Pasco, Hillsborough, Pinellas, Hernando' (GET /company + GET /service_zones), captured 2026-07-28. This is the operational zone: 5 technicians assigned, trip charge $0. A second saved zone of 268 zips has no technicians assigned and is treated as legacy pending client confirmation.",
+  "_source": "Trinity's Housecall Pro service zone 'Pasco, Hillsborough, Pinellas, Hernando' (GET /company + GET /service_zones), captured 2026-07-28. This is the operational zone: 5 technicians assigned, trip charge $0. A second saved zone of 268 zips has no technicians assigned and is treated as legacy pending client confirmation. ⚠ EXCEPTION, added 2026-08-10 by client direction and NOT from Housecall Pro: 34219 Parrish, 34221 Palmetto and 34222 Ellenton (Manatee County). These three are the only Manatee zips north of the Manatee River and are roughly 56 to 59 road miles from the Lutz office. They are a business decision, not verified operational data, and CLIENT-ASKS #6b is still open on whether anything south of Hillsborough is genuinely served. Remove these three to return the file to the verified 130.",
   "_note": "USPS primary city names. Use for the service-area checker; no Google Maps key required.",
-  "_nonResidential": ["33620", "33621", "33744"],
+  "_nonResidential": [
+    "33620",
+    "33621",
+    "33744"
+  ],
   "zips": {
-    "33510": { "city": "Brandon", "county": "Hillsborough" },
-    "33511": { "city": "Brandon", "county": "Hillsborough" },
-    "33523": { "city": "Dade City", "county": "Pasco" },
-    "33525": { "city": "Dade City", "county": "Pasco" },
-    "33527": { "city": "Dover", "county": "Hillsborough" },
-    "33534": { "city": "Gibsonton", "county": "Hillsborough" },
-    "33540": { "city": "Zephyrhills", "county": "Pasco" },
-    "33541": { "city": "Zephyrhills", "county": "Pasco" },
-    "33542": { "city": "Zephyrhills", "county": "Pasco" },
-    "33543": { "city": "Wesley Chapel", "county": "Pasco" },
-    "33544": { "city": "Wesley Chapel", "county": "Pasco" },
-    "33545": { "city": "Wesley Chapel", "county": "Pasco" },
-    "33548": { "city": "Lutz", "county": "Hillsborough" },
-    "33549": { "city": "Lutz", "county": "Hillsborough" },
-    "33556": { "city": "Odessa", "county": "Hillsborough" },
-    "33558": { "city": "Lutz", "county": "Hillsborough" },
-    "33559": { "city": "Lutz", "county": "Hillsborough" },
-    "33563": { "city": "Plant City", "county": "Hillsborough" },
-    "33565": { "city": "Plant City", "county": "Hillsborough" },
-    "33569": { "city": "Riverview", "county": "Hillsborough" },
-    "33570": { "city": "Ruskin", "county": "Hillsborough" },
-    "33572": { "city": "Apollo Beach", "county": "Hillsborough" },
-    "33573": { "city": "Sun City Center", "county": "Hillsborough" },
-    "33576": { "city": "San Antonio", "county": "Pasco" },
-    "33578": { "city": "Riverview", "county": "Hillsborough" },
-    "33584": { "city": "Seffner", "county": "Hillsborough" },
-    "33592": { "city": "Thonotosassa", "county": "Hillsborough" },
-    "33594": { "city": "Valrico", "county": "Hillsborough" },
-    "33596": { "city": "Valrico", "county": "Hillsborough" },
-    "33602": { "city": "Tampa", "county": "Hillsborough" },
-    "33603": { "city": "Tampa", "county": "Hillsborough" },
-    "33604": { "city": "Tampa", "county": "Hillsborough" },
-    "33605": { "city": "Tampa", "county": "Hillsborough" },
-    "33606": { "city": "Tampa", "county": "Hillsborough" },
-    "33607": { "city": "Tampa", "county": "Hillsborough" },
-    "33609": { "city": "Tampa", "county": "Hillsborough" },
-    "33610": { "city": "Tampa", "county": "Hillsborough" },
-    "33611": { "city": "Tampa", "county": "Hillsborough" },
-    "33612": { "city": "Tampa", "county": "Hillsborough" },
-    "33613": { "city": "Tampa", "county": "Hillsborough" },
-    "33614": { "city": "Tampa", "county": "Hillsborough" },
-    "33615": { "city": "Tampa", "county": "Hillsborough" },
-    "33616": { "city": "Tampa", "county": "Hillsborough" },
-    "33617": { "city": "Tampa", "county": "Hillsborough" },
-    "33618": { "city": "Tampa", "county": "Hillsborough" },
-    "33619": { "city": "Tampa", "county": "Hillsborough" },
-    "33620": { "city": "Tampa", "county": "Hillsborough" },
-    "33621": { "city": "Tampa", "county": "Hillsborough" },
-    "33624": { "city": "Tampa", "county": "Hillsborough" },
-    "33625": { "city": "Tampa", "county": "Hillsborough" },
-    "33626": { "city": "Tampa", "county": "Hillsborough" },
-    "33629": { "city": "Tampa", "county": "Hillsborough" },
-    "33634": { "city": "Tampa", "county": "Hillsborough" },
-    "33635": { "city": "Tampa", "county": "Hillsborough" },
-    "33637": { "city": "Tampa", "county": "Hillsborough" },
-    "33647": { "city": "Tampa", "county": "Hillsborough" },
-    "33701": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33702": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33703": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33704": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33705": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33706": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33707": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33708": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33709": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33710": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33711": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33712": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33713": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33714": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33715": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33716": { "city": "St. Petersburg", "county": "Pinellas" },
-    "33744": { "city": "Bay Pines", "county": "Pinellas" },
-    "33755": { "city": "Clearwater", "county": "Pinellas" },
-    "33756": { "city": "Clearwater", "county": "Pinellas" },
-    "33759": { "city": "Clearwater", "county": "Pinellas" },
-    "33760": { "city": "Clearwater", "county": "Pinellas" },
-    "33761": { "city": "Clearwater", "county": "Pinellas" },
-    "33762": { "city": "Clearwater", "county": "Pinellas" },
-    "33763": { "city": "Clearwater", "county": "Pinellas" },
-    "33764": { "city": "Clearwater", "county": "Pinellas" },
-    "33765": { "city": "Clearwater", "county": "Pinellas" },
-    "33767": { "city": "Clearwater Beach", "county": "Pinellas" },
-    "33770": { "city": "Largo", "county": "Pinellas" },
-    "33771": { "city": "Largo", "county": "Pinellas" },
-    "33772": { "city": "Seminole", "county": "Pinellas" },
-    "33773": { "city": "Largo", "county": "Pinellas" },
-    "33774": { "city": "Largo", "county": "Pinellas" },
-    "33776": { "city": "Seminole", "county": "Pinellas" },
-    "33777": { "city": "Seminole", "county": "Pinellas" },
-    "33778": { "city": "Largo", "county": "Pinellas" },
-    "33781": { "city": "Pinellas Park", "county": "Pinellas" },
-    "33782": { "city": "Pinellas Park", "county": "Pinellas" },
-    "33785": { "city": "Indian Rocks Beach", "county": "Pinellas" },
-    "33786": { "city": "Belleair Beach", "county": "Pinellas" },
-    "33801": { "city": "Lakeland", "county": "Polk" },
-    "33803": { "city": "Lakeland", "county": "Polk" },
-    "33805": { "city": "Lakeland", "county": "Polk" },
-    "33810": { "city": "Lakeland", "county": "Polk" },
-    "33815": { "city": "Lakeland", "county": "Polk" },
-    "34601": { "city": "Brooksville", "county": "Hernando" },
-    "34602": { "city": "Brooksville", "county": "Hernando" },
-    "34604": { "city": "Brooksville", "county": "Hernando" },
-    "34606": { "city": "Spring Hill", "county": "Hernando" },
-    "34607": { "city": "Spring Hill", "county": "Hernando" },
-    "34608": { "city": "Spring Hill", "county": "Hernando" },
-    "34609": { "city": "Spring Hill", "county": "Hernando" },
-    "34610": { "city": "Shady Hills", "county": "Pasco" },
-    "34613": { "city": "Brooksville", "county": "Hernando" },
-    "34614": { "city": "Brooksville", "county": "Hernando" },
-    "34637": { "city": "Land O Lakes", "county": "Pasco" },
-    "34638": { "city": "Land O Lakes", "county": "Pasco" },
-    "34639": { "city": "Land O Lakes", "county": "Pasco" },
-    "34652": { "city": "New Port Richey", "county": "Pasco" },
-    "34653": { "city": "New Port Richey", "county": "Pasco" },
-    "34654": { "city": "New Port Richey", "county": "Pasco" },
-    "34655": { "city": "New Port Richey", "county": "Pasco" },
-    "34667": { "city": "Hudson", "county": "Pasco" },
-    "34668": { "city": "Port Richey", "county": "Pasco" },
-    "34669": { "city": "Hudson", "county": "Pasco" },
-    "34677": { "city": "Oldsmar", "county": "Pinellas" },
-    "34683": { "city": "Palm Harbor", "county": "Pinellas" },
-    "34684": { "city": "Palm Harbor", "county": "Pinellas" },
-    "34685": { "city": "Palm Harbor", "county": "Pinellas" },
-    "34688": { "city": "Tarpon Springs", "county": "Pinellas" },
-    "34689": { "city": "Tarpon Springs", "county": "Pinellas" },
-    "34690": { "city": "Holiday", "county": "Pasco" },
-    "34691": { "city": "Holiday", "county": "Pasco" },
-    "34695": { "city": "Safety Harbor", "county": "Pinellas" },
-    "34698": { "city": "Dunedin", "county": "Pinellas" }
+    "33510": {
+      "city": "Brandon",
+      "county": "Hillsborough"
+    },
+    "33511": {
+      "city": "Brandon",
+      "county": "Hillsborough"
+    },
+    "33523": {
+      "city": "Dade City",
+      "county": "Pasco"
+    },
+    "33525": {
+      "city": "Dade City",
+      "county": "Pasco"
+    },
+    "33527": {
+      "city": "Dover",
+      "county": "Hillsborough"
+    },
+    "33534": {
+      "city": "Gibsonton",
+      "county": "Hillsborough"
+    },
+    "33540": {
+      "city": "Zephyrhills",
+      "county": "Pasco"
+    },
+    "33541": {
+      "city": "Zephyrhills",
+      "county": "Pasco"
+    },
+    "33542": {
+      "city": "Zephyrhills",
+      "county": "Pasco"
+    },
+    "33543": {
+      "city": "Wesley Chapel",
+      "county": "Pasco"
+    },
+    "33544": {
+      "city": "Wesley Chapel",
+      "county": "Pasco"
+    },
+    "33545": {
+      "city": "Wesley Chapel",
+      "county": "Pasco"
+    },
+    "33548": {
+      "city": "Lutz",
+      "county": "Hillsborough"
+    },
+    "33549": {
+      "city": "Lutz",
+      "county": "Hillsborough"
+    },
+    "33556": {
+      "city": "Odessa",
+      "county": "Hillsborough"
+    },
+    "33558": {
+      "city": "Lutz",
+      "county": "Hillsborough"
+    },
+    "33559": {
+      "city": "Lutz",
+      "county": "Hillsborough"
+    },
+    "33563": {
+      "city": "Plant City",
+      "county": "Hillsborough"
+    },
+    "33565": {
+      "city": "Plant City",
+      "county": "Hillsborough"
+    },
+    "33569": {
+      "city": "Riverview",
+      "county": "Hillsborough"
+    },
+    "33570": {
+      "city": "Ruskin",
+      "county": "Hillsborough"
+    },
+    "33572": {
+      "city": "Apollo Beach",
+      "county": "Hillsborough"
+    },
+    "33573": {
+      "city": "Sun City Center",
+      "county": "Hillsborough"
+    },
+    "33576": {
+      "city": "San Antonio",
+      "county": "Pasco"
+    },
+    "33578": {
+      "city": "Riverview",
+      "county": "Hillsborough"
+    },
+    "33584": {
+      "city": "Seffner",
+      "county": "Hillsborough"
+    },
+    "33592": {
+      "city": "Thonotosassa",
+      "county": "Hillsborough"
+    },
+    "33594": {
+      "city": "Valrico",
+      "county": "Hillsborough"
+    },
+    "33596": {
+      "city": "Valrico",
+      "county": "Hillsborough"
+    },
+    "33602": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33603": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33604": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33605": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33606": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33607": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33609": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33610": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33611": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33612": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33613": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33614": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33615": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33616": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33617": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33618": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33619": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33620": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33621": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33624": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33625": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33626": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33629": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33634": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33635": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33637": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33647": {
+      "city": "Tampa",
+      "county": "Hillsborough"
+    },
+    "33701": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33702": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33703": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33704": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33705": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33706": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33707": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33708": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33709": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33710": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33711": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33712": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33713": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33714": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33715": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33716": {
+      "city": "St. Petersburg",
+      "county": "Pinellas"
+    },
+    "33744": {
+      "city": "Bay Pines",
+      "county": "Pinellas"
+    },
+    "33755": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33756": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33759": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33760": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33761": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33762": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33763": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33764": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33765": {
+      "city": "Clearwater",
+      "county": "Pinellas"
+    },
+    "33767": {
+      "city": "Clearwater Beach",
+      "county": "Pinellas"
+    },
+    "33770": {
+      "city": "Largo",
+      "county": "Pinellas"
+    },
+    "33771": {
+      "city": "Largo",
+      "county": "Pinellas"
+    },
+    "33772": {
+      "city": "Seminole",
+      "county": "Pinellas"
+    },
+    "33773": {
+      "city": "Largo",
+      "county": "Pinellas"
+    },
+    "33774": {
+      "city": "Largo",
+      "county": "Pinellas"
+    },
+    "33776": {
+      "city": "Seminole",
+      "county": "Pinellas"
+    },
+    "33777": {
+      "city": "Seminole",
+      "county": "Pinellas"
+    },
+    "33778": {
+      "city": "Largo",
+      "county": "Pinellas"
+    },
+    "33781": {
+      "city": "Pinellas Park",
+      "county": "Pinellas"
+    },
+    "33782": {
+      "city": "Pinellas Park",
+      "county": "Pinellas"
+    },
+    "33785": {
+      "city": "Indian Rocks Beach",
+      "county": "Pinellas"
+    },
+    "33786": {
+      "city": "Belleair Beach",
+      "county": "Pinellas"
+    },
+    "33801": {
+      "city": "Lakeland",
+      "county": "Polk"
+    },
+    "33803": {
+      "city": "Lakeland",
+      "county": "Polk"
+    },
+    "33805": {
+      "city": "Lakeland",
+      "county": "Polk"
+    },
+    "33810": {
+      "city": "Lakeland",
+      "county": "Polk"
+    },
+    "33815": {
+      "city": "Lakeland",
+      "county": "Polk"
+    },
+    "34219": {
+      "city": "Parrish",
+      "county": "Manatee"
+    },
+    "34221": {
+      "city": "Palmetto",
+      "county": "Manatee"
+    },
+    "34222": {
+      "city": "Ellenton",
+      "county": "Manatee"
+    },
+    "34601": {
+      "city": "Brooksville",
+      "county": "Hernando"
+    },
+    "34602": {
+      "city": "Brooksville",
+      "county": "Hernando"
+    },
+    "34604": {
+      "city": "Brooksville",
+      "county": "Hernando"
+    },
+    "34606": {
+      "city": "Spring Hill",
+      "county": "Hernando"
+    },
+    "34607": {
+      "city": "Spring Hill",
+      "county": "Hernando"
+    },
+    "34608": {
+      "city": "Spring Hill",
+      "county": "Hernando"
+    },
+    "34609": {
+      "city": "Spring Hill",
+      "county": "Hernando"
+    },
+    "34610": {
+      "city": "Shady Hills",
+      "county": "Pasco"
+    },
+    "34613": {
+      "city": "Brooksville",
+      "county": "Hernando"
+    },
+    "34614": {
+      "city": "Brooksville",
+      "county": "Hernando"
+    },
+    "34637": {
+      "city": "Land O Lakes",
+      "county": "Pasco"
+    },
+    "34638": {
+      "city": "Land O Lakes",
+      "county": "Pasco"
+    },
+    "34639": {
+      "city": "Land O Lakes",
+      "county": "Pasco"
+    },
+    "34652": {
+      "city": "New Port Richey",
+      "county": "Pasco"
+    },
+    "34653": {
+      "city": "New Port Richey",
+      "county": "Pasco"
+    },
+    "34654": {
+      "city": "New Port Richey",
+      "county": "Pasco"
+    },
+    "34655": {
+      "city": "New Port Richey",
+      "county": "Pasco"
+    },
+    "34667": {
+      "city": "Hudson",
+      "county": "Pasco"
+    },
+    "34668": {
+      "city": "Port Richey",
+      "county": "Pasco"
+    },
+    "34669": {
+      "city": "Hudson",
+      "county": "Pasco"
+    },
+    "34677": {
+      "city": "Oldsmar",
+      "county": "Pinellas"
+    },
+    "34683": {
+      "city": "Palm Harbor",
+      "county": "Pinellas"
+    },
+    "34684": {
+      "city": "Palm Harbor",
+      "county": "Pinellas"
+    },
+    "34685": {
+      "city": "Palm Harbor",
+      "county": "Pinellas"
+    },
+    "34688": {
+      "city": "Tarpon Springs",
+      "county": "Pinellas"
+    },
+    "34689": {
+      "city": "Tarpon Springs",
+      "county": "Pinellas"
+    },
+    "34690": {
+      "city": "Holiday",
+      "county": "Pasco"
+    },
+    "34691": {
+      "city": "Holiday",
+      "county": "Pasco"
+    },
+    "34695": {
+      "city": "Safety Harbor",
+      "county": "Pinellas"
+    },
+    "34698": {
+      "city": "Dunedin",
+      "county": "Pinellas"
+    }
   }
 }

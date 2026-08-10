@@ -50,6 +50,7 @@ const areaChips = [
   { label: "Wesley Chapel", href: "/service-areas/wesley-chapel/" },
   { label: "Palm Harbor", href: "/service-areas/palm-harbor/" },
   { label: "Oldsmar", href: "/service-areas/oldsmar/" },
+  { label: "North Manatee", href: "/service-areas/manatee-county/" },
 ];
 
 const eyebrowCls = "text-[13px] font-extrabold uppercase tracking-[0.16em] text-accent";
@@ -187,7 +188,7 @@ export default function ServicesHubPage() {
               <div>
                 <div className={eyebrowCls}>Where We Work</div>
                 <h2 className={`${h2Cls} text-ink`}>All Over Tampa Bay</h2>
-                <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, and the towns around them. Not sure you&apos;re in range? Give us a call and ask.</p>
+                <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the north end of Manatee, and the towns around them. Not sure you&apos;re in range? Give us a call and ask.</p>
                 <div className="mt-[22px] flex flex-wrap gap-2.5">
                   {areaChips.map((a) => (
                     <Link key={a.label} href={a.href} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">

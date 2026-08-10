@@ -25,6 +25,7 @@ const areaChips = [
   { label: "Palm Harbor", href: "/service-areas/palm-harbor/" },
   { label: "Oldsmar", href: "/service-areas/oldsmar/" },
   { label: "Tampa", href: "/service-areas/tampa/" },
+  { label: "North Manatee", href: "/service-areas/manatee-county/" },
 ];
 
 const steps: { n: string; title: string; body: string }[] = [
@@ -157,7 +158,7 @@ export default function ContactPage() {
                 <div className={eyebrowCls}>Where We Work</div>
                 <h2 className="m-0 mt-3 font-display text-[clamp(24px,3vw,36px)] font-extrabold uppercase leading-[1.04] text-ink">We&apos;re Mobile, So We Come To You</h2>
                 <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">
-                  We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the towns nearby. Find yours on our{" "}
+                  We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the north end of Manatee and the towns nearby. Find yours on our{" "}
                   <Link href={ROUTES.serviceAreas} className="font-bold text-accent no-underline">service areas</Link> page.
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2.5">

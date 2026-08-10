@@ -12,7 +12,7 @@ import { Reveal } from "@/components/blocks/reveal";
 export const metadata: Metadata = {
   title: "Service Areas | Trinity Garage Door Service Tampa Bay",
   description:
-    "Garage door service across Tampa Bay: Lutz, Land O' Lakes, Wesley Chapel, Palm Harbor, Oldsmar, and Tampa. Same day, family owned. Call (813) 279-6785.",
+    "Garage door service across Tampa Bay: Lutz, Land O' Lakes, Wesley Chapel, Palm Harbor, Oldsmar, Tampa, and north Manatee. Same day, family owned. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/service-areas/" },
 };
 
@@ -32,6 +32,7 @@ const towns = [
   { name: "Palm Harbor", slug: "palm-harbor", blurb: "A Gulf coast community on St. Joseph Sound, where salt air is rough on door hardware and rollers seize sooner." },
   { name: "Oldsmar", slug: "oldsmar", blurb: "A bayfront city at the head of Old Tampa Bay, with plenty of waterfront and canal homes that take a beating from the humidity." },
   { name: "Tampa", slug: "tampa", blurb: "The heart of the bay, where historic Hyde Park and Ybor sit alongside new construction and waterfront South Tampa." },
+  { name: "North Manatee", slug: "manatee-county", blurb: "Palmetto, Parrish and Ellenton, north of the Manatee River, where new neighborhoods have gone up fast." },
 ];
 
 const whyCards: { icon: ReactNode; title: string; body: string }[] = [
@@ -76,7 +77,7 @@ export default function ServiceAreasHubPage() {
             Garage Door Service <span className="inline-block bg-accent px-3 text-white">Across Tampa Bay</span>
           </h1>
           <p className="mt-6 max-w-[660px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">
-            Trinity is based right here in Tampa Bay, and we cover a good stretch of it. If your garage door quits in Hillsborough, Pinellas, Pasco, Hernando or Polk county, there&apos;s a strong chance we can be at your house the same day. Here&apos;s where we work and how to tell if you&apos;re in range.
+            Trinity is based right here in Tampa Bay, and we cover a good stretch of it. If your garage door quits in Hillsborough, Pinellas, Pasco, Hernando or Polk county, or the north end of Manatee, there&apos;s a strong chance we can be at your house the same day. Here&apos;s where we work and how to tell if you&apos;re in range.
           </p>
           <div className="mt-[30px] flex flex-wrap gap-[13px]">
             <a href="#towns" className="rounded-[7px] bg-accent px-8 py-[17px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline shadow-[0_12px_26px_rgba(184,32,42,0.4)] hover:bg-accent-dark">See The Towns</a>
@@ -94,8 +95,8 @@ export default function ServiceAreasHubPage() {
         <div className="mx-auto max-w-[900px] px-5 pb-2.5 pt-20 text-center nav:px-8">
           <Reveal>
             <div className={eyebrowCls}>The Towns We Cover</div>
-            <h2 className={`${h2Cls} text-ink`}>Six Towns, Plus The Neighborhoods Around Them</h2>
-            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] leading-[1.62] text-body">We focus on six towns and the areas around each one. Find yours below to see what we handle where you live, or call and we&apos;ll tell you straight whether you&apos;re in range.</p>
+            <h2 className={`${h2Cls} text-ink`}>Seven Areas, Plus The Neighborhoods Around Them</h2>
+            <p className="mx-auto mt-4 max-w-[640px] text-[17.5px] leading-[1.62] text-body">We focus on seven areas and the ground around each one. Find yours below to see what we handle where you live, or call and we&apos;ll tell you straight whether you&apos;re in range.</p>
           </Reveal>
         </div>
       </section>
@@ -169,10 +170,10 @@ export default function ServiceAreasHubPage() {
                 <div>
                   <div className={eyebrowCls}>Where We Work</div>
                   <h2 className={`${h2Cls} text-ink`}>All Over Tampa Bay</h2>
-                  <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, and the towns around them. That is 130 zip codes and 41 towns in all.</p>
+                  <p className="mt-3.5 text-[16.5px] leading-[1.6] text-body">We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the north end of Manatee, and the towns around them. That is 133 zip codes and 44 towns in all.</p>
                   <ServiceAreaChecker className="mt-[22px]" />
                   <div className="mt-[22px] flex flex-wrap gap-2.5">
-                    {[towns[5], towns[0], towns[1], towns[2], towns[3], towns[4]].map((a) => (
+                    {[towns[5], towns[0], towns[1], towns[2], towns[3], towns[4], towns[6]].map((a) => (
                       <Link key={a.slug} href={`/service-areas/${a.slug}/`} className="rounded-[6px] border-2 border-ink px-4 py-2.5 text-[14px] font-bold text-ink no-underline transition-colors hover:bg-ink hover:text-white">{a.name}</Link>
                     ))}
                   </div>

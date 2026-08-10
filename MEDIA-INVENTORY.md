@@ -6,6 +6,25 @@ Compiled 2026-07-28. Live: https://trinity-garage-door.derrick-2fd.workers.dev
 > **The AI-generated owner headshot is gone.** It has been replaced sitewide with the real studio
 > portrait of Jason Grunder found in Trinity's own WordPress media library.
 
+## 📦 Google Business Profile export, 2026-08-10
+
+Pulled from the client's own Takeout, so provenance is certain rather than scraped.
+
+| Asset | Count | Notes |
+|---|---|---|
+| Photos (full resolution JPEG) | **42** | Across all three listings, with a matching `media-*.json` for each. More than the 29 visible on the public Lutz listing, because it covers all three profiles |
+| **Google Posts** | **529** | 263 on Lutz, 266 on Oldsmar. Nobody on our side knew these existed |
+
+**The 529 posts are the find.** They are real, dated, already published marketing copy in Trinity's
+own voice, most with a CALL action, running to mid 2026. Two uses worth raising:
+1. **Blog and social source material.** The monthly blog workflow (`LAUNCH-TODO` 6.7) currently
+   depends on Annek emailing copy. There are 529 posts sitting here already.
+2. **They stop at Oldsmar and Lutz.** The Tampa listing has zero posts, despite carrying 84 reviews.
+
+⚠️ **The export is gitignored and local only** (582 MB, includes reviewer names). It lives at
+`takeout-20260810T175557Z-1-001/`. Do not commit it, and do not assume it will still be on disk.
+
+
 ## What was gathered
 
 **1,449 files / 751 MB** staged in `.media-hunt/` (gitignored working set; the curated subset lives
@@ -17,7 +36,7 @@ in `public/`).
 | Instagram (via Picnob) | 690 | 457 posts, pre-sorted into `owner-jason`, `team`, `technicians-and-staff`, `trucks-and-branding`, `completed-doors`, `before-after`, `ai-illustrations` |
 | Video | 138 | 2 site videos + 96 Instagram clips + posters |
 | Directories (Angi, Facebook, Nextdoor, BBB, HomeAdvisor) | 45 | **Angi holds the highest-resolution originals anywhere**, up to 6649×4433 |
-| Google Business Profile | 29 | 14 owner-posted / 15 customer-posted, provenance determined via the "By owner" tab |
+| Google Business Profile | 29 | 14 owner-posted / 15 customer-posted, provenance determined via the "By owner" tab. ⚠️ **Superseded 2026-08-10 by the profile export**, see below |
 | Yelp | 1 | Hard-blocked by DataDome; only the logo was retrievable |
 
 ## What was placed

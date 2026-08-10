@@ -57,6 +57,22 @@ export const SITE = {
    * book Monday to Saturday; their own API returns **242 booking windows over 21 days with zero on
    * a Saturday**. Publishing Saturday would send people to an empty calendar. Blocked on
    * `CLIENT-ASKS` #4a: either Jason adds Saturday hours in Housecall Pro, or this stays as is.
+   *
+   * ✅ **`opens` corrected 08:00 to 07:00 on 2026-08-10**, from the client's own Google Business
+   * Profile Takeout export. **All three of their Google listings publish 07:00 to 21:00, Monday to
+   * Saturday.** Two things follow:
+   *   1. `closes` and `schemaDays` were already right, so only the open time was wrong. It was
+   *      understating them by an hour against the listing Google itself cross-checks us on.
+   *   2. It is independently corroborated by a real review in that same export: *"I called them
+   *      right at 7A.M. and spoke to a gentleman"*.
+   *
+   * ⚠️ **The user facing wording was NOT changed.** "We answer the phones till 9pm" is the exact
+   * phrasing Derrick confirmed with Simone, and 7am is an unadvertised selling point rather than a
+   * correction. Raising it is `CLIENT-ASKS` #4c. Do not reword these strings without asking.
+   *
+   * ⚠️ **Saturday is now a live contradiction, not an open question.** Google publicly says they
+   * are open Saturday 07:00 to 21:00. Housecall Pro has zero Saturday booking windows. Both cannot
+   * be right, and the schema follows Google because that is the public claim they already make.
    */
   hours: {
     /** When a human answers the phone. Short form, for badges and inline CTAs. */
@@ -66,8 +82,8 @@ export const SITE = {
     /** When a customer can actually book a slot online. */
     bookingLabel: "8am to 4pm",
     bookingDays: "Monday to Friday",
-    /** For JSON-LD. 24 hour clock. */
-    opens: "08:00",
+    /** For JSON-LD. 24 hour clock. Matches all three Google Business Profile listings. */
+    opens: "07:00",
     closes: "21:00",
     schemaDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] as string[],
   },
@@ -194,8 +210,30 @@ export const SERVICE_OPTIONS = [
 export const STATS = [
   { value: String(new Date().getFullYear() - FOUNDED_YEAR), accent: "+", label: "Years of Service" },
   { value: "12k", accent: "+", label: "Doors Serviced" },
-  { value: "4.9", accent: "★", label: "Average Rating" },
+  { value: "5.0", accent: "★", label: "Average Rating" },
   { value: "6", accent: "", label: "Cities Covered" },
+] as const;
+
+/**
+ * Counties for `areaServed` in the LocalBusiness schema.
+ *
+ * Source: the client's own Google Business Profile export, 2026-08-10. Their **Tampa** listing
+ * declares its service area as exactly these five counties, which is the most authoritative public
+ * statement of coverage that exists, and it is the record Google cross-checks our markup against.
+ *
+ * Replaces an `areaServed` of six cities, which described 6 of the 44 towns actually covered.
+ *
+ * ⚠️ **Manatee is deliberately ABSENT**, even though the site now has a North Manatee page. None of
+ * their three Google listings names Manatee or Sarasota anywhere, so asserting it here would put our
+ * markup in direct conflict with their own Google record. Add it once `CLIENT-ASKS` #6b is answered
+ * and the listings are updated to match, not before.
+ */
+export const COUNTIES_SERVED = [
+  "Hillsborough County",
+  "Pinellas County",
+  "Pasco County",
+  "Hernando County",
+  "Polk County",
 ] as const;
 
 /** The six locked service-area cities (ARCHITECTURE-PROPOSAL.md). */
@@ -335,6 +373,12 @@ export const AREAS = [
   { name: "Palm Harbor", slug: "palm-harbor", county: "Pinellas", blurb: "A Gulf coast community on St. Joseph Sound, where salt air is rough on door hardware." },
   { name: "Oldsmar", slug: "oldsmar", county: "Pinellas", blurb: "A bayfront city at the head of Old Tampa Bay, with plenty of waterfront and canal homes." },
   { name: "Tampa", slug: "tampa", county: "Hillsborough", blurb: "The heart of the bay, where historic Hyde Park and Ybor meet new construction and waterfront South Tampa." },
+  /**
+   * ⚠ The only entry here that is NOT from the verified Housecall Pro zone. Added 2026-08-10 by
+   * client direction, and scoped to the three zips north of the Manatee River only. See the
+   * _source note in lib/service-area-zips.json and CLIENT-ASKS #6b.
+   */
+  { name: "North Manatee", slug: "manatee-county", county: "Manatee", blurb: "The towns north of the Manatee River, Palmetto, Parrish and Ellenton, where new construction has come in fast." },
 ] as const;
 
 /** The 8 real, verbatim Google reviews (handoff 02; keep names exactly, incl. "E R"). */

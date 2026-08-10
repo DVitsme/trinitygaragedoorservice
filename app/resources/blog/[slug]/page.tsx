@@ -116,7 +116,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               We&apos;re Local, And We Answer The Phone
             </h2>
             <p className="mt-3 text-[16px] leading-[1.6] text-[#a8a8a8]">
-              Serving Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, and Tampa. Free estimates, and no pressure to buy anything you don&apos;t need.
+              Serving Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, Tampa, and north Manatee. Free estimates, and no pressure to buy anything you don&apos;t need.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href={SITE.phoneHref} className="inline-flex items-center gap-2.5 rounded-[7px] bg-accent px-7 py-[15px] text-[15px] font-extrabold uppercase tracking-[0.04em] text-white no-underline hover:bg-accent-dark">

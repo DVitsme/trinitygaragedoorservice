@@ -32,6 +32,7 @@ const data: CityAreaData = {
       { label: "Oldsmar", href: "/service-areas/oldsmar/" },
       { label: "Carrollwood" },
       { label: "Westchase" },
+      { label: "North Manatee", href: "/service-areas/manatee-county/" },
     ],
   },
   closingLead:

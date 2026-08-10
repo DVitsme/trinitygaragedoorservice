@@ -11,6 +11,7 @@ import { TrustStrip } from "@/components/blocks/trust-strip";
 import { ServiceAreaMap } from "@/components/blocks/service-area-map";
 import { ServiceAreaProvider, ServiceAreaChecker, ServiceAreaMapMarker } from "@/components/service-area-checker";
 import { Reveal } from "@/components/blocks/reveal";
+import { ReviewMarquee } from "@/components/blocks/review-marquee";
 
 export const metadata: Metadata = {
   title: "Garage Door Repair Tampa Bay | Trinity Garage Door Service",
@@ -35,15 +36,17 @@ const whyCards: { icon: ReactNode; title: string; body: string }[] = [
  *  - Years:  derived from SITE.foundedYear, so it cannot go stale.
  *  - 12k+:   lifetime figure. Housecall Pro only holds records from Oct 2019 (7,673 jobs since),
  *            so it neither proves nor disproves this. Left as the client's own claim.
- *  - 5.0★:   Google Business Profile, checked 2026-07-28. HCP has no reviews endpoint, so this
- *            is hand maintained. Re-check the rating AND the count together before each launch.
- *  - 5:      counties in Trinity's real Housecall Pro service zone (130 zips, 41 cities).
- *            Counties rather than cities so the number stays consistent with a nav that lists 6.
+ *  - 5.0★:   Google Business Profile, verified 2026-08-10 from the client's own Takeout export.
+ *            598 on the Lutz listing the site links to. Hand maintained; re-check both together.
+ *  - 5:      counties in Trinity's verified Housecall Pro service zone. Deliberately still 5
+ *            after north Manatee was added on 2026-08-10: we cover 3 zips there, not a county,
+ *            and the LocalBusiness schema omits Manatee for the same reason. The zip and town
+ *            totals (now 133 and 44) live in the service-area copy, not here.
  */
 const stats = [
   { v: <>{new Date().getFullYear() - SITE.foundedYear}<span className="text-accent">+</span></>, label: "Years of Service" },
   { v: <>12k<span className="text-accent">+</span></>, label: "Doors Serviced" },
-  { v: <>5.0<span className="text-accent">★</span></>, label: "From 597 Reviews" },
+  { v: <>5.0<span className="text-accent">★</span></>, label: "From 598 Reviews" },
   { v: <>5</>, label: "Counties Covered" },
 ];
 
@@ -65,15 +68,9 @@ const cities: { name: string; slug: string }[] = [
   { name: "Palm Harbor", slug: "palm-harbor" },
   { name: "Oldsmar", slug: "oldsmar" },
   { name: "Tampa", slug: "tampa" },
+  { name: "North Manatee", slug: "manatee-county" },
 ];
 
-// Real Google reviews (verbatim) — replaces the design's sample placeholders (content rule: never invent).
-const reviews = [
-  { quote: "David was fast, knowledgeable, and professional on getting our garage door back in perfect working order.", name: "Jonathan B." },
-  { quote: "Jason was great no high pressure sales and very good pricing. Joey did a great installation. Very professional. I would definitely use them again", name: "Charles Cohn" },
-  { quote: "Diagnosed the problem quickly and made simple repair.", name: "Ron Sompels" },
-  { quote: "The original quote was honored. The work was scheduled and completed in the timeframe I needed. My installer Joey was on time, knowledgeable, professional but friendly.", name: "Lynn Rosenthal" },
-];
 
 /** Actual posts from the Trinity Instagram feed (public/social/), so the grid matches the profile. */
 const igTiles = [
@@ -293,7 +290,7 @@ export default function HomePage() {
                 <div>
                   <div className={eyebrowCls}>Service Areas</div>
                   <h2 className="mt-3 font-display text-[clamp(26px,3.2vw,38px)] font-extrabold uppercase leading-[1.04] text-ink">We Cover the Whole Tampa Bay Area</h2>
-                  <p className="mt-3.5 text-[16.5px] leading-[1.58] text-body">Local techs based in Lutz means shorter drive times across Hillsborough, Pinellas, Pasco, Hernando and Polk. That is 130 zip codes and 41 towns.</p>
+                  <p className="mt-3.5 text-[16.5px] leading-[1.58] text-body">Local techs based in Lutz means shorter drive times across Hillsborough, Pinellas, Pasco, Hernando, Polk and the north end of Manatee. That is 133 zip codes and 44 towns.</p>
                   <ServiceAreaChecker className="mt-[22px]" />
                   <div className="mt-[22px] flex flex-wrap gap-2.5">
                     {cities.map((c) => (
@@ -316,34 +313,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* REVIEWS */}
-      <section className="bg-cream border-t-2 border-ink">
-        <div className="mx-auto max-w-[1200px] px-5 py-[92px] nav:px-8">
-          <Reveal>
-            <div className="mx-auto max-w-[640px] text-center">
-              <div className={eyebrowCls}>Reviews</div>
-              <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.04] text-ink">Neighbors Who Trust Trinity</h2>
-              <p className="mt-2.5 text-[13.5px] font-semibold text-[#8a8a8a]">A few of the reviews folks have left us on Google. <Link href={ROUTES.reviewsPage} className="font-bold text-accent no-underline">Read more</Link>.</p>
-            </div>
-          </Reveal>
-          <Reveal>
-            <div className="mt-[42px] grid items-start gap-5 grid-cols-4 max-nav:grid-cols-2 max-xs:grid-cols-1">
-              {reviews.map((r, i) => (
-                <div key={i} className="rounded-[8px] border-2 border-ink bg-white p-[24px_22px]">
-                  <div className="text-[15px] tracking-[2px] text-accent">★★★★★</div>
-                  <p className="mt-3.5 text-[16px] font-semibold leading-[1.5] text-ink">&ldquo;{r.quote}&rdquo;</p>
-                  <div className="mt-[18px] flex items-center gap-[11px]">
-                    <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[6px] bg-ink text-[15px] font-extrabold text-white">{r.name[0]}</span>
-                    <div>
-                      <div className="text-[14px] font-extrabold text-ink">{r.name}</div>
-                      <div className="text-[12px] font-semibold text-[#8a8a8a]">Google</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
+      {/*
+        REVIEWS. Full bleed marquee rather than a grid, because Jason asked for "a lot more"
+        reviews on the page and volume is the whole point. The heading block keeps the 1200px
+        container; only the track runs edge to edge. Band stays cream: the section above is white
+        and the booking band below is ink, so turning this one dark would collapse the rhythm.
+      */}
+      <section className="bg-cream border-t-2 border-ink py-[92px]">
+        <Reveal>
+          <div className="mx-auto max-w-[640px] px-5 text-center nav:px-8">
+            <div className={eyebrowCls}>Reviews</div>
+            <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.04] text-ink">Hundreds Of Neighbors Trust Trinity</h2>
+            <p className="mt-2.5 text-[13.5px] font-semibold text-[#8a8a8a]">Real Google reviews, word for word. 5.0 from 598 and counting. <Link href={ROUTES.reviewsPage} className="font-bold text-accent no-underline">Read them all</Link>.</p>
+          </div>
+        </Reveal>
+        <Reveal className="mt-[42px]">
+          <ReviewMarquee />
+        </Reveal>
       </section>
 
       {/* BOOKING BAND (dark) */}

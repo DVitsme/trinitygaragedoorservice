@@ -3,14 +3,27 @@ import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { requestHref } from "@/lib/booking";
-import { SITE, ROUTES, GOOGLE_REVIEWS, asset } from "@/lib/site";
+import { SITE, ROUTES, GOOGLE_REVIEWS, SOCIAL, asset } from "@/lib/site";
+import reviewData from "@/lib/google-reviews.json";
 import { Breadcrumb } from "@/components/blocks/primitives";
 import { Reveal } from "@/components/blocks/reveal";
+
+/**
+ * The full review wall: the 8 original GOOGLE_REVIEWS plus the 60 curated from the client's own
+ * Google Business Profile Takeout export (lib/google-reviews.json), 68 in all, no overlap because
+ * the curation excluded the 8 names already used. The homepage marquee says "Read them all" and
+ * links here, so this page carrying only 8 cards was a broken promise; the masonry has no line
+ * clamp, which makes it the one place every quote appears in full.
+ */
+const WALL = [
+  ...GOOGLE_REVIEWS.map((r) => ({ name: r.name, quote: r.quote })),
+  ...reviewData.reviews.map((r) => ({ name: r.name, quote: r.quote })),
+];
 
 export const metadata: Metadata = {
   title: "Reviews | Trinity Garage Door Service Tampa Bay",
   description:
-    "Real Google reviews from Tampa Bay homeowners after Trinity worked on their garage doors. 5.0 on Google from 597 reviews, BBB A+ accredited. Call (813) 279-6785.",
+    "Real Google reviews from Tampa Bay homeowners after Trinity worked on their garage doors. 5.0 on Google from 598 reviews, BBB A+ accredited. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/about/reviews/" },
 };
 
@@ -48,7 +61,7 @@ export default function ReviewsPage() {
           <div className="mt-7 flex flex-wrap items-center gap-[18px]">
             <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.08] px-[18px] py-2.5">
               <span className="text-[16px] tracking-[2px] text-accent">★★★★★</span>
-              <span className="text-[15px] font-extrabold text-white">5.0 on Google, 597 reviews</span>
+              <span className="text-[15px] font-extrabold text-white">5.0 on Google, 598 reviews</span>
             </div>
             <div className="inline-flex items-center gap-2.5 text-[14px] font-bold text-white">
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-[4px] bg-white text-[11px] font-black text-[#0a4ea2]">A+</span>
@@ -69,15 +82,15 @@ export default function ReviewsPage() {
           </Reveal>
           <Reveal>
             <div className="mt-[42px] gap-5 [column-count:3] max-nav:[column-count:2] max-xs:[column-count:1]">
-              {GOOGLE_REVIEWS.map((r, i) => (
+              {WALL.map((r, i) => (
                 <div key={i} className="mb-5 break-inside-avoid rounded-[10px] border-2 border-ink bg-white p-[24px_22px] shadow-[0_6px_0_rgba(26,26,26,0.06)]">
-                  <div className="text-[15px] tracking-[2px] text-accent">★★★★★</div>
+                  <div className="text-[15px] tracking-[2px] text-accent" role="img" aria-label="Rated 5 out of 5 stars">★★★★★</div>
                   <p className="mt-[13px] text-[15.5px] font-medium leading-[1.6] text-[#2a2a2a]">&ldquo;{r.quote}&rdquo;</p>
                   <div className="mt-[18px] flex items-center gap-[11px] border-t-2 border-[#eee] pt-4">
-                    <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[6px] bg-ink text-[14px] font-extrabold text-white">{r.name[0]}</span>
-                    <div>
-                      <div className="text-[14px] font-extrabold text-ink">{r.name}</div>
-                      <div className="text-[12px] font-semibold text-[#8a8a8a]">via {r.source}</div>
+                    <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[6px] bg-ink text-[14px] font-extrabold uppercase text-white">{r.name[0]}</span>
+                    <div className="min-w-0">
+                      <div className="truncate text-[14px] font-extrabold text-ink">{r.name}</div>
+                      <div className="text-[12px] font-semibold text-[#8a8a8a]">via Google</div>
                     </div>
                   </div>
                 </div>
@@ -85,7 +98,7 @@ export default function ReviewsPage() {
             </div>
           </Reveal>
           <Reveal>
-            <div className="mt-2 text-[12.5px] font-semibold text-[#8a8a8a]">Real Google reviews, reproduced verbatim. A live Google feed can keep these current.</div>
+            <div className="mt-2 text-[12.5px] font-semibold text-[#8a8a8a]">Real Google reviews, reproduced word for word from our own Google Business Profile. There are hundreds more on <a href={SOCIAL.google} target="_blank" rel="noopener noreferrer" className="font-bold text-accent no-underline">our Google listing</a>.</div>
           </Reveal>
         </div>
       </section>

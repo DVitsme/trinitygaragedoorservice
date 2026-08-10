@@ -43,8 +43,8 @@ const groups: Group[] = [
       },
       {
         q: "What areas do you serve?",
-        a: <>We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, including Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, and Tampa, plus the towns in between. See our <A href={ROUTES.serviceAreas}>service areas</A> page.</>,
-        plain: "We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, including Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, and Tampa, plus the towns in between.",
+        a: <>We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the north end of Manatee, including Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, Tampa and Palmetto, plus the towns in between. See our <A href={ROUTES.serviceAreas}>service areas</A> page.</>,
+        plain: "We cover Tampa Bay across Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the north end of Manatee, including Lutz, Land O Lakes, Wesley Chapel, Palm Harbor, Oldsmar, Tampa and Palmetto, plus the towns in between.",
       },
       {
         q: "Are you licensed and insured?",

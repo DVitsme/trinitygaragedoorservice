@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  *
  * Replaces the old `ServiceAreaMapMock`, which was a decorative CSS panel (grid lines, two
  * rotated bars as "roads", a blue wedge as "water", pins at hardcoded percentages) that depicted
- * nothing. This is the dissolved outline of all 130 zip codes they actually cover, built from
+ * nothing. This is the dissolved outline of every zip code they cover, built from
  * public-domain US Census boundaries by `scripts/generate-service-area-geo.mjs`.
  *
  * Costs ~1 KB gzipped and **zero client JavaScript**: the paths arrive already projected to
@@ -42,8 +42,9 @@ export function ServiceAreaMap({
   children?: React.ReactNode;
 }) {
   /**
-   * Label placement, tuned by hand for these six towns. Land O' Lakes anchors right-to-left so it
-   * does not run into Wesley Chapel, which sits at almost the same latitude 120 units east.
+   * Label placement. Land O' Lakes anchors right to left so it does not run into Wesley Chapel,
+   * which sits at almost the same latitude 120 units east. Palmetto sits well south of the rest and
+   * needs no adjustment.
    */
   const anchors: Record<string, "start" | "end"> = { "Land O' Lakes": "end" };
 
@@ -60,7 +61,7 @@ export function ServiceAreaMap({
           <path key={c.name} d={c.d} fill="none" stroke="#ffffff" strokeOpacity="0.13" strokeWidth="2.5" />
         ))}
 
-        {/* The service area itself: all 130 zips dissolved into one outline */}
+        {/* The service area itself: every covered zip dissolved into one outline */}
         <path
           d={geo.footprint}
           fill="#b8202a"
@@ -107,10 +108,13 @@ export function ServiceAreaMap({
       {children}
 
       {caption && (
-        // Bottom RIGHT, not left: the Pinellas peninsula runs down the bottom left of the real
-        // footprint, and a badge there sits on top of it.
-        <div className="absolute bottom-3.5 right-3.5 flex items-center gap-2 rounded-[6px] border-2 border-accent bg-ink px-3.5 py-[9px] text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-white">
-          <span className="h-2 w-2 rounded-full bg-accent" /> 130 Zip Codes, 5 Counties
+        // TOP right. It used to sit bottom right, because the Pinellas peninsula runs down the
+        // bottom left and a badge there covered it. Adding north Manatee on 2026-08-10 extended the
+        // footprint far enough south that the bottom right stopped being empty too: the badge
+        // landed directly on top of the Palmetto pin. The top right corner is the only one the
+        // outline does not reach. Re-check this if the zone ever grows north.
+        <div className="absolute right-3.5 top-3.5 flex items-center gap-2 rounded-[6px] border-2 border-accent bg-ink px-3.5 py-[9px] text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-white">
+          <span className="h-2 w-2 rounded-full bg-accent" /> {geo.zipCount} Zip Codes, {geo.countyCount} Counties
         </div>
       )}
     </div>

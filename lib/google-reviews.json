@@ -1,0 +1,366 @@
+{
+ "_source": "Trinity's own Google Business Profile, exported via Google Takeout 2026-08-10. Verbatim, unedited. 706 reviews in the export; these are a curated 60.",
+ "_note": "Owner-exported data, NOT the Google Places API, so the Places caching restrictions do not apply. Do not edit the text of any review. Order matters: the homepage marquee renders the first 45 and clamps at 7 lines; anything that renders longer than 7 lines at 340px belongs in the tail, which only /about/reviews/ shows unclamped.",
+ "reviews": [
+  {
+   "name": "Ann Pasquino",
+   "quote": "We've been using this company for years & they have never disappointed us.",
+   "rating": 5,
+   "date": "2024-02-19"
+  },
+  {
+   "name": "Pete Hubbard",
+   "quote": "Quick, easy and knowledgeable guys. Had the entire new door motor install completed in 45 minutes.",
+   "rating": 5,
+   "date": "2025-08-25"
+  },
+  {
+   "name": "Edward Melendez",
+   "quote": "Joey had a little late start but once he arrived he got busy and got it done in what might be record time.  The door is exactly what I was looking for and the installation is flawless.",
+   "rating": 5,
+   "date": "2024-01-16"
+  },
+  {
+   "name": "James Hart",
+   "quote": "Installed garage door opener swiftly and efficiently",
+   "rating": 5,
+   "date": "2023-02-21"
+  },
+  {
+   "name": "H A",
+   "quote": "Had a new lift master installed by Jonah, very professional and knowledgeable I would definitely recommend Trinity",
+   "rating": 5,
+   "date": "2026-03-09"
+  },
+  {
+   "name": "lm128",
+   "quote": "Evaluated my 93 year old father's garage door and fix the sensor free of charge. Gave us an estimate and were very professional.  Thank you Bryce and Trinity Garage!",
+   "rating": 5,
+   "date": "2026-04-02"
+  },
+  {
+   "name": "K",
+   "quote": "Trinity has worked on my doors for over 10 years. Locally owned business family business\n\nWe don't bother calling anyone else. No need to.",
+   "rating": 5,
+   "date": "2026-06-16"
+  },
+  {
+   "name": "Maurice Hollowell",
+   "quote": "Dave did a great job! Our garage was like a sauna…Thank You!\n\nMaurice",
+   "rating": 5,
+   "date": "2023-08-08"
+  },
+  {
+   "name": "sandi gerstle",
+   "quote": "Very pleased with Trinity garage door services and support of their product installs. Bryce was very prompt and helpful with reprogramming the keypad.",
+   "rating": 5,
+   "date": "2026-06-08"
+  },
+  {
+   "name": "Karen Topolski",
+   "quote": "Our spring broke on our garage door. I called Trinity and Amy was extremely helpful and had someone at my house within the hour. He was very knowledgeable and friendly!",
+   "rating": 5,
+   "date": "2023-11-03"
+  },
+  {
+   "name": "Victoria Hammond",
+   "quote": "Great customer service! Prompt appointment, arrived on time, and performed maintenance to keep our garage door working well (and quiet!) highly recommend.",
+   "rating": 5,
+   "date": "2024-07-06"
+  },
+  {
+   "name": "Ron Price",
+   "quote": "Quick response and professional high quality workmanship to my call of a broken spring.",
+   "rating": 5,
+   "date": "2026-05-20"
+  },
+  {
+   "name": "Eric O'Dell",
+   "quote": "David and Jonah replaced my existing damaged doors very quickly. Both an 16x7 and an 8x7 door. Everything works great!",
+   "rating": 5,
+   "date": "2026-05-28"
+  },
+  {
+   "name": "Kieran Kelleher",
+   "quote": "Same day service. Fast and efficient repair of broken garage door spring",
+   "rating": 5,
+   "date": "2025-12-08"
+  },
+  {
+   "name": "John Sell",
+   "quote": "The Tech was very good at communication and diagnosis. The sensors were fixed quickly at a great price. Thank you so much",
+   "rating": 5,
+   "date": "2024-03-06"
+  },
+  {
+   "name": "Thomas LoCicero",
+   "quote": "Jonah serviced my double garage door and replaced my spring/rollers on single car garage door. Superb work done in a timely manner. He came out the same day I called.",
+   "rating": 5,
+   "date": "2023-08-30"
+  },
+  {
+   "name": "steve mcsoley",
+   "quote": "Guys were great. Quick and knowledgeable. Seemed happy to be on the job.",
+   "rating": 5,
+   "date": "2024-07-15"
+  },
+  {
+   "name": "Jill Schroeder",
+   "quote": "Trinity Garage Door replaced all of the rollers on our garage door.  They were fast, friendly, and efficient.  Great communication with Barbara in the office as well as David the installer.",
+   "rating": 5,
+   "date": "2026-05-13"
+  },
+  {
+   "name": "Marcia Eannetta",
+   "quote": "Excellent service! And the day before a holiday weekend! My service tech was Tyler and he was great!!",
+   "rating": 5,
+   "date": "2026-07-03"
+  },
+  {
+   "name": "Tiffany",
+   "quote": "David was excellent! He was able to fix my issue quickly and easily and got me back up and running in no time. He was very knowledgeable and didn’t mind answering my “what’s that used for” questions. 😁 Thank you David!",
+   "rating": 5,
+   "date": "2023-09-18"
+  },
+  {
+   "name": "HB",
+   "quote": "Responsive and personal service from a family owned business. I have used them 4 or 5 times now and am very happy with the service.",
+   "rating": 5,
+   "date": "2023-08-27"
+  },
+  {
+   "name": "Suzanne Moss",
+   "quote": "Bryce was very friendly and helpful, even though the problem was my own fault.  He gave me useful information illustrating the various components of garage door opener and troubleshooting info.",
+   "rating": 5,
+   "date": "2024-04-13"
+  },
+  {
+   "name": "James Heckard",
+   "quote": "Kudos to Technician David, he did an outstanding New Door Installation on December 12 and then stopped back to program the remotes!!  Awesome Service.",
+   "rating": 5,
+   "date": "2025-01-09"
+  },
+  {
+   "name": "Robert Konkel",
+   "quote": "Same day service, honored price estimate. Reputable service and highly recommended.",
+   "rating": 5,
+   "date": "2025-09-23"
+  },
+  {
+   "name": "Kerr Lawson",
+   "quote": "David sorted my garage door opener, tuned it up and installed a new switch.  Like all genius he made it look easy!\n\nVery pleased with the service.",
+   "rating": 5,
+   "date": "2023-12-28"
+  },
+  {
+   "name": "H Mcgee",
+   "quote": "Jonah was a true professional.\nVery thorough, informative, and thoughtful.",
+   "rating": 5,
+   "date": "2026-03-05"
+  },
+  {
+   "name": "Steve Patti",
+   "quote": "Trinity installed my garage door 7 years ago, the coiled spring above the door broke. I called for a service call, they were on the job with in hours to fix door",
+   "rating": 5,
+   "date": "2024-05-05"
+  },
+  {
+   "name": "Bill Merritt",
+   "quote": "Great job by David, he really knows his stuff.",
+   "rating": 5,
+   "date": "2026-02-05"
+  },
+  {
+   "name": "Rich Steed",
+   "quote": "Fast response to a late day repair request.  Door spring broke, both cars in the garage.  Three hours later new springs had been installed and all is well!",
+   "rating": 5,
+   "date": "2026-07-27"
+  },
+  {
+   "name": "Vernon Hall",
+   "quote": "The techs were right on time… They arrived literally at the start of the appointment window, we’re very polite and professional, and had me back up and running in less than 20 minutes. Great company!",
+   "rating": 5,
+   "date": "2022-09-10"
+  },
+  {
+   "name": "Joe Mislevy",
+   "quote": "David did a great job replacing old springs in Garage door.  He was on time, answered all questioned and left garage looking very clean when finished.",
+   "rating": 5,
+   "date": "2022-11-28"
+  },
+  {
+   "name": "Michele Christy",
+   "quote": "Thank you so much for coming out to figure out what was wrong with my garage door. I feel silly as to how simple it was but you were very kind and understanding. Thank you",
+   "rating": 5,
+   "date": "2022-10-20"
+  },
+  {
+   "name": "Jim Steele",
+   "quote": "I needed a new garage door opener. Called in the morning and it was done before 2pm. Excellent service! I will definitely use again!",
+   "rating": 5,
+   "date": "2022-09-26"
+  },
+  {
+   "name": "Kathy Coogan",
+   "quote": "I have used this company twice and both times they provided prompt, professional and cost efficient service!  While I hope to never need them again, I would certainly recommend them without reservation :)",
+   "rating": 5,
+   "date": "2022-08-02"
+  },
+  {
+   "name": "shi deng",
+   "quote": "Hardworking two brothers came and did a fantastic job.  Couldn’t be more satisfied for their work!  Thanks brothers",
+   "rating": 5,
+   "date": "2024-06-28"
+  },
+  {
+   "name": "Annie Beilstein",
+   "quote": "The person that came out did a great job, explained the situation and told us we do not need a new garage door, which I was very happy about.  Not every company will be so honest!  Now it's finally fixed!",
+   "rating": 5,
+   "date": "2023-03-24"
+  },
+  {
+   "name": "Sarah Chapman",
+   "quote": "Rebuilt my very noisy garage door.   Now quiet and like new.  Trinity and David was awesome.\nHighly recommend!!",
+   "rating": 5,
+   "date": "2022-09-17"
+  },
+  {
+   "name": "Shirley Bruce",
+   "quote": "Bryce explained everything he was doing to the garage. He  replaced the two springs and he taught me the importance of lubricating the springs and the joints on the joints.",
+   "rating": 5,
+   "date": "2026-02-27"
+  },
+  {
+   "name": "Matt Moore",
+   "quote": "On-time.  Responsive.  Offer repair rather than new.  3rd time I have used Trinity and each time has been great.",
+   "rating": 5,
+   "date": "2023-03-02"
+  },
+  {
+   "name": "AVN Installations LLC",
+   "quote": "Trinity Did a great job with the shop doors , Bryce professionalism was exceptional and did a great job, they were always on time and always informed me when they will come to the location.",
+   "rating": 5,
+   "date": "2025-09-23"
+  },
+  {
+   "name": "A.J Molina",
+   "quote": "Trinity garage doors! Wow! I’m so happy with finished product, they were great. Thank you for my amazing new garage door.",
+   "rating": 5,
+   "date": "2023-08-06"
+  },
+  {
+   "name": "Koren Sutton",
+   "quote": "I have known Jason for over 10 years.  I have used his services 2 times.  Both times I have been more than happy with the promptness and services that he provided.  They are a wonderful company to do business with.",
+   "rating": 5,
+   "date": "2022-10-20"
+  },
+  {
+   "name": "Marion Collins",
+   "quote": "David was early and fixed the problem in minutes.  Thanks.",
+   "rating": 5,
+   "date": "2022-11-07"
+  },
+  {
+   "name": "Elizabeth Calleja",
+   "quote": "This is the 3rd time I've used this company. They are incredibly reasonable professional, always get the job done and quickly.",
+   "rating": 5,
+   "date": "2026-07-03"
+  },
+  {
+   "name": "Cynthia Crain",
+   "quote": "Service techs Bryce & David did an excellent job replacing items on our garage door opener. They were precise, prompt, and pleasant. Thanks guys!",
+   "rating": 5,
+   "date": "2025-10-14"
+  },
+  {
+   "name": "Frank Harris",
+   "quote": "My garage door spring broke and I called Trinity at 8am. Tyler arrived before noon and had both springs replaced in an hour! He was prompt, courteous,  uniformed,  and professional.  Unexpected and awesome service!",
+   "rating": 5,
+   "date": "2026-08-05"
+  },
+  {
+   "name": "Willie Hodo",
+   "quote": "If you don't call these guy, you are missing out on a first class operation. GARAGE DOOR MY FRIENDS, AT ITS BEST.",
+   "rating": 5,
+   "date": "2026-06-17"
+  },
+  {
+   "name": "Ronald Cruz",
+   "quote": "Tyler was amazing. He explained everything that needs to be done, and which options are most practical based on our budget. The installation was quick. He even helped us set-up our app and keypad. Thank you!",
+   "rating": 5,
+   "date": "2026-01-18"
+  },
+  {
+   "name": "Jennifer Corbin",
+   "quote": "David came out. He was on time. He loved my big bad scary pit bull. Lol. He didn’t try to up sale me. He was fast and friendly. I’d use them again.",
+   "rating": 5,
+   "date": "2023-04-25"
+  },
+  {
+   "name": "Laurel Graham",
+   "quote": "Andre did a great job replacing the spring, and Jonah did a terrific job both installing the new garage door opener and replacing the seal! We will definitely hire this company again if we ever need their services.",
+   "rating": 5,
+   "date": "2025-12-23"
+  },
+  {
+   "name": "John Philip",
+   "quote": "Great company to do business with. Their tech did a great job educating me on the bushings, and NOT selling me on them.",
+   "rating": 5,
+   "date": "2023-06-27"
+  },
+  {
+   "name": "Barbara Shimer",
+   "quote": "David and Jonah were professional, experienced installers. They explained everything and made timely and logical suggestions. I def would recommend Trinity Garage Door Service.",
+   "rating": 5,
+   "date": "2025-08-15"
+  },
+  {
+   "name": "Arthur Lewey",
+   "quote": "Always courteous. Show up on time . Always helpful no matter how small the problem.",
+   "rating": 5,
+   "date": "2025-09-11"
+  },
+  {
+   "name": "Stan Porch",
+   "quote": "Excellent service, fast response and resolution, reasonable prices.  I had used another garage door company for my last repair, and the difference between them and Trinity is huge.  I highly recommend them.",
+   "rating": 5,
+   "date": "2024-04-18"
+  },
+  {
+   "name": "Joe Haddox",
+   "quote": "Trinity was great to work with from start to finish. Excellent customer service!",
+   "rating": 5,
+   "date": "2024-02-25"
+  },
+  {
+   "name": "Kaitlyn Salles",
+   "quote": "The technician arrived up on time, was knowledgeable and fixed my garage door quickly. He did not pressure us to purchase anything more than what we needed/asked for. Definitely recommend.",
+   "rating": 5,
+   "date": "2026-05-29"
+  },
+  {
+   "name": "J Ashlock",
+   "quote": "Great service and more reasonably priced than others I've used.",
+   "rating": 5,
+   "date": "2026-07-01"
+  },
+  {
+   "name": "Susy Chiong",
+   "quote": "Tyler was excellent and knowledgeable.  He changed cables, rods, rubber that goes to the bottom of the two-door garage and did maintenance on both doors quickly and efficiently.  He is an asset to your company.",
+   "rating": 5,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "Nicholas Vassalli",
+   "quote": "Very trustworthy, Honest, Bryce gave me different options to fix the  problem. I thought I was going to need a new door,  I ended up with changing how the door opened, I saved some money.",
+   "rating": 5,
+   "date": "2025-11-11"
+  },
+  {
+   "name": "Brigette Mauger",
+   "quote": "Great company, good to talk to a person that talks to the techs . Not just a call center.  Also , prices are very reasonable and service is top notch. They came out same day and fixed issue.",
+   "rating": 5,
+   "date": "2024-08-03"
+  }
+ ]
+}

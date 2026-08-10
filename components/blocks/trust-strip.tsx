@@ -6,8 +6,13 @@ import { asset } from "@/lib/site";
  * red dividers, BBB A+ chip, license line.
  *
  * The rating is HAND MAINTAINED: Housecall Pro has no reviews endpoint, so nothing here can
- * refresh it. Checked 2026-07-28 against the Google Business Profile: 5.0 from 597 reviews
- * (the design shipped 4.9, which understated them). Re-check rating and count together.
+ * refresh it. Re-check rating and count together.
+ *
+ * 2026-08-10: verified straight from the client's own Google Business Profile Takeout export.
+ * **598** on the "Trinity Garage Door Service - Lutz" listing, which is the one SOCIAL.google
+ * links to. They have 706 reviews in total across three listings, but the other 108 sit on the
+ * Tampa and Oldsmar profiles and a visitor following our link cannot see them, so 598 is the
+ * number we can stand behind. Do not "correct" this to 706.
  *
  * JSON-LD aggregateRating stays omitted on purpose (G6) — self-serving review markup is
  * ineligible, and the rating already shows in the Business Profile where searchers see it.
@@ -19,7 +24,7 @@ export function TrustStrip() {
         <Image src={asset("badge-angi-super-service-2024.png")} alt="Angi Super Service Award 2024" width={296} height={310} className="h-[58px] w-auto" />
         <Image src={asset("badge-elite.png")} alt="HomeAdvisor Elite Service" width={162} height={160} className="h-12 w-auto" />
         <span className="inline-flex items-center gap-2 text-[15px] font-bold text-white">
-          <span className="tracking-[1px] text-accent">★★★★★</span> 5.0 on Google, 597 reviews
+          <span className="tracking-[1px] text-accent">★★★★★</span> 5.0 on Google, 598 reviews
         </span>
         <span className="h-[26px] w-[2px] bg-accent" />
         <span className="inline-flex items-center gap-2 text-[15px] font-extrabold text-white">

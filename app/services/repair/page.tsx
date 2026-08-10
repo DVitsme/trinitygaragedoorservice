@@ -139,7 +139,7 @@ export default function RepairHubPage() {
                   Most days you don't think about your garage door. You hit the button, it rolls up, and you get on with your morning. Then one day it won't move, or it makes a sound you've never heard before, and suddenly it's the only thing you can think about.
                 </p>
                 <p className="mt-4 text-[17.5px] leading-[1.64] text-body">
-                  That's usually when people call us. We're Trinity Garage Door Service, a family owned company that's been fixing doors around Tampa Bay since 2007. We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, and most of the time we can get a technician out to you the same day.
+                  That's usually when people call us. We're Trinity Garage Door Service, a family owned company that's been fixing doors around Tampa Bay since 2007. We cover Hillsborough, Pinellas, Pasco, Hernando and Polk counties, plus the north end of Manatee, and most of the time we can get a technician out to you the same day.
                 </p>
               </div>
               <div className="relative">

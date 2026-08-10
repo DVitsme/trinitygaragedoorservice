@@ -60,10 +60,43 @@ There are **four** `__awcc` (call tracking) tags, one per number, all on All Pag
 | `(813) 447-3874` | `/contact/` only |
 | `(813) 279-6785` | every page |
 | `(727) 314-5062` | `/contact/` only |
-| **`(813) 731-8405`** | **nowhere.** It is the storefront decal line from `MEDIA-INVENTORY.md` |
+| **`(813) 731-8405`** | **nowhere on the website.** ✅ **Source identified 2026-08-10, see below** |
 
 The fourth can never match. It fails on all 32 pages, after already pulling a forwarding number
-from the pool. **Delete it.**
+from the pool. **Delete it** from the website container.
+
+#### ✅ Where (813) 731-8405 actually comes from
+
+Found in the client's own Google Business Profile Takeout export, 2026-08-10. It is the **SMS deep
+link on their Tampa listing**:
+
+```
+location-15806677045058781112  "Trinity Garage Door Service, LLC - Tampa"
+  SCALABLE_DEEP_LINK   sms:+18137318405
+```
+
+So it was never a typo or a stale number. It is a **real Trinity channel that Google drives**, which
+is exactly why it ended up in an Ads container. It still does not belong in a **website** call
+tracking tag, because it appears on no page of the site and therefore can never be swapped. Deleting
+the `__awcc` tag stands. **Tell Lloyd what it is** so he does not re-add it later wondering where it
+went, and so any text message conversions get measured on the Google listing rather than here.
+
+#### ⚠️ And a fourth number nobody had: (813) 397-6104
+
+The same export shows the Tampa listing's **primary phone** is **(813) 397-6104**, which appears
+**nowhere on the website and in no call tracking tag**. Trinity now has five numbers in play:
+
+| Number | Where it lives |
+|---|---|
+| (813) 279-6785 | Every page of the site. Lutz Google listing. The one number the site uses |
+| (813) 447-3874 | `/contact/` only. Hillsborough county line |
+| (727) 314-5062 | `/contact/` only. **Oldsmar Google listing** |
+| **(813) 397-6104** | **Tampa Google listing only. Not on the site, not tracked** |
+| **(813) 731-8405** | **Tampa Google listing SMS link. Not on the site. Tag should be deleted** |
+
+**This matters more than it looks on a business whose revenue arrives by phone.** Two of their five
+numbers are reachable only through Google listings, so calls to them cannot be attributed by
+anything we control, and they are invisible to the site's own measurement.
 
 Note Google documents a limit of **one tracked number per page**. Three on `/contact/` works because
 of how the module is built, not because it is supported. Confirm it in GTM Preview: set

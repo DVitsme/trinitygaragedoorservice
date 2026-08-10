@@ -2,8 +2,101 @@
 
 Talking points for client meetings. Wins to share, problems to raise, and advice worth giving.
 
-**Living document.** Last updated: 2026-08-04. Deeper detail: `MEDIA-INVENTORY.md`,
+**Living document.** Last updated: 2026-08-10. Deeper detail: `MEDIA-INVENTORY.md`,
 `PRE-LAUNCH-PUNCHLIST.md`, `INTEGRATIONS` notes in `CLAUDE.md`.
+
+---
+---
+
+## 🗓️ THE REVIEWS SECTION IS NOW A SCROLLING WALL (10 AUGUST)
+
+**Jason asked for "a lot more" reviews on the site. Done.** The homepage used to show four. It now
+shows **60 real Google reviews** on three rows that scroll continuously in alternating directions,
+so the page reads as a company with a lot of happy customers rather than four quotes.
+
+Every one is **verbatim from their own Google profile**, pulled from the official export. Nothing
+was written, shortened or tidied.
+
+### One thing to put back to Jason, gently
+
+He said **"we have around or over 1k online"**. His three Google listings hold **706**, of which 593
+have any text written. He is very probably right about "online" in the wider sense once Yelp, Angi,
+BBB, Facebook and Nextdoor are counted, but **Google alone is not 1,000**.
+
+**The site says "5.0 from 598 and counting"**, which is the number on the Lutz listing the site
+links to, so anyone who clicks can check it in one second. That is the number we can defend. If he
+wants a bigger figure on the page, the honest version is an all platforms total, and we would need
+him to confirm the counts on the other sites first.
+
+Worth pairing with **#42**: 108 of those 706 are stranded on the Tampa and Oldsmar listings. Getting
+those consolidated would raise the number people actually see on the listing the site points at.
+
+## 🗓️ GOOGLE BUSINESS PROFILE ACCESS, AND WHAT IT SHOWED (10 AUGUST)
+
+Jason granted access to all three profiles. We exported the data the same day. Three things to tell them.
+
+### 1. They have 706 reviews, not 598. About 108 are on the wrong listings.
+There are **three** Business Profiles, and all three carry real reviews:
+
+| Listing | Reviews |
+|---|---|
+| Trinity Garage Door Service **- Lutz** (the main one, the one the website links to) | **598** |
+| A second listing | **84** |
+| A third listing | **24** |
+
+Every review is unique, so this is not double counting. **108 real reviews are sitting on profiles
+that almost nobody sees**, and they do not count toward the 5.0 average customers look at. Two of
+the three listings also have a town stuck in the business name, which is against Google's naming
+rules and is a suspension risk. Worth Jason's attention, but **changing a listing name can put it
+into review, so do not touch it during the domain move.**
+
+### 2. The plan to build town pages from their reviews does not work, and we should say so.
+We had planned to read all their reviews, find the ones that mention a town, and put a real local
+review on each new town page. **Now that we have all 706, that plan is dead.** Only **8 reviews out
+of 593 with any text mention a town at all**, and they only cover Lutz, Tampa, Land O' Lakes and
+Wesley Chapel, which already have pages. Customers just do not write where they live.
+
+**This is not a problem with the reviews, it is a problem with the plan.** Collecting more reviews
+will not change it. If they want town pages for New Port Richey, Zephyrhills, Odessa or Trinity, the
+honest options are: ask a few recent customers in those towns for a review that mentions the town,
+or build the pages without a local quote. **Recommend asking the office to note the town when they
+request a review.** That costs nothing and fixes it going forward.
+
+### 3. The rating on the site is slightly out of date.
+Google now shows **5.0 from 598**. The site says 597 in the bar under the header, and one older
+figure of 4.9 is still sitting in the code where nothing reads it. Small, worth a tidy up.
+
+---
+
+## 🗓️ NORTH MANATEE PAGE IS LIVE (10 AUGUST)
+
+New service area page for **Palmetto, Parrish and Ellenton**, the three zip codes north of the
+Manatee River. Their zip checker now answers yes for 34221, 34219 and 34222, and the map on the
+service areas page has grown to match.
+
+**Be straight with them about what this is.** Every other town on the site came from their own
+Housecall Pro service zone. **Manatee did not.** So this page is a business decision to go after new
+work, not a description of work they already do.
+
+⚠️ **Updated 10 August, and the evidence got stronger.** Their Google Business Profile export
+settles it. The Tampa listing declares its service area as exactly **five counties: Polk, Pasco,
+Hernando, Pinellas and Hillsborough.** The Oldsmar listing names ten towns, all Pinellas and north
+Hillsborough. The Lutz listing names three towns. **Manatee appears nowhere. Neither does Sarasota.**
+
+That is now **three independent sources agreeing**: their booking system, what Jason said on the
+call, and the service area they publish to Google themselves. **Nothing anywhere says they work
+Manatee.** The page is still a reasonable bet on new work, but it should be presented to them as a
+bet, and #6b should be answered before it is promoted.
+
+**Two questions back to them, both in `CLIENT-ASKS` (#6b and #6c):**
+1. **Do they want it?** It is about an hour each way from Lutz.
+2. 🔴 **Does their licence cover Manatee?** GD13010 is Hillsborough and GDI-09484 is Pasco. If those
+   are county licences rather than state ones, they may not cover work there, and those numbers are
+   printed on every page of the site. **This one should be answered before anyone sells a Manatee
+   job.** Manatee also requires a permit for a garage door replacement.
+
+We deliberately stopped at the Manatee River and left Bradenton and Lakewood Ranch out, so the site
+does not promise more than they have agreed to.
 
 ---
 

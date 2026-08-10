@@ -70,3 +70,8 @@ next-env.d.ts
 # Full mirror of the old WordPress site, captured at the 2026-08-01 cutover (219MB).
 # Kept out of git: it is a rollback/reference artifact, not source.
 .wp-backup/
+
+# Google Business Profile Takeout exports. Client data incl. reviewer names + call logs.
+# 582MB, never commit. Keep local only.
+takeout-*/
+takeout-*.zip

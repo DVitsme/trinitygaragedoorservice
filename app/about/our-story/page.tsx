@@ -43,6 +43,7 @@ const doCards: { label: string; href: string; icon: ReactNode }[] = [
 const cities = [
   ["Lutz", "lutz"], ["Land O' Lakes", "land-o-lakes"], ["Wesley Chapel", "wesley-chapel"],
   ["Palm Harbor", "palm-harbor"], ["Oldsmar", "oldsmar"], ["Tampa", "tampa"],
+  ["North Manatee", "manatee-county"],
 ];
 
 const faqs = [

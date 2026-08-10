@@ -1,10 +1,10 @@
-import { SITE, CITIES, SOCIAL } from "@/lib/site";
+import { SITE, CITIES, COUNTIES_SERVED, SOCIAL } from "@/lib/site";
 import { absoluteUrl } from "@/lib/seo";
 
 /**
  * LocalBusiness schema for local SEO. Rendered once in the root layout.
  *
- * Still NO `aggregateRating`: Google penalises unverified review markup, and we have 8 of their 597
+ * Still NO `aggregateRating`: Google penalises unverified review markup, and we have 8 of their 598
  * reviews. That stays out until the reviews are pulled properly.
  *
  * ✅ **NAP completed 2026-07-28/29.** Street address and geo now present, sourced from their own
@@ -41,7 +41,13 @@ export function LocalBusinessJsonLd() {
       latitude: SITE.address.lat,
       longitude: SITE.address.lng,
     },
-    areaServed: CITIES.map((c) => ({ "@type": "City", name: `${c.name}, FL` })),
+    // Counties first, then the towns with their own page. The counties come from the client's own
+    // Google Business Profile service area, so this markup agrees with their Google record instead
+    // of describing 6 towns out of 44. See COUNTIES_SERVED in lib/site.ts for why Manatee is absent.
+    areaServed: [
+      ...COUNTIES_SERVED.map((c) => ({ "@type": "AdministrativeArea", name: `${c}, FL` })),
+      ...CITIES.map((c) => ({ "@type": "City", name: `${c.name}, FL` })),
+    ],
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",

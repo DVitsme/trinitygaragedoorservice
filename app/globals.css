@@ -60,12 +60,19 @@ img {
 }
 
 /* Partner-logo marquee (home "Who We Work With"). */
+/* ⚠️ The `- 20px` is not a fudge, it is the correction for a real drift bug.
+   The track holds two copies of BRAND_CATALOG separated by gap:40px throughout, so it is
+   `2N·w + (2N-1)·gap` wide, while one clean cycle must advance `N·w + N·gap`. Plain -50% therefore
+   lands exactly gap/2 short and the strip jumps 20px every loop. Measured in Chrome before the fix:
+   track 4200px, -50% = 2100px, correct distance 2120px.
+   If `gap` ever changes here, this offset must change with it to gap/2.
+   The review wall below avoids the whole problem by animating one set at a time instead. */
 @keyframes bt-marquee {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - 20px));
   }
 }
 .bt-marquee {
@@ -78,6 +85,106 @@ img {
 .bt-marquee-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+
+/* Review wall (home "Reviews").
+   ────────────────────────────────────────────────────────────────────────────────────────────
+   ⚠️ **Do NOT copy the translateX(-50%) trick from .bt-marquee above. It is subtly wrong.**
+   A single gapped track holding two copies is `2N·w + (2N-1)·gap` wide, but one cycle must advance
+   by `N·w + N·gap`. So -50% lands exactly **gap/2 short** and the row jumps by that much every
+   loop. Measured in Chrome on the logo strip: 20px of drift per cycle at gap:40px.
+
+   The fix used here: each copy is its own <ul>, and the animation moves ONE <ul> by
+   `calc(-100% - gap)`. Percentages resolve against the animated element, which is a single set, so
+   this is exact for any card widths. That matters because reviews vary in length.
+
+   Copies: the rule is `(k-1)·setWidth + (k-2)·gap >= viewport`. With 20 cards a set is ~6,800px,
+   far wider than any viewport, so **k=2 is provably enough here**. Short sets (a handful of cards)
+   would need k=3 or a gap appears at the loop point on wide monitors.
+
+   Direction: `animation-direction: reverse`, not a second keyframe.
+   ⚠️ Must be listed in the prefers-reduced-motion block further down. */
+@keyframes bt-reviews-scroll {
+  to {
+    transform: translateX(calc(-100% - var(--bt-rv-gap)));
+  }
+}
+.bt-reviews {
+  --bt-rv-gap: 20px;
+  --bt-rv-fade: 72px;
+}
+.bt-reviews-viewport {
+  position: relative;
+  overflow: hidden;
+}
+/* Edge fade as OVERLAYS, deliberately not mask-image.
+   ⚠️ Measured 2026-08-10 in headless Chrome: with mask-image on these viewports the marquee ran at
+   ~10fps; with it off, ~19fps, and card count barely moved the number. A mask forces the browser
+   to composite the whole 5,000px+ animating layer through an extra masking pass every frame. Two
+   static gradient strips that sit on top cost nothing, and they are only possible because the band
+   background is a solid colour. If this band ever stops being solid cream, these must become a
+   mask again, and the frame rate cost comes back with it. */
+.bt-reviews-viewport::before,
+.bt-reviews-viewport::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--bt-rv-fade);
+  z-index: 1;
+  pointer-events: none;
+}
+.bt-reviews-viewport::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--color-cream), transparent);
+}
+.bt-reviews-viewport::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--color-cream), transparent);
+}
+.bt-reviews-track {
+  display: flex;
+  width: max-content;
+  gap: var(--bt-rv-gap);
+}
+.bt-reviews-set {
+  display: flex;
+  flex: none;
+  gap: var(--bt-rv-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: bt-reviews-scroll var(--bt-rv-duration, 100s) linear infinite;
+  animation-direction: var(--bt-rv-direction, normal);
+  /* Negative per row delays start each row mid cycle, so first paint is not three grid aligned
+     rows marching in step. ⚠️ Both sets in a row MUST carry the same delay or the copies desync
+     and the loop tears. The component passes it per row, so this holds by construction. */
+  animation-delay: var(--bt-rv-delay, 0s);
+}
+/* The WCAG 2.2.2 control. See components/blocks/review-wall.tsx. */
+.bt-reviews[data-reviews-paused="true"] .bt-reviews-set {
+  animation-play-state: paused;
+}
+/* Set by an IntersectionObserver in review-wall.tsx. Compositor animations keep ticking while
+   scrolled out of view, which is wasted GPU and battery on a band that lives below the fold. */
+.bt-reviews[data-reviews-offscreen="true"] .bt-reviews-set {
+  animation-play-state: paused;
+}
+/* Courtesy pause. Tailwind 4 already gates hover: to hover-capable pointers, but this is plain
+   CSS so the media query is explicit. Focus parity matters: without it a keyboard user tabbing a
+   card would have it slide out from under them. */
+@media (hover: hover) {
+  .bt-reviews-viewport:hover .bt-reviews-set {
+    animation-play-state: paused;
+  }
+}
+.bt-reviews-viewport:focus-within .bt-reviews-set {
+  animation-play-state: paused;
+}
+@media (max-width: 560px) {
+  .bt-reviews {
+    --bt-rv-fade: 20px;
+  }
 }
 
 /* "Book Online" CTA pulse (Book a Repair page) — a subtle red attention ring, paused on hover. */
@@ -99,8 +206,26 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .bt-marquee,
   .bt-book-btn,
-  .bt-map-ping {
+  .bt-map-ping,
+  .bt-reviews-set {
     animation: none;
+  }
+  /* Stopping the animation alone would clip most of the reviews behind the mask with no way to
+     reach them. Hand the row back as a normal horizontal scroller instead, drop the edge fade so
+     nothing is cut off, hide the duplicate set (it has no purpose without motion) and hide the
+     pause button (there is nothing left to pause, and a dead control is worse than none). */
+  .bt-reviews-clone {
+    display: none;
+  }
+  .bt-reviews-pause {
+    display: none;
+  }
+  .bt-reviews-viewport {
+    overflow-x: auto;
+  }
+  .bt-reviews-viewport::before,
+  .bt-reviews-viewport::after {
+    content: none;
   }
   html {
     scroll-behavior: auto;
