@@ -31,8 +31,15 @@ const data: CityAreaData = {
       "Parrish has gone up fast. North River Ranch alone is planned for more than six thousand homes, with Del Webb neighborhoods filling in around it, and Palmetto and Ellenton have picked up the overflow. New doors do not stay new. The calls we get from neighborhoods like these are usually an opener that has started skipping, or rollers and hinges that have gone noisy after a few Florida summers.",
       "Manatee also sits in a wind borne debris region, which is not true of every county we work in. A garage door here has to carry a Florida Product Approval rated for the local wind speed, and a replacement needs a permit. That is worth knowing before you buy a door on price alone, because the door is one of the largest openings in the house. Debby, Helene and Milton all came through in the autumn of 2024, and Milton alone accounted for more than three hundred million dollars of property damage in unincorporated Manatee.",
     ],
-    image: "jobsite-ladder-install-in-progress.jpg",
-    imageAlt: "A garage door raised on its tracks during a Trinity job, seen from inside the garage",
+    /*
+     * Swapped 2026-08-10 on client feedback: the previous pick (an interior ladder shot with no
+     * person in frame) read as random and unbranded. This one is from Trinity's own Google
+     * Business Profile posts (cached in .media-hunt/google/), resized from the 1572x2096 original.
+     * Alt text describes only what is in frame; it makes no claim about where it was taken, which
+     * keeps the never invent provenance rule the six older city pages break (punchlist P1).
+     */
+    image: "jobsite-crew-installing-door-trinity-polo.jpg",
+    imageAlt: "Trinity technicians in branded shirts installing a garage door, one holding a drill",
   },
   review: { quote: "Quick response, clear communication, reasonable price.", name: "Mike Oehler" },
   nearby: {
