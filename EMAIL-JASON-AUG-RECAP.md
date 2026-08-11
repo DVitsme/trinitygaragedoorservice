@@ -1,6 +1,18 @@
 # Email to Jason, the August recap
 
-Written 2026-08-11 on Derrick's ask. Plain ASCII, paste into Gmail as is.
+⚠️ **SUPERSEDED. Derrick rewrote this in his own register and sent his version 2026-08-11.**
+The sent text is archived verbatim, with the tone lessons, in the global email skill:
+`~/.claude/skills/client-email-voice/samples/2026-08-11-jason-light-update.md`. Key deltas he
+made: momentum opener with exclamation, bold label sections, benefit translation ("firewalls",
+"custom prompts for AI bots"), cut to ONE question (the Manatee confirm; Saturday and the phone
+numbers were NOT asked), warm availability closer.
+
+⚠️ One accuracy item to reconcile when Jason replies: the sent email says "Palmetto, Ellenton,
+Parrish, and North Bradenton". The live page and checker cover the first three only; Bradenton
+is a "call and ask" area. If Jason confirms, either add the north Bradenton zips or clarify
+with him. Tracked in CLIENT-ASKS #6b.
+
+The draft below is kept for the diff value only.
 
 ⚠️ Before sending, deploy first (`pnpm run deploy`): the two row review wall and the crew photo on
 the Manatee page are committed but not live, and Jason will click these links.
