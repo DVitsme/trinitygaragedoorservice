@@ -6,6 +6,7 @@ import { after } from "next/server";
 import {
   isValidPhone,
   isValidEmail,
+  hasPlausiblePhone,
   toE164,
   formatPhone,
   isTurnstileTestSecret,
@@ -26,6 +27,14 @@ type Payload = {
   message?: string;
   source?: string;
   token?: string;
+  /**
+   * The last Turnstile client side error code the visitor's browser saw, if any.
+   *
+   * Untrusted, cosmetic, and never used for a decision. It exists so Workers Logs can answer the
+   * one question the server could not answer during the 2026-08-11 incident: whether the widget was
+   * blocked (200500), misconfigured by us (110200), or simply failed (300 and 600 families).
+   */
+  turnstileError?: string;
 };
 
 /** Sink outcomes, so the response can tell the truth instead of always claiming success. */
@@ -112,6 +121,26 @@ const SITEVERIFY_TIMEOUT_MS = 4000;
 /** Bind a token to this form, so one minted elsewhere on the site cannot be replayed here. */
 const TURNSTILE_ACTION = "contact-form";
 
+/**
+ * Hostnames a Turnstile token is allowed to have been minted on.
+ *
+ * ⚠️ **Both entries are required and neither is redundant.** The zone serves the apex and `www`
+ * with no redirect between them, both are Worker routes in `wrangler.jsonc`, and both are in the
+ * widget's allowed domains. A real lead was captured on `www` on 2026-08-11, so dropping it would
+ * refuse genuine customers.
+ *
+ * Why check this at all when the dashboard allowlist already exists: the allowlist governs where a
+ * token can be MINTED, and it is one dashboard click away from including `localhost`, which is a
+ * completely natural thing to add while debugging and was actively considered during the 2026-08-12
+ * post mortem. The moment it is there, anyone can serve a page on their own machine with our site
+ * key, solve the widget honestly, and post the token here. This is the check that makes that
+ * harmless, and it costs nothing.
+ */
+const TURNSTILE_HOSTNAMES = new Set([
+  "trinitygaragedoorservice.com",
+  "www.trinitygaragedoorservice.com",
+]);
+
 export async function POST(req: Request) {
   let data: Payload;
   try {
@@ -150,8 +179,16 @@ export async function POST(req: Request) {
     email: data.email?.trim() || undefined,
     city: data.city?.trim() || undefined,
     service: data.service?.trim() || undefined,
-    // Capped on the way in. See MAX_STORED_TEXT: the refusal path below is not behind the spam
-    // gate, so this is the only thing standing between a loop and unbounded D1 storage.
+    /*
+      Capped on the way in. See MAX_STORED_TEXT: the refusal path below is not behind the spam
+      gate, so this is the only thing standing between a loop and unbounded D1 storage.
+
+      ⚠️ It also applies to the HAPPY path, which the cap was not originally written for. Four
+      thousand characters is far more than anyone has typed into "what is going on", so no real
+      customer should ever feel it, but "a limit added for one path silently applying to another"
+      is exactly the kind of thing that resurfaces two years later as a mystery. So if it ever does
+      fire, it says so, and `truncatedMessage` below is the only reason this is not silent.
+    */
     message: data.message?.trim().slice(0, MAX_STORED_TEXT) || undefined,
     // Was hardcoded "website", which made every lead from the 18 CTAs pointing at the estimate form
     // indistinguishable. Now the form says where it came from.
@@ -191,26 +228,66 @@ export async function POST(req: Request) {
 
   // ---------------------------------------------------------------- spam gate
   const secret = process.env.TURNSTILE_SECRET_KEY?.trim();
+  /*
+    Logged BEFORE the verdict, so it is present even on submissions that then pass, and capped
+    because it arrives from the browser. This one line is what would have turned the 2026-08-11
+    investigation from "six refusals, cause unknown" into "six refusals, code 110200" on the first
+    query. Cheap, and only ever emitted when the widget actually failed.
+  */
+  // Never silent. If the cap ever clips a genuine customer's message we find out from the logs
+  // rather than from them wondering why half their description vanished.
+  const truncatedMessage = (data.message?.trim().length ?? 0) > MAX_STORED_TEXT;
+  if (truncatedMessage) {
+    console.warn("[contact] message exceeded MAX_STORED_TEXT and was truncated", {
+      length: data.message?.trim().length,
+      cap: MAX_STORED_TEXT,
+      source: submission.source,
+    });
+  }
+
+  const clientError = data.turnstileError?.trim().slice(0, 32);
+  if (clientError) {
+    console.warn("[contact] Turnstile client side error reported by the browser:", clientError, {
+      source: submission.source,
+      hasToken: Boolean(data.token),
+    });
+  }
   const verdict = await verifyTurnstile(secret, data.token, req.headers.get("cf-connecting-ip"));
   if (verdict === "reject") {
-    const captured = await refuse(submission, req, "turnstile_reject");
+    const { stored, notified } = await refuse(submission, req, "turnstile_reject");
     return NextResponse.json(
       {
         error: "verification_failed",
         /**
-         * Read by the client to choose between a calm confirmation and a red error.
+         * Three outcomes, three different true things to say. The old code had one flag and so
+         * could only say two, which meant the middle case, by far the most common one, was told
+         * the same thing as a total failure.
          *
-         * True ONLY when the row was written and an alert is already on its way to a person, which
-         * is the exact condition under which the message below is allowed to say someone will call.
-         * If the alert address is not configured, this is false and the visitor gets the old copy,
-         * which promises nothing. Never widen this to mean "we stored it somewhere".
+         * ⚠️ **`captured` keeps its original meaning on purpose: stored AND announced.** A browser
+         * running a cached bundle from before this deploy reads only this field, and it must not
+         * start seeing "someone will call you back" in a state where nobody was told. `stored` is
+         * additive, so an old client degrades to exactly its current behaviour and a new one gets
+         * the extra state. Same reasoning as keeping `data.name` supported on the way in.
          */
-        captured,
-        message: captured
-          ? `We could not finish the security check, so a person is picking this one up by hand. Someone will call you back. If you need us sooner, call ${SITE.phoneDisplay}.`
-          // Names the phone number on purpose. If the widget is being blocked outright, "try again"
-          // is advice that cannot work, and this is the only form the business has.
-          : `We could not verify that request. Please refresh and try again, or call us at ${SITE.phoneDisplay} and we will take the details over the phone.`,
+        captured: stored && notified,
+        /** The durable half, and a confirmed fact rather than an intention. Read by new clients. */
+        stored,
+        message:
+          stored && notified
+            ? `We could not finish the security check, so a person is picking this one up by hand. Someone will call you back. If you need us sooner, call ${SITE.phoneDisplay}.`
+            : stored
+              /*
+                Saved, but nobody has been told yet. This is the state production sits in whenever
+                no alert address is configured, and it used to render as the red "refresh and try
+                again" error, which was false twice over: it implied the details were lost, and
+                refreshing would have thrown away everything the visitor had typed. That is the
+                exact advice the customer in the incident followed, at 01:37:46, before failing
+                three more times.
+              */
+              ? `We could not finish the security check, but we have your details and they are saved. To be certain we reach you today, please call ${SITE.phoneDisplay}.`
+              // Names the phone number on purpose. If the widget is being blocked outright, "try
+              // again" is advice that cannot work, and this is the only form the business has.
+              : `We could not verify that request. Please refresh and try again, or call us at ${SITE.phoneDisplay} and we will take the details over the phone.`,
       },
       /**
        * ⚠️ **Still a 400 even when the details were captured, on purpose.** The client fires
@@ -321,14 +398,22 @@ export async function POST(req: Request) {
     form roughly how many leads this business has ever taken. Free information to give away, no
     reason to give it.
 
-    Second, the semantics are already exactly right. This hash is `phoneE164|name|message`, so a
-    double submit of the same enquiry produces the SAME reference and Google collapses it, which is
-    what we want, while a genuinely new enquiry produces a new one. It is the same key Resend
-    already uses to stop the office getting two copies, so both dedupe on one definition of "the
-    same submission" rather than on two that could drift apart.
+    Second, the semantics are already exactly right. A double submit of the same enquiry produces
+    the SAME reference and Google collapses it, which is what we want, while a genuinely new
+    enquiry produces a new one. It is the same key Resend already uses to stop the office getting
+    two copies, so both dedupe on one definition of "the same submission" rather than on two that
+    could drift apart.
 
-    It is still joinable to D1 without storing anything new: recompute the hash from a row's
-    `phone_e164`, `name` and `message`.
+    ⚠️ It is still joinable to D1 without storing anything new, but ONLY if you hash the same eight
+    fields in the same order. See the block above `idempotencyKey`: it is
+
+        phone_e164 | name | email | zip | city | service | source | message
+
+    joined with a literal pipe, with every null rendered as an empty string, SHA-256, first 16 bytes
+    as hex. This comment used to say `phoneE164|name|message`, which was true until the key was
+    widened to cover every field the email renders and was never updated. Anyone who trusted it and
+    recomputed three fields got a hash matching nothing, silently, months later, which is the whole
+    reason the exact recipe is spelled out here instead of described.
   */
   return NextResponse.json({ ok: true, email: emailStatus, db: dbStatus, leadRef: idempotencyKey });
 }
@@ -356,6 +441,15 @@ export async function GET(req: Request) {
   let db = false;
   let leadsSchema = false;
   let unverifiedTable = false;
+  /*
+    Refusals that no human has been told about. This is the number that would have exposed the
+    original bug: a table quietly filling with people nobody knew had tried. 'pending' means the
+    alert was queued and never resolved, 'failed' means Resend rejected it twice, and 'skipped'
+    means no alert address is configured, which is a deliberate state rather than a fault and so is
+    counted separately.
+  */
+  let unannounced: number | null = null;
+  let unalerted: number | null = null;
   try {
     const { env } = getCloudflareContext();
     await env.DB.prepare("SELECT 1").first();
@@ -377,6 +471,17 @@ export async function GET(req: Request) {
       "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'unverified_leads'",
     ).first();
     unverifiedTable = Boolean(found);
+
+    if (unverifiedTable) {
+      const counts = await env.DB.prepare(
+        `SELECT
+           SUM(CASE WHEN alert_status IN ('pending','failed') THEN 1 ELSE 0 END) AS unannounced,
+           SUM(CASE WHEN alert_status = 'skipped' THEN 1 ELSE 0 END) AS unalerted
+         FROM unverified_leads`,
+      ).first<{ unannounced: number | null; unalerted: number | null }>();
+      unannounced = counts?.unannounced ?? 0;
+      unalerted = counts?.unalerted ?? 0;
+    }
   } catch {
     // Leave every flag false. A thrown query here IS the finding.
   }
@@ -395,6 +500,19 @@ export async function GET(req: Request) {
     // False here means a migration has not been applied to whichever D1 this Worker is bound to.
     leadsSchema,
     unverifiedTable,
+    /*
+      ⚠️ **Non zero here is not automatically a fault, and zero is not automatically health.**
+
+      `unannounced` counts refusals whose alert is stuck at 'pending' or was rejected twice. Any
+      sustained number means the notification path is broken and people are being turned away into
+      a table nobody is reading, which is the original incident reproducing one level up.
+
+      `unalerted` counts refusals recorded while no alert address was configured at all. Expect this
+      to be the whole table until `UNVERIFIED_ALERT_TO` is set. It is the size of the backlog
+      somebody still owes a phone call to.
+    */
+    unannounced,
+    unalerted,
     resend: Boolean(process.env.RESEND_API_KEY?.trim()),
     mailTo: Boolean(process.env.CONTACT_TO_EMAIL?.trim()),
     // Counts only, never the addresses. Enough to prove the handover landed without printing
@@ -608,23 +726,57 @@ async function storeLead(
  *
  * ## Why the reachability bar
  *
- * Writing a row for every refused POST hands anyone with a loop a way to burn the daily D1 write
- * allowance that the real `leads` table shares, which would turn a spam nuisance into a lead outage.
- * A refusal with no phone and no email is also not a lead anyone could ever recover, so keeping it
- * buys nothing to pay for that risk with. A structurally valid phone or a plausible email is the
- * whole test, and every real customer clears it, including the one this was built for.
+ * This table is the CALLBACK WORKLIST. It is not the archive, and confusing the two is how somebody
+ * ends up widening this bar for a reason that no longer applies.
+ *
+ * ⚠️ **The archive DOES NOT EXIST YET, and until it does this bar is a real hole.** The plan is a
+ * write ahead submission log that takes every attempt unconditionally, ahead of every gate, whatever
+ * is in the fields, so that "we might lose the record" stops being a reason to widen this bar.
+ * See `postmortems/2026-08-12-turnstile-lead-loss/08-storage-decision.md`. Until that ships, a
+ * refusal carrying no dialable number and no plausible email is still discarded with no trace,
+ * which is a smaller version of the bug this whole file exists to fix. Accepted knowingly, recorded
+ * here rather than left for someone to discover.
+ *
+ * What this bar buys is a worklist somebody can actually work. A refusal carrying no dialable
+ * number and no plausible email is not a customer anyone can recover, so it is noise on a list
+ * whose whole value is that a human reads it. It also keeps a loop from burning the daily D1 write
+ * allowance that the real `leads` table shares, which would turn a spam nuisance into a lead
+ * outage.
  *
  * ⚠️ This is NOT a substitute for a rate limiting rule on the zone. It bounds the damage; it does
  * not stop a determined flood. See the note in the remediation plan.
  *
- * Returns true only when the details are stored **and** an alert is already on its way to a person,
- * because that is the exact condition under which the caller is allowed to tell a visitor that
- * someone will call them back.
+ * ## What it returns, and why it is two facts and not one
+ *
+ * It used to return a single boolean meaning "stored AND an alert is on its way", which the route
+ * handed straight to the visitor as permission to say someone would call. That conflated two things
+ * that fail independently and are known at different times:
+ *
+ *   `stored`    a confirmed fact at response time. The D1 insert returned a row id. This is the
+ *               half that actually preserves the lead, and it is the half we can promise on.
+ *   `notified`  an INTENTION. The alert is sent in `after()`, so at the moment we answer the
+ *               visitor nobody has been told anything yet and the send may still fail.
+ *
+ * Collapsing those into one flag produced the same shape of bug this whole change exists to fix,
+ * one level up: telling somebody they are handled when they might not be. Reporting both lets the
+ * caller say something true in all three states, including the state production is in RIGHT NOW,
+ * where no alert address is configured at all and every refusal is stored and announced to nobody.
  */
-async function refuse(submission: Submission, req: Request, reason: RefusalReason): Promise<boolean> {
+type RefusalOutcome = {
+  /** The details are in `unverified_leads`. Confirmed, not hoped for. */
+  stored: boolean;
+  /** An alert is configured and has been queued. Its delivery is still unproven at this point. */
+  notified: boolean;
+};
+
+async function refuse(
+  submission: Submission,
+  req: Request,
+  reason: RefusalReason,
+): Promise<RefusalOutcome> {
   if (!isReachable(submission)) {
     console.warn("[contact] refused, nothing to call back on, dropped", { reason });
-    return false;
+    return { stored: false, notified: false };
   }
 
   /**
@@ -645,18 +797,50 @@ async function refuse(submission: Submission, req: Request, reason: RefusalReaso
     // After the response, exactly like the HCP push: the durable write is what the visitor waits
     // for, the notification is not. The details are already safe by this point either way.
     after(async () => {
-      const status = await alertUnverified(submission, reason);
-      await markAlert(id, status);
+      /*
+        Retried ONCE, and it is free to do so. `alertUnverified` derives its Resend idempotency key
+        from the submission, so both attempts carry the same key and Resend collapses them: a retry
+        can never produce a second email in the office inbox. Most Resend failures are transient,
+        and the alternative to a retry here is a row sitting at 'failed' that nobody reads.
+      */
+      let result = await alertUnverified(submission, reason);
+      if (result.status === "failed") {
+        console.warn("[contact] refusal alert failed, retrying once", { id });
+        result = await alertUnverified(submission, reason);
+      }
+      await markAlert(id, result.status, result.error);
     });
   }
-  return id !== null && alerting;
+  return { stored: id !== null, notified: id !== null && alerting };
 }
 
-/** Is there any way at all to get back to this person? The bar for keeping a refused submission. */
-function isReachable(s: { phoneE164?: string; email?: string }): boolean {
-  // `phoneE164` is only ever set when `isValidPhone` passed, so this reads as "a number that could
-  // actually be dialled" rather than "the field was not empty".
-  return Boolean(s.phoneE164) || isValidEmail(s.email);
+/**
+ * Can a human get back to this person? The bar for putting a refused submission on the worklist.
+ *
+ * ⚠️ **Read this before widening it.** `unverified_leads` is the CALLBACK WORKLIST, not the
+ * archive. The archive is a write ahead submission log that records every attempt unconditionally,
+ * before any gate, including malformed bodies and including submissions with nothing usable in them
+ * at all. Once that exists, "we might lose the record" stops being a reason to lower this bar,
+ * because the record is kept somewhere else, and lowering it only fills the worklist with rows
+ * nobody can action and buries the recoverable customers among them.
+ *
+ * ⚠️ **It DOES NOT EXIST YET.** Design in
+ * `postmortems/2026-08-12-turnstile-lead-loss/08-storage-decision.md`, D1 table `submission_log`,
+ * migration 0006, not built at the time of writing. Until it ships this bar really does drop
+ * submissions nobody can call back, and that is a known accepted gap rather than a covered one.
+ *
+ * ⚠️ **`phoneE164` alone was the wrong test.** `toE164` returns null whenever `isValidPhone` fails,
+ * so at the `phone_invalid` gate that field is null BY DEFINITION, and the one gate whose entire
+ * purpose is catching a real customer who mistyped their number was the gate least able to keep
+ * them. It kept them only by luck, when their email happened to be valid. A mistyped phone is one
+ * of the stronger signals that a HUMAN is at the keyboard, because a bot has no reason to typo.
+ *
+ * `hasPlausiblePhone` closes exactly that hole and no more: ten digits that fail the NANP structure
+ * check still describe someone Barbara can call. Seven digits, or "x", do not. See the note on that
+ * function for why the line sits at ten.
+ */
+function isReachable(s: { phone?: string; phoneE164?: string; email?: string }): boolean {
+  return Boolean(s.phoneE164) || hasPlausiblePhone(s.phone) || isValidEmail(s.email);
 }
 
 /** Whether a refusal can reach a human at all. Checked before promising anyone a call back. */
@@ -734,11 +918,14 @@ async function storeUnverified(
  * `wrangler secret put` with **no rebuild and no deploy**. Same pattern, and same reasoning, as
  * `CONTACT_BCC_EMAIL`.
  */
-async function alertUnverified(s: Submission, reason: RefusalReason): Promise<SinkStatus> {
+async function alertUnverified(
+  s: Submission,
+  reason: RefusalReason,
+): Promise<{ status: SinkStatus; error: string | null }> {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const to = process.env.UNVERIFIED_ALERT_TO?.trim();
   const from = process.env.CONTACT_FROM_EMAIL?.trim();
-  if (!apiKey || !to || !from) return "skipped";
+  if (!apiKey || !to || !from) return { status: "skipped", error: null };
 
   /**
    * ⚠️ **This key MUST NOT be the one the office lead email uses, and the reason is a trap.**
@@ -788,21 +975,30 @@ async function alertUnverified(s: Submission, reason: RefusalReason): Promise<Si
     );
     if (error) {
       console.error("[contact] Resend rejected the refusal alert:", error.name, error.message);
-      return "failed";
+      // Truncated on the way into the column: a provider can return a long body and this row is
+      // written on a path an attacker can reach.
+      return { status: "failed", error: `${error.name}: ${error.message}`.slice(0, 500) };
     }
-    return "ok";
+    return { status: "ok", error: null };
   } catch (err) {
     console.error("[contact] refusal alert threw:", err);
-    return "failed";
+    return { status: "failed", error: String(err).slice(0, 500) };
   }
 }
 
-/** Records whether the alert actually went out, so a broken alert path is not itself silent. */
-async function markAlert(id: number, status: SinkStatus): Promise<void> {
+/**
+ * Records whether the alert actually went out, so a broken alert path is not itself silent.
+ *
+ * ⚠️ `alert_error` was declared in migration 0005 and never written, which left the status column
+ * saying 'failed' with no way to tell a rejected address from an expired API key from a rate limit.
+ * The whole reason this column pair exists is that the alert is sent after the response, where its
+ * failure is invisible to the visitor by design. A status with no detail is only half an answer.
+ */
+async function markAlert(id: number, status: SinkStatus, error: string | null = null): Promise<void> {
   try {
     const { env } = getCloudflareContext();
-    await env.DB.prepare(`UPDATE unverified_leads SET alert_status = ? WHERE id = ?`)
-      .bind(status, id)
+    await env.DB.prepare(`UPDATE unverified_leads SET alert_status = ?, alert_error = ? WHERE id = ?`)
+      .bind(status, error, id)
       .run();
   } catch (err) {
     console.error("[contact] could not record the refusal alert outcome:", err);
@@ -931,6 +1127,43 @@ async function verifyTurnstile(
         if (json.action && json.action !== TURNSTILE_ACTION) {
           console.error("[contact] Turnstile action mismatch:", json.action);
           return "reject";
+        }
+        /*
+          ⚠️ **Enforced in production ONLY, and that asymmetry is deliberate.**
+
+          A hostname mismatch in production means a token minted somewhere we do not serve, which is
+          the replay this check exists to stop, so it fails closed.
+
+          Locally the hostname is `localhost` and will never match, and failing closed there would
+          make every developer's form permanently unsubmittable, which is the exact shape of the bug
+          this whole post mortem is about: a security check that refuses honest people and says
+          nothing useful. So outside production it warns and passes.
+
+          Note this can only ever reject a token Cloudflare has ALREADY declared valid, so a
+          Cloudflare outage cannot reach this line. That is what makes failing closed safe here when
+          it was not safe for the missing token branch above.
+        */
+        if (json.hostname && !TURNSTILE_HOSTNAMES.has(json.hostname)) {
+          /*
+            ⚠️ **The test key exemption is not optional, it is the difference between this check
+            being safe and it being the same bug again.**
+
+            `next start` and `pnpm preview` both set NODE_ENV to production, and Cloudflare's always
+            pass testing secret answers with `hostname: "example.com"`. Without this exemption, the
+            NODE_ENV branch below would reject every submission in a local production build, which
+            is precisely the workflow used to verify the happy path on 2026-08-12. A security check
+            that turns away honest traffic in the one environment where we test honest traffic is
+            how this whole incident started.
+
+            Safe because a test secret can never be live: `GET /api/contact` reports
+            `turnstileIsTestKey`, and `verifyTurnstile` already console.errors on startup if one is
+            found in production.
+          */
+          if (process.env.NODE_ENV === "production" && !isTurnstileTestSecret(secret)) {
+            console.error("[contact] Turnstile hostname mismatch, rejecting:", json.hostname);
+            return "reject";
+          }
+          console.warn("[contact] Turnstile hostname not in the allowlist, accepting:", json.hostname);
         }
         return "pass";
       }

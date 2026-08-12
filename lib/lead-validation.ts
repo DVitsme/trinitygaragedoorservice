@@ -46,6 +46,38 @@ export function toE164(raw: string | undefined | null): string | null {
 }
 
 /**
+ * "There is a full number here that a person could actually dial", which is a deliberately lower
+ * bar than `isValidPhone` and exists for a different job.
+ *
+ * ⚠️ **Never use this to decide whether to ACCEPT a submission.** `isValidPhone` still owns that,
+ * and the two want opposite error biases. Accepting a bad number wastes the office's time on a call
+ * that cannot connect. This one decides whether an already refused submission earns a place on the
+ * human callback worklist, where the cost of a wrong answer is a lost customer.
+ *
+ * **Ten digits, not seven, and the difference matters.** `isValidPhone` enforces NANP structure, so
+ * it rejects a complete number whose area code or exchange begins with 0 or 1, or that collides
+ * with an N11 service code. Those are usually a real person transposing two digits, and Barbara can
+ * look at the row, see ten digits and work out what they meant. A seven digit fragment is a
+ * different thing: Tampa Bay spans 813, 727, 941 and 352, so there is no area code to infer and
+ * nobody can be called. A worklist entry nobody can action is noise on the worklist.
+ *
+ * **This is selective on purpose, because it feeds the WORKLIST and not the archive.** The archive
+ * is a planned write ahead submission log that will capture every attempt unconditionally, before
+ * any gate, whatever is in the fields, and it is the answer to "what happened to my form
+ * submission". This function feeds a different artefact with a different job. Once the log exists,
+ * do not "fix" this into accepting everything: that would not add safety, it would duplicate the
+ * archive into the worklist and bury the recoverable customers in it.
+ *
+ * ⚠️ **The log DOES NOT EXIST YET** (see
+ * `postmortems/2026-08-12-turnstile-lead-loss/08-storage-decision.md`). So today this bar is the
+ * last line, and a submission with no ten digit phone and no valid email is still lost. That is a
+ * known gap, not a covered one, and it is the reason the log is the next thing to build.
+ */
+export function hasPlausiblePhone(raw: string | undefined | null): boolean {
+  return normalizePhone(raw).length >= 10;
+}
+
+/**
  * Progressive display mask for the phone field, `(813) 279-6785`.
  *
  * Standard US convention, no spaces around the hyphen. A spaced variant was requested first and

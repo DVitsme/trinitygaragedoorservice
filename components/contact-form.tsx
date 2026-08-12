@@ -48,6 +48,49 @@ const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?ren
 const TOKEN_PROMPT_AFTER_MS = 2500;
 const TOKEN_GIVE_UP_AFTER_MS = 12000;
 
+/**
+ * Turn a Turnstile client side error code into advice the visitor can act on.
+ *
+ * ⚠️ **The previous test was `code.startsWith("200")` and it was wrong in both directions.**
+ * It caught `200100`, a clock or cache problem, and told those people to switch off a browser
+ * extension, which cannot possibly help. And it MISSED `110200`, `110100`, `400020` and `400070`,
+ * every one of which is OUR misconfiguration, so a fault on our side was reported to the customer
+ * as a problem with their browser. `110200` is the code a real preview build produced on localhost
+ * during the 2026-08-12 post mortem, and it showed the visitor the generic browser message.
+ *
+ * Codes are Cloudflare's documented client side list:
+ *   110100 / 110110 / 400020 / 400070   our sitekey is wrong, missing or disabled
+ *   110200                              this hostname is not on the widget allowlist, also ours
+ *   200500                              the challenge iframe could not load, often a blocker
+ *   200100                              the device clock or cache is out of step
+ *   110600 / 110620                     the challenge or the interaction timed out, retryable
+ *   300* / 600*                         generic challenge failure on Cloudflare's side, retryable
+ *
+ * ⚠️ **Every branch ends with "you can still send this form", because that is true.** A submission
+ * with no token reaches the server, which records it and puts it in front of a person rather than
+ * discarding it. Copy that tells someone to give up, or to fix something they cannot fix, is what
+ * turned a recoverable problem into a lost customer on 2026-08-11.
+ */
+const OUR_CONFIG_CODES = new Set(["110100", "110110", "110200", "400020", "400070"]);
+
+function turnstileAdvice(code: string): string {
+  const phone = "call us at (813) 279-6785";
+  if (OUR_CONFIG_CODES.has(code)) {
+    // Never blame the visitor for our own configuration. Nothing they do can change this one.
+    return `The security check on this page is misconfigured on our side. You can still send this form and we will pick it up, or ${phone}.`;
+  }
+  if (code === "200500") {
+    return `The verification box could not load, which often means a browser extension is blocking it. Turn the blocker off for this page, or just send the form anyway and we will pick it up, or ${phone}.`;
+  }
+  if (code === "200100") {
+    return `The verification could not run, usually because the clock on this device is out of step. Check your date and time, or send the form anyway and we will pick it up, or ${phone}.`;
+  }
+  if (code === "110600" || code === "110620") {
+    return `The security check timed out. Send the form again, or send it as it is and we will pick it up, or ${phone}.`;
+  }
+  return `Your browser could not finish the verification. You can still send this form, or ${phone} and we will take the details over the phone.`;
+}
+
 /** The slice of Cloudflare's global we use. Typed here so nothing reaches for `any`. */
 type TurnstileApi = {
   render: (el: HTMLElement, opts: Record<string, unknown>) => string;
@@ -58,7 +101,7 @@ type TurnstileApi = {
 const turnstileApi = (): TurnstileApi | undefined =>
   (window as unknown as { turnstile?: TurnstileApi }).turnstile;
 
-type Status = "idle" | "verifying" | "submitting" | "success" | "captured" | "error";
+type Status = "idle" | "verifying" | "submitting" | "success" | "captured" | "saved" | "error";
 type Field = "firstName" | "phone" | "email" | "zip";
 
 const FIELDS: Field[] = ["firstName", "phone", "email", "zip"];
@@ -115,7 +158,7 @@ export function ContactForm({ intent, source }: { intent?: string; source?: Lead
   // See the note on the success card below: focus is what actually announces it, and what stops
   // focus being dropped on the floor when the form unmounts.
   useEffect(() => {
-    if (status === "success" || status === "captured") successRef.current?.focus();
+    if (status === "success" || status === "captured" || status === "saved") successRef.current?.focus();
   }, [status]);
 
   /**
@@ -204,6 +247,13 @@ export function ContactForm({ intent, source }: { intent?: string; source?: Lead
   const token = useRef("");
   /** Submits parked waiting for a token. Drained by the widget callback, cleared on reset. */
   const waiters = useRef<Array<(t: string) => void>>([]);
+  /**
+   * The last Turnstile client side error code seen on this page, posted with the submission.
+   *
+   * A ref rather than state on purpose: nothing renders from it, and putting it in state would
+   * re-render the form every time the widget hiccups. It is read once, at submit.
+   */
+  const lastTurnstileError = useRef("");
 
   const settleToken = useCallback((value: string) => {
     token.current = value;
@@ -246,12 +296,22 @@ export function ContactForm({ intent, source }: { intent?: string; source?: Lead
       "error-callback": (code: unknown) => {
         const c = String(code ?? "");
         console.warn("[contact] Turnstile error", c);
+        /*
+          ⚠️ **Kept so it can travel to the server on the next submit.** Throughout the 2026-08-11
+          investigation this code existed only in the visitor's console, so Workers Logs could show
+          six refusals and not say whether the widget was blocked (200500), misconfigured by us
+          (110200) or simply failed the challenge (the 300 and 600 families). Those need opposite
+          fixes. We only
+          ever learned the code at all because someone pasted their own console into a chat.
+
+          Deliberately NOT a beacon to a new endpoint. A separate route would be one more
+          unauthenticated thing to flood, and every case that mattered here ended in a submission
+          anyway. The residual gap is a visitor who errors and never submits, which is still
+          visible in Turnstile analytics as challenges issued with no solve.
+        */
+        lastTurnstileError.current = c;
         settleToken("");
-        setTsError(
-          c.startsWith("200")
-            ? "The verification box could not load, which usually means a browser extension is blocking it. Turn the blocker off for this page, then send the form again, or call us at (813) 279-6785."
-            : "Your browser could not finish the verification. You can still send this form, or call us at (813) 279-6785 and we will take the details over the phone.",
-        );
+        setTsError(turnstileAdvice(c));
       },
     });
   }, [settleToken]);
@@ -302,13 +362,14 @@ export function ContactForm({ intent, source }: { intent?: string; source?: Lead
     }
     return new Promise<string>((resolve) => {
       const prompt = setTimeout(() => setNeedsCheck(true), TOKEN_PROMPT_AFTER_MS);
-      let giveUp: ReturnType<typeof setTimeout>;
+      // Declared before `onToken` so the closure can clear it. `const` because it is assigned once;
+      // the previous `let` was flagged by prefer-const the moment `pnpm lint` started working again.
       const onToken = (value: string) => {
         clearTimeout(prompt);
         clearTimeout(giveUp);
         resolve(value);
       };
-      giveUp = setTimeout(() => {
+      const giveUp = setTimeout(() => {
         clearTimeout(prompt);
         waiters.current = waiters.current.filter((w) => w !== onToken);
         resolve("");
@@ -493,27 +554,38 @@ export function ContactForm({ intent, source }: { intent?: string; source?: Lead
           service: get("service") || undefined,
           source: leadSource,
           token: verified || undefined,
+          // Only ever set when the widget actually errored, so it is absent on the happy path and
+          // present on exactly the submissions we would otherwise be unable to explain.
+          turnstileError: lastTurnstileError.current || undefined,
         }),
       });
       const json = (await res.json().catch(() => ({}))) as {
         message?: string;
         leadRef?: string;
         captured?: boolean;
+        stored?: boolean;
       };
       if (!res.ok) {
         resetWidget();
         /*
-          `captured` means the server has the name, phone, email, zip and message on file and has
-          already put them in front of a person. That is a different outcome from a failure and it
-          gets different words: a red alert telling someone to refresh is what sent a real customer
-          away twice, and refreshing would have thrown away everything he had typed.
+          Two server flags, three outcomes, because they fail independently:
 
-          ⚠️ No `track()` call on this branch, deliberately. A refused submission is not a
+            captured  the details are saved AND an alert is already on its way to a person
+            stored    the details are saved, but nobody has been told yet
+
+          `stored` without `captured` is the state the site is in whenever no alert address is
+          configured, which is most of the time so far. It used to render as the red error below,
+          which was false twice over: it implied the details were lost when they were not, and its
+          advice to refresh would have discarded everything the visitor had typed. That is the
+          advice the customer in the incident actually followed, and he failed three more times
+          after taking it.
+
+          ⚠️ No `track()` on any of these branches, deliberately. A refused submission is not a
           conversion, and reporting it as one would feed Smart Bidding on spam.
         */
-        if (json.captured) {
+        if (json.captured || json.stored) {
           setNeedsCheck(false);
-          setStatus("captured");
+          setStatus(json.captured ? "captured" : "saved");
           return;
         }
         setFormError(json.message ?? "Something went wrong. Please call us at (813) 279-6785.");
@@ -607,6 +679,39 @@ export function ContactForm({ intent, source }: { intent?: string; source?: Lead
         <p className="mx-auto mt-2 max-w-[430px] text-[16px] leading-[1.55] text-body">
           The security check on this page did not finish, so a person is picking this one up by hand.
           Someone will call you back. If you would rather not wait, call{" "}
+          <a href="tel:18132796785" className="font-bold text-accent">(813) 279-6785</a>.
+        </p>
+      </div>
+    );
+  }
+
+  /**
+   * Saved, but nobody has been told yet, so the copy asks them to call rather than promising a
+   * callback that has no mechanism behind it.
+   *
+   * ⚠️ **This is the state the live site is in whenever `UNVERIFIED_ALERT_TO` is unset**, which has
+   * been the whole time so far. Before this card existed it rendered as the red error, telling a
+   * visitor whose details we had just successfully saved that they should refresh and try again.
+   * Refreshing empties the form. The customer in the 2026-08-11 incident took that advice at
+   * 01:37:46 and failed three more times afterwards.
+   *
+   * It leans on the phone number rather than the callback because the callback depends on somebody
+   * reading `unverified_leads`, and until there is an alert or a routine that reads it, saying
+   * "someone will call you back" here would be the same over promise the `captured` flag was
+   * splitting apart in the first place. Keep the two cards distinct.
+   */
+  if (status === "saved") {
+    return (
+      <div
+        ref={successRef}
+        tabIndex={-1}
+        role="status"
+        className="text-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      >
+        <h3 className="font-display text-[22px] font-extrabold uppercase text-ink">Your details are saved.</h3>
+        <p className="mx-auto mt-2 max-w-[430px] text-[16px] leading-[1.55] text-body">
+          The security check on this page did not finish, but we have what you sent and it is safe.
+          To be certain we reach you today, call{" "}
           <a href="tel:18132796785" className="font-bold text-accent">(813) 279-6785</a>.
         </p>
       </div>

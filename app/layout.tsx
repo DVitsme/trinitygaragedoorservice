@@ -43,10 +43,31 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   /**
-   * Off in local dev and in any build that sets NEXT_PUBLIC_GTM_DISABLE, so screenshot QA and
-   * `next dev` never fire real conversions into the client's live Google Ads account.
+   * Google Tag Manager, on in production builds only.
+   *
+   * ⚠️ **`NODE_ENV === "production"` is the load bearing half and it was missing.** The comment here
+   * used to claim GTM was "off in local dev" while the code checked nothing but
+   * `NEXT_PUBLIC_GTM_DISABLE`, a variable that was set in no file anywhere in this repository. So
+   * `pnpm dev` and `pnpm preview` both loaded the real container and fired real conversions into the
+   * client's live Google Ads account from localhost, unless whoever ran them happened to remember a
+   * flag nothing told them about. During the 2026-08-12 post mortem the first preview build was
+   * started without it and had to be killed and rebuilt.
+   *
+   * The inverse direction is worse and is why the env var is kept as well as the NODE_ENV check
+   * rather than replaced by it. `NEXT_PUBLIC_*` is inlined at BUILD time, so a stray
+   * `NEXT_PUBLIC_GTM_DISABLE=1` in a deploy shell would ship production with **no conversion
+   * tracking at all**, silently, with a green build and no error anywhere. That is now a deliberate
+   * two step: you have to be in a production build AND not have set the escape hatch.
+   *
+   * ⚠️ **Do not "simplify" this by dropping either half.** NODE_ENV alone removes the ability to
+   * disable tags in a production build for a screenshot pass; the env var alone is what shipped the
+   * bug above. `next build` sets NODE_ENV to production, `next dev` sets it to development, and
+   * `pnpm preview` runs a production build, which is why the escape hatch still has to exist.
    */
-  const gtmEnabled = Boolean(SITE.gtmId) && process.env.NEXT_PUBLIC_GTM_DISABLE !== "1";
+  const gtmEnabled =
+    Boolean(SITE.gtmId) &&
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXT_PUBLIC_GTM_DISABLE !== "1";
 
   return (
     <html lang="en" className={hanken.variable}>
