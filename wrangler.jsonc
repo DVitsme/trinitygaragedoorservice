@@ -46,6 +46,37 @@
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://trinitygaragedoorservice.com"
   },
+  /*
+    Rate limiter for POST /api/contact. Added 2026-08-12.
+
+    ⚠️ **Ships in SHADOW MODE.** `RATE_LIMIT_MODE` in `lib/rate-limit.ts` is `"log"`, so this
+    counts and logs and refuses nobody. That is deliberate and it is our own rule: a gate on the
+    revenue path does not get to reject anyone until its false positive rate has been measured.
+    The last gate that skipped that step refused a real customer six times. See
+    `postmortems/2026-08-12-turnstile-lead-loss/06-prevention.md`.
+
+    **Why 10 per 60 seconds and not something tighter.** The customer this whole post-mortem is
+    about submitted FIVE times in two minutes, three of them inside four seconds, because the form
+    kept failing and he kept retrying. A limit of 3 or 5 a minute would have blocked a real,
+    already struggling customer on his last attempts. The threshold has to clear the worst genuine
+    burst we have on record, not the average one. Ten is roughly double his peak.
+
+    ⚠️ **`period` accepts ONLY 10 or 60.** Any other value is a deploy error, not a warning.
+
+    ⚠️ **The limit is per Cloudflare location, not global.** A visitor is counted at whichever colo
+    serves them, so the effective global ceiling is higher than 10 and a distributed flood is only
+    loosely bounded. That is fine for the job here, which is stopping one source hammering the
+    endpoint. It is NOT a substitute for a WAF rate limiting rule at the edge, which is the only
+    thing that stops a request before the Worker is invoked at all. That rule still needs adding in
+    the dashboard: no API token on this machine can read or write zone rulesets.
+  */
+  "ratelimits": [
+    {
+      "name": "CONTACT_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 10, "period": 60 }
+    }
+  ],
   // D1 lead store (Phase 2). Remote DB created via `wrangler d1 create trinity-leads`.
   // Local dev/migrations use `pnpm db:migrate:local`; remote uses `pnpm db:migrate`.
   "d1_databases": [

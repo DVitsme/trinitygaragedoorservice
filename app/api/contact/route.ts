@@ -14,6 +14,22 @@ import {
 } from "@/lib/lead-validation";
 import { pushLeadToHcp, HcpPermanentError } from "@/lib/housecall-pro";
 import { SITE } from "@/lib/site";
+import { checkRateLimit, RATE_LIMIT_MODE, RATE_LIMIT_RULE } from "@/lib/rate-limit";
+
+/** The `CONTACT_RATE_LIMITER` binding from `wrangler.jsonc`, or undefined if it is not bound. */
+type RateLimiterBinding = { limit: (o: { key: string }) => Promise<{ success: boolean }> };
+function rateLimiter(): RateLimiterBinding | undefined {
+  try {
+    // Cast because the binding is generated into cloudflare-env.d.ts, which is gitignored, so a
+    // fresh clone that has not run `pnpm cf-typegen` would otherwise fail to typecheck this file.
+    const env = getCloudflareContext().env as unknown as Record<string, RateLimiterBinding | undefined>;
+    return env.CONTACT_RATE_LIMITER;
+  } catch {
+    // getCloudflareContext throws outside a request scope. Treated as "no limiter", never as a
+    // reason to reject anyone.
+    return undefined;
+  }
+}
 
 type Payload = {
   firstName?: string;
@@ -142,6 +158,47 @@ const TURNSTILE_HOSTNAMES = new Set([
 ]);
 
 export async function POST(req: Request) {
+  /*
+    Rate limit check, first thing, before the body is even parsed.
+
+    ⚠️ **In shadow mode this refuses NOBODY.** `RATE_LIMIT_MODE` is `"log"`, so `rate.refuse` is
+    always false and the only effect is a log line. Read `lib/rate-limit.ts` before changing that:
+    the criteria for flipping to `"enforce"` are written down there, and they exist because the
+    last gate shipped to this path without measuring its false positive rate refused a real
+    customer six times.
+
+    It sits above the JSON parse on purpose. The cheapest possible rejection of a flood is one that
+    happens before we allocate anything, and a request that is over the limit is not made more
+    interesting by reading its body.
+  */
+  const clientIp = req.headers.get("cf-connecting-ip");
+  const rate = await checkRateLimit(rateLimiter(), clientIp);
+  if (rate.overLimit) {
+    console.warn("[contact] rate limit exceeded", {
+      mode: RATE_LIMIT_MODE,
+      refused: rate.refuse,
+      rule: `${RATE_LIMIT_RULE.limit}/${RATE_LIMIT_RULE.periodSeconds}s`,
+      ip: clientIp,
+    });
+  } else if (rate.skipped && rate.skipped !== "mode_off") {
+    // Loud on purpose. An empty "over limit" log has to mean "nobody was over", not "it never ran".
+    console.warn("[contact] rate limiter did not run:", rate.skipped);
+  }
+  if (rate.refuse) {
+    /*
+      Only reachable in `enforce` mode. Names the phone number, because the one thing we never do
+      again is leave a real person with a closed door and no other route. 429 rather than 403 so
+      the honest reason is in the status line as well as the body.
+    */
+    return NextResponse.json(
+      {
+        error: "rate_limited",
+        message: `Too many requests from this connection just now. Please wait a moment and try again, or call us at ${SITE.phoneDisplay} and we will take the details over the phone.`,
+      },
+      { status: 429, headers: { "Retry-After": String(RATE_LIMIT_RULE.periodSeconds) } },
+    );
+  }
+
   let data: Payload;
   try {
     data = (await req.json()) as Payload;
