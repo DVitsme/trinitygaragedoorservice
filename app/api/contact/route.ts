@@ -15,6 +15,10 @@ import {
 import { pushLeadToHcp, HcpPermanentError } from "@/lib/housecall-pro";
 import { SITE } from "@/lib/site";
 import { checkRateLimit, RATE_LIMIT_MODE, RATE_LIMIT_RULE } from "@/lib/rate-limit";
+import {
+  beginAttempt, recordAttempt, recordCollapsed, finishAttempt, MAX_RAW_BODY,
+  type AttemptContext, type AttemptOutcome,
+} from "@/lib/submission-log";
 
 /** The `CONTACT_RATE_LIMITER` binding from `wrangler.jsonc`, or undefined if it is not bound. */
 type RateLimiterBinding = { limit: (o: { key: string }) => Promise<{ success: boolean }> };
@@ -157,7 +161,50 @@ const TURNSTILE_HOSTNAMES = new Set([
   "www.trinitygaragedoorservice.com",
 ]);
 
+/**
+ * The public entry point. Thin on purpose: its only job is to guarantee that every single request
+ * leaves a record, whatever happens inside `handleContact`.
+ *
+ * ⚠️ **The `finally` is the whole design.** It runs on every return path, on every gate, and on an
+ * uncaught throw. Before this existed, each gate returned while the customer's details were still
+ * loose local variables and nothing was written anywhere. That is how six submissions from a real
+ * customer vanished on 2026-08-11.
+ *
+ * ⚠️ **`out.outcome` defaults to `"error"` and that is deliberate.** If the request dies somewhere
+ * unexpected, the row says so rather than saying nothing. And if the isolate is killed outright the
+ * `finally` never runs at all, which leaves `outcome` NULL: a fourth state meaning "we started
+ * handling this and never finished". Nobody had that signal before. Do not paper over it.
+ */
 export async function POST(req: Request) {
+  const ctx = beginAttempt(req);
+  const out: AttemptOutcome = { outcome: "error" };
+  let rowId: number | null = null;
+  const setRowId = (id: number | null) => { rowId = id; };
+
+  try {
+    const res = await handleContact(req, ctx, out, setRowId);
+    out.status = res.status;
+    return res;
+  } catch (err) {
+    // A throw here means a bug, not a visitor problem. Say so honestly and give them the phone.
+    console.error("[contact] unhandled error", { attemptId: ctx.attemptId, err: String(err) });
+    out.outcome = "error";
+    out.status = 500;
+    return NextResponse.json(
+      { error: "server_error", message: `Something went wrong on our end. Please call us at ${SITE.phoneDisplay}.` },
+      { status: 500 },
+    );
+  } finally {
+    await finishAttempt(rowId, out);
+  }
+}
+
+async function handleContact(
+  req: Request,
+  ctx: AttemptContext,
+  out: AttemptOutcome,
+  setRowId: (id: number | null) => void,
+): Promise<NextResponse> {
   /*
     Rate limit check, first thing, before the body is even parsed.
 
@@ -171,7 +218,7 @@ export async function POST(req: Request) {
     happens before we allocate anything, and a request that is over the limit is not made more
     interesting by reading its body.
   */
-  const clientIp = req.headers.get("cf-connecting-ip");
+  const clientIp = ctx.ip;
   const rate = await checkRateLimit(rateLimiter(), clientIp);
   if (rate.overLimit) {
     console.warn("[contact] rate limit exceeded", {
@@ -184,12 +231,71 @@ export async function POST(req: Request) {
     // Loud on purpose. An empty "over limit" log has to mean "nobody was over", not "it never ran".
     console.warn("[contact] rate limiter did not run:", rate.skipped);
   }
+  /*
+    Read the body ONCE as text, then parse it ourselves.
+
+    ⚠️ **`req.json()` consumes the stream, so a body that fails to parse is unrecoverable after
+    it.** That is why a malformed submission used to leave no trace at all: the parse threw, the
+    handler returned at the next line, and the bytes were gone. Reading text first is what lets the
+    archive record the one class of request it could never see before.
+
+    The `content-length` guard comes first so an attacker cannot make us buffer megabytes per
+    request just to throw it away.
+  */
+  const declared = Number(req.headers.get("content-length") ?? "0");
+  if (declared > MAX_RAW_BODY) {
+    out.outcome = "invalid";
+    out.gate = "body_too_large";
+    setRowId(await recordAttempt(ctx, { bodyBytes: declared }));
+    return NextResponse.json({ error: "too_large", message: "That request was too large." }, { status: 413 });
+  }
+
+  let raw = "";
+  try {
+    raw = await req.text();
+  } catch {
+    /* Unreadable stream. Nothing to record but the context, which is still worth having. */
+  }
+
+  let parsed: Payload | null = null;
+  try {
+    parsed = JSON.parse(raw) as Payload;
+  } catch {
+    parsed = null;
+  }
+
+  /*
+    ⚠️ **The archive row is written HERE**, before every gate, whatever the body turned out to be.
+    Over limit clients get a single collapsed row per hour instead (see migration 0006), which is
+    what keeps a flood from spending the D1 write quota that real leads share.
+  */
+  if (rate.overLimit) {
+    await recordCollapsed(ctx, raw);
+  } else {
+    setRowId(
+      await recordAttempt(ctx, {
+        rawBody: raw,
+        bodyBytes: raw.length,
+        tokenLen: parsed?.token?.length,
+        clientError: parsed?.turnstileError?.trim().slice(0, 32),
+        name: parsed?.firstName?.trim() || parsed?.name?.trim(),
+        phone: parsed?.phone?.trim(),
+        email: parsed?.email?.trim(),
+        zip: parsed?.zip?.trim(),
+        service: parsed?.service?.trim(),
+        source: parsed?.source?.trim(),
+      }),
+    );
+  }
+
   if (rate.refuse) {
     /*
       Only reachable in `enforce` mode. Names the phone number, because the one thing we never do
       again is leave a real person with a closed door and no other route. 429 rather than 403 so
       the honest reason is in the status line as well as the body.
     */
+    out.outcome = "rate_limited";
+    out.gate = "over_limit";
     return NextResponse.json(
       {
         error: "rate_limited",
@@ -199,12 +305,12 @@ export async function POST(req: Request) {
     );
   }
 
-  let data: Payload;
-  try {
-    data = (await req.json()) as Payload;
-  } catch {
+  if (parsed === null) {
+    out.outcome = "invalid";
+    out.gate = "invalid_json";
     return NextResponse.json({ error: "invalid_json", message: "Invalid request." }, { status: 400 });
   }
+  const data: Payload = parsed;
 
   const firstName = data.firstName?.trim() ?? "";
   const lastName = data.lastName?.trim() ?? "";
@@ -263,7 +369,8 @@ export async function POST(req: Request) {
   };
 
   if (!name) {
-    await refuse(submission, req, "name_required");
+    out.outcome = "refused"; out.gate = "name_required";
+    out.unverifiedId = (await refuse(submission, req, "name_required", ctx.attemptId)).id;
     return NextResponse.json(
       { error: "name_required", message: "Please tell us your name." },
       { status: 422 },
@@ -272,7 +379,8 @@ export async function POST(req: Request) {
   // Previously ANY non-empty string passed, so `phone: "x"` was accepted and stored. The phone is
   // the only way this business calls anyone back, so it had weaker validation than optional email.
   if (!isValidPhone(phone)) {
-    await refuse(submission, req, "phone_invalid");
+    out.outcome = "refused"; out.gate = "phone_invalid";
+    out.unverifiedId = (await refuse(submission, req, "phone_invalid", ctx.attemptId)).id;
     return NextResponse.json(
       {
         error: "phone_invalid",
@@ -311,7 +419,8 @@ export async function POST(req: Request) {
   }
   const verdict = await verifyTurnstile(secret, data.token, req.headers.get("cf-connecting-ip"));
   if (verdict === "reject") {
-    const { stored, notified } = await refuse(submission, req, "turnstile_reject");
+    const { stored, notified, id: unverifiedId } = await refuse(submission, req, "turnstile_reject", ctx.attemptId);
+    out.outcome = "refused"; out.gate = "turnstile_reject"; out.unverifiedId = unverifiedId;
     return NextResponse.json(
       {
         error: "verification_failed",
@@ -383,7 +492,7 @@ export async function POST(req: Request) {
 
   const [emailStatus, leadId] = await Promise.all([
     sendEmail(lead, idempotencyKey),
-    storeLead(lead, req),
+    storeLead(lead, req, ctx.attemptId),
   ]);
   const dbStatus: SinkStatus = leadId === null ? "failed" : "ok";
 
@@ -431,6 +540,7 @@ export async function POST(req: Request) {
   // The whole point: if EVERY durable sink failed, the lead is gone. Say so and give them the
   // phone number, instead of showing a success card over a lost customer.
   if (emailStatus !== "ok" && dbStatus !== "ok") {
+    out.outcome = "error"; out.gate = "all_sinks_failed";
     console.error("[contact] every sink failed, lead not captured", { emailStatus, dbStatus });
     return NextResponse.json(
       {
@@ -472,7 +582,17 @@ export async function POST(req: Request) {
     recomputed three fields got a hash matching nothing, silently, months later, which is the whole
     reason the exact recipe is spelled out here instead of described.
   */
-  return NextResponse.json({ ok: true, email: emailStatus, db: dbStatus, leadRef: idempotencyKey });
+  out.outcome = "accepted";
+  out.leadId = leadId;
+  /*
+    `ref` is the attempt id, and it is safe to hand back where the D1 row id would not be. A
+    sequential integer would tell anyone who submits the form roughly how many leads this business
+    has ever taken; this leaks nothing. It is the support win: a customer who phones can read out a
+    reference and it resolves to exactly one row in `submission_log`.
+  */
+  return NextResponse.json({
+    ok: true, email: emailStatus, db: dbStatus, leadRef: idempotencyKey, ref: ctx.attemptId,
+  });
 }
 
 /**
@@ -733,13 +853,15 @@ async function storeLead(
     zip?: string; city?: string; service?: string; message?: string; source: string;
   } & ClickIds,
   req: Request,
+  /** Correlates this row back to its `submission_log` entry. See migration 0006. */
+  attemptId: string,
 ): Promise<number | null> {
   try {
     const { env } = getCloudflareContext();
     const row = await env.DB.prepare(
       `INSERT INTO leads (name, phone, phone_e164, email, zip, city, service, message, source, user_agent, ip,
-                          gclid, gbraid, wbraid, msclkid, landing_path)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+                          gclid, gbraid, wbraid, msclkid, landing_path, attempt_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     )
       .bind(
         lead.name,
@@ -758,6 +880,7 @@ async function storeLead(
         lead.wbraid ?? null,
         lead.msclkid ?? null,
         lead.landingPath ?? null,
+        attemptId,
       )
       .first<{ id: number }>();
     return row?.id ?? null;
@@ -824,16 +947,19 @@ type RefusalOutcome = {
   stored: boolean;
   /** An alert is configured and has been queued. Its delivery is still unproven at this point. */
   notified: boolean;
+  /** `unverified_leads.id`, or null when nothing was stored. Correlates the WAL row. */
+  id: number | null;
 };
 
 async function refuse(
   submission: Submission,
   req: Request,
   reason: RefusalReason,
+  attemptId: string,
 ): Promise<RefusalOutcome> {
   if (!isReachable(submission)) {
     console.warn("[contact] refused, nothing to call back on, dropped", { reason });
-    return { stored: false, notified: false };
+    return { stored: false, notified: false, id: null };
   }
 
   /**
@@ -847,7 +973,7 @@ async function refuse(
    * the endpoint. Widen this from the table's own data, not from a hunch.
    */
   const alerting = reason === "turnstile_reject" && alertConfigured();
-  const id = await storeUnverified(submission, req, reason, alerting ? "pending" : "skipped");
+  const id = await storeUnverified(submission, req, reason, alerting ? "pending" : "skipped", attemptId);
   console.warn("[contact] refused submission captured", { reason, id, source: submission.source });
 
   if (id !== null && alerting) {
@@ -868,7 +994,7 @@ async function refuse(
       await markAlert(id, result.status, result.error);
     });
   }
-  return { stored: id !== null, notified: id !== null && alerting };
+  return { stored: id !== null, notified: id !== null && alerting, id };
 }
 
 /**
@@ -915,6 +1041,8 @@ async function storeUnverified(
   req: Request,
   reason: RefusalReason,
   alertStatus: "pending" | "skipped",
+  /** Correlates this row back to its `submission_log` entry. See migration 0006. */
+  attemptId: string,
 ): Promise<number | null> {
   try {
     const { env } = getCloudflareContext();
@@ -929,11 +1057,12 @@ async function storeUnverified(
         `DELETE FROM unverified_leads WHERE created_at < datetime('now', ?)`,
       ).bind(`-${UNVERIFIED_RETENTION_DAYS} days`),
       env.DB.prepare(
-        `INSERT INTO unverified_leads (reason, name, phone, phone_e164, email, zip, city, service,
+        `INSERT INTO unverified_leads (attempt_id, reason, name, phone, phone_e164, email, zip, city, service,
                                        message, source, user_agent, ip,
                                        gclid, gbraid, wbraid, msclkid, landing_path, alert_status)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
       ).bind(
+        attemptId,
         reason,
         s.name ?? null,
         s.phone || null,
