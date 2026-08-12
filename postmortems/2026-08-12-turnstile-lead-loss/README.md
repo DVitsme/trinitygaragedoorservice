@@ -59,6 +59,10 @@ with nothing in the process set up to notice.
 | [`05-known-gaps.md`](05-known-gaps.md) | Fourteen things the patch does not fix, ordered by likelihood of costing a lead | Before you assume this is finished. It is not |
 | [`06-prevention.md`](06-prevention.md) | Eight principles that generalise past this stack and past Turnstile | You are about to ship anything that can reject a user |
 | [`07-day-one-checklist.md`](07-day-one-checklist.md) | The build list for the next project, grouped and tickable | Starting a new lead capture site |
+| [`08-storage-decision.md`](08-storage-decision.md) | R2 versus D1 for the write ahead log. Three analyses, one hands on spike, and the failure modes that decided it | Choosing where an audit log lives on Cloudflare |
+| [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md) | The reproducible baseline, runnable queries, the traps in each instrument, and the monitoring that should exist | Proving a fix worked, or building observability from scratch |
+| [`10-privacy-and-retention.md`](10-privacy-and-retention.md) | What the data actually contains, which laws reach a business this size, retention, and the two near misses | Before storing customer data anywhere, especially in a public repo |
+| [`REFERENCES.md`](REFERENCES.md) | Every external source used, grouped by topic, with what each establishes | You need the citation without rereading the argument |
 
 ---
 
@@ -118,6 +122,22 @@ Fixed and deployed:
 - Refused submissions captured to a quarantine table instead of discarded.
 - The retry race closed.
 - Two silent office email losses fixed (`replyTo` validation, widened idempotency key).
+
+**Decided since, with the research recorded rather than repeated:**
+
+- **The write ahead log goes in D1, not R2.** The monthly plain text file is a derived export. Three
+  analyses ran and disagreed; a hands on spike settled it on failure modes, not performance. R2's
+  `put` silently discards on key collision, its compaction job destroyed a real record on the first
+  race test, `wrangler` cannot list R2 objects at all, and one null byte makes an entire month
+  unsearchable by grep while `file` still calls it ASCII text. See
+  [`08-storage-decision.md`](08-storage-decision.md).
+- **The 62% solve rate in these documents is a dashboard figure and is not reproducible via the
+  API.** The reproducible baseline is **68.5% solved, 31.5% refused**. Comparing a fresh API number
+  against 62% would invent a six point improvement out of a methodology difference. See
+  [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md).
+- **Retention should be 90 days**, matching the click id lifetime already justified in
+  `middleware.ts`, and the privacy policy's unconditional deletion promise is the one clean self
+  inflicted liability in it. See [`10-privacy-and-retention.md`](10-privacy-and-retention.md).
 
 **Not yet done, and the reason `05-known-gaps.md` exists:**
 

@@ -10,6 +10,119 @@ two are pre-existing faults that this work simply did not touch.
 
 ---
 
+## Status, updated 2026-08-12 evening
+
+Work continued after this file was written. **Nothing below has been deployed.** Production is
+still running `408f7db`, so every gap marked "patched" is patched in a file on disk, not in the
+thing customers are using.
+
+| # | Gap | Status |
+|---|---|---|
+| 1 | Alerting off, calm card dormant | **Open.** Still `alertTo: false` in production |
+| 2 | The calm card can promise falsely | **Patched, not deployed.** `refuse()` now returns `{ stored, notified }`, three states instead of two. `captured` keeps its old meaning so a cached bundle degrades safely |
+| 3 | `alert_error` never written | **Patched, not deployed** |
+| 4 | Nobody reads `unverified_leads` | **Designed, not built.** Weekly digest Worker, see [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md) |
+| 5 | The gate captures the least | **Patched, not deployed. And it fired in production.** See below |
+| 6 | Refusal path is an abuse surface | **Open, and now blocking.** Rate limiting must land *before* the write ahead log, not after |
+| 7 | The 38% is unmeasured | **Baseline corrected**, see below. Post fix sample is n=1 and means nothing |
+| 8 | Client side Turnstile error code invisible | **Patched, not deployed.** Now posted with the submission and logged server side |
+| 9 | Error branch misroutes config errors | **Patched, not deployed.** `startsWith("200")` was wrong in *both* directions |
+| 10 | `json.hostname` never validated | **Patched, not deployed.** Nearly reintroduced the incident, see below |
+| 11 | `leadRef` comment factually wrong | **Patched, not deployed** |
+| 12 | Silent message truncation | **Made observable, not restructured.** It now logs when it fires |
+| 13 | `pnpm lint` broken | **Fixed, not deployed.** Root cause found, see below |
+| 14 | GTM guard does not match its comment | **Patched, not deployed** |
+
+### Gap 5 fired in production eleven minutes after the deploy
+
+The only `POST /api/contact` since `408f7db` went live was a **422 at 2026-08-12T15:48:54Z**, and
+`unverified_leads` still holds **zero rows**. That refusal was discarded exactly as this gap
+predicted, for exactly the reason described: the deployed `isReachable` requires a valid email, and
+a `phone_invalid` refusal can never carry a `phoneE164` because `toE164` returns null when
+`isValidPhone` fails.
+
+This is no longer a theoretical gap. It is a measured, ongoing loss, and the fix is sitting in a
+patch file. **It is the reason the defects patch should deploy ahead of all the storage work.**
+
+### Gap 7: the 38% baseline was not reproducible, and the corrected figure is 31.5%
+
+The 62% solve rate (141 issued, 87 solved) quoted throughout this post-mortem is a **dashboard**
+number. It cannot be reproduced through the GraphQL API. The numerator reconciles exactly, the
+denominator does not: GraphQL reports 154 issued across all user agents, or **127 with bot
+`browserName` values excluded, giving 87/127 = 68.5% solved and 31.5% refused**. Every window
+boundary and bot subset was tried and no combination produces 141. The dashboard applies
+Cloudflare's own bot classification; GraphQL exposes only `browserName`.
+
+**68.5% is the reproducible baseline.** A post fix GraphQL figure compared against the 62%
+dashboard figure would be measuring the difference between two instruments, not the effect of the
+fix. Full detail and the runnable queries are in
+[`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md).
+
+### Gap 10 nearly became the incident, a second time
+
+The straightforward hostname check rejects a mismatch in production. But `next start` and
+`pnpm preview` both set `NODE_ENV=production`, and Cloudflare's test secret returns
+`hostname: "example.com"`. Shipped as written, it would have **rejected every local test
+submission**, including the exact workflow used to verify the patch an hour earlier. Caught during
+testing and exempted via `isTurnstileTestSecret`. The accept path was exercised; the reject path
+was not, because producing a genuinely valid token from a non allowlisted host is not possible
+locally.
+
+This is the third time in one day that a change intended to protect the form turned out to be
+capable of refusing legitimate submissions. That rate is itself the finding.
+
+### Gap 13: the root cause, recorded so nobody rediscovers it
+
+`eslint-config-next@16` ships **flat** configs, but `eslint.config.mjs` wrapped them in
+`FlatCompat.extends()`, which translates *legacy* eslintrc. It walked a structure that
+self references through `plugins.react` and `JSON.stringify` threw before a single file was linted.
+Fixed by importing the flat configs directly. Lint now runs and reports **39 errors and 3 warnings,
+all pre-existing**, 37 of them `react/no-unescaped-entities` apostrophes across eight marketing
+pages. Those were deliberately left for their own commit rather than buried in a security patch.
+
+Note for whoever fixes them: the `@next/next/no-page-custom-font` warning on `app/layout.tsx` is the
+Archivo Expanded `<link>` that CLAUDE.md says must **not** be converted to `next/font`. It needs an
+inline disable comment pointing at CLAUDE.md so nobody "fixes" it and breaks the build.
+
+### Four gaps that were not in the original fourteen
+
+Found by reading the shipped code rather than the summary of it, and all now patched but not
+deployed. They are described in [`04-implementation.md`](04-implementation.md) and were the reason
+this file was revised:
+
+- **`alertConfigured()` tests configuration, not delivery**, so `captured: true` would have meant
+  "an email was queued" the moment alerting was switched on.
+- **`isReachable` was backwards relative to risk**, which is gap 5 above.
+- **`alert_error` was a dead column**, gap 3.
+- **The `leadRef` comments described a three field hash** when the code hashes eight.
+
+### Two claims in this post-mortem that were wrong
+
+Corrected here rather than quietly edited, because being wrong in the record is the point of
+keeping one:
+
+- **The `/api/contact` 308 redirect does not happen on production.** `trailingSlash: true` is set
+  and the client does post without the slash, but a live POST returns its status directly. The 308
+  was a `next start` behaviour that OpenNext does not reproduce.
+- **The dangling JS chunk was a local Turbopack artefact.** All twelve chunks referenced by the
+  live page return 200.
+
+### Two near misses that were not code at all
+
+Both caught before anything was pushed, both now fixed, both recorded in
+[`10-privacy-and-retention.md`](10-privacy-and-retention.md):
+
+- **`emails/email-reports/` was untracked and NOT gitignored**, holding raw office lead emails with
+  real customer names, phone numbers, email addresses and IP addresses, in a **public** repository.
+  One `git add -A` would have published them.
+- **The first draft of the post-mortem commit carried two customers' IP addresses**, their user
+  agents, ISP, town and request timestamps. Caught while still unpushed and amended out.
+
+Neither was a bug. Both were a process with nothing in it that would notice, which is the same
+shape as the incident this folder documents.
+
+---
+
 ## 1 · The calm card is dormant in production. Alerting is off.
 
 Confirmed on the deployed health check after `a1d68ba7`:
