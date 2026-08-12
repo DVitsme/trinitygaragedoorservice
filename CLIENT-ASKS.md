@@ -172,6 +172,7 @@ The site is fully stocked with real photos now. These would make it noticeably b
 | 18 | **The 47 photos off their Yelp page** | Yelp blocks us from downloading them. Easier for them to send. | ☐ |
 | 18b | 🔑 **More of their Google reviews, ideally with the town** | **This one unlocks real growth.** They have **597 reviews**. We only have **8**, and all but two are already used, one per town page. We cannot invent testimonials, so **we cannot add town pages for St Petersburg, Clearwater, Lakeland and the rest until we have real reviews from those towns.** Easiest fix: give us access to the Google Business Profile and we pull them ourselves. Otherwise, 3 or 4 reviews per town, copied and pasted. | ☐ |
 | 19 | **Any commercial job photos** | They sell commercial doors but we found zero photos of commercial work. | ☐ |
+| 19b | **The full size original of the new team photo, the one with Barbara in it** | The copy we were sent is 1537 pixels wide. The one it replaced was 2048. It looks good on the home page, but the About page stretches it right across the screen, and there the extra size would show. Low priority, the page looks fine today. | ☐ |
 
 ---
 
@@ -249,6 +250,7 @@ one thing worth a careful conversation.
 ---
 
 ## Changelog
+- **2026-08-11 (2nd)** New team photo supplied, the frame Barbara is clearly in, and it is now live on the home page and the About page (both read the same file). Added **#19b**, a request for the full size original, because the copy sent is smaller than the one it replaced.
 - **2026-08-04 (3rd)** Privacy policy placeholders filled from facts we already had, so #11 is closed and #7 and #8 ticked as done by the live site. #12, the lawyer glance, is the only privacy item left.
 - **2026-08-04 (2nd)** Conversion tracking dive. Added #38 to #41: the job value disclosure decision, Housecall Pro webhooks, praise for the office's lead source discipline, and the two Google Ads accounts question for Lloyd.
 - **2026-08-04** Online booking switched off on the website at the client's request, and every

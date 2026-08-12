@@ -148,18 +148,22 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="relative">
-                {/* Same file as the /about/our-story/ hero, deliberately. It is the same
-                    photograph (verified pixel wise, mean difference ~1/255), so shipping a second
-                    copy would have cost 200 KB for nothing.
+                {/* Same file as the /about/our-story/ hero, deliberately: one photograph serving
+                    two pages, so a second copy would cost another 235 KB for nothing.
                     next.config.ts sets images.unoptimized, so this file IS what the visitor
-                    downloads. Re-encoding was tested at several sizes and qualities and every
-                    attempt came out LARGER, so it is committed exactly as supplied. */}
+                    downloads. The client supplied this frame (the one Barbara is clearly in, at the
+                    desk in red) as a 2.3 MB PNG, which would have shipped verbatim, so it is
+                    re encoded to JPEG q82 4:2:0 at its native width, 235 KB, next to the 200 KB
+                    frame it replaced. Master PNG is parked in .media-hunt/masters/ (gitignored).
+                    ⚠️ That frame is only 1537px wide where the old one was 2048px. Fine here, but
+                    the our-story hero is full bleed at sizes="100vw", so if it ever looks soft the
+                    fix is to get the full resolution original from the client, not to upscale. */}
                 {/* The height drops below the nav breakpoint on purpose. A fixed 430px against a
                     ~350px wide phone makes a PORTRAIT box for a landscape photo, and object-cover
                     then throws away the sides: at 430px two of the six people are cropped out
                     entirely and a third is cut in half. 260px puts the box back near the photo's
                     own 1.5 aspect, so almost nothing is lost. */}
-                <Image src={"/team/team-in-office.jpg"} alt="The Trinity Garage Door Service team in their Lutz office" width={2048} height={1366} className="h-[430px] w-full rounded-[8px] border-2 border-ink object-cover max-nav:h-[260px]" priority={false} />
+                <Image src={"/team/team-in-office.jpg"} alt="The Trinity Garage Door Service team in their Lutz office" width={1537} height={1023} className="h-[430px] w-full rounded-[8px] border-2 border-ink object-cover max-nav:h-[260px]" priority={false} />
                 <div className="absolute -right-4 -top-4 rounded-[8px] border-2 border-ink bg-accent px-[18px] py-3.5 text-center">
                   <div className="font-display text-[32px] font-black leading-none text-white">{SITE.yearsLabel}</div>
                   <div className="mt-[3px] text-[10.5px] font-extrabold uppercase leading-tight tracking-[0.06em] text-white">Years in<br />Tampa Bay</div>
