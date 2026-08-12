@@ -15,6 +15,14 @@ CONTACT_FROM_EMAIL=
 # the customer never wrote to. Runtime only, so removing it is
 # `wrangler secret delete CONTACT_BCC_EMAIL` with no rebuild and no deploy.
 CONTACT_BCC_EMAIL=
+# Comma separated. Where a REFUSED submission goes, meaning one the spam check would not pass but
+# that still carried a phone or an email. Aim it at the agency first, not the office: until there is
+# a week of real volume in the unverified_leads table nobody knows how much of this is spam, and
+# pointing an untriaged stream at Barbara would undo, from her side, the fix that started all of
+# this. Adding the office later is `wrangler secret put` with no rebuild and no deploy.
+# ⚠️ Leave this empty and refusals are still SAVED but nobody is told, which is halfway back to the
+# bug this was built to close. `GET /api/contact` reports it as `alertTo`.
+UNVERIFIED_ALERT_TO=
 
 # Cloudflare Turnstile (form spam protection)
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=

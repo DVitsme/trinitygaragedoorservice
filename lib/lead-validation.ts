@@ -127,3 +127,22 @@ const TURNSTILE_DUMMY_SECRETS = new Set([
 export function isTurnstileTestSecret(secret: string | undefined | null): boolean {
   return !!secret && TURNSTILE_DUMMY_SECRETS.has(secret.trim());
 }
+
+/**
+ * The other half of the same problem, and the more dangerous half.
+ *
+ * `isTurnstileTestSecret` above catches a dummy SECRET, where the form looks protected and accepts
+ * everything. A dummy SITE key paired with a real secret fails the opposite way and is far worse:
+ * the widget mints `XXXX.DUMMY.TOKEN.XXXX`, siteverify answers `invalid-input-response`, and **every
+ * single submission is rejected**. That is a total outage of the only lead form the business has,
+ * and nothing in the pipeline reports it, because from the server's point of view every visitor
+ * simply failed the challenge.
+ *
+ * Checked by prefix rather than against a list of the five documented testing keys. Cloudflare has
+ * added testing keys before and a hardcoded list would quietly stop matching; every real key they
+ * issue begins `0x`, and every testing key begins `1x`, `2x` or `3x`. An empty or malformed value
+ * also returns false here, which is correct: it is not a key we can rely on either.
+ */
+export function isRealTurnstileSiteKey(key: string | undefined | null): boolean {
+  return !!key && key.trim().startsWith("0x");
+}
