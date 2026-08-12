@@ -2,36 +2,70 @@
 
 **Summary.** The patch shipped as `408f7db` fixes the three faults that caused the incident. It does
 not make the lead path safe, and reading it as "done" would be the second mistake in this sequence.
-Fourteen gaps are recorded below, ordered by how likely each is to cost a lead. The first one is the
-most important and the most embarrassing: **the customer facing half of the fix is currently switched
-off in production**, so today a refused visitor still sees the same red error that sent the Wesley
-Chapel customer away. Several of the rest are things the patch introduced rather than inherited, and
-two are pre-existing faults that this work simply did not touch.
+Fourteen gaps are recorded below, ordered by how likely each is to cost a lead. Several are things
+the patch introduced rather than inherited, and two are pre-existing faults that this work simply
+did not touch.
+
+⚠️ **This summary describes the state at `408f7db`. Read the status section immediately below it
+first**, because a second fix has since shipped as `b187eed` and nine of the fourteen are closed.
+The line that used to stand here, that the customer facing half of the fix was switched off in
+production, is **no longer true**: a refused visitor now sees a message saying their details are
+saved rather than the red "refresh and try again" that emptied the Wesley Chapel customer's form.
+What remains off is the notification to a human, which is gap 1.
 
 ---
 
 ## Status, updated 2026-08-12 evening
 
-Work continued after this file was written. **Nothing below has been deployed.** Production is
-still running `408f7db`, so every gap marked "patched" is patched in a file on disk, not in the
-thing customers are using.
+Work continued after this file was written, and a second fix has now **shipped and been verified
+against production**: commit `b187eed`, Worker version `268527c3`.
+
+**The soft navigation fix is confirmed in a real browser on the live site**, which was the one check
+that could not be automated (headless browsing the live site fires the client's Google Ads and Bing
+tags). Method, worth reusing on any third party widget in a client routed app:
+
+```js
+// on the first form page, after a hard load
+window.__t = document.querySelector('input[name="cf-turnstile-response"]').value.slice(0,24)
+// then CLICK a nav link to a second form page, and run
+const now = document.querySelector('input[name="cf-turnstile-response"]')?.value?.slice(0,24)
+console.log({ before: window.__t, after: now, freshMint: !!now && now !== window.__t })
+```
+
+Result on 2026-08-12, `/get-service/` then `/get-service/off-track/` via the nav bar:
+`{ before: '1.8j4iP7...', after: '1.gBEemX...', freshMint: true }`. Two distinct tokens, so the
+widget re-mounted and minted fresh on a client side navigation. Before the fix the second read
+returned nothing at all.
+
+⚠️ **Comparing token LENGTH is not sufficient.** Tokens for one site key run to a consistent length,
+so equal lengths are equally consistent with a fresh mint and with a stale token carried over. The
+comparison has to be on the value.
+
+Also verified end to end against production: a real submission wrote a `leads` row and delivered to
+both office inboxes with `Reply-To` correctly populated, and a ten digit typo with no email was
+captured into `unverified_leads` where the previous deploy discarded it. Both test records were
+deleted afterwards; `leads` is back to 13 rows with `max_id` 20.
+
+Nine of the fourteen are now closed. The five that remain are gaps 1, 4, 6, 7 and 12, and the two
+that matter are **6, rate limiting, which now blocks the write ahead log**, and **1, alerting, which
+is a single `wrangler secret put` once the recipient is decided**.
 
 | # | Gap | Status |
 |---|---|---|
 | 1 | Alerting off, calm card dormant | **Open.** Still `alertTo: false` in production |
-| 2 | The calm card can promise falsely | **Patched, not deployed.** `refuse()` now returns `{ stored, notified }`, three states instead of two. `captured` keeps its old meaning so a cached bundle degrades safely |
-| 3 | `alert_error` never written | **Patched, not deployed** |
+| 2 | The calm card can promise falsely | **Shipped in `b187eed`.** `refuse()` now returns `{ stored, notified }`, three states instead of two. `captured` keeps its old meaning so a cached bundle degrades safely |
+| 3 | `alert_error` never written | **Shipped in `b187eed`** |
 | 4 | Nobody reads `unverified_leads` | **Designed, not built.** Weekly digest Worker, see [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md) |
-| 5 | The gate captures the least | **Patched, not deployed. And it fired in production.** See below |
+| 5 | The gate captures the least | **Shipped in `b187eed`, and verified against production.** See below |
 | 6 | Refusal path is an abuse surface | **Open, and now blocking.** Rate limiting must land *before* the write ahead log, not after |
 | 7 | The 38% is unmeasured | **Baseline corrected**, see below. Post fix sample is n=1 and means nothing |
-| 8 | Client side Turnstile error code invisible | **Patched, not deployed.** Now posted with the submission and logged server side |
-| 9 | Error branch misroutes config errors | **Patched, not deployed.** `startsWith("200")` was wrong in *both* directions |
-| 10 | `json.hostname` never validated | **Patched, not deployed.** Nearly reintroduced the incident, see below |
-| 11 | `leadRef` comment factually wrong | **Patched, not deployed** |
+| 8 | Client side Turnstile error code invisible | **Shipped in `b187eed`.** Now posted with the submission and logged server side |
+| 9 | Error branch misroutes config errors | **Shipped in `b187eed`.** `startsWith("200")` was wrong in *both* directions |
+| 10 | `json.hostname` never validated | **Shipped in `b187eed`.** Nearly reintroduced the incident, see below |
+| 11 | `leadRef` comment factually wrong | **Shipped in `b187eed`** |
 | 12 | Silent message truncation | **Made observable, not restructured.** It now logs when it fires |
-| 13 | `pnpm lint` broken | **Fixed, not deployed.** Root cause found, see below |
-| 14 | GTM guard does not match its comment | **Patched, not deployed** |
+| 13 | `pnpm lint` broken | **Fixed in `b187eed`.** Root cause found, see below |
+| 14 | GTM guard does not match its comment | **Shipped in `b187eed`** |
 
 ### Gap 5 fired in production eleven minutes after the deploy
 
@@ -41,8 +75,12 @@ predicted, for exactly the reason described: the deployed `isReachable` requires
 a `phone_invalid` refusal can never carry a `phoneE164` because `toE164` returns null when
 `isValidPhone` fails.
 
-This is no longer a theoretical gap. It is a measured, ongoing loss, and the fix is sitting in a
-patch file. **It is the reason the defects patch should deploy ahead of all the storage work.**
+This was no longer a theoretical gap, it was a measured ongoing loss, and it is why the defects
+patch was deployed ahead of all the storage work.
+
+**Closed and verified against production on 2026-08-12.** A POST carrying a ten digit phone with a
+bad area code and no email address, the exact shape that was being discarded, returned 422 and wrote
+a row to `unverified_leads`. The test row was deleted afterwards.
 
 ### Gap 7: the 38% baseline was not reproducible, and the corrected figure is 31.5%
 
@@ -86,9 +124,9 @@ inline disable comment pointing at CLAUDE.md so nobody "fixes" it and breaks the
 
 ### Four gaps that were not in the original fourteen
 
-Found by reading the shipped code rather than the summary of it, and all now patched but not
-deployed. They are described in [`04-implementation.md`](04-implementation.md) and were the reason
-this file was revised:
+Found by reading the shipped code rather than the summary of it, and all now shipped in `b187eed`.
+They are described in [`04-implementation.md`](04-implementation.md) and were the reason this file
+was revised:
 
 - **`alertConfigured()` tests configuration, not delivery**, so `captured: true` would have meant
   "an email was queued" the moment alerting was switched on.
