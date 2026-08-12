@@ -6,12 +6,15 @@ Fourteen gaps are recorded below, ordered by how likely each is to cost a lead. 
 the patch introduced rather than inherited, and two are pre-existing faults that this work simply
 did not touch.
 
-⚠️ **This summary describes the state at `408f7db`. Read the status section immediately below it
-first**, because a second fix has since shipped as `b187eed` and nine of the fourteen are closed.
-The line that used to stand here, that the customer facing half of the fix was switched off in
-production, is **no longer true**: a refused visitor now sees a message saying their details are
-saved rather than the red "refresh and try again" that emptied the Wesley Chapel customer's form.
-What remains off is the notification to a human, which is gap 1.
+⚠️ **This summary describes the state at `408f7db` and is kept only for the record. Read the status
+section immediately below it instead.** Three further deploys have landed since and **eleven of the
+fourteen are closed**. Two lines that used to stand here are now false: the customer facing half of
+the fix is no longer dormant (a refused visitor is told their details are saved, rather than getting
+the red "refresh and try again" that emptied the Wesley Chapel customer's form), and alerting is no
+longer off.
+
+The one that grew instead of shrinking is **gap 4**: there are now two tables nobody reads rather
+than one.
 
 ---
 
@@ -46,18 +49,38 @@ both office inboxes with `Reply-To` correctly populated, and a ten digit typo wi
 captured into `unverified_leads` where the previous deploy discarded it. Both test records were
 deleted afterwards; `leads` is back to 13 rows with `max_id` 20.
 
-Nine of the fourteen are now closed. The five that remain are gaps 1, 4, 6, 7 and 12, and the two
-that matter are **6, rate limiting, which now blocks the write ahead log**, and **1, alerting, which
-is a single `wrangler secret put` once the recipient is decided**.
+**Update, later on 2026-08-12.** Three more things shipped after the table below was written, all
+deployed and verified against production:
+
+| Deployed | What |
+|---|---|
+| `91966c6` → Worker `6c7c22b1` | Rate limiting on `/api/contact`, shadow mode, 10 per 60s per IP |
+| `UNVERIFIED_ALERT_TO` secret | Alerting live. Runtime secret, so no rebuild and no deploy |
+| `48be8c3` → Worker `31b6c8ea` | The write ahead submission log, migration `0006` |
+
+**Eleven of the fourteen are closed.** What remains is gap 4 (nobody reads either table), gap 7
+(the post fix solve rate is still unmeasured, and the sample is far too small), and gap 12
+(truncation is observable rather than restructured). Gap 6 is half closed: the limiter is live but
+in shadow mode, so it measures and protects nothing yet.
+
+⚠️ **Gap 4 is now the most important one, and it grew rather than shrank.** There are two tables
+nobody reads instead of one, and the archive is the larger of them. The whole point of this
+post-mortem is that a record nobody looks at is barely better than no record.
+
+The archive closes the last capture hole: a malformed body. Verified on production, a request whose
+JSON fails to parse now lands in `submission_log` with its raw body recoverable verbatim and its
+outcome stamped. That class of request left no trace anywhere before, because `req.json()` consumes
+the stream and the bytes were gone by the time the handler returned. Design and the rejected R2
+alternative: [`08-storage-decision.md`](08-storage-decision.md).
 
 | # | Gap | Status |
 |---|---|---|
-| 1 | Alerting off, calm card dormant | **Open.** Still `alertTo: false` in production |
+| 1 | Alerting off, calm card dormant | **Closed 2026-08-12.** `UNVERIFIED_ALERT_TO` set to the agency address; alert delivered and `alert_status` recorded `ok` |
 | 2 | The calm card can promise falsely | **Shipped in `b187eed`.** `refuse()` now returns `{ stored, notified }`, three states instead of two. `captured` keeps its old meaning so a cached bundle degrades safely |
 | 3 | `alert_error` never written | **Shipped in `b187eed`** |
-| 4 | Nobody reads `unverified_leads` | **Designed, not built.** Weekly digest Worker, see [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md) |
+| 4 | Nobody reads `unverified_leads` **or `submission_log`** | **Still open, and now larger.** Weekly digest Worker, see [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md) |
 | 5 | The gate captures the least | **Shipped in `b187eed`, and verified against production.** See below |
-| 6 | Refusal path is an abuse surface | **Open, and now blocking.** Rate limiting must land *before* the write ahead log, not after |
+| 6 | Refusal path is an abuse surface | **Partly closed.** Rate limiting live in SHADOW mode (`91966c6`), so it measures and refuses nobody. The archive uses its `overLimit` signal to collapse a flood into one row per hour. Still no WAF rule at the edge |
 | 7 | The 38% is unmeasured | **Baseline corrected**, see below. Post fix sample is n=1 and means nothing |
 | 8 | Client side Turnstile error code invisible | **Shipped in `b187eed`.** Now posted with the submission and logged server side |
 | 9 | Error branch misroutes config errors | **Shipped in `b187eed`.** `startsWith("200")` was wrong in *both* directions |

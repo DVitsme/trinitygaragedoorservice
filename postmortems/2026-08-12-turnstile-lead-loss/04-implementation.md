@@ -1,5 +1,12 @@
 # 04 · How the fix was implemented
 
+> ⚠️ **This file describes the state at `408f7db` / Worker `a1d68ba7`, which is no longer what is
+> deployed.** Three further deploys landed the same day: `b187eed` (four defects this
+> implementation introduced), `91966c6` (rate limiting, shadow mode) and `48be8c3` (the write ahead
+> submission log, migration `0006`). It is kept as the record of what the first fix actually did,
+> because four of its defects were only found by reading it against the shipped code. For the
+> current state see [`05-known-gaps.md`](05-known-gaps.md).
+
 **Summary.** Commit `408f7db`, five files, +919/-89, deployed as Worker version `a1d68ba7`. Three
 independent faults were fixed plus two unrelated silent losses found on the way past. The single
 most important structural change is that the `submission` object is now assembled **before** any

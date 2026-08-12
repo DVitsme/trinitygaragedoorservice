@@ -3,7 +3,7 @@
 **Incident date:** 11 to 12 August 2026
 **Regression introduced:** 3 August 2026, commits `4cb5cc1` and `1142198`
 **Detected:** by the client's owner, relaying a customer voicemail, nine days later
-**Fixed:** 12 August 2026, commit `408f7db`, Worker version `a1d68ba7`
+**Fixed:** 12 August 2026 across four deploys, `408f7db` → `b187eed` → `91966c6` → `48be8c3`
 **Written:** 12 August 2026
 
 ---
@@ -139,15 +139,30 @@ Fixed and deployed:
   `middleware.ts`, and the privacy policy's unconditional deletion promise is the one clean self
   inflicted liability in it. See [`10-privacy-and-retention.md`](10-privacy-and-retention.md).
 
+Shipped later the same day, all verified against production:
+
+- **Four defects the first fix introduced** (`b187eed`), found by writing `04-implementation.md`
+  against the shipped code rather than a summary of it. One of them was discarding a real
+  customer's details eleven minutes after the first deploy went live.
+- **Alerting** (`UNVERIFIED_ALERT_TO`). A refusal now emails the agency with the name and phone in
+  the subject line, so the alert is the recovery rather than a prompt to investigate.
+- **Rate limiting** (`91966c6`), in shadow mode. It measures and refuses nobody, which is this
+  post-mortem's own principle 1 applied to itself.
+- **The write ahead submission log** (`48be8c3`, migration `0006`). Every attempt, before any gate,
+  unconditionally. It closes the last capture hole, a malformed body, which left no trace anywhere
+  before because `req.json()` consumes the stream. See
+  [`08-storage-decision.md`](08-storage-decision.md) for why D1 and not R2.
+
 **Not yet done, and the reason `05-known-gaps.md` exists:**
 
-- `UNVERIFIED_ALERT_TO` is unset, so `alertTo: false` in production. Refusals are captured
-  but nobody is told, and because `captured` is computed as `id !== null && alerting`, the
-  visitor still sees the red error rather than the calm card. **The customer facing half of
-  the fix is dormant.**
-- Nobody reads `unverified_leads`. A quarantine table with no reader is only marginally
-  better than a discard.
-- No post deploy measurement of whether the 38% actually moved.
+- ⚠️ **Nobody reads `unverified_leads` or `submission_log`.** This gap grew rather than shrank:
+  there are two tables with no reader instead of one, and the archive is the larger. A record
+  nobody looks at is barely better than no record, which is the whole thesis of this folder.
+- **The monthly plain text file does not exist yet.** It is the artifact the owner actually asked
+  for, and it is now a read query over a table that exists.
+- **No WAF rate limiting rule at the edge**, so nothing stops a request before the Worker runs.
+- **No post deploy measurement of whether the 38% actually moved.** The sample so far is far too
+  small to say anything.
 
 ---
 

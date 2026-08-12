@@ -2,7 +2,7 @@
 
 Things only Jason or Simone can answer or provide. Tick them off as they come in.
 
-**Living document.** Last updated: 2026-08-11. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
+**Living document.** Last updated: 2026-08-12. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
 `MEDIA-INVENTORY.md`, `LAUNCH-CHECKLIST.md`.
 
 ---
@@ -94,6 +94,18 @@ these reverse things already shipped.**
 
 **Still to chase from this call:** Lloyd's GTM code, Jason adding us to Google Business Profile,
 and the Saturday booking conflict at #4a.
+
+---
+
+## 🩸 FROM THE 12 AUGUST FORM INCIDENT
+
+Background for the conversation is in `CLIENT-NOTES.md`, top section. These are the two things we
+need FROM them as a result.
+
+| # | Ask | Why it matters | Status |
+|---|---|---|---|
+| 45 | **Access to add one rate limiting rule in their Cloudflare account** | The lead form now records every submission, which is the fix for what happened. That also means anyone hammering the form writes to the database, and the daily write allowance is shared with the real leads table, so a flood could take the form down. One rule at Cloudflare's edge stops that before it reaches us. We have a working API key but it has no permission for this area, confirmed 12 August. Either they add the rule, or they grant Zone WAF and Zone Settings permission on a token. **Free plan gives one rule: 10 second window, group by IP, match on path `/api/contact`.** | 🔴 **OPEN, and it gates finishing the protection** |
+| 46 | **Ten minutes of a Florida attorney on the privacy policy** | Their policy promises, with no conditions, that anyone can ask them to delete their information. We now keep a record of every submission, so that promise has a second place to reach. It also says submissions are "sent to us by email and stored in our database", which is no longer the whole truth, and it states no retention period. None of this is urgent and no law forces it at their size, but it is their own promise and it should be one they can keep. Already flagged as **#12**, this raises its value. Detail in `postmortems/2026-08-12-turnstile-lead-loss/10-privacy-and-retention.md`. | 🟠 **OPEN, low urgency, cheap to fix** |
 
 ---
 
@@ -274,6 +286,8 @@ one thing worth a careful conversation.
 - **2026-07-28** Founding year answered: **2007**. Site now says 19+ years (was showing a stale 18+).
 - **2026-07-28** Contact page now lists all three county lines, so ask #1 is half answered: we
   still need to know which number leads everywhere else on the site.
+- **2026-08-12** Added the form incident section: #45 Cloudflare rate limiting access, which gates
+  finishing the protection, and #46 the privacy policy review, which raises the value of #12.
 - **2026-07-28** Created. Added photo/video asks and quick decisions surfaced by the media hunt.
 
 *Key: ☐ open · ◐ partly handled · ☑ done · ⏸️ on hold, paused for now, not dropped*

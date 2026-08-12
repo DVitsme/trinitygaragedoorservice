@@ -2,10 +2,60 @@
 
 Talking points for client meetings. Wins to share, problems to raise, and advice worth giving.
 
-**Living document.** Last updated: 2026-08-10. Deeper detail: `MEDIA-INVENTORY.md`,
+**Living document.** Last updated: 2026-08-12. Deeper detail: `MEDIA-INVENTORY.md`,
 `PRE-LAUNCH-PUNCHLIST.md`, `INTEGRATIONS` notes in `CLAUDE.md`.
 
 ---
+---
+
+## 🩸 JASON WAS RIGHT ABOUT THE FORM, AND IT WAS OUR FAULT (12 AUGUST)
+
+**Lead with this one, and lead with the apology.** Full detail in
+`postmortems/2026-08-12-turnstile-lead-loss/`.
+
+### What to say
+
+He emailed twice about a customer saying the form came back. He was right both times, and the
+cause was a change we made on 3 August.
+
+A homeowner in Wesley Chapel clicked one of their Google ads, read the page about his own town,
+and tried to send a repair request **six times over eleven hours**. Every attempt was turned away
+by our spam check. Twice at about 9:40 that night, three times two minutes later, and once more at
+7:12 the next morning. His second email landed four minutes after that last attempt.
+
+**We cannot get that customer back.** Our own system threw his details away as it turned him down,
+so there is no name and no number on our side. **The voicemail on Jason's phone is the only way to
+reach him**, and someone chasing a garage door at ten at night is worth the call.
+
+### The part that is bigger than one customer
+
+It was not only him. For nine days, roughly **a third of the people who got as far as the spam
+check could not get past it**. Nobody could tell, because a refused request left no record
+anywhere. The only alarm in the whole system was a customer picking up the phone.
+
+### What is fixed, as of today
+
+- The fault itself. Clicking from one form page to another used to quietly break the spam check.
+- **We no longer throw anything away.** Every submission is now saved before any check runs, spam
+  included. If it is a real person we can call them back.
+- **A refused customer now gets told the truth on screen**, that we have their details and someone
+  will ring. The old message said "refresh and try again", which wiped everything they had typed.
+  That is what this customer followed, three more times.
+- **We get an email the moment anyone is refused**, with their name and number in the subject.
+- The spam check was also loosened so it stops interrupting people.
+
+### If Jason asks why it happened
+
+Straight answer: on 3 August we tightened the form to stop spam getting through, which was a real
+problem and the right thing to do. We did not measure how many real customers that tightening
+would turn away, and we had no way to see it afterwards. Both are fixed now. That is the honest
+version and it is better than a technical one.
+
+### One thing to ask him for
+
+A small setting needs changing in their Cloudflare account to finish the protection. We do not have
+access to that part. See `CLIENT-ASKS`.
+
 ---
 
 ## 🗓️ THE REVIEWS SECTION IS NOW A SCROLLING WALL (10 AUGUST)
@@ -526,6 +576,10 @@ Ranked by impact.
 
 ## Changelog
 - **2026-08-04 (2nd)** Rewrote section 6. The old "no analytics at all, one job from the website" line was out of date. Replaced with the measured numbers: 12 website jobs at $2,330 average, and July's $149,800 broken down by where it came from.
+- **2026-08-12** The form incident. Added the section at the top: Jason was right, it was our
+  change on 3 August, one customer is unrecoverable and his voicemail is the only route back to
+  him, and roughly a third of challenged visitors were affected for nine days. Also what is fixed
+  and the one thing we need from their Cloudflare account.
 - **2026-08-04** Online booking switched off at Jason's request and replaced by request forms, one
   per job. Added the note at the top, corrected the "online booking works" line, and put step 2 of
   the measurement plan on hold along with `CLIENT-ASKS` #35.

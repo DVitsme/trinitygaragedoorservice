@@ -96,10 +96,56 @@ The three rules that came out of it, in order of how much they will cost you to 
    38% was measurable the whole time. The change shipped on reasoning, the reasoning was careful,
    and it was still wrong. Log only first, then enforce.
 
-⚠️ **Still open, see `05-known-gaps.md`:** `UNVERIFIED_ALERT_TO` is unset, so refusals are captured
-but nobody is told and the visitor still sees the red error rather than the calm card. Nobody reads
-`unverified_leads`. And `alertConfigured()` checks that an alert address exists, not that the alert
-was delivered, so `captured: true` currently means "queued".
+### What shipped after the first fix, all live and verified against production
+
+| Deployed | What |
+|---|---|
+| `408f7db` | The three faults that caused the incident |
+| `b187eed` | Four defects the first fix introduced, found by writing the post-mortem against the shipped code |
+| `91966c6` | Rate limiting on `/api/contact`, in **shadow mode** |
+| `48be8c3` | The **write ahead submission log**, migration `0006` |
+
+**Three tables now, and confusing them is the main way to break this:**
+
+- **`leads`** is a real captured lead. Unchanged.
+- **`unverified_leads`** is the **CALLBACK WORKLIST**. Refusals that carry something dialable, so a
+  human can ring them back. It is deliberately selective and prunes at 30 days.
+- **`submission_log`** is the **ARCHIVE**. Every attempt, before any gate, unconditionally,
+  including malformed bodies and including submissions with nothing usable in them. Nothing
+  filters it. This is the one that answers "what happened to my form submission".
+
+They join on `attempt_id`, which is on all three.
+
+⚠️ **`req.json()` must never come back.** The route reads `req.text()` once and parses it itself.
+`req.json()` consumes the stream, so a body that fails to parse is unrecoverable after it, and that
+is exactly why malformed submissions used to leave no trace at all.
+
+⚠️ **`submission_log.outcome IS NULL` is a real state, not a bug.** It means a request began and
+never finished, which is what an isolate killed mid flight looks like. Do not backfill it.
+
+**Rate limiting is `RATE_LIMIT_MODE` in `lib/rate-limit.ts`, currently `"log"`, and it refuses
+nobody.** The criteria for moving it to `"enforce"` are written in that file. It is 10 requests per
+60 seconds because the customer in this incident submitted FIVE times in two minutes, three of them
+inside four seconds, and a tighter limit would have blocked a real person who was already
+struggling. The limiter still computes `overLimit` truthfully in every mode, which is what lets the
+archive collapse a flood into one row per hour instead of one per request.
+
+### Still open
+
+- **Nobody reads `unverified_leads` or `submission_log`.** No digest, no report, no routine. A log
+  nobody reads is the same failure in a nicer costume, and there is now more in there to not read.
+  Design in `09-measurement-and-monitoring.md`.
+- **The monthly plain text export does not exist yet.** It is the artifact the client actually asked
+  for and it is a read query over a table that now exists.
+- **No WAF rate limiting rule at the edge.** The Workers binding runs inside the Worker, so it
+  cannot stop request volume itself, and it is per colo. Needs adding in the dashboard: no API token
+  on this machine can read or write zone rulesets, confirmed 2026-08-12.
+- **`alertConfigured()` tests configuration, not delivery**, so `captured: true` means the alert was
+  queued. Mitigated with a retry, `alert_error`, and the `unalerted` count on the health endpoint.
+- **Two retention clocks for the same personal data**: `unverified_leads` prunes at 30 days, the
+  archive does not prune at all. `10-privacy-and-retention.md` recommends 90 for both, and warns
+  that the privacy policy's unconditional deletion promise is the one clean self inflicted liability
+  in it.
 
 `06-prevention.md` and `07-day-one-checklist.md` are written client agnostic. **Copy them into the
 next project.**
@@ -269,12 +315,26 @@ muted autoplay. Use them instead of re-implementing.
 `NavigationMenu`). The mobile drawer is the separate `MobileMenu` client component (the
 original static page had no working mobile menu). Nav structure spec: `site-audit/NAVBAR-SPEC.md`.
 
-**Lead pipeline** (`components/contact-form.tsx` → `app/api/contact/route.ts`): client posts
-JSON to `/api/contact`, which (1) validates name+phone, (2) verifies **Cloudflare Turnstile**
-*only if* `TURNSTILE_SECRET_KEY` is set (graceful skip in dev), (3) sends a Resend email via
-the `emails/lead-email.tsx` React template, (4) inserts into D1. **Email and D1 writes are
-best-effort** (wrapped in try/catch, logged, never thrown) — a provider hiccup must not lose
-the lead. `app/get-service/page.tsx` reads `?intent=estimate` to retitle/repurpose the form.
+**Lead pipeline** (`components/contact-form.tsx` → `app/api/contact/route.ts`). Rewritten
+2026-08-12 after the incident above; read that section first. `POST` is now a thin wrapper whose
+`finally` guarantees a record on **every** return path, gate, and uncaught throw. Order matters and
+is load bearing:
+
+1. **rate limit** (`lib/rate-limit.ts`, shadow mode, refuses nobody)
+2. **read the raw body as text** and parse it ourselves, so a malformed body is still recoverable
+3. **write the archive row** (`lib/submission-log.ts` → `submission_log`), before any gate
+4. validate name and phone, each gate calling `refuse()` on its way out
+5. verify **Cloudflare Turnstile**, *only if* `TURNSTILE_SECRET_KEY` is set (graceful skip in dev)
+6. Resend email via `emails/lead-email.tsx` + insert into `leads`
+7. `finally` stamps the outcome onto the archive row
+
+**Email and D1 writes are best-effort** (try/catch, logged, never thrown) so a provider hiccup
+cannot lose a lead, and that decision is why the two real leads on 11 and 12 August survived.
+**The archive write is NOT best effort and is awaited**, because it is the one thing that must not
+be lost. Do not move it into `after()`: that compiles to `waitUntil`, which is dropped if the
+isolate goes away, and this is precisely the write that has to survive that.
+
+`app/get-service/page.tsx` reads `?intent=estimate` to retitle/repurpose the form.
 
 **Foundation primitives** in `components/ui/` (`Section`, `Cta`/`Button` via cva, `prose`,
 `breadcrumbs`, `faq-accordion`) and SEO helpers (`lib/seo.ts` `pageMetadata()`/`absoluteUrl()`,
