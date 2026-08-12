@@ -75,3 +75,16 @@ next-env.d.ts
 # 582MB, never commit. Keep local only.
 takeout-*/
 takeout-*.zip
+
+# ── Customer data. NEVER commit: this repository is PUBLIC. ──────────────────
+# Added 2026-08-12 after `emails/email-reports/` was found untracked but NOT
+# ignored, holding real customer names, phone numbers, emails and IP addresses.
+# One `git add -A` would have published them. See
+# postmortems/2026-08-12-turnstile-lead-loss/ for why this matters.
+emails/email-reports/
+/leads-export/
+/leads-archive/
+/submissions/
+/.data/
+*.ndjson
+.claude/worktrees/

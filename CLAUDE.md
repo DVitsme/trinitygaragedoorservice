@@ -70,6 +70,40 @@ Address **18125 US-41 Ste 208, Lutz FL 33549** · geo **28.1372004, -82.4625826*
   from `lib/booking.ts`, which follows `BOOKING_MODE`. Setting `NEXT_PUBLIC_BOOKING_URL` alone does
   **not** turn booking back on — `BOOKING_MODE` is the switch, and it lives in version control.
 
+## 🩸 THE LEAD FORM REFUSED A REAL CUSTOMER SIX TIMES (2026-08-12)
+
+**Read `postmortems/2026-08-12-turnstile-lead-loss/` before touching the contact form, the
+Turnstile config, or anything that can reject a submission.** It is the most expensive lesson on
+this project and it is written to stop a repeat.
+
+What happened: a homeowner arrived on a **paid** Google Ads click, tried six times over eleven
+hours, and was refused every time with a 400. His details were discarded at the gate and are gone.
+Site wide, **38% of challenged real browsers were producing no token** and every one was turned
+away, silently, for nine days. Fixed in `408f7db`.
+
+The three rules that came out of it, in order of how much they will cost you to relearn:
+
+1. **A rejection path must NEVER discard what the visitor typed.** A captured spam row costs
+   Barbara ten seconds. A discarded real lead costs the $2,330 mean website job. Refusals now go to
+   the `unverified_leads` quarantine table via `refuse()` in `app/api/contact/route.ts`, which every
+   gate calls on its way out. Keep it that way.
+2. **Turnstile must stay on `?render=explicit`.** Implicit rendering scans for `.cf-turnstile` once,
+   when `api.js` executes, and `next/script` dedupes by `src`, so on a client side navigation the
+   widget never mounts and the form posts with no token. Measured: hard load mounted it, clicking
+   through to a second form page mounted nothing. This applies to ANY third party script that
+   self initialises by scanning the DOM.
+3. **Never ship a gate on the revenue path without measuring its false positive rate first.** The
+   38% was measurable the whole time. The change shipped on reasoning, the reasoning was careful,
+   and it was still wrong. Log only first, then enforce.
+
+⚠️ **Still open, see `05-known-gaps.md`:** `UNVERIFIED_ALERT_TO` is unset, so refusals are captured
+but nobody is told and the visitor still sees the red error rather than the calm card. Nobody reads
+`unverified_leads`. And `alertConfigured()` checks that an alert address exists, not that the alert
+was delivered, so `captured: true` currently means "queued".
+
+`06-prevention.md` and `07-day-one-checklist.md` are written client agnostic. **Copy them into the
+next project.**
+
 ## ✅ DESIGN-PORT BUILD COMPLETE (2026-06-22)
 
 The 1:1 design → Next.js build is **done**. Every approved `*.dc.html` "Bold Trade" design (in `trinitygaragedoorservice.com/`) is now a live Next.js page, each `pnpm build`-green and **production-screenshot-verified 1:1**. Final build: **32 static pages, 0 errors**. **~27 commits ahead of origin/main, UNPUSHED** — the user pushes via `! git push origin main` (the auto-mode classifier blocks me from pushing to main).
