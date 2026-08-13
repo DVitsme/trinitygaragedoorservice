@@ -105,31 +105,6 @@ export function CustomerAckEmail({ firstName, service, message, phone }: Custome
             </Section>
 
             {/*
-              ⚠️ **The most important block in this email, and it is styled to be impossible to
-              skim past.** Distinct background, its own border, larger and bolder than the body.
-
-              The wording is deliberately "unmonitored" rather than "your reply will be lost",
-              because `sendCustomerAck` DOES set replyTo to the office, so a reply does currently
-              arrive. Saying otherwise would be a false statement to a customer. What is true is
-              that nobody reads the noreply mailbox itself, that the From address tells the reader
-              this is a dead end, and that a single careless edit to replyTo would make a reply
-              vanish with no error anywhere. Giving them an address a human actually watches is the
-              honest and durable answer.
-
-              ⚠️ **Keep replyTo set even though this notice exists.** It is the safety net for the
-              customer who hits reply without reading. Never close a route into this business.
-            */}
-            <Section style={notice}>
-              <Text style={noticeHead}>Please do not reply to this email</Text>
-              <Text style={noticeBody}>
-                It is sent from an address nobody checks. To reach us, write to:
-              </Text>
-              <Link href="mailto:trinitygaragedoorservice@gmail.com" style={noticeMail}>
-                trinitygaragedoorservice@gmail.com
-              </Link>
-            </Section>
-
-            {/*
               Their own words, read back. Two reasons, and the second is the useful one: it shows we
               actually received what they wrote, and it lets them catch their own mistyped phone
               number while they are still thinking about it. A wrong digit here is the single most
@@ -143,10 +118,14 @@ export function CustomerAckEmail({ firstName, service, message, phone }: Custome
                 {phone && <Text style={recapRow}><strong style={recapKey}>Phone</strong>{phone}</Text>}
                 {message && <Text style={recapMsg}>{message}</Text>}
                 {/*
-                  Names the address rather than saying "above" or "below". The notice block has
-                  already moved once during review, and a direction word silently points the wrong
-                  way the moment anything is reordered. Repeating the address costs one line and it
-                  is the single thing in this email we most want repeated.
+                  ⚠️ **This line is now the ONLY place the monitored address appears.** A louder
+                  standalone "do not reply" block was tried and removed as over reach: the From
+                  address already reads as noreply, and `sendCustomerAck` sets replyTo to the office
+                  so a reply does in fact arrive. This one sentence is the whole safety net, so if
+                  anyone trims it, put the address somewhere else first.
+
+                  It names the address rather than saying "above" or "below", because a direction
+                  word silently points the wrong way the moment anything is reordered.
                 */}
                 <Text style={recapNote}>
                   If anything above is wrong, email trinitygaragedoorservice@gmail.com and we will
@@ -203,16 +182,6 @@ const recapKey = { display: "inline-block", width: "74px", color: ACCENT } as co
 const recapMsg = { color: BODY, fontSize: "14px", lineHeight: "1.5", margin: "10px 0 0", whiteSpace: "pre-wrap" } as const;
 const recapNote = { color: BODY, fontSize: "13px", lineHeight: "1.45", margin: "12px 0 0", fontStyle: "italic" } as const;
 
-/*
-  The notice. Everything here is one step louder than the body copy on purpose: a warmer background
-  than the sand callout above it so the two do not read as the same thing, a full accent border
-  rather than a left rule, and type that steps up rather than down. If this ever stops standing out
-  from the block above it, the styling has failed at its only job.
-*/
-const notice = { backgroundColor: "#fdecec", border: `2px solid ${ACCENT}`, borderRadius: "6px", padding: "18px 20px", margin: "20px 0 4px" } as const;
-const noticeHead = { color: ACCENT, fontSize: "18px", fontWeight: 800, margin: "0 0 6px", lineHeight: "1.3" } as const;
-const noticeBody = { color: INK, fontSize: "16px", fontWeight: 700, margin: "0 0 8px", lineHeight: "1.45" } as const;
-const noticeMail = { color: ACCENT, fontSize: "19px", fontWeight: 800, textDecoration: "underline", wordBreak: "break-all" } as const;
 
 const footer = { backgroundColor: INK, padding: "16px 28px" } as const;
 const footerText = { color: "#ffffff", fontSize: "13px", margin: 0 } as const;
