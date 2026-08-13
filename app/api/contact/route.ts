@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Resend } from "resend";
 import { LeadEmail } from "@/emails/lead-email";
+import { CustomerAckEmail } from "@/emails/customer-ack-email";
 import { after } from "next/server";
 import {
   isValidPhone,
@@ -584,6 +585,26 @@ async function handleContact(
   */
   out.outcome = "accepted";
   out.leadId = leadId;
+
+  /*
+    The first touch reply to the customer, added 2026-08-12.
+
+    ⚠️ **Only on the accepted path, and that is a hard requirement, not a preference.** A refused
+    submission must never trigger this. Turnstile has already passed by the time we are here, which
+    is what stops the form being used to reflect mail at a stranger: without that gate anybody could
+    type a victim's address into a public form and make this domain send them whatever the message
+    box allows. Do not move this call above the spam gate for any reason.
+
+    ⚠️ **Deferred, unlike the archive write.** Losing this email costs the customer a nicety. Losing
+    the archive row costs us the ability to say what happened, which is the whole reason that write
+    is awaited. Different value, different treatment.
+
+    ⚠️ **The office copy is what matters and it has already been sent by this point.** This is the
+    lower priority of the two, so it runs after, and its failure is logged and otherwise ignored.
+  */
+  if (isValidEmail(lead.email)) {
+    after(() => sendCustomerAck(lead, idempotencyKey));
+  }
   /*
     `ref` is the attempt id, and it is safe to hand back where the D1 row id would not be. A
     sequential integer would tell anyone who submits the form roughly how many leads this business
@@ -843,6 +864,66 @@ async function sendEmail(
   } catch (err) {
     console.error("[contact] Resend threw:", err);
     return "failed";
+  }
+}
+
+/**
+ * The customer's own copy. Best effort, never awaited by the request, never able to fail it.
+ *
+ * ## Why the idempotency key is derived and not reused verbatim
+ *
+ * The office email already uses `leadKey`. Resend scopes an idempotency key to the whole account,
+ * not to a recipient, so passing the SAME key here would make Resend treat this as a replay of the
+ * office send and return that response without delivering anything. The customer would silently get
+ * nothing. Prefixing it keeps the dedupe property (a double submit sends one ack) while keeping the
+ * two messages distinct.
+ *
+ * That is the same trap the refusal alert had to design around, and it has now caught us twice, so
+ * it is worth stating plainly: **two different emails about one submission need two different
+ * idempotency keys.**
+ *
+ * ## Reply-To
+ *
+ * Points at the office, not at `noreply`. Somebody who replies to this is a customer adding
+ * information about their broken door, and that has to reach a human. It is also the correction
+ * offered in the body: "if the number above is wrong, just reply to this email".
+ */
+async function sendCustomerAck(
+  lead: { firstName: string; email?: string; phone: string; service?: string; message?: string },
+  leadKey: string,
+): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = process.env.CONTACT_FROM_EMAIL?.trim();
+  const office = process.env.CONTACT_TO_EMAIL?.trim();
+  if (!apiKey || !from || !lead.email) return;
+
+  try {
+    const { error } = await new Resend(apiKey).emails.send(
+      {
+        to: [lead.email],
+        from,
+        ...(office ? { replyTo: office.split(",").map((t) => t.trim()).filter(Boolean) } : {}),
+        // No name in the subject. It is their own inbox; they know who they are. What they want to
+        // see in the list is that somebody has it and will ring.
+        subject: "We have your request, and someone will call you back",
+        react: CustomerAckEmail({
+          firstName: lead.firstName || "there",
+          service: lead.service,
+          message: lead.message,
+          phone: lead.phone,
+        }),
+      },
+      { idempotencyKey: `ack-${leadKey}` },
+    );
+    if (error) {
+      // A bounce or a rejected address is common and expected: people mistype their own email.
+      // Logged so the rate is visible, never retried, never surfaced to the visitor.
+      console.warn("[contact] customer ack not sent:", error.name, error.message);
+      return;
+    }
+    console.info("[contact] customer ack sent");
+  } catch (err) {
+    console.warn("[contact] customer ack threw:", String(err));
   }
 }
 

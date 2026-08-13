@@ -43,8 +43,12 @@ import { Reveal } from "@/components/blocks/reveal";
  *
  * ## Every claim here has to survive contact with reality
  *
- * ⚠️ **We send the customer NOTHING.** `app/api/contact/route.ts` sends exactly one email, to the
- * office, with `replyTo` set to the customer. There is no customer confirmation email and no SMS.
+ * ⚠️ **Updated 2026-08-12: we DO now email the customer, and we still do not text them.**
+ * `app/api/contact/route.ts` sends two emails on an accepted submission: the lead to the office,
+ * and a first touch acknowledgement to the customer (`emails/customer-ack-email.tsx`), sent in
+ * `after()` so it can never delay or fail the request. There is still **no SMS**, so any copy
+ * promising a text is still false. The acknowledgement is also best effort: people mistype their
+ * own email address, so this page must not tell anyone to go and look for it.
  * The older `/book-a-repair/thank-you/` page tells people to check their texts and email and to look
  * in their spam folder, which was true of Housecall Pro's booking flow and is false of this one.
  * That page is left alone for the day booking returns; this one must never repeat those lines.
