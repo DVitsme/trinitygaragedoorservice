@@ -126,6 +126,54 @@ There is a live bug attached to this. The handler branches on `c.startsWith("200
 **Cost now:** a `verifying` state and an awaited promise. An hour.
 **Cost later:** every user who retries quickly, which is every frustrated user, is guaranteed to fail again.
 
+### ☐ A5. Email the person back the moment they submit
+
+**What.** Any public form that a member of the public fills in should send that person an email
+straight away. It does not need to be clever. It needs to say thank you, confirm you have their
+request, and tell them a human will get back to them. Nothing else is required.
+
+**Why.** Three separate reasons, and only the first is the obvious one.
+
+**It closes the loop for the customer.** Somebody who has just typed their phone number into a
+stranger's website has no idea whether it worked. A thank you page is seen for four seconds and then
+the tab is closed. An email sits in their inbox as proof, with a phone number in it, and it is
+findable a week later when they wonder whether they ever actually contacted you.
+
+**It is a detector, and this is the part people miss.** If the form silently stops working, a
+customer who expected an email and did not get one has a reason to chase. That is a real monitoring
+channel and it costs nothing. In this incident the only detector in the entire system was a customer
+choosing to phone the owner twice, and if he had been told to expect an email he would have had a
+much clearer reason to say something the first time.
+
+**It surfaces the customer's own typo.** Read their phone number and email back to them in the
+message. A wrong digit is the single most common way a genuine lead becomes uncontactable, and the
+sender is the only person who can spot it. Give them a monitored address to correct it at, and
+**name that address in the text** rather than relying on a Reply-To they cannot see.
+
+**Rules that are not optional:**
+
+- **Send it only on the ACCEPTED path, after the spam gate.** Before the gate, the form becomes a
+  way for anyone to make your domain send mail to a stranger who never asked for it. This is the
+  one hard constraint in this item.
+- **Send it deferred and best effort.** It must never delay the response or fail the submission.
+  Losing it costs the customer a nicety; losing the record costs you the customer.
+- **Give it its own idempotency key.** If you reuse the key from the internal notification, Resend
+  and most providers scope idempotency to the account rather than the recipient, treat the second
+  send as a replay of the first, return success, and deliver nothing. This trap caught this project
+  twice.
+- **Do not promise a time, a price, or a warranty.** Say a person will be in touch. Anything more
+  specific is a claim somebody has to keep.
+- **No unsubscribe footer.** It is a transactional reply to somebody who asked to be contacted, not
+  marketing, and dressing it as a mailing list invites spam reports on the domain that also carries
+  your internal lead notifications.
+- **Any image is decoration.** Mail clients block remote images by default, so nothing the reader
+  needs may live inside one. Host it rather than inlining base64: Gmail clips a message over 102 KB
+  and will hide whatever sits below the fold, which is usually the phone number.
+
+**Cost now:** a template and about twenty lines in the handler. Half a day including review.
+**Cost later:** every customer who is not sure whether their message arrived phones you to ask, or
+worse, phones somebody else. And you lose a free detector for the day the form breaks.
+
 ---
 
 ## B. Spam defence

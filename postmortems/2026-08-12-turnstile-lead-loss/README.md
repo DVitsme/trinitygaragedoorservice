@@ -3,7 +3,7 @@
 **Incident date:** 11 to 12 August 2026
 **Regression introduced:** 3 August 2026, commits `4cb5cc1` and `1142198`
 **Detected:** by the client's owner, relaying a customer voicemail, nine days later
-**Fixed:** 12 August 2026 across four deploys, `408f7db` → `b187eed` → `91966c6` → `48be8c3`
+**Fixed:** 12 August 2026 across five deploys, `408f7db` → `b187eed` → `91966c6` → `48be8c3` → `1324e50`
 **Written:** 12 August 2026
 
 ---
@@ -148,6 +148,10 @@ Shipped later the same day, all verified against production:
   the subject line, so the alert is the recovery rather than a prompt to investigate.
 - **Rate limiting** (`91966c6`), in shadow mode. It measures and refuses nobody, which is this
   post-mortem's own principle 1 applied to itself.
+- **A first touch email to the customer** (`1324e50`). The site had never sent one. It thanks them,
+  says a person will be in contact, and reads their own details back so they can spot their own
+  typo. It is also a free detector: somebody expecting an email who does not get one has a reason
+  to chase, and the only detector in this incident was a customer phoning the owner twice.
 - **The write ahead submission log** (`48be8c3`, migration `0006`). Every attempt, before any gate,
   unconditionally. It closes the last capture hole, a malformed body, which left no trace anywhere
   before because `req.json()` consumes the stream. See

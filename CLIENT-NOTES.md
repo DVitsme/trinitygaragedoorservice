@@ -58,6 +58,37 @@ access to that part. See `CLIENT-ASKS`.
 
 ---
 
+## 📧 CUSTOMERS NOW GET AN EMAIL WHEN THEY FILL THE FORM IN (12 AUGUST)
+
+**This is new and worth telling them, because it changes what their customers experience.**
+
+Until today the website sent the customer nothing at all. They filled the form in, saw a thank you
+page for a few seconds, and then had no proof any of it happened. The only email went to the office.
+
+Now anyone who submits gets a short email straight away. It opens with their name, thanks them,
+says a real person will be in contact as soon as possible, shows the phone number, and reads their
+own details back to them. There is a photo of one of the crew at the top with the logo and the
+phone number across the back of the shirt.
+
+**Three reasons this matters more than it looks:**
+
+1. **It reassures the customer.** Somebody who has just typed their phone number into a website has
+   no idea whether it worked. Now they have something in their inbox that says it did, with a
+   number to call if they want somebody sooner.
+2. **It catches their own typos.** The email shows them the phone number they gave us. A wrong digit
+   is the most common way a real enquiry goes cold, and the customer is the only person who can spot
+   it. The email tells them where to write to fix it.
+3. **It is an early warning if the form ever breaks again.** A customer who expects an email and
+   does not get one has a reason to call and say so. That is exactly the situation last week, where
+   the only reason anybody found out was Jason chasing a voicemail twice.
+
+**What it does not do**, and Jason may ask: it does not promise a time, a price, or an arrival
+window, because those are not ours to promise before the office has spoken to them. It does not
+text anybody. And it is only sent when the form actually goes through, never to somebody the spam
+check turned away.
+
+---
+
 ## 🗓️ THE REVIEWS SECTION IS NOW A SCROLLING WALL (10 AUGUST)
 
 **Jason asked for "a lot more" reviews on the site. Done.** The homepage used to show four. It now
@@ -576,6 +607,9 @@ Ranked by impact.
 
 ## Changelog
 - **2026-08-04 (2nd)** Rewrote section 6. The old "no analytics at all, one job from the website" line was out of date. Replaced with the measured numbers: 12 website jobs at $2,330 average, and July's $149,800 broken down by where it came from.
+- **2026-08-12** Customers now get an acknowledgement email when they submit a form. Added the
+  section explaining what it says, why it also acts as an early warning, and what it deliberately
+  does not promise.
 - **2026-08-12** The form incident. Added the section at the top: Jason was right, it was our
   change on 3 August, one customer is unrecoverable and his voicemail is the only route back to
   him, and roughly a third of challenged visitors were affected for nine days. Also what is fixed

@@ -7,7 +7,7 @@ the patch introduced rather than inherited, and two are pre-existing faults that
 did not touch.
 
 ⚠️ **This summary describes the state at `408f7db` and is kept only for the record. Read the status
-section immediately below it instead.** Three further deploys have landed since and **eleven of the
+section immediately below it instead.** Four further deploys have landed since and **eleven of the
 fourteen are closed**. Two lines that used to stand here are now false: the customer facing half of
 the fix is no longer dormant (a refused visitor is told their details are saved, rather than getting
 the red "refresh and try again" that emptied the Wesley Chapel customer's form), and alerting is no
@@ -49,7 +49,7 @@ both office inboxes with `Reply-To` correctly populated, and a ten digit typo wi
 captured into `unverified_leads` where the previous deploy discarded it. Both test records were
 deleted afterwards; `leads` is back to 13 rows with `max_id` 20.
 
-**Update, later on 2026-08-12.** Three more things shipped after the table below was written, all
+**Update, later on 2026-08-12.** Four more things shipped after the table below was written, all
 deployed and verified against production:
 
 | Deployed | What |
@@ -57,11 +57,22 @@ deployed and verified against production:
 | `91966c6` → Worker `6c7c22b1` | Rate limiting on `/api/contact`, shadow mode, 10 per 60s per IP |
 | `UNVERIFIED_ALERT_TO` secret | Alerting live. Runtime secret, so no rebuild and no deploy |
 | `48be8c3` → Worker `31b6c8ea` | The write ahead submission log, migration `0006` |
+| `be484e6`, `46032fd`, `1324e50` → Worker `1707d884` | A first touch acknowledgement email to the customer |
 
 **Eleven of the fourteen are closed.** What remains is gap 4 (nobody reads either table), gap 7
 (the post fix solve rate is still unmeasured, and the sample is far too small), and gap 12
 (truncation is observable rather than restructured). Gap 6 is half closed: the limiter is live but
 in shadow mode, so it measures and protects nothing yet.
+
+**A capability that did not exist before, and which the checklist now treats as day one work.**
+The site had never sent the customer anything: one email went to the office with `replyTo` set to
+the person, and that was all. An accepted submission now also sends the customer a short
+acknowledgement (`emails/customer-ack-email.tsx`), which closes the loop for them, reads their own
+phone number back so they can catch their own typo, and quietly gives us a **detector**: somebody
+who is told to expect an email and does not get one has a reason to chase. In this incident the
+only detector in the whole system was a customer choosing to phone the owner twice. See
+[`07-day-one-checklist.md`](07-day-one-checklist.md) item **A5** for the rules, of which the one
+that matters is that it fires only on the accepted path, after the spam gate.
 
 ⚠️ **Gap 4 is now the most important one, and it grew rather than shrank.** There are two tables
 nobody reads instead of one, and the archive is the larger of them. The whole point of this

@@ -104,6 +104,7 @@ The three rules that came out of it, in order of how much they will cost you to 
 | `b187eed` | Four defects the first fix introduced, found by writing the post-mortem against the shipped code |
 | `91966c6` | Rate limiting on `/api/contact`, in **shadow mode** |
 | `48be8c3` | The **write ahead submission log**, migration `0006` |
+| `1324e50` | A **first touch email to the customer** on an accepted submission |
 
 **Three tables now, and confusing them is the main way to break this:**
 
@@ -326,7 +327,16 @@ is load bearing:
 4. validate name and phone, each gate calling `refuse()` on its way out
 5. verify **Cloudflare Turnstile**, *only if* `TURNSTILE_SECRET_KEY` is set (graceful skip in dev)
 6. Resend email via `emails/lead-email.tsx` + insert into `leads`
-7. `finally` stamps the outcome onto the archive row
+7. **on the accepted path only**, a deferred acknowledgement to the customer
+   (`emails/customer-ack-email.tsx`)
+8. `finally` stamps the outcome onto the archive row
+
+⚠️ **The customer acknowledgement fires ONLY after the spam gate has passed, and that is a hard
+constraint.** Before the gate, the form is a way for anyone to make this domain send mail to a
+stranger who never asked for it. It is also deferred and best effort, so it can never delay or fail
+a submission, and it carries **its own idempotency key** (`ack-` prefixed): providers scope
+idempotency to the account rather than the recipient, so reusing the office key makes the send a
+silent no op. That trap has caught this codebase twice.
 
 **Email and D1 writes are best-effort** (try/catch, logged, never thrown) so a provider hiccup
 cannot lose a lead, and that decision is why the two real leads on 11 and 12 August survived.
