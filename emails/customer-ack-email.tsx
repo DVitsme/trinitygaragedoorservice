@@ -1,5 +1,5 @@
 import {
-  Html, Head, Preview, Body, Container, Heading, Text, Section, Hr, Img, Link, Row, Column,
+  Html, Head, Preview, Body, Container, Heading, Text, Section, Hr, Img, Link,
 } from "@react-email/components";
 import { SITE } from "@/lib/site";
 import { absoluteUrl } from "@/lib/seo";
@@ -92,10 +92,10 @@ export function CustomerAckEmail({ firstName, service, message, phone }: Custome
           />
 
           <Section style={pad}>
-            <Heading style={h1}>Thanks, we&apos;ve got it.</Heading>
+            <Heading style={h1}>Hello {firstName},</Heading>
             <Text style={lede}>
-              {firstName}, your request is with us and a real person will call you back, usually the
-              same day. Nothing else is needed from you right now.
+              Thank you for reaching out! We are excited to get started working with you and will be
+              in contact as soon as possible.
             </Text>
 
             <Section style={callout}>
@@ -104,31 +104,30 @@ export function CustomerAckEmail({ firstName, service, message, phone }: Custome
               <Text style={calloutSub}>Phones answered till 9pm</Text>
             </Section>
 
-            <Hr style={rule} />
+            {/*
+              ⚠️ **The most important block in this email, and it is styled to be impossible to
+              skim past.** Distinct background, its own border, larger and bolder than the body.
 
-            <Heading as="h2" style={h2}>Here is how it goes from here</Heading>
+              The wording is deliberately "unmonitored" rather than "your reply will be lost",
+              because `sendCustomerAck` DOES set replyTo to the office, so a reply does currently
+              arrive. Saying otherwise would be a false statement to a customer. What is true is
+              that nobody reads the noreply mailbox itself, that the From address tells the reader
+              this is a dead end, and that a single careless edit to replyTo would make a reply
+              vanish with no error anywhere. Giving them an address a human actually watches is the
+              honest and durable answer.
 
-            <Row style={step}>
-              <Column style={stepNum}><Text style={numText}>1</Text></Column>
-              <Column>
-                <Text style={stepTitle}>A real person calls you back</Text>
-                <Text style={stepBody}>
-                  Usually the same day, from our office in Lutz. Not a call centre and not a robot.
-                  They will ask what the door is doing and work out what it needs.
-                </Text>
-              </Column>
-            </Row>
-
-            <Row style={step}>
-              <Column style={stepNum}><Text style={numText}>2</Text></Column>
-              <Column>
-                <Text style={stepTitle}>We find you a two hour window</Text>
-                <Text style={stepBody}>
-                  Once we know what the job is, we book a two hour arrival window rather than an
-                  exact minute, which gives your tech room for traffic and for the job before yours.
-                </Text>
-              </Column>
-            </Row>
+              ⚠️ **Keep replyTo set even though this notice exists.** It is the safety net for the
+              customer who hits reply without reading. Never close a route into this business.
+            */}
+            <Section style={notice}>
+              <Text style={noticeHead}>Please do not reply to this email</Text>
+              <Text style={noticeBody}>
+                It is sent from an address nobody checks. To reach us, write to:
+              </Text>
+              <Link href="mailto:trinitygaragedoorservice@gmail.com" style={noticeMail}>
+                trinitygaragedoorservice@gmail.com
+              </Link>
+            </Section>
 
             {/*
               Their own words, read back. Two reasons, and the second is the useful one: it shows we
@@ -139,12 +138,19 @@ export function CustomerAckEmail({ firstName, service, message, phone }: Custome
             {(message || phone || service) && (
               <>
                 <Hr style={rule} />
-                <Text style={recapLabel}>What you sent us</Text>
+                <Text style={recapLabel}>Our records show:</Text>
                 {service && <Text style={recapRow}><strong style={recapKey}>Service</strong>{service}</Text>}
                 {phone && <Text style={recapRow}><strong style={recapKey}>Phone</strong>{phone}</Text>}
                 {message && <Text style={recapMsg}>{message}</Text>}
+                {/*
+                  Names the address rather than saying "above" or "below". The notice block has
+                  already moved once during review, and a direction word silently points the wrong
+                  way the moment anything is reordered. Repeating the address costs one line and it
+                  is the single thing in this email we most want repeated.
+                */}
                 <Text style={recapNote}>
-                  If the number above is wrong, just reply to this email and we will fix it.
+                  If anything above is wrong, email trinitygaragedoorservice@gmail.com and we will
+                  put it right.
                 </Text>
               </>
             )}
@@ -165,7 +171,7 @@ export function CustomerAckEmail({ firstName, service, message, phone }: Custome
 }
 
 /*
-  Inline styles only, and tables via Row/Column rather than flex or grid. Outlook renders through
+  Inline styles only, and no flex or grid anywhere. Outlook renders through
   Word, which supports neither, and a <style> block is stripped by several clients including Gmail
   on mobile. Colours are the Bold Trade tokens from `app/globals.css`, hardcoded because an email
   cannot read a CSS custom property.
@@ -189,19 +195,24 @@ const calloutPhone = { color: ACCENT, fontSize: "24px", fontWeight: 800, textDec
 const calloutSub = { color: BODY, fontSize: "13px", margin: "4px 0 0" } as const;
 
 const rule = { border: "none", borderTop: "1px solid #e3e0da", margin: "24px 0" } as const;
-const h2 = { color: INK, fontSize: "17px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "0.5px", fontWeight: 800 } as const;
 
-const step = { marginBottom: "16px" } as const;
-const stepNum = { width: "38px", verticalAlign: "top" } as const;
-const numText = { backgroundColor: ACCENT, color: "#ffffff", width: "26px", height: "26px", borderRadius: "13px", textAlign: "center", fontSize: "14px", fontWeight: 800, lineHeight: "26px", margin: 0 } as const;
-const stepTitle = { color: INK, fontSize: "15px", fontWeight: 700, margin: "0 0 4px" } as const;
-const stepBody = { color: BODY, fontSize: "14.5px", lineHeight: "1.5", margin: 0 } as const;
 
 const recapLabel = { color: INK, fontSize: "13px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 10px" } as const;
 const recapRow = { color: INK, fontSize: "14px", lineHeight: "22px", margin: "0 0 4px" } as const;
 const recapKey = { display: "inline-block", width: "74px", color: ACCENT } as const;
 const recapMsg = { color: BODY, fontSize: "14px", lineHeight: "1.5", margin: "10px 0 0", whiteSpace: "pre-wrap" } as const;
 const recapNote = { color: BODY, fontSize: "13px", lineHeight: "1.45", margin: "12px 0 0", fontStyle: "italic" } as const;
+
+/*
+  The notice. Everything here is one step louder than the body copy on purpose: a warmer background
+  than the sand callout above it so the two do not read as the same thing, a full accent border
+  rather than a left rule, and type that steps up rather than down. If this ever stops standing out
+  from the block above it, the styling has failed at its only job.
+*/
+const notice = { backgroundColor: "#fdecec", border: `2px solid ${ACCENT}`, borderRadius: "6px", padding: "18px 20px", margin: "20px 0 4px" } as const;
+const noticeHead = { color: ACCENT, fontSize: "18px", fontWeight: 800, margin: "0 0 6px", lineHeight: "1.3" } as const;
+const noticeBody = { color: INK, fontSize: "16px", fontWeight: 700, margin: "0 0 8px", lineHeight: "1.45" } as const;
+const noticeMail = { color: ACCENT, fontSize: "19px", fontWeight: 800, textDecoration: "underline", wordBreak: "break-all" } as const;
 
 const footer = { backgroundColor: INK, padding: "16px 28px" } as const;
 const footerText = { color: "#ffffff", fontSize: "13px", margin: 0 } as const;
