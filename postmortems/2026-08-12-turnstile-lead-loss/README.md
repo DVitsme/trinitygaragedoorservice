@@ -62,6 +62,7 @@ with nothing in the process set up to notice.
 | [`08-storage-decision.md`](08-storage-decision.md) | R2 versus D1 for the write ahead log. Three analyses, one hands on spike, and the failure modes that decided it | Choosing where an audit log lives on Cloudflare |
 | [`09-measurement-and-monitoring.md`](09-measurement-and-monitoring.md) | The reproducible baseline, runnable queries, the traps in each instrument, and the monitoring that should exist | Proving a fix worked, or building observability from scratch |
 | [`10-privacy-and-retention.md`](10-privacy-and-retention.md) | What the data actually contains, which laws reach a business this size, retention, and the two near misses | Before storing customer data anywhere, especially in a public repo |
+| [`11-applied-to-a-second-site.md`](11-applied-to-a-second-site.md) | What happened when this whole document was applied to an unrelated project nine days later: which principles found real defects, three instrument traps not recorded in `09`, the §5 reasoning error repeated while reading §5, and the worst defect on that site that nothing here would have predicted | You want to know whether any of this generalises, or you are about to run this playbook somewhere else |
 | [`REFERENCES.md`](REFERENCES.md) | Every external source used, grouped by topic, with what each establishes | You need the citation without rereading the argument |
 
 ---

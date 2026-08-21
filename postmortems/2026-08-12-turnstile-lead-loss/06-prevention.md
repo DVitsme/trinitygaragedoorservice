@@ -301,6 +301,25 @@ This project now has the first, in the `?deep=1` health check. It does not yet h
 
 ---
 
+## 9. Every rejection must name its cause to the person who can fix it
+
+Added 2026-08-21 after applying this document elsewhere; see
+[`11-applied-to-a-second-site.md`](11-applied-to-a-second-site.md) §4.
+
+Principles 1 through 8 are thorough about making refusals visible to the OPERATOR: capture,
+alerting, logs, counters. They say nothing about making them actionable for the VISITOR, and both
+sites failed on exactly that. This incident told a customer to "refresh and try again" for a
+failure that was deterministic for him. The second site said "check the highlighted fields" while
+highlighting none, on a form whose server was computing field-level errors, returning them in the
+response, and rendering them nowhere.
+
+The test: for every rejection your form can emit, can the person who received it identify what to
+change? If the answer is no, the refusal is silent from their side even when it is fully logged on
+yours, and they leave. A refusal the operator can see and the visitor cannot act on is still a lost
+lead.
+
+---
+
 ## The short version
 
 If you remember nothing else from this document:
@@ -312,3 +331,4 @@ If you remember nothing else from this document:
 5. **Count third party widget initialisations against page views.**
 6. **A comment is not a measurement, however well argued.**
 7. **If the only detector is the client, you have no detector.**
+8. **Every rejection must tell the visitor what to change**, not just tell you that it happened.

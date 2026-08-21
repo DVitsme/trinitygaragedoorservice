@@ -165,6 +165,13 @@ assert max(sampleInterval) == 1.0
 
 ---
 
+> **Three further traps were found applying these queries to a second site on 2026-08-21 and are
+> recorded in [`11-applied-to-a-second-site.md`](11-applied-to-a-second-site.md) §2: the dataset's
+> ~30-day RETENTION cap (distinct from the `1w1h` window cap below, and it means the 6–12 August
+> baseline expires around 7 September unless the raw response is snapshotted), the fact that
+> `challenge_issued` and `*_solved` events do not pair 1:1 inside a window (a cohort showed a 114%
+> solve rate), and `console.error` output being invisible in local `wrangler` preview.**
+
 ## 4 · Three traps in the instruments, each measured
 
 ### 4.1 `turnstileAdaptiveGroups` window cap and sampling
