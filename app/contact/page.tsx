@@ -169,14 +169,36 @@ export default function ContactPage() {
                   ))}
                 </div>
                 {/* Placeholder removed 2026-07-29: the address shipped here, in the footer and in
-                    the LocalBusiness JSON-LD together, which is why it was held until now. */}
-                <address className="mt-[18px] not-italic text-[15px] leading-[1.6] text-body">
+                    the LocalBusiness JSON-LD together, which is why it was held until now. Oldsmar
+                    and Tampa joined it 2026-08-13, from `SITE.locations`, in the same commit as the
+                    footer and the branch nodes in `components/json-ld.tsx`. All four places move
+                    together or the NAP stops agreeing with itself. */}
+                <div className="mt-[18px] text-[15px] leading-[1.6] text-body">
                   <strong className="font-bold text-ink">{SITE.name}</strong>
-                  <br />
-                  {SITE.address.street}
-                  <br />
-                  {SITE.address.city}, {SITE.address.region} {SITE.address.postalCode}
-                </address>
+                  {/*
+                    ⚠️ **No "visit us", "showroom", "come by" or opening hours here, deliberately.**
+                    This section is headed "We're Mobile, So We Come To You" and that is the actual
+                    business: they dispatch trucks. Three addresses printed beside a map read as
+                    places a customer may walk into, and a wasted journey to a door that does not
+                    open to the public is a worse experience than never listing the address.
+
+                    These are here as NAP, so Google can tie the three Google Business Profiles to
+                    one entity. Whether Oldsmar and Tampa are staffed is an open question with the
+                    client. Until it is answered, nothing on this page may invite anyone to turn up.
+                  */}
+                  <div className="mt-2.5 grid gap-x-8 gap-y-3 min-[560px]:grid-cols-2">
+                    {SITE.locations.map((loc) => (
+                      <address key={loc.label} className="not-italic">
+                        <span className="block text-[12.5px] font-extrabold uppercase tracking-[0.06em] text-ink/55">
+                          {loc.label}
+                        </span>
+                        {loc.street}
+                        <br />
+                        {loc.city}, {loc.region} {loc.postalCode}
+                      </address>
+                    ))}
+                  </div>
+                </div>
               </div>
               <ServiceAreaMap className="mx-auto max-w-[380px]" />
             </div>
