@@ -42,6 +42,36 @@ export const SITE = {
   },
 
   /**
+   * Every physical location, in the order they should be listed.
+   *
+   * ⚠️ **`address` above stays the PRIMARY and is not derived from this array.** It is read by the
+   * LocalBusiness JSON-LD, the privacy policy and the contact page, and it is the one verified from
+   * Trinity's own Housecall Pro dispatch record. Changing which entry is primary is a local SEO
+   * decision, not a formatting one, so it is deliberately not a `.find(l => l.primary)` lookup that
+   * somebody could flip by reordering this list.
+   *
+   * Oldsmar and Tampa were added 2026-08-13 at the client's request. They correspond to the second
+   * and third Google Business Profiles found in the 2026-08-10 export, which between them hold 108
+   * of the business's 706 reviews. Publishing a consistent name, address and phone for them is the
+   * thing most likely to help Google tie those listings to this entity.
+   *
+   * ⚠️ **No `lat`/`lng` on the two branches, and that is deliberate.** Coordinates were never
+   * supplied for them and inventing them would put a wrong pin in structured data, which is worse
+   * than no pin. Add them only from a verified source.
+   *
+   * ⚠️ **All three carry the SAME phone**, the one number confirmed by Jason on 2026-07-29. The
+   * county lines further down this file, (813) 447-3874 for Hillsborough and (727) 314-5062 for
+   * Pinellas, are inherited from the old WordPress site and are listed in CLAUDE.md as UNSETTLED.
+   * Do not attach them to a location here until somebody confirms they ring the right desk: a wrong
+   * number in NAP data is the one mistake that actively costs calls.
+   */
+  locations: [
+    { label: "Lutz", street: "18125 US-41 Ste 208", city: "Lutz", region: "FL", postalCode: "33549", primary: true },
+    { label: "Oldsmar", street: "105 Dunbar Ave Suite H", city: "Oldsmar", region: "FL", postalCode: "34677", primary: false },
+    { label: "Tampa", street: "14056 N Florida Ave", city: "Tampa", region: "FL", postalCode: "33613", primary: false },
+  ],
+
+  /**
    * ⚠️ **THE HOURS LIVE HERE AND NOWHERE ELSE. Change them here, never in a page.**
    *
    * Settled on the 2026-07-29 call. The site previously claimed **24/7 in 62 places** and its

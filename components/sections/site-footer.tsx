@@ -66,16 +66,33 @@ export function SiteFooter() {
               </a>
               <span>Phones Answered Till 9pm</span>
               {/*
-                The real street address, in the footer on every page. Google reads a consistent NAP
-                (name, address, phone) across a site as an entity signal, and this business gets
-                most of its customers through local search. It matches the LocalBusiness JSON-LD
-                exactly, which is the point: a mismatch is worse than an omission.
+                The real street addresses, in the footer on every page. Google reads a consistent
+                NAP (name, address, phone) across a site as an entity signal, and this business gets
+                most of its customers through local search.
+
+                ⚠️ **These match the LocalBusiness JSON-LD exactly, and that is the point: a
+                mismatch is worse than an omission.** Lutz is the primary entity there; Oldsmar and
+                Tampa are branch nodes pointing at it. If you add, remove or reorder a location
+                here, change `components/json-ld.tsx` in the same commit or the two disagree and the
+                markup becomes a liability rather than a signal.
+
+                Driven off `SITE.locations` rather than three hardcoded blocks, so there is one
+                place to edit and the footer cannot silently drift from the structured data.
               */}
-              <address className="not-italic leading-[1.5]">
-                {SITE.address.street}
-                <br />
-                {SITE.address.city}, {SITE.address.region} {SITE.address.postalCode}
-              </address>
+              <div className="flex flex-col gap-[9px]">
+                {SITE.locations.map((loc) => (
+                  <address key={loc.label} className="not-italic leading-[1.5]">
+                    {/* The town label earns its place: with three addresses stacked, the reader is
+                        scanning for their own area, not reading prose. */}
+                    <span className="block text-[13px] font-extrabold uppercase tracking-[0.06em] text-[#8a8a8a]">
+                      {loc.label}
+                    </span>
+                    {loc.street}
+                    <br />
+                    {loc.city}, {loc.region} {loc.postalCode}
+                  </address>
+                ))}
+              </div>
             </div>
           </div>
         </div>

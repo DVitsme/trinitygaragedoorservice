@@ -69,7 +69,63 @@ export function LocalBusinessJsonLd() {
       SOCIAL.nextdoor,
     ],
   };
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+
+  /**
+   * The two branch locations, added 2026-08-13 alongside the footer change.
+   *
+   * ⚠️ **The Lutz entity above is untouched.** It holds the `@id` every other node references, the
+   * geo, the hours, the areaServed and the sameAs profile list, which is the accumulated signal. A
+   * branch must never be allowed to compete with it for canonical status, so each one below is a
+   * separate node that points UP at Lutz via `parentOrganization`. That is the relationship Google
+   * documents for a multi location business, and it is what keeps one entity with three addresses
+   * from reading as three unrelated businesses.
+   *
+   * ⚠️ **Three things are deliberately absent from the branches, and each absence is a decision:**
+   *
+   * - **No `geo`.** Coordinates were never supplied for Oldsmar or Tampa. A guessed pin is worse
+   *   than no pin, because Google will happily show it and a customer will drive to it.
+   * - **No `openingHoursSpecification`.** `SITE.hours` describes when the phones are answered, which
+   *   is a company wide fact, not a statement about a door being unlocked at either branch.
+   *   Declaring hours for a location nobody has confirmed is staffed is exactly the claim that gets
+   *   a listing suspended.
+   * - **No `sameAs`.** Those profile URLs belong to the primary listing. Repeating them on a branch
+   *   would tell Google all three nodes are the same profile.
+   *
+   * They DO carry `telephone`, using the one number Jason confirmed. See the note in
+   * `SITE.locations` about why the county specific lines are not used here.
+   */
+  const branches = SITE.locations
+    .filter((loc) => !loc.primary)
+    .map((loc) => ({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": `${absoluteUrl("/")}#business-${loc.label.toLowerCase()}`,
+      name: `${SITE.legalName} ${loc.label}`,
+      parentOrganization: { "@id": `${absoluteUrl("/")}#business` },
+      url: absoluteUrl("/"),
+      telephone: "+18132796785",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: loc.street,
+        addressLocality: loc.city,
+        addressRegion: loc.region,
+        postalCode: loc.postalCode,
+        addressCountry: SITE.address.country,
+      },
+    }));
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+      {branches.map((b) => (
+        <script
+          key={b["@id"]}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(b) }}
+        />
+      ))}
+    </>
+  );
 }
 
 /** FAQPage schema — pair with <FaqAccordion> on service/resource pages. */
