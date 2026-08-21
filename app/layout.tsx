@@ -64,10 +64,37 @@ export default function RootLayout({ children }: { children: ReactNode }) {
    * bug above. `next build` sets NODE_ENV to production, `next dev` sets it to development, and
    * `pnpm preview` runs a production build, which is why the escape hatch still has to exist.
    */
-  const gtmEnabled =
-    Boolean(SITE.gtmId) &&
-    process.env.NODE_ENV === "production" &&
-    process.env.NEXT_PUBLIC_GTM_DISABLE !== "1";
+  /**
+   * ⚠️ **Tags are OFF by default and the DEPLOY turns them on. Do not invert this back.**
+   *
+   * This was `NODE_ENV === "production" && NEXT_PUBLIC_GTM_DISABLE !== "1"`, and the comment above
+   * it claimed that meant tags were off in local dev. That was true of `next dev` and of nothing
+   * else. **`next start` and `pnpm preview` both set `NODE_ENV=production`**, and those are the two
+   * commands this project actually uses to verify UI work, because CLAUDE.md says never to trust
+   * `next dev` for visual QA. So the guard protected the one path nobody uses.
+   *
+   * It cost real data on 2026-08-13: a plain `pnpm build` followed by roughly ten headless page
+   * loads for screenshots fired that many Google Ads and Bing UET pageviews into the client's live
+   * container. Silent, and not reversible.
+   *
+   * **Why opt in rather than a better opt out.** Both directions can fail silently, so the question
+   * is which failure you can see. A forgotten disable pollutes the client's analytics invisibly and
+   * permanently. A forgotten enable ships production with no tracking, which is loud the moment
+   * anybody looks at the rendered HTML, and it is checked after every deploy.
+   *
+   * **The flag lives in the `deploy` and `upload` scripts in `package.json`, not in a shell or a
+   * dashboard**, so it travels with the only two commands that can put this in front of a customer
+   * and it cannot be left out of a hurried release. `preview` deliberately does NOT set it.
+   *
+   * ⚠️ **The residual risk, stated plainly:** if somebody runs `pnpm build` and then deploys that
+   * artifact by some other route, production ships with no tracking. The post deploy check is what
+   * catches it, so do not remove that step:
+   *
+   *     curl -s https://trinitygaragedoorservice.com/get-service/ | grep -c GTM-
+   *
+   * It must be non zero. Zero means the tags are gone and Lloyd's conversion data has stopped.
+   */
+  const gtmEnabled = Boolean(SITE.gtmId) && process.env.NEXT_PUBLIC_GTM_ENABLE === "1";
 
   return (
     <html lang="en" className={hanken.variable}>

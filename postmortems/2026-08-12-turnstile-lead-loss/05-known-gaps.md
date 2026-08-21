@@ -74,6 +74,12 @@ only detector in the whole system was a customer choosing to phone the owner twi
 [`07-day-one-checklist.md`](07-day-one-checklist.md) item **A5** for the rules, of which the one
 that matters is that it fires only on the accepted path, after the spam gate.
 
+**Update, 2026-08-13.** Gap 14 was **reopened**. It had been recorded as shipped in `b187eed` and
+the fix did not work: the guard tested `NODE_ENV === "production"`, which is true for `next start`
+and `pnpm preview`, the two commands this project uses for visual QA. It was found by causing the
+harm rather than by review, and it is written up below because the pattern matters more than the
+bug. The count of eleven closed still holds only because it has since been closed properly.
+
 ⚠️ **Gap 4 is now the most important one, and it grew rather than shrank.** There are two tables
 nobody reads instead of one, and the archive is the larger of them. The whole point of this
 post-mortem is that a record nobody looks at is barely better than no record.
@@ -99,7 +105,7 @@ alternative: [`08-storage-decision.md`](08-storage-decision.md).
 | 11 | `leadRef` comment factually wrong | **Shipped in `b187eed`** |
 | 12 | Silent message truncation | **Made observable, not restructured.** It now logs when it fires |
 | 13 | `pnpm lint` broken | **Fixed in `b187eed`.** Root cause found, see below |
-| 14 | GTM guard does not match its comment | **Shipped in `b187eed`** |
+| 14 | GTM guard does not match its comment | **Reopened, then closed properly in `af93e55`+.** The `b187eed` fix was wrong and I marked it closed anyway. See below |
 
 ### Gap 5 fired in production eleven minutes after the deploy
 
@@ -142,6 +148,46 @@ locally.
 
 This is the third time in one day that a change intended to protect the form turned out to be
 capable of refusing legitimate submissions. That rate is itself the finding.
+
+### Gap 14 was marked closed, was not closed, and then cost real data
+
+`b187eed` changed the guard to `NODE_ENV === "production" && NEXT_PUBLIC_GTM_DISABLE !== "1"` and
+this file recorded it as shipped. **That fix does not work**, and the reason is one line long:
+
+> **`next start` and `pnpm preview` both set `NODE_ENV=production`.**
+
+Those are the two commands this project uses for visual QA, because CLAUDE.md says never to trust
+`next dev` for it. So the guard protected `next dev`, the one path nobody uses, and left every
+verification path firing tags.
+
+**It was not caught by review. It was caught by causing the harm.** On 2026-08-13 a plain
+`pnpm build` followed by roughly ten headless page loads for footer and contact screenshots fired
+that many Google Ads and Bing UET pageviews into the client's live container. Localhost origin,
+pageviews not conversions, but real and not reversible.
+
+**The correct fix inverts the default.** Tags are now OFF unless a build sets
+`NEXT_PUBLIC_GTM_ENABLE=1`, and that flag lives inside the `deploy` and `upload` scripts in
+`package.json` rather than in a shell, so it travels with the only two commands that can put the
+site in front of a customer and cannot be omitted from a hurried release. `preview` deliberately
+does not set it.
+
+Both directions were verified rather than reasoned about: a plain `pnpm build` produces **0**
+occurrences of the container id in the rendered HTML, a deploy shaped build produces **2**.
+
+**The residual risk is stated rather than hidden.** If somebody builds by one route and deploys the
+artifact by another, production ships with no tracking. That failure is loud where the old one was
+silent, and the post deploy check catches it:
+
+```
+curl -s https://trinitygaragedoorservice.com/get-service/ | grep -c GTM-   # must be non zero
+```
+
+**The transferable lesson, and it is uncomfortable.** This is the second time in two days that a
+guard was written, argued for in a careful comment, recorded as fixed, and did not cover the case
+that actually occurs. The first was `json.hostname`. Both times the reasoning was sound and the
+premise was wrong. A guard is not closed when it is written, it is closed when somebody has
+demonstrated the unprotected path is now protected. `06-prevention.md` principle 7 says comments
+record intent and only telemetry records behaviour; a status table is a comment.
 
 ### Gap 13: the root cause, recorded so nobody rediscovers it
 

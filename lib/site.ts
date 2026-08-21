@@ -153,8 +153,15 @@ export const SITE = {
    * was 5,197 bytes. Browsers have partitioned the HTTP cache per site since 2020, so there is no
    * shared CDN saving. This is a real cost accepted deliberately for attribution.
    *
-   * Set `NEXT_PUBLIC_GTM_DISABLE=1` to turn it off locally, so screenshot QA and dev work do not
-   * fire real conversions into the client's Google Ads account.
+   * ⚠️ **Tags are OFF unless the build sets `NEXT_PUBLIC_GTM_ENABLE=1`, and only `pnpm run deploy`
+   * and `pnpm run upload` do**, because the flag lives in those two scripts in `package.json`.
+   * Nothing needs setting for local work: `pnpm build`, `pnpm preview`, `next start` and `next dev`
+   * all ship without tags, so screenshot QA cannot fire conversions into the client's account.
+   *
+   * This was the reverse until 2026-08-13 and the old guard read `NODE_ENV === "production"`, which
+   * is TRUE for `next start` and `pnpm preview`, the two commands this project uses for visual QA.
+   * See the comment on `gtmEnabled` in `app/layout.tsx` for the full reasoning and the one residual
+   * risk it accepts.
    */
   gtmId: "GTM-MXNSKF57",
 } as const;

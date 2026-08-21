@@ -588,7 +588,7 @@ human reads the mail. Split those across three checks:
 
 **(i) Widget mount, in CI, never against production.** The highest-value check in the design,
 because it is the one that would have caught the original bug. Playwright against `pnpm preview`
-(real `workerd`), with `NEXT_PUBLIC_GTM_DISABLE=1`:
+(real `workerd`). Nothing needs setting to keep tags off, see the note below:
 
 ```
 hard load  /get-service/                → cf-turnstile-response non-empty within 15s, mounts == 1
@@ -597,10 +597,14 @@ navigate away and back                  → same
 ```
 
 About 40 lines. Runs on every PR and nightly, because `api.js` is remote code that changes without
-us. Two constraints that will bite otherwise: it **must** be `pnpm preview`, not `next dev`
-(Turbopack drops CSS chunks in headless Chrome), and `NEXT_PUBLIC_GTM_DISABLE=1` **must** be set or
-the run fires real conversions into the client's Ads account. That flag is currently set nowhere in
-the repo and the guard in `app/layout.tsx` has no dev check, so gap 14 needs fixing first.
+us. One constraint that will bite otherwise: it **must** be `pnpm preview`, not `next dev`, because
+Turbopack drops CSS chunks in headless Chrome.
+
+**Updated 2026-08-13: the tag flag is no longer something the runner has to remember.** Tags are off
+unless a build sets `NEXT_PUBLIC_GTM_ENABLE=1`, and only `pnpm run deploy` and `pnpm run upload` do,
+because the flag is written into those two scripts. Any local or CI build is tag free by default.
+The old advice on this line was to remember `NEXT_PUBLIC_GTM_DISABLE=1`, and forgetting it is
+exactly what fired about ten real pageviews into the client's container on 2026-08-13.
 
 **(ii) Write round-trip, server side, no fake lead.** Extend `?deep=1` to `INSERT` / `SELECT` /
 `DELETE` a single row in `unverified_leads` with `reason = 'healthcheck'`. That table already has a

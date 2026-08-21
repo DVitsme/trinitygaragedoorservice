@@ -255,6 +255,16 @@ The customer's three submissions at 21:39:48, 21:39:50 and 21:39:51 all landed i
 
 Applied to the comment above, that would have read: *"Assumption: `turnstile.reset()` mints a replacement synchronously. Not verified. If it does not, a retry inside the gap posts an empty token."* That sentence would have been enough for anyone to spend the five minutes that measures it.
 
+**A smaller instance of the same thing, and it went on to prove the principle twice over.**
+
+> **Resolved 2026-08-13, after it cost real data.** The first fix added `NODE_ENV === "production"`
+> to the guard and was recorded as closed. It did not work, because `next start` and `pnpm preview`
+> both set `NODE_ENV=production` and those are the two commands used for visual QA here. Roughly ten
+> headless page loads then fired real pageviews into the client's container. Tags are now OFF by
+> default and only the `deploy` and `upload` scripts turn them on. Full account in
+> [`05-known-gaps.md`](05-known-gaps.md) under gap 14. The paragraph below is left as written,
+> because it was accurate when written and it is the better illustration of the principle.
+
 **A smaller instance of the same thing, still live.** `app/layout.tsx` carries a comment saying GTM is "Off in local dev and in any build that sets `NEXT_PUBLIC_GTM_DISABLE`". The first half is simply false: there is no dev guard, only the variable, and that variable is set **nowhere in the repository**. Every local build fires real Google Ads conversions into the client's live account unless somebody remembers a flag that is not written down. The comment describes the intent perfectly and the code has never done it.
 
 ---
