@@ -2,10 +2,41 @@
 
 Talking points for client meetings. Wins to share, problems to raise, and advice worth giving.
 
-**Living document.** Last updated: 2026-08-12. Deeper detail: `MEDIA-INVENTORY.md`,
+**Living document.** Last updated: 2026-08-21. Deeper detail: `MEDIA-INVENTORY.md`,
 `PRE-LAUNCH-PUNCHLIST.md`, `INTEGRATIONS` notes in `CLAUDE.md`.
 
 ---
+---
+
+## ⭐ THE REVIEW COUNT NOW SAYS 1,000+ (21 AUGUST)
+
+Jason asked for the number to read closer to 1,000. It is live on 36 pages.
+
+**What it says now:** "5.0 on Google, and 1,000+ reviews online", with the count linking to the
+reviews page where the six platforms are named: Google, Yelp, Angi, BBB, Facebook and Nextdoor.
+
+**Three things worth knowing if it ever comes up in conversation.**
+
+1. **The rating and the count are deliberately two separate facts.** 5.0 is Google only. The 1,000+
+   is a count across six platforms. The old wording, "5.0 on Google, 598 reviews", read as "5.0
+   **from** 598", so simply swapping the number would have claimed a 5.0 average across every
+   platform, which is not true and not something we can support. The word "and" in the new sentence
+   is doing that work.
+2. **It says 1,000+ rather than an exact number on purpose.** A customer who leaves a review on two
+   platforms is counted twice and there is no way to remove the duplicates, so an exact total would
+   claim a precision nobody has. A threshold is honest and it does not go stale.
+3. **Nobody has actually added the platforms up.** We have a verified 706 on Google from their own
+   export. The rest is unverified. This is `CLIENT-ASKS` **#47** and it is ten minutes of work, but
+   until it is done the claim rests on Jason's estimate rather than on arithmetic we can show
+   someone.
+
+**A related fix went out with it.** The mobile Call and Request Service bar at the bottom of the
+screen is fixed in place, and nothing was reserving room for it, so the last 72 pixels of every
+page were sitting behind it on phones. It had gone unnoticed because the thing at the bottom was
+never anything you needed to tap. Adding a seventh social button pushed a button down into that
+dead zone and made it unreachable, which is how we found it. Every page on a phone now scrolls
+past the bar properly.
+
 ---
 
 ## 🩸 JASON WAS RIGHT ABOUT THE FORM, AND IT WAS OUR FAULT (12 AUGUST)
@@ -610,6 +641,10 @@ Ranked by impact.
 - **2026-08-12** Customers now get an acknowledgement email when they submit a form. Added the
   section explaining what it says, why it also acts as an early warning, and what it deliberately
   does not promise.
+- **2026-08-21** Review count changed to 1,000+ across six platforms at Jason's request. Added the
+  section at the top: why the rating and the count are stated separately, why it is a threshold and
+  not an exact number, and that the platform totals still need adding up (`CLIENT-ASKS` #47). Also
+  the sticky mobile bar fix it uncovered.
 - **2026-08-12** The form incident. Added the section at the top: Jason was right, it was our
   change on 3 August, one customer is unrecoverable and his voicemail is the only route back to
   him, and roughly a third of challenged visitors were affected for nine days. Also what is fixed

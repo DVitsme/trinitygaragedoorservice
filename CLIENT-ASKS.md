@@ -2,7 +2,7 @@
 
 Things only Jason or Simone can answer or provide. Tick them off as they come in.
 
-**Living document.** Last updated: 2026-08-12. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
+**Living document.** Last updated: 2026-08-21. Deeper detail: `PRE-LAUNCH-PUNCHLIST.md`,
 `MEDIA-INVENTORY.md`, `LAUNCH-CHECKLIST.md`.
 
 ---
@@ -106,6 +106,17 @@ need FROM them as a result.
 |---|---|---|---|
 | 45 | **Access to add one rate limiting rule in their Cloudflare account** | The lead form now records every submission, which is the fix for what happened. That also means anyone hammering the form writes to the database, and the daily write allowance is shared with the real leads table, so a flood could take the form down. One rule at Cloudflare's edge stops that before it reaches us. We have a working API key but it has no permission for this area, confirmed 12 August. Either they add the rule, or they grant Zone WAF and Zone Settings permission on a token. **Free plan gives one rule: 10 second window, group by IP, match on path `/api/contact`.** | 🔴 **OPEN, and it gates finishing the protection** |
 | 46 | **Ten minutes of a Florida attorney on the privacy policy** | Their policy promises, with no conditions, that anyone can ask them to delete their information. We now keep a record of every submission, so that promise has a second place to reach. It also says submissions are "sent to us by email and stored in our database", which is no longer the whole truth, and it states no retention period. None of this is urgent and no law forces it at their size, but it is their own promise and it should be one they can keep. Already flagged as **#12**, this raises its value. Detail in `postmortems/2026-08-12-turnstile-lead-loss/10-privacy-and-retention.md`. | 🟠 **OPEN, low urgency, cheap to fix** |
+
+---
+
+## ⭐ THE 1,000+ REVIEW CLAIM (new, 2026-08-21)
+
+Jason asked for the review count to read closer to 1,000, so the site now says **"5.0 on Google,
+and 1,000+ reviews online"** on 36 pages, with the breakdown named on the reviews page.
+
+| # | Ask | Why it matters | Status |
+|---|---|---|---|
+| 47 | **Confirm the review totals on Yelp, Angi, BBB, Facebook, HomeAdvisor and Nextdoor** | We have a verified 706 on Google from their own Takeout export. We do **not** have verified counts for the other platforms, so nobody has actually added up the 1,000. The claim is written to be as defensible as possible: it says "1,000+ reviews online" across six named platforms rather than a precise total, and the 5.0 rating is stated as Google only so the two are never conflated. But if a competitor or a customer challenges it, Trinity needs to be able to point at the arithmetic. Ten minutes of adding up profile counts settles it permanently. | 🟠 **OPEN, worth doing before anyone asks** |
 
 ---
 
