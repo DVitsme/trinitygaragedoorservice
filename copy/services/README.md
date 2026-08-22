@@ -1,5 +1,13 @@
 # Trinity Services Copy Deck
 
+> ⚠️ **REVIEW FIGURES IN THIS FILE ARE SUPERSEDED. Do not copy them into a page.**
+> Any `4.9`, `598` or "Average Rating" below is stale. The live claims are, as of 2026-08-13:
+> **`5.0 on Google`** (a Google only RATING, never presented as a cross platform average) and
+> **`1,000+ reviews online`** (a cross platform COUNT across Google, Yelp, Angi, BBB, Facebook and
+> Nextdoor). Source of truth: `components/blocks/trust-strip.tsx` and the `stats` array in
+> `app/page.tsx`. Any page that states the count must leave the reader one click from
+> `/about/reviews/`, where the platform breakdown is stated.
+
 Ten pages of new website copy for the Services section, written in Trinity's real voice (warm, honest, local, family owned), then QA'd for tone and rules. Total: about 12,000 words. The original seven were drafted by three agents from the discovery research and the live site. The three repair sub pages (emergency, cables and rollers, tune up) were added later from confirmed technical research, and they complete the repair mega menu. The Services section is now content complete.
 
 Voice and rules these were written to: see `_VOICE-AND-RULES.md`.

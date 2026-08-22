@@ -243,13 +243,19 @@ export const SERVICE_OPTIONS = [
   "Not sure / something else",
 ] as const;
 
-/** Provisional homepage stats (shown with a "figures provisional" disclaimer). */
-export const STATS = [
-  { value: String(new Date().getFullYear() - FOUNDED_YEAR), accent: "+", label: "Years of Service" },
-  { value: "12k", accent: "+", label: "Doors Serviced" },
-  { value: "5.0", accent: "★", label: "Average Rating" },
-  { value: "6", accent: "", label: "Cities Covered" },
-] as const;
+/*
+  The `STATS` export was DELETED on 2026-08-13. It had zero importers: `app/page.tsx` keeps its own
+  local `stats` array and always has.
+
+  It is recorded here rather than silently removed because of what it contained. Its third entry was
+  `{ value: "5.0", accent: "★", label: "Average Rating" }`, and "Average Rating" with no platform
+  named is exactly the claim the site must never make: 5.0 is the GOOGLE rating, and the review
+  COUNT is the cross platform figure. Wired up as written, it would have presented a Google rating
+  as an average across six platforms. Dead code that ships a false claim the moment somebody imports
+  it is worse than no code, which is the same reason the fabricated `REVIEWS` export was removed.
+
+  The live figures are the local `stats` array in `app/page.tsx` and the `TrustStrip`.
+*/
 
 /**
  * Counties for `areaServed` in the LocalBusiness schema.

@@ -37,7 +37,17 @@ const whyCards: { icon: ReactNode; title: string; body: string }[] = [
  *  - 12k+:   lifetime figure. Housecall Pro only holds records from Oct 2019 (7,673 jobs since),
  *            so it neither proves nor disproves this. Left as the client's own claim.
  *  - 5.0★:   Google Business Profile, verified 2026-08-10 from the client's own Takeout export.
- *            598 on the Lutz listing the site links to. Hand maintained; re-check both together.
+ *            598 on the Lutz listing the site links to. Hand maintained.
+ *            ⚠️ The LABEL is "Google Rating" and not a review count, deliberately. The tile was
+ *            "From 598 Reviews", and the obvious move when the site went to a cross platform
+ *            "1,000+" was to swap the VALUE to 1,000+. Measured and rejected: at the 560px
+ *            breakpoint the tile's usable inner width is 95px and "1,000+" renders 100.6px in
+ *            Archivo Expanded Black, so it spills. It also puts a third volume count in a row of
+ *            four, directly beside "12k+ Doors Serviced", inviting a reader to compare two
+ *            unrelated numbers. And it would delete 5.0, which is the stronger claim, from the most
+ *            prominent numeric block on the site. The volume claim lives in the trust strip above
+ *            and the caption below instead. Naming Google in the label is also what keeps the
+ *            rating from reading as a cross platform average.
  *  - 5:      counties in Trinity's verified Housecall Pro service zone. Deliberately still 5
  *            after north Manatee was added on 2026-08-10: we cover 3 zips there, not a county,
  *            and the LocalBusiness schema omits Manatee for the same reason. The zip and town
@@ -46,7 +56,7 @@ const whyCards: { icon: ReactNode; title: string; body: string }[] = [
 const stats = [
   { v: <>{new Date().getFullYear() - SITE.foundedYear}<span className="text-accent">+</span></>, label: "Years of Service" },
   { v: <>12k<span className="text-accent">+</span></>, label: "Doors Serviced" },
-  { v: <>5.0<span className="text-accent">★</span></>, label: "From 598 Reviews" },
+  { v: <>5.0<span className="text-accent">★</span></>, label: "Google Rating" },
   { v: <>5</>, label: "Counties Covered" },
 ];
 
@@ -330,8 +340,16 @@ export default function HomePage() {
           <Reveal>
             <div className="mx-auto max-w-[640px] text-center">
               <div className={eyebrowCls}>Reviews</div>
-              <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.04] text-ink">Hundreds Of Neighbors Trust Trinity</h2>
-              <p className="mt-2.5 text-[13.5px] font-semibold text-[#6a6a6a]">Real Google reviews, word for word. 5.0 from 598 and counting. <Link href={ROUTES.reviewsPage} className="font-bold text-accent underline underline-offset-2">Read them all</Link>.</p>
+              {/* Was "Hundreds Of Neighbors Trust Trinity". With a 1,000+ claim in the line directly
+                  beneath it, "hundreds" undersold and read as a contradiction. No number here now,
+                  so the heading cannot go stale and cannot argue with the sentence below it. */}
+              <h2 className="mt-3 font-display text-[clamp(26px,3.4vw,40px)] font-extrabold uppercase leading-[1.04] text-ink">Tampa Bay Neighbors Trust Trinity</h2>
+              {/* ⚠️ "Real Google reviews, word for word" is load bearing and must stay: the marquee
+                  below shows 30 verbatim GOOGLE reviews, and that provenance is what makes
+                  republishing them legal. Only the COUNT is cross platform. This caption is the
+                  homepage's platform anchor, so it names all six; the trust strip links here for
+                  the same reason. */}
+              <p className="mt-2.5 text-[13.5px] font-semibold text-[#6a6a6a]">Real Google reviews, word for word. 5.0 on Google, and 1,000+ reviews online across Google, Yelp, Angi, BBB, Facebook and Nextdoor. <Link href={ROUTES.reviewsPage} className="font-bold text-accent underline underline-offset-2">Read the reviews</Link>.</p>
             </div>
           </Reveal>
           <Reveal className="mt-[42px]">

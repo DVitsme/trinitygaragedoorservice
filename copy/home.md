@@ -1,3 +1,11 @@
+
+> ⚠️ **REVIEW FIGURES IN THIS FILE ARE SUPERSEDED. Do not copy them into a page.**
+> Any `4.9`, `598` or "Average Rating" below is stale. The live claims are, as of 2026-08-13:
+> **`5.0 on Google`** (a Google only RATING, never presented as a cross platform average) and
+> **`1,000+ reviews online`** (a cross platform COUNT across Google, Yelp, Angi, BBB, Facebook and
+> Nextdoor). Source of truth: `components/blocks/trust-strip.tsx` and the `stats` array in
+> `app/page.tsx`. Any page that states the count must leave the reader one click from
+> `/about/reviews/`, where the platform breakdown is stated.
 **Page title:** Home
 **URL slug:** /
 **Meta title:** Garage Door Repair in Tampa Bay | Trinity Garage Door Service

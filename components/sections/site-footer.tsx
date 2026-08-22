@@ -28,10 +28,23 @@ const SOCIALS = [
   { Icon: YelpIcon, label: "Yelp", href: SOCIAL.yelp },
 ];
 
-/** Directories with no icon in the set; rendered as wordmark chips instead. */
+/**
+ * Directories with no icon in the set; rendered as wordmark chips instead.
+ *
+ * ⚠️ **NEXTDOOR was added 2026-08-13 for a specific reason: the site now claims "1,000+ reviews
+ * online" and names Nextdoor as one of the six sources.** Before this it was linked nowhere on the
+ * site and existed only inside the JSON-LD `sameAs` array, so a reader who wanted to check that
+ * part of the claim had nowhere to go. Naming a platform we do not link is the kind of small
+ * unverifiable gap that makes a whole number look invented. If the claim ever stops naming
+ * Nextdoor, this chip can go with it.
+ *
+ * There is no Nextdoor glyph in `components/social-icons.tsx` and lucide 1.x dropped brand icons,
+ * so it is a wordmark like BBB and ANGI rather than an invented logo.
+ */
 const BADGES = [
   { label: "BBB", title: "BBB accredited, A+ rating", href: SOCIAL.bbb },
   { label: "ANGI", title: "Angi Super Service Award winner", href: SOCIAL.angi },
+  { label: "NEXTDOOR", title: "Trinity on Nextdoor", href: SOCIAL.nextdoor },
 ];
 
 export function SiteFooter() {
@@ -103,7 +116,25 @@ export function SiteFooter() {
             <span aria-hidden="true">·</span>
             <a href="/privacy-policy/" className="text-[#8a8a8a] no-underline hover:text-accent">Privacy Policy</a>
           </div>
-          <div className="flex items-center gap-2.5">
+          {/*
+            ⚠️ **`flex-wrap` is load bearing, not tidiness.** This row was `nowrap` with six items at
+            307.8px inside a 311px parent, which fitted by 3px. Adding the NEXTDOOR chip takes it to
+            417.5px and produced real horizontal page overflow at 375px wide, measured, where
+            `document.scrollWidth` went from 375 to 450. Wrapping is what makes a seventh chip safe.
+            If you add an eighth, re-measure rather than assuming.
+          */}
+          {/*
+            No `justify-end`. With it, the wrap at 372 to 481px put six chips on one line and left
+            NEXTDOOR as a lone orphan hanging at the far right, which covers 375, 390, 393, 412, 414,
+            428 and 430, so most phones. Left aligned, the seventh chip sits under the first and
+            reads as a second row rather than a mistake. Below 372 it wraps 5 and 2, which is fine.
+
+            That second row is also what exposed a much older bug: the sticky mobile bar is `fixed`
+            and nothing reserved its height, so the last 72px of every page sat behind it. The chip
+            was completely unreachable until `StickyMobileBar` gained a spacer. Measured after the
+            fix: chip bottom 806 against bar top 828, so 22px of clearance at 320 through 768.
+          */}
+          <div className="flex flex-wrap items-center gap-2.5">
             {SOCIALS.map(({ Icon, label, href }) => (
               <a
                 key={label}

@@ -11,7 +11,7 @@ import { Reveal } from "@/components/blocks/reveal";
 /**
  * The full review wall: the 8 original GOOGLE_REVIEWS plus the 60 curated from the client's own
  * Google Business Profile Takeout export (lib/google-reviews.json), 68 in all, no overlap because
- * the curation excluded the 8 names already used. The homepage marquee says "Read them all" and
+ * the curation excluded the 8 names already used. The homepage marquee says "Read the reviews" and
  * links here, so this page carrying only 8 cards was a broken promise; the masonry has no line
  * clamp, which makes it the one place every quote appears in full.
  */
@@ -23,7 +23,10 @@ const WALL = [
 export const metadata: Metadata = {
   title: "Reviews | Trinity Garage Door Service Tampa Bay",
   description:
-    "Real Google reviews from Tampa Bay homeowners after Trinity worked on their garage doors. 5.0 on Google from 598 reviews, BBB A+ accredited. Call (813) 279-6785.",
+    // 152 characters. ⚠️ This is the ONLY review claim on the site that no icon or badge can ever
+    // carry: it is never rendered, it is indexed, and it has to say the thing in words. "BBB A+
+    // accredited" was dropped to make room; BBB still appears on the page itself.
+    "Real Google reviews from Tampa Bay homeowners after Trinity worked on their garage doors. 5.0 on Google, and 1,000+ reviews online. Call (813) 279-6785.",
   alternates: { canonical: "https://trinitygaragedoorservice.com/about/reviews/" },
 };
 
@@ -59,15 +62,31 @@ export default function ReviewsPage() {
           </h1>
           <p className="mt-6 max-w-[660px] text-[clamp(17px,2.1vw,21px)] font-medium leading-[1.55] text-white/90">Here&apos;s what people around Tampa Bay have said after we worked on their doors. Every one of these is a real Google review, in their own words.</p>
           <div className="mt-7 flex flex-wrap items-center gap-[18px]">
+            {/*
+              ⚠️ **Two pills, not one, and the split is the point.** These were a single pill reading
+              "5.0 on Google, 598 reviews". The rating is GOOGLE ONLY and the count is now cross
+              platform, so keeping them in one pill behind one set of stars would present 5.0 as an
+              average across six platforms, which it is not. Separating them lets the stars sit with
+              the rating they actually describe.
+            */}
             <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.08] px-[18px] py-2.5">
               <span className="text-[16px] tracking-[2px] text-accent">★★★★★</span>
-              <span className="text-[15px] font-extrabold text-white">5.0 on Google, 598 reviews</span>
+              <span className="text-[15px] font-extrabold text-white">5.0 on Google</span>
+            </div>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/[0.08] px-[18px] py-2.5">
+              <span className="text-[15px] font-extrabold text-white">1,000+ reviews online</span>
             </div>
             <div className="inline-flex items-center gap-2.5 text-[14px] font-bold text-white">
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-[4px] bg-white text-[11px] font-black text-[#0a4ea2]">A+</span>
               BBB Accredited
             </div>
           </div>
+          {/*
+            The platform anchor for this page, and the reason the trust strip on the other 25 pages
+            links here. Every page that claims 1,000+ has to leave the reader one click from the
+            breakdown, or the number is an assertion with nowhere to check it.
+          */}
+          <p className="mt-4 text-[13.5px] font-medium text-white/70">Counted across Google, Yelp, Angi, BBB, Facebook and Nextdoor.</p>
         </div>
       </section>
 

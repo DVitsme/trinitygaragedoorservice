@@ -1,5 +1,13 @@
 # 02 — Components
 
+> ⚠️ **REVIEW FIGURES IN THE .dc.html DESIGNS ARE SUPERSEDED. Do not port them 1:1.**
+> Any `4.9`, `598` or "Average Rating" below is stale. The live claims are, as of 2026-08-13:
+> **`5.0 on Google`** (a Google only RATING, never presented as a cross platform average) and
+> **`1,000+ reviews online`** (a cross platform COUNT across Google, Yelp, Angi, BBB, Facebook and
+> Nextdoor). Source of truth: `components/blocks/trust-strip.tsx` and the `stats` array in
+> `app/page.tsx`. Any page that states the count must leave the reader one click from
+> `/about/reviews/`, where the platform breakdown is stated.
+
 Build these once; every page composes them. Styling = the tokens/values in `01`. For exact markup of any block, open the page's `.dc.html` — the structure below tells you what to extract and how to make it reusable. All components are Server Components unless they need state/interaction (marked **client**).
 
 ## Chrome (in `app/layout.tsx`, wraps every page)

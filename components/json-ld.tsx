@@ -4,8 +4,15 @@ import { absoluteUrl } from "@/lib/seo";
 /**
  * LocalBusiness schema for local SEO. Rendered once in the root layout.
  *
- * Still NO `aggregateRating`: Google penalises unverified review markup, and we have 8 of their 598
- * reviews. That stays out until the reviews are pulled properly.
+ * ⚠️ **Still NO `aggregateRating`, and the case for leaving it out got STRONGER on 2026-08-13, not
+ * weaker.** The site now claims "1,000+ reviews online" across six platforms. Do not be tempted to
+ * put that number in markup because it is bigger: self serving review markup is ineligible for rich
+ * results, and a total aggregated across platforms we do not own is LESS eligible than a single
+ * platform figure, not more. The rating already shows in the Business Profile where searchers see
+ * it.
+ *
+ * `sameAs` below is the machine readable version of the cross platform claim and it is enough. It
+ * already lists all six named platforms plus two more.
  *
  * ✅ **NAP completed 2026-07-28/29.** Street address and geo now present, sourced from their own
  * Housecall Pro company record. Their absence was the HIGH-RISK local SEO gap in the punch list:

@@ -245,7 +245,7 @@ img {
      pause button disappear (no purpose without motion), the edge fades disappear (nothing to fade
      into), each remaining set wraps into rows, and only the first few cards per set stay visible.
      That reproduces the calm card grid this band had before it became a marquee. The rest of the
-     reviews are one click away behind "Read them all", which sits directly above in the heading. */
+     reviews are one click away behind "Read the reviews", which sits directly above in the heading. */
   .bt-reviews-clone,
   .bt-reviews-pause {
     display: none;
